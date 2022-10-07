@@ -4,7 +4,7 @@
 ## :sparkles: Summary
 
 <!-- Copy the link of the ticket from Jira website -->
-- Ticket: HM=???
+- Ticket: HM-???
 
 <!-- Long description of PR -->
 <!-- Why are we doing this? -->
@@ -24,14 +24,13 @@
 
 ## :thinking: How to test this
 
-What environment? What login? What steps? ...
-
+<!-- What environment? What login? What steps? ... -->
 1. Step 1
 1. ...
 
 ## :camera: Screenshots
 
-<!-- If your changes includes UI, drag and drop the image here -->
+<!-- If your ticket includes UI changes, drag and drop images here -->
 
 ## :construction: Contributor checklist
 
