@@ -14,7 +14,7 @@
 
 <!-- Describe the changes you are introducing here -->
 1. Change 1
-1. ,,,
+1. ...
 
 ### Further works
 
@@ -38,3 +38,5 @@
 - [ ] Checked that there are no additional warnings
 - [ ] Added Github labels
 - [ ] Code was formatted automatically
+
+<!-- When reviewing code, you should follow https://conventionalcomments.org -->
