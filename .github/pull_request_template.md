@@ -1,6 +1,9 @@
 <!-- This is a comment, only you can see this while editing -->
 <!-- Feel free to remove sections that you don't need -->
 
+<!-- Pull request title must include ticket key and capitalize first letter -->
+<!-- [HM-???] Your pull request title -->
+
 ## :sparkles: Summary
 
 <!-- Copy the link of the ticket from Jira website -->
