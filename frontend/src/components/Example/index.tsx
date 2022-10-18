@@ -1,7 +1,7 @@
-import React from 'react';
+import { StyledTitle } from './styles';
 
 const Example = () => {
-  return <div>Example</div>;
+  return <StyledTitle>Example</StyledTitle>;
 };
 
 export default Example;
