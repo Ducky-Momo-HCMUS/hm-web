@@ -6,9 +6,9 @@
   "author": "Ducky Momo",
   "scripts": {
     "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "start": "yarn build",
+    "test": "react-scripts test",
+    "watch": "react-scripts start"
   },
   "browserslist": {
     "production": [
@@ -46,7 +46,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@types/jest": "^27.5.2",
+    "@types/jest": "^29.2.0",
     "@types/node": "^16.11.64",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",

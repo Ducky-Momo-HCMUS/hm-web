@@ -7,7 +7,7 @@
 ## :sparkles: Summary
 
 <!-- Copy the link of the ticket from Jira website -->
-- Ticket: HM-???
+- Ticket: [HM-???](paste-the-link-here)
 
 <!-- Long description of PR -->
 <!-- Why are we doing this? -->
