@@ -4,7 +4,12 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "airbnb-base", "airbnb-typescript/base"],
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",

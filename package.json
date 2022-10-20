@@ -5,8 +5,8 @@
   "license": "MIT",
   "author": "Ducky Momo",
   "workspaces": [
-    "apps/*",
-    "libs/*"
+    "apps/**",
+    "libs/**"
   ],
   "scripts": {
     "start": "nx run-many --target=start",
@@ -21,7 +21,9 @@
     "eslint": "^8.25.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.0",
     "jest": "^29.2.0",
     "nx": "14.8.6",

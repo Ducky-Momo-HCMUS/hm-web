@@ -1,3 +1,6 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 
@@ -11,7 +14,7 @@ const rootDependencies = [].concat(
 );
 // Get all workspaces directory from wildcard (*) expressions
 const workspaces = rootPackage.workspaces.flatMap((workspaceOrWildcard) => {
-  let workspaceOrPath = workspaceOrWildcard.replace('*', '');
+  const workspaceOrPath = workspaceOrWildcard.replaceAll('*', '');
   return workspaceOrWildcard.includes('*')
     ? fs
         .readdirSync(workspaceOrPath)
@@ -28,7 +31,7 @@ const prettyPackagePaths = packagePaths
   .map((package) => package.replace(/\\/g, '/'));
 const packages = packagePaths.map((package) => require(package));
 
-let diff = {};
+const diff = {};
 const dependencyKeys = ['dependencies', 'devDependencies'];
 
 const mergeArray = (arrayOrNull, value) => {

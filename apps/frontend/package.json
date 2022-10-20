@@ -1,5 +1,5 @@
 {
-  "name": "hm-web",
+  "name": "frontend",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
@@ -51,7 +51,6 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
-    "eslint-plugin-import": "^2.26.0",
     "ts-jest": "^29.0.3"
   }
 }
