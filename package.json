@@ -14,7 +14,6 @@
     "watch": "nx run-many --target=watch --output-style=stream"
   },
   "devDependencies": {
-    "@types/jest": "^29.2.0",
     "@types/node": "^16.11.64",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
@@ -30,5 +29,6 @@
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
-  }
+  },
+  "packageManager": "yarn@3.2.4"
 }

@@ -12,6 +12,7 @@ const rootDependencies = [].concat(
   Object.keys(rootPackage.dependencies ?? {}),
   Object.keys(rootPackage.devDependencies ?? {})
 );
+
 // Get all workspaces directory from wildcard (*) expressions
 const workspaces = rootPackage.workspaces.flatMap((workspaceOrWildcard) => {
   const workspaceOrPath = workspaceOrWildcard.replaceAll('*', '');
