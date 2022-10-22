@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import {
   Box,
@@ -32,36 +32,34 @@ function Login() {
     showPassword: false,
   });
 
-  const handleChange =
+  const handleChange = useCallback(
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+      setValues((v) => ({ ...v, [prop]: event.target.value }));
+    },
+    []
+  );
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  const handleClickShowPassword = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      showPassword: !v.showPassword,
+    }));
+  }, []);
 
   const [error, setError] = useState<string>('');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (data.get('username')) {
-      setError('Tài khoản không hợp lệ');
-      return;
-    }
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (!values.username) {
+        setError('Tài khoản không hợp lệ');
+        return;
+      }
 
-    setError('');
-  };
+      setError('');
+    },
+    [values.username]
+  );
 
   return (
     <StyledContainer>
@@ -76,14 +74,14 @@ function Login() {
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
             label='Tên đăng nhập'
-            id='username'
+            name='username'
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant='filled'
             onChange={handleChange('username')}
           />
           <StyledTextField
             label='Mật khẩu'
-            id='password'
+            name='password'
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showPassword ? 'text' : 'password'}
             value={values.password}
@@ -94,7 +92,6 @@ function Login() {
                   <IconButton
                     aria-label='toggle password visibility'
                     onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
                     edge='end'
                   >
                     {values.showPassword ? (
