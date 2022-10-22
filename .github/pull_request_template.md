@@ -37,7 +37,7 @@
 
 ## :construction: Contributor checklist
 
-- [ ] Run `yarn start` successfully
+- [ ] Run `pnpm build` and `pnpm start` successfully
 - [ ] Checked that there are no additional warnings
 - [ ] Added Github labels
 - [ ] Code was formatted automatically
