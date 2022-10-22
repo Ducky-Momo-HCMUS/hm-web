@@ -48,9 +48,10 @@ rootDependencies.forEach((dependency) => {
 
     packages.forEach((package, i) => {
       dependencyKeys.forEach((key) => {
-        const version = package[key][dependency];
-        if (!package[key] || !version) return;
+        if (!package[key]) return;
 
+        const version = package[key][dependency];
+        if (!version) return;
         if (rootVersion !== version) {
           const dependencyDiff = diff[dependency] ?? {};
 

@@ -14,7 +14,10 @@ function Home() {
     <AsyncDataRenderer loading={loading} data={data}>
       <Example />
       {data?.books.map((book: Book) => (
-        <p>Title: {book.title}</p>
+        <p>
+          Title:
+          {book.title}
+        </p>
       ))}
     </AsyncDataRenderer>
   );

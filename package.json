@@ -9,6 +9,7 @@
     "libs/**"
   ],
   "scripts": {
+    "lint": "eslint . --fix",
     "start": "nx run-many --target=start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nx run-many --target=watch --output-style=stream"
@@ -29,6 +30,5 @@
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
-  },
-  "packageManager": "yarn@3.2.4"
+  }
 }

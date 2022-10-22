@@ -8,8 +8,10 @@
     "eslint:recommended",
     "airbnb-base",
     "airbnb-typescript/base",
+    "plugin:import/recommended",
     "plugin:prettier/recommended"
   ],
+  "ignorePatterns": ["build/*", "dist/*"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -19,6 +21,7 @@
   "plugins": ["@typescript-eslint"],
   "root": true,
   "rules": {
+    "linebreak-style": ["error", "windows"],
     "prettier/prettier": [
       "error",
       {

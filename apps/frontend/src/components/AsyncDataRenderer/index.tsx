@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
-import { GenericObject } from '../../types';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import { GenericObject } from '../../types';
 
 export interface AsyncDataRendererProps {
   children: ReactNode;
