@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { styled } from '@mui/system';
+import { styled } from '@mui/material/styles';
 
 export const StyledBox = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.contrastText,

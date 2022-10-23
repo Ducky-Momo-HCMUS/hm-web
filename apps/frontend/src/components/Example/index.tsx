@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyledTitle } from './styles';
 
 function Example() {

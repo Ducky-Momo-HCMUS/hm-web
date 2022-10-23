@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -11,12 +11,7 @@ export interface AsyncDataRendererProps {
   data?: GenericObject | GenericObject[];
 }
 
-function AsyncDataRenderer({
-  children,
-  error,
-  loading,
-  data,
-}: AsyncDataRendererProps) {
+function AsyncDataRenderer({ children, loading }: AsyncDataRendererProps) {
   if (loading) {
     return (
       <Box
@@ -33,5 +28,10 @@ function AsyncDataRenderer({
   }
   return <>{children}</>;
 }
+
+AsyncDataRenderer.defaultProps = {
+  error: null,
+  data: null,
+};
 
 export default AsyncDataRenderer;

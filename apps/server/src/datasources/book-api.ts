@@ -1,7 +1,7 @@
 import { BaseDataSource } from './base-data-source';
 
 class BookApi extends BaseDataSource {
-  public async getBooks() {
+  public getBooks() {
     try {
       const books = [
         {
@@ -16,6 +16,7 @@ class BookApi extends BaseDataSource {
       return books;
     } catch (error) {
       console.error('Error: cannot fetch books');
+      return error;
     }
   }
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { StyledBox, StyledMessage } from './styles';
 

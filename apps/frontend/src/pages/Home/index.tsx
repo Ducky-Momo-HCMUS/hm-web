@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import Example from '../../components/Example';

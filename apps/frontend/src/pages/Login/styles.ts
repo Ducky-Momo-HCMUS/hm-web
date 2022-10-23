@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { styled } from '@mui/material/styles';
 import { FormControlLabel } from '@mui/material';
 
 export const StyledFormControlLabel = styled(FormControlLabel)`
