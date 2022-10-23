@@ -32,6 +32,12 @@ const prettyPackagePaths = packagePaths
   .map((package) => package.replace(/\\/g, '/'));
 const packages = packagePaths.map((package) => require(package));
 
+console.log('Comparing between:');
+[...prettyPackagePaths, prettyRootPackagePath].forEach((aPath) => {
+  console.log(aPath);
+});
+console.log();
+
 const diff = {};
 const dependencyKeys = ['dependencies', 'devDependencies'];
 
@@ -75,4 +81,4 @@ rootDependencies.forEach((dependency) => {
   });
 });
 
-console.log(diff);
+console.log('Result', diff);
