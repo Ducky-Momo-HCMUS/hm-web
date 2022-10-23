@@ -21,13 +21,6 @@
   "plugins": ["@typescript-eslint"],
   "root": true,
   "rules": {
-    "linebreak-style": ["error", "windows"],
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
     "import/prefer-default-export": 0
   }
 }
