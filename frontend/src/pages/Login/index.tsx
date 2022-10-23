@@ -119,7 +119,7 @@ function Login() {
             </Grid>
           </Grid>
           <Box sx={{ textAlign: 'right' }}>
-            <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <Button type='submit' variant='contained' sx={{ mt: 1 }}>
               Đăng nhập
             </Button>
           </Box>
