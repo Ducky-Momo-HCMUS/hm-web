@@ -66,33 +66,33 @@ function Login() {
       <Header />
       <StyledCard>
         <StyledLogo
-          variant='square'
-          alt='HCMUS Logo'
-          src='/img/hcmus-logo.png'
+          variant="square"
+          alt="HCMUS Logo"
+          src="/img/hcmus-logo.png"
         />
         {error && <ErrorMessage content={error} />}
-        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
-            label='Tên đăng nhập'
-            name='username'
+            label="Tên đăng nhập"
+            name="username"
             sx={{ margin: '0.5rem 0', width: '100%' }}
-            variant='filled'
+            variant="filled"
             onChange={handleChange('username')}
           />
           <StyledTextField
-            label='Mật khẩu'
-            name='password'
+            label="Mật khẩu"
+            name="password"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showPassword ? 'text' : 'password'}
             value={values.password}
             onChange={handleChange('password')}
             InputProps={{
               endAdornment: (
-                <InputAdornment position='end'>
+                <InputAdornment position="end">
                   <IconButton
-                    aria-label='toggle password visibility'
+                    aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-                    edge='end'
+                    edge="end"
                   >
                     {values.showPassword ? (
                       <VisibilityOff sx={{ fontSize: '1.25rem' }} />
@@ -103,23 +103,23 @@ function Login() {
                 </InputAdornment>
               ),
             }}
-            variant='filled'
+            variant="filled"
           />
-          <Grid container alignItems='center'>
+          <Grid container alignItems="center">
             <Grid item xs>
               <StyledFormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Ghi nhớ đăng nhập'
+                control={<Checkbox value="remember" color="primary" />}
+                label="Ghi nhớ đăng nhập"
               />
             </Grid>
             <Grid item>
-              <Link href='/forgot-password' variant='body2'>
-                {'Quên mật khẩu?'}
+              <Link href="/forgot-password" variant="body2">
+                Quên mật khẩu?
               </Link>
             </Grid>
           </Grid>
           <Box sx={{ textAlign: 'right' }}>
-            <Button type='submit' variant='contained' sx={{ mt: 1 }}>
+            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
               Đăng nhập
             </Button>
           </Box>
