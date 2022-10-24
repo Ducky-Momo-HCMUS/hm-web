@@ -1,5 +1,5 @@
 {
-  "extends": ["airbnb", "airbnb-typescript", "../../.eslintrc.json"],
+  "extends": ["../../.eslintrc.json"],
   "rules": {
     "class-methods-use-this": 0,
     "@typescript-eslint/no-use-before-define": 0
