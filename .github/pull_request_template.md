@@ -7,7 +7,7 @@
 ## :sparkles: Summary
 
 <!-- Copy the link of the ticket from Jira website -->
-- Ticket: HM-???
+- Ticket: [HM-???](paste-the-link-here)
 
 <!-- Long description of PR -->
 <!-- Why are we doing this? -->
@@ -37,7 +37,7 @@
 
 ## :construction: Contributor checklist
 
-- [ ] Run `yarn start` successfully
+- [ ] Run `pnpm build` and `pnpm start` successfully
 - [ ] Checked that there are no additional warnings
 - [ ] Added Github labels
 - [ ] Code was formatted automatically
