@@ -1,5 +1,5 @@
+import React, { useCallback, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ErrorMessage from '../../components/ErrorMessage';
 import Header from '../../components/Header';
@@ -51,34 +51,34 @@ function ResetPassword() {
       <Header />
       <StyledCard>
         <StyledLogo
-          variant='square'
-          alt='HCMUS Logo'
-          src='/img/hcmus-logo.png'
+          variant="square"
+          alt="HCMUS Logo"
+          src="/img/hcmus-logo.png"
         />
         <Typography sx={{ mb: 1 }}>
           Vui lòng nhập{' '}
-          <Typography component='span' sx={{ fontWeight: 'bold' }}>
+          <Typography component="span" sx={{ fontWeight: 'bold' }}>
             Mã giảng viên
           </Typography>{' '}
           vào ô bên dưới để nhận email thay đổi mật khẩu. Nếu gặp vấn đề liên
           quan đến đăng nhập vào hệ thống vui lòng liên hệ{' '}
-          <Typography component='span' sx={{ fontWeight: 'bold' }}>
+          <Typography component="span" sx={{ fontWeight: 'bold' }}>
             admin@ctdb.hcmus.edu.vn
           </Typography>
           .
         </Typography>
         {error && <ErrorMessage content={error} />}
-        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
-            label='Mã giảng viên'
-            name='teacherId'
+            label="Mã giảng viên"
+            name="teacherId"
             sx={{ margin: '0.5rem 0', width: '100%' }}
-            variant='filled'
+            variant="filled"
             onChange={handleChange('teacherId')}
           />
 
           <Box sx={{ textAlign: 'right' }}>
-            <Button type='submit' variant='contained' sx={{ mt: 1 }}>
+            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
               Gửi yêu cầu
             </Button>
           </Box>

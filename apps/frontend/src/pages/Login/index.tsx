@@ -114,7 +114,7 @@ function Login() {
             </Grid>
             <Grid item>
               <Link href="/reset-password" variant="body2">
-                {'Quên mật khẩu?'}
+                Quên mật khẩu?
               </Link>
             </Grid>
           </Grid>

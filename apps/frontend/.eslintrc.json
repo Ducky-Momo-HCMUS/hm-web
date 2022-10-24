@@ -2,6 +2,7 @@
   "extends": ["airbnb", "airbnb-typescript", "plugin:import/typescript", "../../.eslintrc.json"],
   "rules": {
     "react/no-unused-prop-types": 1,
-    "react/jsx-no-useless-fragment": 0
+    "react/jsx-no-useless-fragment": 0,
+    "prettier/prettier": 1
   }
 }

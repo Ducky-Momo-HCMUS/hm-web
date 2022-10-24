@@ -66,26 +66,26 @@ function CreateNewPassword() {
       <Header />
       <StyledCard>
         <StyledLogo
-          variant='square'
-          alt='HCMUS Logo'
-          src='/img/hcmus-logo.png'
+          variant="square"
+          alt="HCMUS Logo"
+          src="/img/hcmus-logo.png"
         />
         {error && <ErrorMessage content={error} />}
-        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
-            label='Mật khẩu mới'
-            name='password'
+            label="Mật khẩu mới"
+            name="password"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showPassword ? 'text' : 'password'}
             value={values.password}
             onChange={handleChange('password')}
             InputProps={{
               endAdornment: (
-                <InputAdornment position='end'>
+                <InputAdornment position="end">
                   <IconButton
-                    aria-label='toggle password visibility'
+                    aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
-                    edge='end'
+                    edge="end"
                   >
                     {values.showPassword ? (
                       <VisibilityOff sx={{ fontSize: '1.25rem' }} />
@@ -96,22 +96,22 @@ function CreateNewPassword() {
                 </InputAdornment>
               ),
             }}
-            variant='filled'
+            variant="filled"
           />
           <StyledTextField
-            label='Nhập lại mật khẩu mới'
-            name='confirmPassword'
+            label="Nhập lại mật khẩu mới"
+            name="confirmPassword"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showConfirmPassword ? 'text' : 'password'}
             value={values.confirmPassword}
             onChange={handleChange('confirmPassword')}
             InputProps={{
               endAdornment: (
-                <InputAdornment position='end'>
+                <InputAdornment position="end">
                   <IconButton
-                    aria-label='toggle password visibility'
+                    aria-label="toggle password visibility"
                     onClick={handleClickShowConfirmPassword}
-                    edge='end'
+                    edge="end"
                   >
                     {values.showPassword ? (
                       <VisibilityOff sx={{ fontSize: '1.25rem' }} />
@@ -122,10 +122,10 @@ function CreateNewPassword() {
                 </InputAdornment>
               ),
             }}
-            variant='filled'
+            variant="filled"
           />
           <Box sx={{ textAlign: 'right' }}>
-            <Button type='submit' variant='contained' sx={{ mt: 1 }}>
+            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
               Lưu thay đổi
             </Button>
           </Box>
