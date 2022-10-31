@@ -6,10 +6,10 @@ import { theme } from '../../../../theme';
 
 interface StudentTableRowProps {
   data: StudentData;
+  index: number;
 }
-function StudentTableRow({ data }: StudentTableRowProps) {
+function StudentTableRow({ data, index }: StudentTableRowProps) {
   const {
-    index,
     studentId,
     fullName,
     major,

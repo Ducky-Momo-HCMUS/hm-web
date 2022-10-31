@@ -2,7 +2,6 @@ import { StudentData } from '../types';
 
 export const STUDENTS_DATA: StudentData[] = [
   {
-    index: 1,
     studentId: '19127268',
     fullName: 'Nguyễn Ngọc Thanh Tâm',
     major: 'Kỹ thuật phần mềm',
@@ -24,7 +23,6 @@ export const STUDENTS_DATA: StudentData[] = [
     },
   },
   {
-    index: 2,
     studentId: '19127643',
     fullName: 'Nguyễn Mai Xuân Huyên',
     major: 'Hệ thống thông tin',
@@ -46,7 +44,6 @@ export const STUDENTS_DATA: StudentData[] = [
     },
   },
   {
-    index: 3,
     studentId: '19127111',
     fullName: 'Nguyễn Hai Lần',
     major: 'Hệ thống thông tin',
@@ -68,7 +65,6 @@ export const STUDENTS_DATA: StudentData[] = [
     },
   },
   {
-    index: 4,
     studentId: '19127113',
     fullName: 'Nguyễn Ba Lần',
     major: 'Hệ thống thông tin',

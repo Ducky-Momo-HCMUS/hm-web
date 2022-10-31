@@ -119,8 +119,8 @@ function StudentsTable() {
             <TableBody>
               {STUDENTS_DATA.sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <StudentTableRow data={row} />
+                .map((row, index) => (
+                  <StudentTableRow data={row} index={index + 1} />
                 ))}
             </TableBody>
           </Table>

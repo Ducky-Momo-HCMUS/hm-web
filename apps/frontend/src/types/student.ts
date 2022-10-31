@@ -9,7 +9,6 @@ export interface Contact {
 }
 
 export interface StudentData {
-  index: number;
   studentId: string;
   fullName: string;
   major: string;

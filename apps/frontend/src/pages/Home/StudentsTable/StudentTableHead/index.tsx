@@ -20,7 +20,6 @@ interface EnhancedTableProps {
 
 interface Column {
   id:
-    | 'index'
     | 'studentId'
     | 'fullName'
     | 'major'
@@ -35,7 +34,6 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'index', label: 'STT' },
   { id: 'studentId', label: 'MSSV' },
   {
     id: 'fullName',
@@ -80,6 +78,7 @@ function StudentTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
+        <TableCell key="index">STT</TableCell>
         {columns.map((column) => (
           <TableCell
             key={column.id}
