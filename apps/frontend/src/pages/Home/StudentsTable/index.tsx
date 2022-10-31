@@ -11,83 +11,33 @@ import {
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
 import {
   StyledActionsBar,
   StyledContentWrapper,
   StyledFormControl,
 } from '../../../components/styles';
-import StudentRow from './StudentRow';
+import StudentTableRow from './StudentTableRow';
 import { STUDENTS_DATA } from '../../../constants';
+import StudentTableHead from './StudentTableHead';
+import { Order, StudentData } from '../../../types';
+import { getComparator } from '../../../utils';
 
 interface State {
   year: string;
   class: string;
 }
 
-interface Column {
-  id:
-    | 'index'
-    | 'studentId'
-    | 'fullName'
-    | 'major'
-    | 'status'
-    | 'gpaFourPointScale'
-    | 'gpaTenPointScale'
-    | 'contact';
-  label: string;
-  minWidth?: number;
-  align?: 'left';
-  format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  { id: 'index', label: 'STT' },
-  { id: 'studentId', label: 'MSSV' },
-  {
-    id: 'fullName',
-    label: 'Họ tên',
-    minWidth: 170,
-  },
-  {
-    id: 'major',
-    label: 'Chuyên ngành',
-    minWidth: 120,
-  },
-  {
-    id: 'status',
-    label: 'Tình trạng',
-    minWidth: 120,
-  },
-  {
-    id: 'gpaTenPointScale',
-    label: 'GPA hệ 4',
-    minWidth: 100,
-  },
-  {
-    id: 'gpaFourPointScale',
-    label: 'GPA hệ 10',
-    minWidth: 100,
-  },
-  {
-    id: 'contact',
-    label: 'Thông tin liên lạc',
-    minWidth: 300,
-  },
-];
-
 function StudentsTable() {
   const [values, setValues] = useState<State>({
     year: '2019',
     class: '19CLC5',
   });
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof StudentData>('studentId');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -106,6 +56,15 @@ function StudentsTable() {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
+  );
+
+  const handleRequestSort = useCallback(
+    (event: React.MouseEvent<unknown>, property: keyof StudentData) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    },
+    [orderBy, order]
   );
 
   return (
@@ -152,26 +111,17 @@ function StudentsTable() {
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+            <StudentTableHead
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
             <TableBody>
-              {STUDENTS_DATA.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
-              ).map((row) => {
-                return <StudentRow data={row} />;
-              })}
+              {STUDENTS_DATA.sort(getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <StudentTableRow data={row} />
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

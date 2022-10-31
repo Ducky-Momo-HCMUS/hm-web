@@ -4,10 +4,10 @@ import { StudentData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
 
-interface StudentRowProps {
+interface StudentTableRowProps {
   data: StudentData;
 }
-function StudentRow({ data }: StudentRowProps) {
+function StudentTableRow({ data }: StudentTableRowProps) {
   const {
     index,
     studentId,
@@ -77,4 +77,4 @@ function StudentRow({ data }: StudentRowProps) {
   );
 }
 
-export default StudentRow;
+export default StudentTableRow;
