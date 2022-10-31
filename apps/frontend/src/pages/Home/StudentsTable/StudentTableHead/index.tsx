@@ -85,7 +85,6 @@ function StudentTableHead(props: EnhancedTableProps) {
             sortDirection={orderBy === column.id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === column.id}
               direction={orderBy === column.id ? order : 'asc'}
               onClick={createSortHandler(column.id)}
             >
