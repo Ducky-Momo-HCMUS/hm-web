@@ -15,7 +15,7 @@ export const StyledContainer = styled(Box)`
 `;
 
 export const StyledContentWrapper = styled(Box)`
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 1.25rem;
 `;
 
 export const StyledActionsBar = styled(Box)`
