@@ -1,10 +1,26 @@
-import { Avatar, Box, TextField } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  FormControl,
+  TextField,
+  Link as MuiLink,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
+import { Link } from 'react-router-dom';
 
 export const StyledContainer = styled(Box)`
   background: ${grey[100]};
   height: 100vh;
+`;
+
+export const StyledContentWrapper = styled(Box)`
+  padding: 1.5rem 1.25rem;
+`;
+
+export const StyledActionsBar = styled(Box)`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const StyledCard = styled(Box)`
@@ -35,3 +51,26 @@ export const StyledTextField = styled(TextField)`
     }
   }
 `;
+
+export const StyledFormControl = styled(FormControl)`
+  min-width: 7.5rem;
+  &:first-child {
+    margin-right: 1rem;
+  }
+  & > div {
+    background-color: white;
+  }
+  & > div > div {
+    padding: 0.5rem 1rem;
+  }
+`;
+
+export const StyledRouterLink = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.primary.dark,
+}));
+
+export const StyledMuiLink = styled(MuiLink)(({ theme }) => ({
+  textDecoration: 'none',
+  color: theme.palette.primary.dark,
+}));
