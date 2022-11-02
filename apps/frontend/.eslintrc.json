@@ -1,8 +1,5 @@
 {
   "extends": [
-    "airbnb",
-    "airbnb-typescript",
-    "plugin:import/typescript",
     "../../.eslintrc.json"
   ],
   "rules": {
