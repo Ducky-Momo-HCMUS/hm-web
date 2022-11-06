@@ -22,7 +22,7 @@ function NoteItem({ data }: NoteItemProps) {
           <Typography variant="body1">{title}</Typography>
           <Typography variant="body2">{lastUpdate}</Typography>
         </StyledContent>
-        <StyledTag label="#Sinhvien" />
+        <StyledTag label="Sinhvien" />
       </StyledContentWrapper>
       <IconButton size="medium" aria-label="delete note" component="label">
         <DeleteIcon fontSize="inherit" color="action" />

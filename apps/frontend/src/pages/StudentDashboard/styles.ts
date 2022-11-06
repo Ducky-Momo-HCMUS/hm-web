@@ -1,11 +1,14 @@
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import { Box, ListItemText } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Box, ListItemButton, ListItemText } from '@mui/material';
+import { blue, grey } from '@mui/material/colors';
 
 export const StyledContainer = styled(Box)`
   display: flex;
   height: 100vh;
+  margin-top: 4rem;
+  width: 100%;
+  position: fixed;
 `;
 
 export const Drawer = styled(MuiDrawer, {
@@ -13,7 +16,8 @@ export const Drawer = styled(MuiDrawer, {
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     padding: '1rem 0 0 0',
-    position: 'relative',
+    position: 'fixed',
+    marginTop: '4rem',
     whiteSpace: 'nowrap',
     width: 240,
     transition: theme.transitions.create('width', {
@@ -35,6 +39,23 @@ export const Drawer = styled(MuiDrawer, {
   },
 }));
 
+export const StyledListItemButton = styled(ListItemButton)<{ active: boolean }>`
+  ${(props) =>
+    props.active &&
+    `
+     background: ${blue[300]};
+     color: #fff;
+     & svg {
+      color: #fff;
+     }
+  `};
+  transition: all 300ms;
+  &:hover {
+    background: ${blue[300]};
+    color: #fff;
+  }
+`;
+
 export const StyledListItemText = styled(ListItemText)`
   margin-left: 0.5rem;
 `;
@@ -43,4 +64,5 @@ export const StyledContent = styled(Box)`
   width: 100%;
   padding: 1.5rem;
   background: ${grey[100]};
+  margin-left: 15rem;
 `;

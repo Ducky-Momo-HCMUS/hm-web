@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
-import { Box, Grid, List, TablePagination, Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import {
+  Box,
+  Grid,
+  Link,
+  List,
+  TablePagination,
+  Typography,
+} from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import { Item, StyledDivider, StyledTitle } from '../../../components/styles';
+import {
+  Item,
+  StyledBreadCrumbs,
+  StyledDivider,
+  StyledTitle,
+} from '../../../components/styles';
 import NoteItem from './NoteItem';
-import { StyledDefaultImage, StyledHeader, StyledIconButton } from './styles';
+import {
+  StyledDefaultImage,
+  StyledDefaultImageWrapper,
+  StyledHeader,
+  StyledIconButton,
+} from './styles';
 import { NoteItemData } from '../../../types';
 
-const ROWS_PER_PAGE = 7;
+const ROWS_PER_PAGE = 5;
 
 function NoteInfo() {
+  const { id } = useParams();
   const [page, setPage] = useState(0);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -62,6 +81,15 @@ function NoteInfo() {
   return (
     <>
       <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
+      <StyledBreadCrumbs aria-label="breadcrumb">
+        <Link underline="hover" color="inherit" href="/">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color="inherit" href={`/students/${id}`}>
+          {id} - Nguyễn Ngọc Thanh Tâm
+        </Link>
+        <Typography color="text.primary">Ghi chú sinh viên</Typography>
+      </StyledBreadCrumbs>
       <Grid container spacing={3} columns={20}>
         <Grid item xs={8}>
           <Item>
@@ -109,10 +137,12 @@ function NoteInfo() {
         </Grid>
         <Grid item xs={12}>
           <Item>
-            <StyledDefaultImage
-              src="/img/empty_note_list.svg"
-              alt="empty note list"
-            />
+            <StyledDefaultImageWrapper sx={{ display: 'flex' }}>
+              <StyledDefaultImage
+                src="/img/empty_note_list.svg"
+                alt="empty note list"
+              />
+            </StyledDefaultImageWrapper>
           </Item>
         </Grid>
       </Grid>

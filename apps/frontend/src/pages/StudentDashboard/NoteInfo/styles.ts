@@ -12,6 +12,12 @@ export const StyledIconButton = styled(IconButton)`
   padding: 0.4375rem;
 `;
 
+export const StyledDefaultImageWrapper = styled(Box)`
+  display: flex;
+  height: 100%;
+  align-items: center;
+`;
+
 export const StyledDefaultImage = styled('img')`
   display: block;
   margin: 0 auto;

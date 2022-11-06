@@ -7,6 +7,7 @@ import {
   Typography,
   Paper,
   Divider,
+  Breadcrumbs,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -94,3 +95,10 @@ export const Item = styled(Paper)(({ theme }) => ({
 export const StyledDivider = styled(Divider)`
   border-color: rgba(0, 0, 0, 0.87);
 `;
+
+export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  marginBottom: '1.5rem',
+  '& a': {
+    color: theme.palette.primary.main,
+  },
+}));
