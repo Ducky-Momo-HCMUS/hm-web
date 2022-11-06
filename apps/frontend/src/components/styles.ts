@@ -4,6 +4,9 @@ import {
   FormControl,
   TextField,
   Link as MuiLink,
+  Typography,
+  Paper,
+  Divider,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -74,3 +77,20 @@ export const StyledMuiLink = styled(MuiLink)(({ theme }) => ({
   textDecoration: 'none',
   color: theme.palette.primary.dark,
 }));
+
+export const StyledTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  color: theme.palette.primary.dark,
+  marginBottom: '1rem',
+}));
+
+export const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#fff',
+  padding: theme.spacing(2),
+  height: '100%',
+}));
+
+export const StyledDivider = styled(Divider)`
+  border-color: rgba(0, 0, 0, 0.87);
+`;

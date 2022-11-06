@@ -1,13 +1,18 @@
 import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { ListItemButton } from '@mui/material';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import StarIcon from '@mui/icons-material/Star';
-import { Drawer, StyledContent, StyledListItemText } from './styles';
+import {
+  Drawer,
+  StyledContainer,
+  StyledContent,
+  StyledListItemText,
+} from './styles';
+import NoteInfo from './NoteInfo';
 
 export const mainListItems = (
   <>
@@ -32,13 +37,15 @@ export const mainListItems = (
 
 function StudentDashboard() {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <StyledContainer>
       <CssBaseline />
       <Drawer variant="permanent" open PaperProps={{ elevation: 8 }}>
         <List component="nav">{mainListItems}</List>
       </Drawer>
-      <StyledContent component="main">Alo</StyledContent>
-    </Box>
+      <StyledContent component="main">
+        <NoteInfo />
+      </StyledContent>
+    </StyledContainer>
   );
 }
 

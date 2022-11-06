@@ -17,3 +17,8 @@ export interface StudentData {
   gpaTenPointScale: number;
   contact: Contact;
 }
+
+export interface NoteItemData {
+  title: string;
+  lastUpdate: string;
+}

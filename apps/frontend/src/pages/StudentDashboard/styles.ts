@@ -1,12 +1,17 @@
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import { Box, ListItemText } from '@mui/material';
+import { grey } from '@mui/material/colors';
+
+export const StyledContainer = styled(Box)`
+  display: flex;
+  height: 100vh;
+`;
 
 export const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
-    height: '100vh',
     padding: '1rem 0 0 0',
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -37,4 +42,5 @@ export const StyledListItemText = styled(ListItemText)`
 export const StyledContent = styled(Box)`
   width: 100%;
   padding: 1.5rem;
+  background: ${grey[100]};
 `;
