@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Editor } from '@tinymce/tinymce-react';
+import { Editor as TinyMCEEditor } from 'tinymce';
+// Import React FilePond
+// import { FilePondFile } from 'filepond';
+import { FilePond, registerPlugin } from 'react-filepond';
 import {
   Box,
+  Button,
   Grid,
   Link,
   List,
@@ -10,6 +16,15 @@ import {
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+// Import FilePond styles
+import 'filepond/dist/filepond.min.css';
+
+// Import the Image EXIF Orientation and Image Preview plugins
+// Note: These need to be installed separately
+// `npm i filepond-plugin-image-preview filepond-plugin-image-exif-orientation --save`
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import {
   Item,
   StyledBreadCrumbs,
@@ -17,66 +32,77 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import NoteItem from './NoteItem';
-import {
-  StyledDefaultImage,
-  StyledDefaultImageWrapper,
-  StyledHeader,
-  StyledIconButton,
-} from './styles';
+import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 import { NoteItemData } from '../../../types';
 
-const ROWS_PER_PAGE = 5;
+// Register the plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+const ROWS_PER_PAGE = 10;
+const notesList: NoteItemData[] = [
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+  },
+];
+
+const API_KEY = '0yf7s1ygposevnas5ey2boi88rautg60xy9zjtwyecbyz0nx';
+const MAX_FILES = 3;
 
 function NoteInfo() {
   const { id } = useParams();
   const [page, setPage] = useState(0);
+  const [files, setFiles] = useState([
+    {
+      source: 'https://picsum.photos/200/300',
+      options: { type: 'local' },
+    },
+  ]);
+  const editorRef = useRef<TinyMCEEditor | null>(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
-  const notesList: NoteItemData[] = [
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-    {
-      title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
-      lastUpdate: '06/11/2022 10:18',
-    },
-  ];
 
   return (
     <>
@@ -90,7 +116,7 @@ function NoteInfo() {
         </Link>
         <Typography color="text.primary">Ghi chú sinh viên</Typography>
       </StyledBreadCrumbs>
-      <Grid container spacing={3} columns={20}>
+      <StyledGridContainer container spacing={3} columns={20}>
         <Grid item xs={8}>
           <Item>
             <List>
@@ -137,15 +163,63 @@ function NoteInfo() {
         </Grid>
         <Grid item xs={12}>
           <Item>
-            <StyledDefaultImageWrapper sx={{ display: 'flex' }}>
-              <StyledDefaultImage
-                src="/img/empty_note_list.svg"
-                alt="empty note list"
-              />
-            </StyledDefaultImageWrapper>
+            <Editor
+              apiKey={API_KEY}
+              onInit={(evt, editor) => {
+                editorRef.current = editor;
+              }}
+              initialValue="<p>This is the initial content of the editor.</p>"
+              init={{
+                height: 400,
+                menubar: false,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'code',
+                ],
+                toolbar:
+                  'undo redo | blocks | ' +
+                  'bold italic forecolor | alignleft aligncenter ' +
+                  'alignright alignjustify | bullist numlist outdent indent | ' +
+                  'removeformat | help',
+              }}
+            />
+            <FilePond
+              allowMultiple
+              files={files as any}
+              onupdatefiles={setFiles as any}
+              server={{
+                load: (source, load) => {
+                  const myRequest = new Request(source);
+                  fetch(myRequest).then(function (response) {
+                    response.blob().then(function (myBlob) {
+                      load(myBlob);
+                    });
+                  });
+                },
+              }}
+              maxFiles={MAX_FILES}
+              name="files"
+              labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
+            />
+            <Button sx={{ width: '100%' }} variant="contained" onClick={log}>
+              Lưu ghi chú
+            </Button>
           </Item>
         </Grid>
-      </Grid>
+      </StyledGridContainer>
     </>
   );
 }

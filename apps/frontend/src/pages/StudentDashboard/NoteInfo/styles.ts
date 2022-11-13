@@ -1,5 +1,9 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+export const StyledGridContainer = styled(Grid)`
+  margin-bottom: 2rem;
+`;
 
 export const StyledHeader = styled(Box)`
   display: flex;
@@ -10,16 +14,4 @@ export const StyledHeader = styled(Box)`
 
 export const StyledIconButton = styled(IconButton)`
   padding: 0.4375rem;
-`;
-
-export const StyledDefaultImageWrapper = styled(Box)`
-  display: flex;
-  height: 100%;
-  align-items: center;
-`;
-
-export const StyledDefaultImage = styled('img')`
-  display: block;
-  margin: 0 auto;
-  max-height: 20rem;
 `;

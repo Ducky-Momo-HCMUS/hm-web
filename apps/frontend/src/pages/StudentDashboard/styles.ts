@@ -5,10 +5,8 @@ import { blue, grey } from '@mui/material/colors';
 
 export const StyledContainer = styled(Box)`
   display: flex;
-  height: 100vh;
   margin-top: 4rem;
   width: 100%;
-  position: fixed;
 `;
 
 export const Drawer = styled(MuiDrawer, {

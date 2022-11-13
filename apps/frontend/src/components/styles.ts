@@ -86,11 +86,11 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
   marginBottom: '1rem',
 }));
 
-export const Item = styled(Paper)(({ theme }) => ({
+export const Item = styled(Paper)({
   backgroundColor: '#fff',
-  padding: theme.spacing(2),
+  padding: '1rem 1rem 0 1rem',
   height: '100%',
-}));
+});
 
 export const StyledDivider = styled(Divider)`
   border-color: rgba(0, 0, 0, 0.87);
