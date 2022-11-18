@@ -17,3 +17,13 @@ export interface StudentData {
   gpaTenPointScale: number;
   contact: Contact;
 }
+
+export interface RegisteredSubjectsData {
+  subjectId: string;
+  subjectName: string;
+  subjectClass: string;
+  status: string;
+  averagePoint: number | null;
+  theoryTeacher: string;
+  practiceTeacher: string;
+}

@@ -9,6 +9,10 @@ const themeOptions: ThemeOptionsOld = {
       light: '#fbb4af',
       dark: '#7c3a38',
     },
+    info: {
+      main: '#0288d1',
+      light: '#acd4ea',
+    },
   },
 };
 
