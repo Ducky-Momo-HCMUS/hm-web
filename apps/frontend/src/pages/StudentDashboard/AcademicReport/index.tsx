@@ -27,7 +27,7 @@ interface State {
 function AcademicReport() {
   const { id } = useParams();
   const [values, setValues] = useState<State>({
-    semester: '',
+    semester: 'all',
   });
 
   const handleChange = useCallback(

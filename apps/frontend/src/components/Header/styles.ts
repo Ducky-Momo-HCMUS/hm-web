@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 
