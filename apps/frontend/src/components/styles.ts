@@ -4,6 +4,10 @@ import {
   FormControl,
   TextField,
   Link as MuiLink,
+  Typography,
+  Paper,
+  Divider,
+  Breadcrumbs,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -73,4 +77,28 @@ export const StyledRouterLink = styled(Link)(({ theme }) => ({
 export const StyledMuiLink = styled(MuiLink)(({ theme }) => ({
   textDecoration: 'none',
   color: theme.palette.primary.dark,
+}));
+
+export const StyledTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '2rem',
+  fontWeight: 'bold',
+  color: theme.palette.primary.dark,
+  marginBottom: '1rem',
+}));
+
+export const Item = styled(Paper)({
+  backgroundColor: '#fff',
+  padding: '1rem 1rem 0 1rem',
+  height: '100%',
+});
+
+export const StyledDivider = styled(Divider)`
+  border-color: rgba(0, 0, 0, 0.87);
+`;
+
+export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  marginBottom: '1.5rem',
+  '& a': {
+    color: theme.palette.primary.main,
+  },
 }));

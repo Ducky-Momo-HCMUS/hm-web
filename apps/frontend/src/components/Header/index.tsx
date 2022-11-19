@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { StyledBox } from './styles';
 import SearchBar from '../SearchBar';
 import ActionsBar from '../ActionsBar';
@@ -9,15 +9,17 @@ interface HeaderProps {
 }
 function Header({ isAuthenticated }: HeaderProps) {
   return (
-    <StyledBox>
-      <Typography component="h6">Homeroom management</Typography>
-      {isAuthenticated && (
-        <>
-          <SearchBar />
-          <ActionsBar />
-        </>
-      )}
-    </StyledBox>
+    <Box sx={{ position: 'fixed', top: 0, zIndex: 9999, width: '100%' }}>
+      <StyledBox>
+        <Typography component="h6">Homeroom management</Typography>
+        {isAuthenticated && (
+          <>
+            <SearchBar />
+            <ActionsBar />
+          </>
+        )}
+      </StyledBox>
+    </Box>
   );
 }
 

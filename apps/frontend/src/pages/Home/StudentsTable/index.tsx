@@ -130,6 +130,7 @@ function StudentsTable() {
           component="div"
           count={STUDENTS_DATA.length}
           rowsPerPage={rowsPerPage}
+          labelRowsPerPage="Số dòng trên trang"
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
