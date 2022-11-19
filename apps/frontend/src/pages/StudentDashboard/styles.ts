@@ -41,7 +41,7 @@ export const StyledListItemButton = styled(ListItemButton)<{ active: boolean }>`
   ${(props) =>
     props.active &&
     `
-     background: ${blue[300]};
+     background: ${blue[500]};
      color: #fff;
      & svg {
       color: #fff;
@@ -49,8 +49,11 @@ export const StyledListItemButton = styled(ListItemButton)<{ active: boolean }>`
   `};
   transition: all 300ms;
   &:hover {
-    background: ${blue[300]};
+    background: ${blue[500]};
     color: #fff;
+    & svg {
+      color: #fff;
+    }
   }
 `;
 
