@@ -17,6 +17,7 @@ import {
   StyledActionsBar,
   StyledContentWrapper,
   StyledFormControl,
+  StyledTitle,
 } from '../../../components/styles';
 import StudentTableRow from './StudentTableRow';
 import { STUDENTS_DATA } from '../../../constants';
@@ -69,6 +70,7 @@ function StudentsTable() {
 
   return (
     <StyledContentWrapper>
+      <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
       <StyledActionsBar>
         <Box>
           <StyledFormControl>

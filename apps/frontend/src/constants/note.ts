@@ -47,13 +47,13 @@ export const NOTES_LIST: NoteItemData[] = [
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `Không có gì`,
+    content: `<p>Không có gì</p>`,
     images: ['https://picsum.photos/200/300'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `Không có gì`,
+    content: `<p>Không có gì</p>`,
     images: ['https://picsum.photos/200/300'],
   },
   {

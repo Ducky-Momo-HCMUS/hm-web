@@ -1,5 +1,13 @@
 import React from 'react';
-import { Box, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
+import {
+  Box,
+  IconButton,
+  ListItemButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -75,22 +83,40 @@ function ActionsBar() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <ListItemIcon>
-            <StickyNote2OutlinedIcon fontSize="small" />
-          </ListItemIcon>
-          Ghi chú của tôi
+          <ListItemButton
+            sx={{ padding: 0 }}
+            href="/notes"
+            LinkComponent={Link}
+          >
+            <ListItemIcon>
+              <StickyNote2OutlinedIcon fontSize="small" />
+            </ListItemIcon>
+            Ghi chú của tôi
+          </ListItemButton>
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <SettingsIcon fontSize="small" />
-          </ListItemIcon>
-          Thay đổi mật khẩu
+          <ListItemButton
+            sx={{ padding: 0 }}
+            href="/change-password"
+            LinkComponent={Link}
+          >
+            <ListItemIcon>
+              <SettingsIcon fontSize="small" />
+            </ListItemIcon>
+            Thay đổi mật khẩu
+          </ListItemButton>
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Đăng xuất
+          <ListItemButton
+            sx={{ padding: 0 }}
+            href="/logout"
+            LinkComponent={Link}
+          >
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Đăng xuất
+          </ListItemButton>
         </MenuItem>
       </Menu>
     </>
