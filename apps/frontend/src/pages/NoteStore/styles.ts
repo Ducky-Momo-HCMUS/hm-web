@@ -14,5 +14,5 @@ export const StyledFilterBar = styled(Card)`
 `;
 
 export const StyledGridContainer = styled(Grid)`
-  margin-top: 2rem;
+  margin-top: 0.25rem;
 `;

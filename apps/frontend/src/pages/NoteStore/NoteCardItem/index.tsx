@@ -9,15 +9,16 @@ import { StyledCard, StyledFooter, StyledTitle } from './styles';
 
 interface NoteCardItemProps {
   data: NoteItemData;
+  onClick: any;
   onClickDelete: any;
 }
 
-function NoteCardItem({ data, onClickDelete }: NoteCardItemProps) {
+function NoteCardItem({ data, onClick, onClickDelete }: NoteCardItemProps) {
   const { title, lastUpdate, content } = data;
 
   return (
     <Grid item xs={3}>
-      <StyledCard>
+      <StyledCard onClick={onClick}>
         <Typography color="text.secondary" variant="body2">
           {lastUpdate}
         </Typography>

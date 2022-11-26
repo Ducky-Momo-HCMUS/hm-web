@@ -20,7 +20,7 @@ import {
   StyledFormControl,
   StyledTitle,
 } from '../../../components/styles';
-import { STUDENTS_DATA } from '../../../constants';
+import { CLASS_OPTIONS, STUDENTS_DATA, YEAR_OPTIONS } from '../../../constants';
 import { Order, StudentData } from '../../../types';
 import { getComparator } from '../../../utils';
 
@@ -84,9 +84,9 @@ function StudentsTable() {
               label="Khoá"
               onChange={handleChange('year')}
             >
-              <MenuItem value="2019">2019</MenuItem>
-              <MenuItem value="2020">2020</MenuItem>
-              <MenuItem value="2021">2021</MenuItem>
+              {YEAR_OPTIONS.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
             </Select>
           </StyledFormControl>
           <StyledFormControl>
@@ -98,9 +98,9 @@ function StudentsTable() {
               label="Lớp"
               onChange={handleChange('class')}
             >
-              <MenuItem value="19CLC5">19CLC5</MenuItem>
-              <MenuItem value="19CLC6">19CLC6</MenuItem>
-              <MenuItem value="19CLC7">19CLC7</MenuItem>
+              {CLASS_OPTIONS.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
             </Select>
           </StyledFormControl>
         </Box>

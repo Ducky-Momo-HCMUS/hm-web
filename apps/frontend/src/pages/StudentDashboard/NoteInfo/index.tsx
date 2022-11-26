@@ -1,4 +1,5 @@
 import React, {
+  ChangeEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -6,63 +7,71 @@ import React, {
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { Editor } from '@tinymce/tinymce-react';
 import { Editor as TinyMCEEditor } from 'tinymce';
-import { FilePond, registerPlugin } from 'react-filepond';
 import {
   Box,
-  Button,
+  Checkbox,
+  FormControl,
   Grid,
+  InputLabel,
   Link,
   List,
+  ListItemText,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TablePagination,
   Typography,
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
+import NoteEditor from '../../../components/NoteEditor';
 import {
   Item,
   StyledBreadCrumbs,
   StyledDivider,
+  StyledTextField,
   StyledTitle,
 } from '../../../components/styles';
-import {
-  API_KEY,
-  MAX_FILES,
-  NOTES_LIST,
-  ROWS_PER_PAGE,
-} from '../../../constants';
+import { NOTES_LIST, ROWS_PER_PAGE, TAGS_OPTIONS } from '../../../constants';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
+import ConfirmDeleteNoteDialog from '../../../components/ConfirmDeleteNoteDialog';
 
-import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 import NoteItem from './NoteItem';
+import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+interface State {
+  selected: number;
+  page: number;
+  title: string;
+  tags: string[];
+  deleteIndex: number;
+}
 
 function NoteInfo() {
   const { id } = useParams();
 
-  const [selected, setSelected] = useState<number>(-1);
-  const initialValue = useMemo(
-    () => (selected >= 0 ? NOTES_LIST[selected].content : ''),
-    [selected]
-  );
+  const [values, setValues] = useState<State>({
+    selected: -1,
+    page: 0,
+    title: '',
+    tags: [],
+    deleteIndex: -1,
+  });
+
   const [files, setFiles] = useState<File[]>();
-  useEffect(() => {
-    if (selected >= 0) {
-      setFiles(mapImageUrlToFile(NOTES_LIST[selected].images));
-    }
-  }, [selected]);
+
+  const initialValue = useMemo(
+    () => (values.selected >= 0 ? NOTES_LIST[values.selected].content : ''),
+    [values.selected]
+  );
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
     if (editorRef.current) {
+      // eslint-disable-next-line no-console
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);
@@ -74,6 +83,42 @@ function NoteInfo() {
     },
     [setPage]
   );
+
+  const handleChangeValue = useCallback(
+    (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+      setValues((v) => ({ ...v, [prop]: event.target.value }));
+    },
+    []
+  );
+
+  const handleSelectTags = useCallback(
+    (event: SelectChangeEvent<typeof values.tags>) => {
+      const {
+        target: { value },
+      } = event;
+      setValues((v) => ({
+        ...v,
+        tags: typeof value === 'string' ? value.split(',') : value,
+      }));
+    },
+    []
+  );
+
+  const handleSelectValue = useCallback((prop: keyof State, value: any) => {
+    setValues((v) => ({ ...v, [prop]: value }));
+  }, []);
+
+  const handleClickDelete = useCallback((index: number) => {
+    setValues((v) => ({ ...v, deleteIndex: index }));
+  }, []);
+
+  useEffect(() => {
+    if (values.selected >= 0) {
+      setValues((v) => ({ ...v, title: NOTES_LIST[values.selected].title }));
+      setValues((v) => ({ ...v, tags: NOTES_LIST[values.selected].tags }));
+      setFiles(mapImageUrlToFile(NOTES_LIST[values.selected].images));
+    }
+  }, [values.selected]);
 
   return (
     <>
@@ -119,9 +164,10 @@ function NoteInfo() {
               ).map((item, index) => (
                 <NoteItem
                   index={index}
-                  selected={selected}
+                  selected={values.selected}
                   data={item}
-                  onClick={() => setSelected(index)}
+                  onClick={() => handleSelectValue('selected', index)}
+                  onClickDelete={() => handleClickDelete(index)}
                 />
               ))}
             </List>
@@ -137,67 +183,64 @@ function NoteInfo() {
         </Grid>
         <Grid item xs={12}>
           <Item>
-            <Editor
-              apiKey={API_KEY}
-              onInit={(evt, editor) => {
-                editorRef.current = editor;
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '1rem',
               }}
-              initialValue={initialValue}
-              init={{
-                height: 400,
-                menubar: false,
-                plugins: [
-                  'advlist',
-                  'autolink',
-                  'lists',
-                  'link',
-                  'charmap',
-                  'preview',
-                  'anchor',
-                  'searchreplace',
-                  'visualblocks',
-                  'code',
-                  'fullscreen',
-                  'insertdatetime',
-                  'media',
-                  'table',
-                  'code',
-                ],
-                toolbar:
-                  'undo redo | blocks | formatselect | ' +
-                  'bold italic backcolor link | alignleft aligncenter ' +
-                  'alignright alignjustify | bullist numlist outdent indent | ' +
-                  'removeformat | help',
-              }}
-            />
-            <FilePond
-              allowMultiple
-              files={files as any}
-              onupdatefiles={setFiles as any}
-              server={{
-                load: (source, load) => {
-                  const myRequest = new Request(source);
-                  fetch(myRequest).then(function (response) {
-                    response.blob().then(function (myBlob) {
-                      load(myBlob);
-                    });
-                  });
-                },
-              }}
-              maxFiles={MAX_FILES}
-              name="files"
-              labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
-            />
-            <Button
-              sx={{ width: '100%' }}
-              variant="contained"
-              onClick={handleClickSave}
             >
-              Lưu ghi chú
-            </Button>
+              <StyledTextField
+                sx={{ width: '70%' }}
+                label="Tiêu đề"
+                name="title"
+                variant="filled"
+                placeholder="Nhập tiêu đề..."
+                value={values.title}
+                onChange={handleChangeValue('title')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <FormControl sx={{ width: 180 }} variant="filled">
+                <InputLabel id="tag-select-label">Tag</InputLabel>
+                <Select
+                  multiple
+                  renderValue={(selected) => selected.join(', ')}
+                  labelId="tag-select-label"
+                  id="tag-select"
+                  value={values.tags}
+                  label="Tag"
+                  onChange={handleSelectTags}
+                >
+                  {TAGS_OPTIONS.map((item) => (
+                    <MenuItem value={item}>
+                      <Checkbox checked={values.tags.indexOf(item) > -1} />
+                      <ListItemText primary={item} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <NoteEditor
+              editorRef={editorRef}
+              initialValue={initialValue}
+              files={files}
+              setFiles={setFiles}
+              onClickSave={handleClickSave}
+            />
           </Item>
         </Grid>
       </StyledGridContainer>
+      {values.deleteIndex >= 0 && (
+        <ConfirmDeleteNoteDialog
+          open={values.deleteIndex >= 0}
+          onClose={() => setValues({ ...values, deleteIndex: -1 })}
+          title={NOTES_LIST[values.deleteIndex].title}
+          onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
+          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+        />
+      )}
     </>
   );
 }

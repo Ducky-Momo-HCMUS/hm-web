@@ -16,10 +16,17 @@ interface NoteItemProps {
   selected: number;
   data: NoteItemData;
   onClick: any;
+  onClickDelete: any;
 }
 
-function NoteItem({ index, selected, data, onClick }: NoteItemProps) {
-  const { title, lastUpdate } = data;
+function NoteItem({
+  index,
+  selected,
+  data,
+  onClick,
+  onClickDelete,
+}: NoteItemProps) {
+  const { title, lastUpdate, tags } = data;
   const isActive = useMemo(() => index === selected, [index, selected]);
 
   return (
@@ -29,9 +36,16 @@ function NoteItem({ index, selected, data, onClick }: NoteItemProps) {
           <Typography variant="body1">{title}</Typography>
           <Typography variant="body2">{lastUpdate}</Typography>
         </StyledContent>
-        <StyledTag label="Sinhvien" />
+        {tags.map((tag) => (
+          <StyledTag label={tag} />
+        ))}
       </StyledContentWrapper>
-      <IconButton size="medium" aria-label="delete note" component="label">
+      <IconButton
+        size="medium"
+        aria-label="delete note"
+        component="label"
+        onClick={onClickDelete}
+      >
         <DeleteIcon fontSize="inherit" color="action" />
       </IconButton>
     </StyledListItem>
