@@ -9,6 +9,7 @@ import {
   InputAdornment,
   Link,
 } from '@mui/material';
+
 import Header from '../../components/Header';
 import {
   StyledCard,
@@ -16,8 +17,9 @@ import {
   StyledLogo,
   StyledTextField,
 } from '../../components/styles';
-import { StyledFormControlLabel } from './styles';
 import ErrorMessage from '../../components/ErrorMessage';
+
+import { StyledFormControlLabel } from './styles';
 
 interface State {
   username: string;

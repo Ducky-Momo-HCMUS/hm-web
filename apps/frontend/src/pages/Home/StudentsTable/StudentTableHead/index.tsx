@@ -7,6 +7,7 @@ import {
   TableSortLabel,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
+
 import { Order, StudentData } from '../../../../types';
 
 interface EnhancedTableProps {

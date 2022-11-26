@@ -20,7 +20,6 @@ import {
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-
 import 'filepond/dist/filepond.min.css';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -32,8 +31,6 @@ import {
   StyledDivider,
   StyledTitle,
 } from '../../../components/styles';
-import NoteItem from './NoteItem';
-import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 import {
   API_KEY,
   MAX_FILES,
@@ -42,6 +39,9 @@ import {
 } from '../../../constants';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
+
+import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
+import NoteItem from './NoteItem';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 

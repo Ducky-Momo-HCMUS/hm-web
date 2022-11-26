@@ -11,6 +11,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
+
 import Header from '../../components/Header';
 import {
   StyledContainer,
@@ -18,13 +19,14 @@ import {
   StyledFormControl,
   StyledTitle,
 } from '../../components/styles';
+import { NOTES_LIST } from '../../constants';
+
 import NoteCardItem from './NoteCardItem';
 import {
   StyledFilterBar,
   StyledGridContainer,
   StyledTextField,
 } from './styles';
-import { NOTES_LIST } from '../../constants';
 
 interface State {
   class: string;

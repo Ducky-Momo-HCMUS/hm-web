@@ -1,9 +1,11 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { StyledBox } from './styles';
+
 import SearchBar from '../SearchBar';
 import ActionsBar from '../ActionsBar';
 import { Link } from 'react-router-dom';
+
+import { StyledBox } from './styles';
 
 interface HeaderProps {
   isAuthenticated?: boolean;

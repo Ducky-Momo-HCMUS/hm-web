@@ -2,7 +2,9 @@ import React from 'react';
 import ShowMoreText from 'react-show-more-text';
 import { Chip, Grid, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import { NoteItemData } from '../../../types';
+
 import { StyledCard, StyledFooter, StyledTitle } from './styles';
 
 interface NoteCardItemProps {

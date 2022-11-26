@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
+
 import { StudentData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';

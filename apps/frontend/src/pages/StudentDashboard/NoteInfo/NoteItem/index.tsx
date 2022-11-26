@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
 import { IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import { NoteItemData } from '../../../../types';
+
 import {
   StyledContent,
   StyledContentWrapper,
   StyledListItem,
   StyledTag,
 } from './styles';
-import { NoteItemData } from '../../../../types';
 
 interface NoteItemProps {
   index: number;

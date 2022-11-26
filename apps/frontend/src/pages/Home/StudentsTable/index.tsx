@@ -13,17 +13,19 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+
 import {
   StyledActionsBar,
   StyledContentWrapper,
   StyledFormControl,
   StyledTitle,
 } from '../../../components/styles';
-import StudentTableRow from './StudentTableRow';
 import { STUDENTS_DATA } from '../../../constants';
-import StudentTableHead from './StudentTableHead';
 import { Order, StudentData } from '../../../types';
 import { getComparator } from '../../../utils';
+
+import StudentTableHead from './StudentTableHead';
+import StudentTableRow from './StudentTableRow';
 
 interface State {
   year: string;
