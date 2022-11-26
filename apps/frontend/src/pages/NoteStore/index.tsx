@@ -99,28 +99,37 @@ function NoteStore() {
           </StyledGridContainer>
         </StyledContentWrapper>
       </StyledContainer>
-      <Dialog
-        open={values.deleteIndex >= 0}
-        onClose={() => setValues({ ...values, deleteIndex: -1 })}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Alo</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setValues({ ...values, deleteIndex: -1 })}>
-            Disagree
-          </Button>
-          <Button onClick={() => setValues({ ...values, deleteIndex: -1 })}>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {values.deleteIndex >= 0 && (
+        <Dialog
+          open={values.deleteIndex >= 0}
+          onClose={() => setValues({ ...values, deleteIndex: -1 })}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Xác nhận</DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              id="alert-dialog-description"
+              color="text.primary"
+            >
+              Bạn có đồng ý xoá ghi chú{' '}
+              <b>{NOTES_LIST[values.deleteIndex].title}</b> không?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setValues({ ...values, deleteIndex: -1 })}>
+              Hủy
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={() => setValues({ ...values, deleteIndex: -1 })}
+            >
+              Xoá
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 }
