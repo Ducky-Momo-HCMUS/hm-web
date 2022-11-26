@@ -13,6 +13,7 @@ import {
 } from './styles';
 import NoteInfo from './NoteInfo';
 import Header from '../../components/Header';
+import AcademicReport from './AcademicReport';
 
 function StudentDashboard() {
   const [selected, setSelected] = useState(1);
@@ -54,7 +55,8 @@ function StudentDashboard() {
           </List>
         </Drawer>
         <StyledContent component="main">
-          <NoteInfo />
+          {selected === 1 && <NoteInfo />}
+          {selected === 2 && <AcademicReport />}
         </StyledContent>
       </StyledContainer>
     </>
