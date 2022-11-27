@@ -28,6 +28,10 @@ interface NoteEditorProps {
   files: File[] | undefined;
   setFiles: React.Dispatch<SetStateAction<File[] | undefined>>;
   onClickSave: any;
+  title: string;
+  tags: string[];
+  handleChangeValue: any;
+  handleSelectTags: any;
 }
 
 function NoteEditor({
@@ -36,74 +40,86 @@ function NoteEditor({
   files,
   setFiles,
   onClickSave,
+  title,
+  tags,
+  handleChangeValue,
+  handleSelectTags,
 }: NoteEditorProps) {
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '1rem',
-        }}
-      >
+      <Box sx={{ padding: '1rem' }}>
         <StyledTextField
-          sx={{ width: '70%' }}
+          sx={{ width: '100%' }}
           label="Tiêu đề"
           name="title"
           variant="filled"
           placeholder="Nhập tiêu đề..."
-          value={values.title}
+          value={title}
           onChange={handleChangeValue('title')}
           InputLabelProps={{
             shrink: true,
           }}
         />
-        <FormControl sx={{ width: 180 }} variant="filled">
-          <InputLabel id="tag-select-label">Tag</InputLabel>
+        <FormControl sx={{ width: '100%', margin: '1rem 0' }} variant="filled">
+          <InputLabel shrink id="tag-select-label">
+            Tag
+          </InputLabel>
           <Select
+            sx={{
+              '& .MuiSelect-select .notranslate::after':
+                tags.length === 0
+                  ? {
+                      content: `"Chọn tag..."`,
+                      opacity: 0.42,
+                    }
+                  : {},
+            }}
             multiple
             renderValue={(selected) => selected.join(', ')}
             labelId="tag-select-label"
             id="tag-select"
-            value={values.tags}
+            value={tags}
             label="Tag"
             onChange={handleSelectTags}
           >
             {TAGS_OPTIONS.map((item) => (
               <MenuItem value={item}>
-                <Checkbox checked={values.tags.indexOf(item) > -1} />
+                <Checkbox checked={tags.indexOf(item) > -1} />
                 <ListItemText primary={item} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
       </Box>
-      <Editor
-        apiKey={API_KEY}
-        onInit={(evt, editor: any) => {
-          // eslint-disable-next-line no-param-reassign
-          editorRef.current = editor;
-        }}
-        initialValue={initialValue}
-        init={NOTE_EDITOR_CONFIG}
-      />
-      <FilePond
-        allowMultiple
-        files={files as any}
-        onupdatefiles={setFiles as any}
-        server={{
-          load: (source, load) => {
-            const myRequest = new Request(source);
-            fetch(myRequest).then((response) => {
-              response.blob().then((myBlob) => {
-                load(myBlob);
+      <Box>
+        <Editor
+          apiKey={API_KEY}
+          onInit={(evt, editor: any) => {
+            // eslint-disable-next-line no-param-reassign
+            editorRef.current = editor;
+          }}
+          initialValue={initialValue}
+          init={NOTE_EDITOR_CONFIG}
+        />
+        <FilePond
+          allowMultiple
+          files={files as any}
+          onupdatefiles={setFiles as any}
+          server={{
+            load: (source, load) => {
+              const myRequest = new Request(source);
+              fetch(myRequest).then((response) => {
+                response.blob().then((myBlob) => {
+                  load(myBlob);
+                });
               });
-            });
-          },
-        }}
-        name="files"
-        labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
-      />
+            },
+          }}
+          name="files"
+          labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
+        />
+      </Box>
+
       <Box>
         <Button sx={{ width: '50%', borderRadius: 0 }} variant="outlined">
           Hủy ghi chú

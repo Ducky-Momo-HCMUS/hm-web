@@ -1,15 +1,10 @@
 import React, { useMemo } from 'react';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton, Typography, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { NoteItemData } from '../../../../types';
 
-import {
-  StyledContent,
-  StyledContentWrapper,
-  StyledListItem,
-  StyledTag,
-} from './styles';
+import { StyledContent, StyledListItem, StyledTag } from './styles';
 
 interface NoteItemProps {
   index: number;
@@ -31,17 +26,17 @@ function NoteItem({
 
   return (
     <StyledListItem divider onClick={onClick} active={isActive}>
-      <StyledContentWrapper>
-        <StyledContent>
-          <Typography variant="body1">{title}</Typography>
-          <Typography variant="body2">{lastUpdate}</Typography>
-        </StyledContent>
-        {tags.map((tag) => (
-          <StyledTag label={tag} />
-        ))}
-      </StyledContentWrapper>
+      <StyledContent>
+        <Typography variant="body1">{title}</Typography>
+        <Typography variant="body2">{lastUpdate}</Typography>
+        <Box>
+          {tags.map((tag) => (
+            <StyledTag label={tag} />
+          ))}
+        </Box>
+      </StyledContent>
       <IconButton
-        size="medium"
+        size="large"
         aria-label="delete note"
         component="label"
         onClick={onClickDelete}

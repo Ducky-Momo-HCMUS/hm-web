@@ -90,7 +90,7 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 
 export const Item = styled(Paper)({
   backgroundColor: '#fff',
-  padding: '1rem 1rem 0 1rem',
+
   height: '100%',
 });
 

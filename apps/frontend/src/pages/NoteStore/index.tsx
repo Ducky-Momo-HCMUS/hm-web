@@ -1,12 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Checkbox,
   FormControl,
   InputLabel,
   ListItemText,
   MenuItem,
-  Modal,
   Pagination,
   Select,
   SelectChangeEvent,
@@ -26,9 +32,11 @@ import { CLASS_OPTIONS, NOTES_LIST } from '../../constants';
 import ConfirmDeleteNoteDialog from '../../components/ConfirmDeleteNoteDialog';
 import { File } from '../../types';
 import NoteEditor from '../../components/NoteEditor';
+import { mapImageUrlToFile } from '../../utils';
 
 import NoteCardItem from './NoteCardItem';
 import {
+  StyledDialog,
   StyledFilterBar,
   StyledGridContainer,
   StyledTextField,
@@ -40,6 +48,8 @@ interface State {
   deleteIndex: number;
   startDate: Dayjs | null;
   endDate: Dayjs | null;
+  title: string;
+  tags: string[];
 }
 
 function NoteStore() {
@@ -49,6 +59,8 @@ function NoteStore() {
     deleteIndex: -1,
     startDate: null,
     endDate: null,
+    title: '',
+    tags: [],
   });
 
   const handleSelectClasses = useCallback(
@@ -78,6 +90,34 @@ function NoteStore() {
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);
+
+  const handleChangeValue = useCallback(
+    (prop: keyof State) => (event: ChangeEvent<HTMLInputElement>) => {
+      setValues((v) => ({ ...v, [prop]: event.target.value }));
+    },
+    []
+  );
+
+  const handleSelectTags = useCallback(
+    (event: SelectChangeEvent<typeof values.tags>) => {
+      const {
+        target: { value },
+      } = event;
+      setValues((v) => ({
+        ...v,
+        tags: typeof value === 'string' ? value.split(',') : value,
+      }));
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (values.selected >= 0) {
+      setValues((v) => ({ ...v, title: NOTES_LIST[values.selected].title }));
+      setValues((v) => ({ ...v, tags: NOTES_LIST[values.selected].tags }));
+      setFiles(mapImageUrlToFile(NOTES_LIST[values.selected].images));
+    }
+  }, [values.selected]);
 
   return (
     <>
@@ -142,9 +182,24 @@ function NoteStore() {
                 )}
               />
             </LocalizationProvider>
-            <FormControl sx={{ width: '10%' }}>
-              <InputLabel id="class-select-label">Lớp</InputLabel>
+            <FormControl variant="standard" sx={{ width: '10%' }}>
+              <InputLabel
+                sx={{ fontWeight: 'bold' }}
+                shrink
+                id="class-select-label"
+              >
+                Lớp
+              </InputLabel>
               <Select
+                sx={{
+                  '& .MuiSelect-select .notranslate::after':
+                    values.classes.length === 0
+                      ? {
+                          content: `"Chọn lớp..."`,
+                          opacity: 0.42,
+                        }
+                      : {},
+                }}
                 multiple
                 renderValue={(selected) => selected.join(', ')}
                 labelId="class-select-label"
@@ -190,8 +245,7 @@ function NoteStore() {
         />
       )}
       {values.selected >= 0 && (
-        <Modal
-          sx={{ marginTop: '4rem' }}
+        <StyledDialog
           open={values.selected >= 0}
           onClose={() => setValues({ ...values, selected: -1 })}
         >
@@ -201,8 +255,12 @@ function NoteStore() {
             files={files}
             setFiles={setFiles}
             onClickSave={handleClickSave}
+            title={values.title}
+            tags={values.tags}
+            handleChangeValue={handleChangeValue}
+            handleSelectTags={handleSelectTags}
           />
-        </Modal>
+        </StyledDialog>
       )}
     </>
   );

@@ -1,13 +1,13 @@
 import { NoteItemData } from '../types';
 
-export const ROWS_PER_PAGE = 10;
+export const ROWS_PER_PAGE = 5;
 export const NOTES_LIST: NoteItemData[] = [
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
     content: `<p>Em này nghỉ học 3 buổi</p>`,
     images: ['https://picsum.photos/100/100'],
-    tags: ['Học tập'],
+    tags: ['Học tập', 'Chuyên cần', 'Phụ huynh'],
   },
   {
     title: 'Tình hình học tập môn cơ sở dữ liệu',
@@ -28,7 +28,7 @@ export const NOTES_LIST: NoteItemData[] = [
     lastUpdate: '06/11/2022 10:18',
     content: `<h3>Mong muốn học tốt hơn</h3>`,
     images: ['https://picsum.photos/100/100'],
-    tags: ['Học tập'],
+    tags: ['Học tập', 'Phụ huynh'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
@@ -42,7 +42,7 @@ export const NOTES_LIST: NoteItemData[] = [
     lastUpdate: '06/11/2022 10:18',
     content: `<p>Không có gì</p>`,
     images: ['https://picsum.photos/100/100'],
-    tags: ['Chuyên cần'],
+    tags: ['Chuyên cần', 'Phụ huynh'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
@@ -50,6 +50,20 @@ export const NOTES_LIST: NoteItemData[] = [
     content: `<p>Không có gì</p>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Chuyên cần'],
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+    content: `<p>Không có gì</p>`,
+    images: ['https://picsum.photos/100/100'],
+    tags: ['Học tập'],
+  },
+  {
+    title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
+    lastUpdate: '06/11/2022 10:18',
+    content: `<p>Không có gì</p>`,
+    images: ['https://picsum.photos/100/100'],
+    tags: ['Học tập'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',

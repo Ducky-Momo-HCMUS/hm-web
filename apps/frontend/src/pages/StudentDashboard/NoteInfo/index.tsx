@@ -10,31 +10,24 @@ import { useParams } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import {
   Box,
-  Checkbox,
-  FormControl,
   Grid,
-  InputLabel,
   Link,
   List,
-  ListItemText,
-  MenuItem,
-  Select,
   SelectChangeEvent,
   TablePagination,
   Typography,
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import SortIcon from '@mui/icons-material/Sort';
 
 import NoteEditor from '../../../components/NoteEditor';
 import {
   Item,
   StyledBreadCrumbs,
   StyledDivider,
-  StyledTextField,
   StyledTitle,
 } from '../../../components/styles';
-import { NOTES_LIST, ROWS_PER_PAGE, TAGS_OPTIONS } from '../../../constants';
+import { NOTES_LIST, ROWS_PER_PAGE } from '../../../constants';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
 import ConfirmDeleteNoteDialog from '../../../components/ConfirmDeleteNoteDialog';
@@ -135,99 +128,66 @@ function NoteInfo() {
       <StyledGridContainer container spacing={3} columns={20}>
         <Grid item xs={8}>
           <Item>
-            <List>
-              <StyledHeader>
-                <Typography component="p" variant="h5">
-                  Danh sách ghi chú
-                </Typography>
-                <Box>
-                  <StyledIconButton
-                    size="large"
-                    aria-label="add note"
-                    color="inherit"
-                  >
-                    <AddCircleOutlineOutlinedIcon fontSize="inherit" />
-                  </StyledIconButton>
-                  <StyledIconButton
-                    size="large"
-                    aria-label="filter note"
-                    color="inherit"
-                  >
-                    <FilterAltOutlinedIcon fontSize="inherit" />
-                  </StyledIconButton>
-                </Box>
-              </StyledHeader>
-              <StyledDivider />
-              {NOTES_LIST.slice(
-                page * ROWS_PER_PAGE,
-                page * ROWS_PER_PAGE + ROWS_PER_PAGE
-              ).map((item, index) => (
-                <NoteItem
-                  index={index}
-                  selected={values.selected}
-                  data={item}
-                  onClick={() => handleSelectValue('selected', index)}
-                  onClickDelete={() => handleClickDelete(index)}
-                />
-              ))}
-            </List>
-            <TablePagination
-              rowsPerPageOptions={[ROWS_PER_PAGE]}
-              component="div"
-              count={NOTES_LIST.length}
-              rowsPerPage={ROWS_PER_PAGE}
-              page={page}
-              onPageChange={handleChangePage}
-            />
+            <Box sx={{ padding: '1rem 1rem 0 1rem' }}>
+              <List>
+                <StyledHeader>
+                  <Typography component="p" variant="h5">
+                    Danh sách ghi chú
+                  </Typography>
+                  <Box>
+                    <StyledIconButton
+                      size="large"
+                      aria-label="add note"
+                      color="inherit"
+                    >
+                      <AddCircleOutlineOutlinedIcon fontSize="inherit" />
+                    </StyledIconButton>
+                    <StyledIconButton
+                      size="large"
+                      aria-label="sort note"
+                      color="inherit"
+                    >
+                      <SortIcon fontSize="inherit" />
+                    </StyledIconButton>
+                  </Box>
+                </StyledHeader>
+                <StyledDivider />
+                {NOTES_LIST.slice(
+                  page * ROWS_PER_PAGE,
+                  page * ROWS_PER_PAGE + ROWS_PER_PAGE
+                ).map((item, index) => (
+                  <NoteItem
+                    index={index}
+                    selected={values.selected}
+                    data={item}
+                    onClick={() => handleSelectValue('selected', index)}
+                    onClickDelete={() => handleClickDelete(index)}
+                  />
+                ))}
+              </List>
+              <TablePagination
+                rowsPerPageOptions={[ROWS_PER_PAGE]}
+                component="div"
+                count={NOTES_LIST.length}
+                rowsPerPage={ROWS_PER_PAGE}
+                page={page}
+                onPageChange={handleChangePage}
+              />
+            </Box>
           </Item>
         </Grid>
         <Grid item xs={12}>
           <Item>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '1rem',
-              }}
-            >
-              <StyledTextField
-                sx={{ width: '70%' }}
-                label="Tiêu đề"
-                name="title"
-                variant="filled"
-                placeholder="Nhập tiêu đề..."
-                value={values.title}
-                onChange={handleChangeValue('title')}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <FormControl sx={{ width: 180 }} variant="filled">
-                <InputLabel id="tag-select-label">Tag</InputLabel>
-                <Select
-                  multiple
-                  renderValue={(selected) => selected.join(', ')}
-                  labelId="tag-select-label"
-                  id="tag-select"
-                  value={values.tags}
-                  label="Tag"
-                  onChange={handleSelectTags}
-                >
-                  {TAGS_OPTIONS.map((item) => (
-                    <MenuItem value={item}>
-                      <Checkbox checked={values.tags.indexOf(item) > -1} />
-                      <ListItemText primary={item} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
             <NoteEditor
               editorRef={editorRef}
               initialValue={initialValue}
               files={files}
               setFiles={setFiles}
               onClickSave={handleClickSave}
+              title={values.title}
+              tags={values.tags}
+              handleChangeValue={handleChangeValue}
+              handleSelectTags={handleSelectTags}
             />
           </Item>
         </Grid>
