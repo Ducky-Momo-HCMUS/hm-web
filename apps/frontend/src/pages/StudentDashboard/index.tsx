@@ -4,6 +4,9 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import StarIcon from '@mui/icons-material/Star';
+
+import Header from '../../components/Header';
+
 import {
   Drawer,
   StyledContainer,
@@ -12,7 +15,6 @@ import {
   StyledListItemText,
 } from './styles';
 import NoteInfo from './NoteInfo';
-import Header from '../../components/Header';
 import AcademicReport from './AcademicReport';
 
 function StudentDashboard() {

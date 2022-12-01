@@ -6,7 +6,7 @@ export const StyledListItem = styled(ListItem)<{ active: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
   cursor: pointer;
   transition: all 300ms;
   ${(props) => props.active && `background: ${grey[200]}`};
@@ -39,4 +39,5 @@ export const StyledContent = styled(Box)(({ theme }) => ({
 
 export const StyledTag = styled(Chip)`
   width: fit-content;
+  margin-right: 0.25rem;
 `;

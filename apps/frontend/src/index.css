@@ -17,3 +17,27 @@ code {
 .filepond--panel-root, .tox-tinymce {
   border-radius: 0!important;
 }
+
+.tox-tinymce {
+  border: 0!important;
+  border-top: 2px solid #eee!important;
+  border-bottom: 2px solid #eee!important;
+}
+
+.filepond--root {
+  margin-bottom: 0!important;
+}
+
+@media (min-width: 30em) {
+  .filepond--item {
+      width: 100px;
+      height: 100px;
+  }
+}
+
+@media (min-width: 50em) {
+  .filepond--item {
+      width: 200px;
+      height: 200px;
+  }
+}

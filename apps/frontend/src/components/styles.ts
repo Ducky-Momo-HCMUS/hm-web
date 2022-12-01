@@ -20,6 +20,7 @@ export const StyledContainer = styled(Box)`
 
 export const StyledContentWrapper = styled(Box)`
   padding: 1.5rem 1.25rem;
+  margin-top: 4rem;
 `;
 
 export const StyledActionsBar = styled(Box)`
@@ -89,7 +90,7 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 
 export const Item = styled(Paper)({
   backgroundColor: '#fff',
-  padding: '1rem 1rem 0 1rem',
+
   height: '100%',
 });
 

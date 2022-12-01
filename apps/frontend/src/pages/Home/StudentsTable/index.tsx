@@ -13,16 +13,19 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+
 import {
   StyledActionsBar,
   StyledContentWrapper,
   StyledFormControl,
+  StyledTitle,
 } from '../../../components/styles';
-import StudentTableRow from './StudentTableRow';
-import { STUDENTS_DATA } from '../../../constants';
-import StudentTableHead from './StudentTableHead';
+import { CLASS_OPTIONS, STUDENTS_DATA, YEAR_OPTIONS } from '../../../constants';
 import { Order, StudentData } from '../../../types';
 import { getComparator } from '../../../utils';
+
+import StudentTableHead from './StudentTableHead';
+import StudentTableRow from './StudentTableRow';
 
 interface State {
   year: string;
@@ -69,6 +72,7 @@ function StudentsTable() {
 
   return (
     <StyledContentWrapper>
+      <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
       <StyledActionsBar>
         <Box>
           <StyledFormControl>
@@ -80,9 +84,9 @@ function StudentsTable() {
               label="Khoá"
               onChange={handleChange('year')}
             >
-              <MenuItem value="2019">2019</MenuItem>
-              <MenuItem value="2020">2020</MenuItem>
-              <MenuItem value="2021">2021</MenuItem>
+              {YEAR_OPTIONS.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
             </Select>
           </StyledFormControl>
           <StyledFormControl>
@@ -94,9 +98,9 @@ function StudentsTable() {
               label="Lớp"
               onChange={handleChange('class')}
             >
-              <MenuItem value="19CLC5">19CLC5</MenuItem>
-              <MenuItem value="19CLC6">19CLC6</MenuItem>
-              <MenuItem value="19CLC7">19CLC7</MenuItem>
+              {CLASS_OPTIONS.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
             </Select>
           </StyledFormControl>
         </Box>

@@ -1,5 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { ApolloError, UserInputError } from 'apollo-server-express';
+
 import { MSG_ERROR_DEFAULT } from '../constants/texts';
 
 export const apolloErrors = [

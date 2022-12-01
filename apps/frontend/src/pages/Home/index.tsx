@@ -1,6 +1,8 @@
 import React from 'react';
+
 import Header from '../../components/Header';
 import { StyledContainer } from '../../components/styles';
+
 import StudentsTable from './StudentsTable';
 
 function Home() {

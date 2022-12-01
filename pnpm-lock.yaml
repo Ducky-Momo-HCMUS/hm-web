@@ -38,6 +38,7 @@ importers:
       '@mui/icons-material': ^5.10.9
       '@mui/material': ^5.10.8
       '@mui/utils': ^5.10.9
+      '@mui/x-date-pickers': ^5.0.9
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^12.1.5
@@ -47,7 +48,9 @@ importers:
       '@types/node': ^16.11.64
       '@types/react': ^18.0.21
       '@types/react-dom': ^18.0.6
+      '@types/react-show-more-text': ^1.4.2
       '@types/styled-components': ^5.1.26
+      dayjs: ^1.11.6
       filepond: ^4.30.4
       filepond-plugin-image-exif-orientation: ^1.0.11
       filepond-plugin-image-preview: ^4.6.11
@@ -58,6 +61,7 @@ importers:
       react-filepond: ^7.1.2
       react-router-dom: ^6.4.2
       react-scripts: 5.0.1
+      react-show-more-text: ^1.6.2
       tinymce: ^6.2.0
       ts-jest: ^29.0.3
       typescript: ^4.8.4
@@ -69,10 +73,13 @@ importers:
       '@mui/icons-material': 5.10.9_hxwoburrgref6nj552adkl5pte
       '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
       '@mui/utils': 5.10.9_react@17.0.2
+      '@mui/x-date-pickers': 5.0.9_dd2azo72dia3wrgxk5x5zzhvwy
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0_aaq3sbffpfe3jnxzm2zngsddei
       '@tinymce/tinymce-react': 4.2.0_sfoxds7t5ydpegc3knd667wn6m
+      '@types/react-show-more-text': 1.4.2
+      dayjs: 1.11.6
       filepond: 4.30.4
       filepond-plugin-image-exif-orientation: 1.0.11_filepond@4.30.4
       filepond-plugin-image-preview: 4.6.11_filepond@4.30.4
@@ -82,6 +89,7 @@ importers:
       react-filepond: 7.1.2_dwijown5ej3nw7ufgjn6wrpcsa
       react-router-dom: 6.4.2_sfoxds7t5ydpegc3knd667wn6m
       react-scripts: 5.0.1_l2xgwaaeyvjnh7pnmx7wfcbpuu
+      react-show-more-text: 1.6.2_react@17.0.2
       tinymce: 6.2.0
       typescript: 4.8.4
       web-vitals: 2.1.4
@@ -1444,6 +1452,14 @@ packages:
       '@babel/helper-plugin-utils': 7.19.0
     dev: false
 
+  /@babel/polyfill/7.12.1:
+    resolution: {integrity: sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g==}
+    deprecated: 🚨 This package has been deprecated in favor of separate inclusion of a polyfill and regenerator-runtime (when needed). See the @babel/polyfill docs (https://babeljs.io/docs/en/babel-polyfill) for more information.
+    dependencies:
+      core-js: 2.6.12
+      regenerator-runtime: 0.13.10
+    dev: false
+
   /@babel/preset-env/7.19.4_@babel+core@7.19.6:
     resolution: {integrity: sha512-5QVOTXUdqTCjQuh2GGtdd7YEhoRXBMVGROAtsBeLGIbIz3obCBIfRMT1I3ZKkMgNzwkyCkftDXSSkHxnfVf4qg==}
     engines: {node: '>=6.9.0'}
@@ -1826,6 +1842,55 @@ packages:
       lodash.once: 4.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@date-io/core/2.16.0:
+    resolution: {integrity: sha512-DYmSzkr+jToahwWrsiRA2/pzMEtz9Bq1euJwoOuYwuwIYXnZFtHajY2E6a1VNVDc9jP8YUXK1BvnZH9mmT19Zg==}
+    dev: false
+
+  /@date-io/date-fns/2.16.0:
+    resolution: {integrity: sha512-bfm5FJjucqlrnQcXDVU5RD+nlGmL3iWgkHTq3uAZWVIuBu6dDmGa3m8a6zo2VQQpu8ambq9H22UyUpn7590joA==}
+    peerDependencies:
+      date-fns: ^2.0.0
+    peerDependenciesMeta:
+      date-fns:
+        optional: true
+    dependencies:
+      '@date-io/core': 2.16.0
+    dev: false
+
+  /@date-io/dayjs/2.16.0_dayjs@1.11.6:
+    resolution: {integrity: sha512-y5qKyX2j/HG3zMvIxTobYZRGnd1FUW2olZLS0vTj7bEkBQkjd2RO7/FEwDY03Z1geVGlXKnzIATEVBVaGzV4Iw==}
+    peerDependencies:
+      dayjs: ^1.8.17
+    peerDependenciesMeta:
+      dayjs:
+        optional: true
+    dependencies:
+      '@date-io/core': 2.16.0
+      dayjs: 1.11.6
+    dev: false
+
+  /@date-io/luxon/2.16.1:
+    resolution: {integrity: sha512-aeYp5K9PSHV28946pC+9UKUi/xMMYoaGelrpDibZSgHu2VWHXrr7zWLEr+pMPThSs5vt8Ei365PO+84pCm37WQ==}
+    peerDependencies:
+      luxon: ^1.21.3 || ^2.x || ^3.x
+    peerDependenciesMeta:
+      luxon:
+        optional: true
+    dependencies:
+      '@date-io/core': 2.16.0
+    dev: false
+
+  /@date-io/moment/2.16.1:
+    resolution: {integrity: sha512-JkxldQxUqZBfZtsaCcCMkm/dmytdyq5pS1RxshCQ4fHhsvP5A7gSqPD22QbVXMcJydi3d3v1Y8BQdUKEuGACZQ==}
+    peerDependencies:
+      moment: ^2.24.0
+    peerDependenciesMeta:
+      moment:
+        optional: true
+    dependencies:
+      '@date-io/core': 2.16.0
     dev: false
 
   /@emotion/babel-plugin/11.10.2_@babel+core@7.19.6:
@@ -2720,6 +2785,54 @@ packages:
       react-is: 18.2.0
     dev: false
 
+  /@mui/x-date-pickers/5.0.9_dd2azo72dia3wrgxk5x5zzhvwy:
+    resolution: {integrity: sha512-PM3RU8MiwDVi+dSDGJ7ylI0hCe79wSCDfrjghS8ApGGFn/n87S8pUZxsZ5czw3mVRN6VfS2C19peo4nM1Tx+nA==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@emotion/react': ^11.9.0
+      '@emotion/styled': ^11.8.1
+      '@mui/material': ^5.4.1
+      '@mui/system': ^5.4.1
+      date-fns: ^2.25.0
+      dayjs: ^1.10.7
+      luxon: ^1.28.0 || ^2.0.0 || ^3.0.0
+      moment: ^2.29.1
+      react: ^17.0.2 || ^18.0.0
+      react-dom: ^17.0.2 || ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/react':
+        optional: true
+      '@emotion/styled':
+        optional: true
+      date-fns:
+        optional: true
+      dayjs:
+        optional: true
+      luxon:
+        optional: true
+      moment:
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.19.4
+      '@date-io/core': 2.16.0
+      '@date-io/date-fns': 2.16.0
+      '@date-io/dayjs': 2.16.0_dayjs@1.11.6
+      '@date-io/luxon': 2.16.1
+      '@date-io/moment': 2.16.1
+      '@emotion/react': 11.10.4_xtpmx62wsus3eq6tnxq7mrmhlq
+      '@emotion/styled': 11.10.4_ppf2weyoyak2rmaqbqjmaosseu
+      '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
+      '@mui/utils': 5.10.9_react@17.0.2
+      '@types/react-transition-group': 4.4.5
+      clsx: 1.2.1
+      dayjs: 1.11.6
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-transition-group: 4.4.5_sfoxds7t5ydpegc3knd667wn6m
+      rifm: 0.12.1_react@17.0.2
+    dev: false
+
   /@nicolo-ribaudo/eslint-scope-5-internals/5.1.1-v1:
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
     dependencies:
@@ -3405,6 +3518,12 @@ packages:
 
   /@types/react-is/17.0.3:
     resolution: {integrity: sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw==}
+    dependencies:
+      '@types/react': 18.0.21
+    dev: false
+
+  /@types/react-show-more-text/1.4.2:
+    resolution: {integrity: sha512-CinPPhpxYFVKx4V0yqQGK0HUbHdlvLH8fQ/Ccp5XNKuQyIyc6bDMQz5b8bIBqmhMcCvn6AvSz3MmPpwNVCjmHQ==}
     dependencies:
       '@types/react': 18.0.21
     dev: false
@@ -5154,6 +5273,12 @@ packages:
 
   /core-js-pure/3.25.5:
     resolution: {integrity: sha512-oml3M22pHM+igfWHDfdLVq2ShWmjM2V4L+dQEBs0DWVIqEm9WHCwGAlZ6BmyBQGy5sFrJmcx+856D9lVKyGWYg==}
+    requiresBuild: true
+    dev: false
+
+  /core-js/2.6.12:
+    resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
+    deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
     requiresBuild: true
     dev: false
 
@@ -10916,6 +11041,16 @@ packages:
       - webpack-plugin-serve
     dev: false
 
+  /react-show-more-text/1.6.2_react@17.0.2:
+    resolution: {integrity: sha512-Z6tRcnEosHvo07vZw36LxCjqYq4ghgaDI273b5XcayJ1PYbT56OKbaQlPqH7W9LGF5rhUVIhEDBPURuG5eO/Uw==}
+    peerDependencies:
+      react: 16 - 18.x
+    dependencies:
+      '@babel/polyfill': 7.12.1
+      prop-types: 15.8.1
+      react: 17.0.2
+    dev: false
+
   /react-transition-group/4.4.5_sfoxds7t5ydpegc3knd667wn6m:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
     peerDependencies:
@@ -11156,6 +11291,14 @@ packages:
 
   /rfdc/1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
+    dev: false
+
+  /rifm/0.12.1_react@17.0.2:
+    resolution: {integrity: sha512-OGA1Bitg/dSJtI/c4dh90svzaUPt228kzFsUkJbtA2c964IqEAwWXeL9ZJi86xWv3j5SMqRvGULl7bA6cK0Bvg==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      react: 17.0.2
     dev: false
 
   /rimraf/3.0.2:

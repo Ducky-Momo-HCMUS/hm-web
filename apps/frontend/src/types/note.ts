@@ -10,4 +10,5 @@ export interface NoteItemData {
   lastUpdate: string;
   content: string;
   images: string[];
+  tags: string[];
 }
