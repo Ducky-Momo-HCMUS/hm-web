@@ -61,6 +61,7 @@
     "@babel/plugin-syntax-flow": "^7.18.6",
     "@babel/plugin-transform-react-jsx": "^7.19.0",
     "@hm/eslint-config": "workspace:*",
+    "@mui/system": "^5.10.16",
     "@testing-library/dom": "^8.19.0",
     "@types/jest": "^29.2.0",
     "@types/node": "^16.11.64",

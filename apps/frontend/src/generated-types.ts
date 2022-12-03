@@ -22,85 +22,104 @@ export type Scalars = {
   Float: number;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+export type HomeroomListItem = {
+  __typename?: 'HomeroomListItem';
+  name: Scalars['String'];
+  teacherId: Scalars['String'];
+  type: Scalars['String'];
+  year: Scalars['Int'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  ping?: Maybe<Scalars['String']>;
+};
+
+export type MutationResponse = {
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  homeroomList?: Maybe<Array<HomeroomListItem>>;
+  ping?: Maybe<Scalars['String']>;
 };
 
-export type BookListQueryVariables = Exact<{ [key: string]: never }>;
+export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
 
-export type BookListQuery = {
+export type HomeroomListQuery = {
   __typename?: 'Query';
-  books?:
-    | Array<
-        | {
-            __typename?: 'Book';
-            title?: string | null | undefined;
-            author?: string | null | undefined;
-          }
-        | null
-        | undefined
-      >
+  homeroomList?:
+    | Array<{
+        __typename?: 'HomeroomListItem';
+        name: string;
+        type: string;
+        year: number;
+        teacherId: string;
+      }>
     | null
     | undefined;
 };
 
-export const BookListDocument = gql`
-  query BookList {
-    books {
-      title
-      author
+export const HomeroomListDocument = gql`
+  query HomeroomList {
+    homeroomList {
+      name
+      type
+      year
+      teacherId
     }
   }
 `;
 
 /**
- * __useBookListQuery__
+ * __useHomeroomListQuery__
  *
- * To run a query within a React component, call `useBookListQuery` and pass it any options that fit your needs.
- * When your component renders, `useBookListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useHomeroomListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useBookListQuery({
+ * const { data, loading, error } = useHomeroomListQuery({
  *   variables: {
  *   },
  * });
  */
-export function useBookListQuery(
-  baseOptions?: Apollo.QueryHookOptions<BookListQuery, BookListQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<BookListQuery, BookListQueryVariables>(
-    BookListDocument,
-    options
-  );
-}
-export function useBookListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    BookListQuery,
-    BookListQueryVariables
+export function useHomeroomListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    HomeroomListQuery,
+    HomeroomListQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<BookListQuery, BookListQueryVariables>(
-    BookListDocument,
+  return Apollo.useQuery<HomeroomListQuery, HomeroomListQueryVariables>(
+    HomeroomListDocument,
     options
   );
 }
-export type BookListQueryHookResult = ReturnType<typeof useBookListQuery>;
-export type BookListLazyQueryHookResult = ReturnType<
-  typeof useBookListLazyQuery
+export function useHomeroomListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomListQuery,
+    HomeroomListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<HomeroomListQuery, HomeroomListQueryVariables>(
+    HomeroomListDocument,
+    options
+  );
+}
+export type HomeroomListQueryHookResult = ReturnType<
+  typeof useHomeroomListQuery
 >;
-export type BookListQueryResult = Apollo.QueryResult<
-  BookListQuery,
-  BookListQueryVariables
+export type HomeroomListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomListLazyQuery
+>;
+export type HomeroomListQueryResult = Apollo.QueryResult<
+  HomeroomListQuery,
+  HomeroomListQueryVariables
 >;

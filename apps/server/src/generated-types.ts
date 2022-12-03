@@ -20,15 +20,29 @@ export type Scalars = {
   Float: number;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+export type HomeroomListItem = {
+  __typename?: 'HomeroomListItem';
+  name: Scalars['String'];
+  teacherId: Scalars['String'];
+  type: Scalars['String'];
+  year: Scalars['Int'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  ping?: Maybe<Scalars['String']>;
+};
+
+export type MutationResponse = {
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  homeroomList?: Maybe<Array<HomeroomListItem>>;
+  ping?: Maybe<Scalars['String']>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -138,41 +152,69 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  MutationResponse: never;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Book: Book;
   Boolean: Scalars['Boolean'];
+  HomeroomListItem: HomeroomListItem;
+  Int: Scalars['Int'];
+  Mutation: {};
+  MutationResponse: never;
   Query: {};
   String: Scalars['String'];
 };
 
-export type BookResolvers<
+export type HomeroomListItemResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']
+  ParentType extends ResolversParentTypes['HomeroomListItem'] = ResolversParentTypes['HomeroomListItem']
 > = {
-  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  teacherId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  year?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type MutationResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']
+> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
-  books?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['Book']>>>,
+  homeroomList?: Resolver<
+    Maybe<Array<ResolversTypes['HomeroomListItem']>>,
     ParentType,
     ContextType
   >;
+  ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
-  Book?: BookResolvers<ContextType>;
+  HomeroomListItem?: HomeroomListItemResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
+  MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };

@@ -1,12 +1,12 @@
-import BookApi from './book-api';
+import HomeroomAPI from './homeroom-api';
 
 export interface DataSources {
-  bookAPI: BookApi;
+  homeroomAPI: HomeroomAPI;
 }
 
 function getDataSources() {
   const dataSources = {
-    bookApi: new BookApi(),
+    homeroomAPI: new HomeroomAPI(),
   };
 
   return dataSources;
