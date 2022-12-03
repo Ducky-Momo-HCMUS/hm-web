@@ -1,0 +1,22 @@
+schema:
+    - "apps/server/src/schema/*.ts"
+documents: "apps/frontend/src/data/**/*.ts"
+generates:
+    apps/frontend/src/generated-types.ts:
+      plugins:
+          - typescript
+          - typescript-operations
+          - typescript-react-apollo
+      config:
+          maybeValue: T | null | undefined
+          enumsAsConst: true
+    apps/server/src/generated-types.ts:
+      plugins:
+          - typescript
+          - typescript-resolvers
+      config:
+          maybeValue: T | null | undefined
+          enumsAsConst: true
+hooks:
+    afterOneFileWrite:
+      - prettier --write
