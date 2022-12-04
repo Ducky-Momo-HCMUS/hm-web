@@ -4,6 +4,7 @@ import { TableCell, TableRow, Typography } from '@mui/material';
 import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
+import { mapMajorIdToName } from '../../../../utils';
 
 interface StudentTableRowProps {
   data: HomeroomStudentListData;
@@ -49,7 +50,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
       <TableCell>
         <StyledRouterLink to={`/students/${maSV}`}>{tenSV}</StyledRouterLink>
       </TableCell>
-      <TableCell>{maCN}</TableCell>
+      <TableCell>{mapMajorIdToName(maCN)}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
       <TableCell>{gpa4}</TableCell>
       <TableCell>{gpa10}</TableCell>

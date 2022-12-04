@@ -59,6 +59,7 @@ importers:
       '@testing-library/user-event': ^13.5.0
       '@tinymce/tinymce-react': ^4.2.0
       '@types/jest': ^29.2.0
+      '@types/lodash': ^4.14.191
       '@types/node': ^16.11.64
       '@types/react': ^18.0.21
       '@types/react-dom': ^18.0.6
@@ -70,6 +71,7 @@ importers:
       filepond-plugin-image-preview: ^4.6.11
       graphql: ^15.3.0
       jest: ^29.2.0
+      lodash: ^4.17.21
       react: ^17.0.2
       react-dom: ^17.0.2
       react-filepond: ^7.1.2
@@ -98,6 +100,7 @@ importers:
       filepond-plugin-image-exif-orientation: 1.0.11_filepond@4.30.4
       filepond-plugin-image-preview: 4.6.11_filepond@4.30.4
       graphql: 15.8.0
+      lodash: 4.17.21
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-filepond: 7.1.2_dwijown5ej3nw7ufgjn6wrpcsa
@@ -115,6 +118,7 @@ importers:
       '@mui/system': 5.10.16_ci3r3mshc3mjxsfpivcog4cdnq
       '@testing-library/dom': 8.19.0
       '@types/jest': 29.2.0
+      '@types/lodash': 4.14.191
       '@types/node': 16.11.68
       '@types/react': 18.0.21
       '@types/react-dom': 18.0.6
@@ -4168,6 +4172,10 @@ packages:
       '@types/koa-compose': 3.2.5
       '@types/node': 16.11.68
     dev: false
+
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+    dev: true
 
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}

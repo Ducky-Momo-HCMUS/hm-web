@@ -2,15 +2,18 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   extend type Query {
-    homeroomList: [HomeroomListItem!]
+    homeroomList: HomeroomList!
     homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]
+  }
+
+  type HomeroomList {
+    lopSinhHoat: [HomeroomListItem!]!
   }
 
   type HomeroomListItem {
     maSH: String!
     heDaoTao: String!
     khoa: Int!
-    maGV: String!
   }
 
   type HomeroomStudentListItem {

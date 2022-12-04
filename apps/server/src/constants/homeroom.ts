@@ -1,31 +1,33 @@
-import { HomeroomListItem, HomeroomStudentListItem } from '../generated-types';
+import {
+  HomeroomList,
+  HomeroomListItem,
+  HomeroomStudentListItem,
+} from '../generated-types';
 
-export const HOMEROOM_LIST = [
-  {
-    maSH: '19clc5',
-    heDaoTao: 'Chương trình chất lượng cao',
-    khoa: 2019,
-    maGV: 'GV001',
-  },
-  {
-    maSH: '19clc6',
-    heDaoTao: 'Chương trình chất lượng cao',
-    khoa: 2019,
-    maGV: 'GV001',
-  },
-  {
-    maSH: '20clc3',
-    heDaoTao: 'Chương trình chất lượng cao',
-    khoa: 2020,
-    maGV: 'GV005',
-  },
-  {
-    maSH: '21clc4',
-    heDaoTao: 'Chương trình chất lượng cao',
-    khoa: 2021,
-    maGV: 'GV005',
-  },
-] as HomeroomListItem[];
+export const HOMEROOM_LIST = {
+  lopSinhHoat: [
+    {
+      maSH: '19clc5',
+      heDaoTao: 'Chương trình chất lượng cao',
+      khoa: 2019,
+    },
+    {
+      maSH: '19clc6',
+      heDaoTao: 'Chương trình chất lượng cao',
+      khoa: 2019,
+    },
+    {
+      maSH: '20clc3',
+      heDaoTao: 'Chương trình chất lượng cao',
+      khoa: 2020,
+    },
+    {
+      maSH: '21clc4',
+      heDaoTao: 'Chương trình chất lượng cao',
+      khoa: 2021,
+    },
+  ] as HomeroomListItem[],
+} as HomeroomList;
 
 export const HOMEROOM_STUDENT_LIST = [
   {

@@ -29,11 +29,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type HomeroomList = {
+  __typename?: 'HomeroomList';
+  lopSinhHoat: Array<HomeroomListItem>;
+};
+
 export type HomeroomListItem = {
   __typename?: 'HomeroomListItem';
   heDaoTao: Scalars['String'];
   khoa: Scalars['Int'];
-  maGV: Scalars['String'];
   maSH: Scalars['String'];
 };
 
@@ -62,7 +66,7 @@ export type MutationResponse = {
 
 export type Query = {
   __typename?: 'Query';
-  homeroomList?: Maybe<Array<HomeroomListItem>>;
+  homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   ping?: Maybe<Scalars['String']>;
 };
@@ -181,6 +185,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  HomeroomList: ResolverTypeWrapper<HomeroomList>;
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -195,6 +200,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Float: Scalars['Float'];
+  HomeroomList: HomeroomList;
   HomeroomListItem: HomeroomListItem;
   HomeroomStudentListItem: HomeroomStudentListItem;
   Int: Scalars['Int'];
@@ -213,13 +219,24 @@ export type ContactResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HomeroomListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomList'] = ResolversParentTypes['HomeroomList']
+> = {
+  lopSinhHoat?: Resolver<
+    Array<ResolversTypes['HomeroomListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HomeroomListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomListItem'] = ResolversParentTypes['HomeroomListItem']
 > = {
   heDaoTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   khoa?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  maGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -261,7 +278,7 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
   homeroomList?: Resolver<
-    Maybe<Array<ResolversTypes['HomeroomListItem']>>,
+    ResolversTypes['HomeroomList'],
     ParentType,
     ContextType
   >;
@@ -276,6 +293,7 @@ export type QueryResolvers<
 
 export type Resolvers<ContextType = any> = {
   Contact?: ContactResolvers<ContextType>;
+  HomeroomList?: HomeroomListResolvers<ContextType>;
   HomeroomListItem?: HomeroomListItemResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

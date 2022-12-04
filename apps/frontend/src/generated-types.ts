@@ -28,11 +28,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type HomeroomList = {
+  __typename?: 'HomeroomList';
+  lopSinhHoat: Array<HomeroomListItem>;
+};
+
 export type HomeroomListItem = {
   __typename?: 'HomeroomListItem';
   heDaoTao: Scalars['String'];
   khoa: Scalars['Int'];
-  maGV: Scalars['String'];
   maSH: Scalars['String'];
 };
 
@@ -61,7 +65,7 @@ export type MutationResponse = {
 
 export type Query = {
   __typename?: 'Query';
-  homeroomList?: Maybe<Array<HomeroomListItem>>;
+  homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   ping?: Maybe<Scalars['String']>;
 };
@@ -74,16 +78,15 @@ export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type HomeroomListQuery = {
   __typename?: 'Query';
-  homeroomList?:
-    | Array<{
-        __typename?: 'HomeroomListItem';
-        maSH: string;
-        heDaoTao: string;
-        khoa: number;
-        maGV: string;
-      }>
-    | null
-    | undefined;
+  homeroomList: {
+    __typename?: 'HomeroomList';
+    lopSinhHoat: Array<{
+      __typename?: 'HomeroomListItem';
+      maSH: string;
+      heDaoTao: string;
+      khoa: number;
+    }>;
+  };
 };
 
 export type HomeroomStudentListQueryVariables = Exact<{
@@ -111,10 +114,11 @@ export type HomeroomStudentListQuery = {
 export const HomeroomListDocument = gql`
   query HomeroomList {
     homeroomList {
-      maSH
-      heDaoTao
-      khoa
-      maGV
+      lopSinhHoat {
+        maSH
+        heDaoTao
+        khoa
+      }
     }
   }
 `;
