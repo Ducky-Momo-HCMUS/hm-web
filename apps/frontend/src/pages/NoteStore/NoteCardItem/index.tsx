@@ -1,8 +1,9 @@
 import React from 'react';
 import ShowMoreText from 'react-show-more-text';
-import { Chip, Grid, IconButton, Typography } from '@mui/material';
+import { Grid, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import { extractContent } from '../../../utils';
 import { NoteItemData } from '../../../types';
 
 import { StyledCard, StyledFooter, StyledTitle } from './styles';
@@ -11,9 +12,15 @@ interface NoteCardItemProps {
   data: NoteItemData;
   onClick: any;
   onClickDelete: any;
+  onClickExpand: any;
 }
 
-function NoteCardItem({ data, onClick, onClickDelete }: NoteCardItemProps) {
+function NoteCardItem({
+  data,
+  onClick,
+  onClickDelete,
+  onClickExpand,
+}: NoteCardItemProps) {
   const { title, lastUpdate, content } = data;
 
   return (
@@ -23,16 +30,27 @@ function NoteCardItem({ data, onClick, onClickDelete }: NoteCardItemProps) {
           {lastUpdate}
         </Typography>
         <StyledTitle>{title}</StyledTitle>
-        <ShowMoreText lines={5} more="Xem thêm" less="Thu gọn" expanded={false}>
-          {content}
+        <ShowMoreText
+          className="show-more-text"
+          lines={5}
+          more="Xem thêm"
+          less="Thu gọn"
+          expanded={false}
+          onClick={onClickExpand}
+        >
+          {extractContent(content)}
         </ShowMoreText>
         <StyledFooter>
-          <Chip label="Nguyễn Ngọc Thanh Tâm" />
+          <Typography component="span">Nguyễn Ngọc Thanh Tâm</Typography>
           <IconButton
             size="medium"
             aria-label="delete note"
             component="label"
-            onClick={onClickDelete}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClickDelete();
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
           >
             <DeleteIcon fontSize="inherit" color="action" />
           </IconButton>

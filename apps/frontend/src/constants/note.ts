@@ -19,14 +19,15 @@ export const NOTES_LIST: NoteItemData[] = [
   {
     title: 'Tâm sự cùng người lạ',
     lastUpdate: '06/11/2022 10:18',
-    content: `<p>Mong muốn có người yêu</p>`,
+    content: `<div>Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+    <h1>I don't know how to learn effectively</h1>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Học tập'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `<h3>Mong muốn học tốt hơn</h3>`,
+    content: `<h3>Mong muốn học tốt hơnnnnnnnnnnn</h3>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Học tập', 'Phụ huynh'],
   },
@@ -40,7 +41,7 @@ export const NOTES_LIST: NoteItemData[] = [
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `<p>Không có gì</p>`,
+    content: `<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, enim dolore qui eaque itaque cupiditate dolor perspiciatis modi laborum consequuntur reprehenderit magnam, explicabo aperiam labore? Excepturi dolorem numquam doloribus dolores!</p>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Chuyên cần', 'Phụ huynh'],
   },
@@ -61,14 +62,14 @@ export const NOTES_LIST: NoteItemData[] = [
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `<p>Không có gì</p>`,
+    content: `<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, enim dolore qui eaque itaque cupiditate dolor perspiciatis modi laborum consequuntur reprehenderit magnam, explicabo aperiam labore? Excepturi dolorem numquam doloribus dolores!</p>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Học tập'],
   },
   {
     title: 'Tình hình học tập môn nhập môn công nghệ phần mềm',
     lastUpdate: '06/11/2022 10:18',
-    content: `<p>Không có gì</p>`,
+    content: `<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, enim dolore qui eaque itaque cupiditate dolor perspiciatis modi laborum consequuntur reprehenderit magnam, explicabo aperiam labore? Excepturi dolorem numquam doloribus dolores!</p>`,
     images: ['https://picsum.photos/100/100'],
     tags: ['Học tập'],
   },

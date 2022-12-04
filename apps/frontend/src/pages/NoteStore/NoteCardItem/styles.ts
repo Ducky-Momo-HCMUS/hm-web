@@ -27,9 +27,14 @@ export const StyledContent = styled(Typography)`
   overflow: hidden;
 `;
 
-export const StyledFooter = styled(Box)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-`;
+export const StyledFooter = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: '0.5rem',
+  '& > span': {
+    color: theme.palette.primary.dark,
+    fontWeight: 500,
+    fontSize: '0.8rem',
+  },
+}));
