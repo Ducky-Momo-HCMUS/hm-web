@@ -1,2 +1,2 @@
 export const YEAR_OPTIONS = [2019, 2020, 2021];
-export const CLASS_OPTIONS = ['19CLC5', '19CLC6', '19CLC7'];
+export const CLASS_OPTIONS = ['19clc5', '19clc6', '19clc7'];

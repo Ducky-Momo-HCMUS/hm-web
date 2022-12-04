@@ -21,7 +21,7 @@ const typeDefs = gql`
     gpa4: Float!
     gpa10: Float!
     sdt: String!
-    lienHe: [Contact!]
+    lienHe: [Contact!]!
   }
 
   type Contact {

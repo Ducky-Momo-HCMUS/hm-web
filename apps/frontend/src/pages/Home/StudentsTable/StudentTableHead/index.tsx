@@ -8,26 +8,16 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import { Order, StudentData } from '../../../../types';
+import { Order, Property } from '../../../../types';
 
 interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof StudentData
-  ) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: Property) => void;
   order: Order;
   orderBy: string;
 }
 
 interface Column {
-  id:
-    | 'studentId'
-    | 'fullName'
-    | 'major'
-    | 'status'
-    | 'gpaFourPointScale'
-    | 'gpaTenPointScale'
-    | 'contact';
+  id: 'maSV' | 'tenSV' | 'maCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'contact';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -35,29 +25,29 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'studentId', label: 'MSSV' },
+  { id: 'maSV', label: 'MSSV' },
   {
-    id: 'fullName',
+    id: 'tenSV',
     label: 'Họ tên',
     minWidth: 200,
   },
   {
-    id: 'major',
+    id: 'maCN',
     label: 'Chuyên ngành',
     minWidth: 120,
   },
   {
-    id: 'status',
+    id: 'tinhTrang',
     label: 'Tình trạng',
     minWidth: 120,
   },
   {
-    id: 'gpaTenPointScale',
+    id: 'gpa4',
     label: 'GPA hệ 4',
     minWidth: 60,
   },
   {
-    id: 'gpaFourPointScale',
+    id: 'gpa10',
     label: 'GPA hệ 10',
     minWidth: 60,
   },
@@ -72,7 +62,7 @@ function StudentTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
   const createSortHandler =
-    (property: keyof StudentData) => (event: React.MouseEvent<unknown>) => {
+    (property: Property) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -87,7 +77,11 @@ function StudentTableHead(props: EnhancedTableProps) {
           >
             <TableSortLabel
               direction={orderBy === column.id ? order : 'asc'}
-              onClick={createSortHandler(column.id)}
+              onClick={() => {
+                if (column.id !== 'contact') {
+                  createSortHandler(column.id);
+                }
+              }}
             >
               {column.label}
               {orderBy === column.id ? (

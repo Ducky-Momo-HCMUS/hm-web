@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -14,15 +14,17 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { useHomeroomStudentListQuery } from '../../../generated-types';
 import {
   StyledActionsBar,
   StyledContentWrapper,
   StyledFormControl,
   StyledTitle,
 } from '../../../components/styles';
-import { CLASS_OPTIONS, STUDENTS_DATA, YEAR_OPTIONS } from '../../../constants';
-import { Order, StudentData } from '../../../types';
-import { getComparator } from '../../../utils';
+import { CLASS_OPTIONS, YEAR_OPTIONS } from '../../../constants';
+import { Order, Property } from '../../../types';
+import { getComparator, mapStudentDataToTable } from '../../../utils';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
@@ -35,12 +37,22 @@ interface State {
 function StudentsTable() {
   const [values, setValues] = useState<State>({
     year: '2019',
-    class: '19CLC5',
+    class: '19clc5',
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof StudentData>('studentId');
+  const [orderBy, setOrderBy] = useState<Property>('maSV');
+
+  const { loading, data } = useHomeroomStudentListQuery({
+    variables: {
+      homeroomId: values.class,
+    },
+  });
+  const studentListData = useMemo(
+    () => data?.homeroomStudentList || [],
+    [data?.homeroomStudentList]
+  );
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -62,7 +74,7 @@ function StudentsTable() {
   );
 
   const handleRequestSort = useCallback(
-    (event: React.MouseEvent<unknown>, property: keyof StudentData) => {
+    (event: React.MouseEvent<unknown>, property: Property) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
@@ -99,7 +111,7 @@ function StudentsTable() {
               onChange={handleChange('class')}
             >
               {CLASS_OPTIONS.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+                <MenuItem value={item}>{item.toUpperCase()}</MenuItem>
               ))}
             </Select>
           </StyledFormControl>
@@ -112,34 +124,40 @@ function StudentsTable() {
           Tổng quan lớp học
         </Button>
       </StyledActionsBar>
-      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <StudentTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {STUDENTS_DATA.sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <StudentTableRow data={row} index={index + 1} />
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={STUDENTS_DATA.length}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage="Số dòng trên trang"
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      <AsyncDataRenderer loading={loading} data={data}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <StudentTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+              />
+              <TableBody>
+                {[...studentListData]
+                  ?.sort(getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => (
+                    <StudentTableRow
+                      data={mapStudentDataToTable(row)}
+                      index={index + 1}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={studentListData?.length || 0}
+            rowsPerPage={rowsPerPage}
+            labelRowsPerPage="Số dòng trên trang"
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </AsyncDataRenderer>
     </StyledContentWrapper>
   );
 }

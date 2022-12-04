@@ -40,7 +40,7 @@ export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   gpa4: Scalars['Float'];
   gpa10: Scalars['Float'];
-  lienHe?: Maybe<Array<Contact>>;
+  lienHe: Array<Contact>;
   maCN: Scalars['String'];
   maSV: Scalars['String'];
   sdt: Scalars['String'];
@@ -102,10 +102,7 @@ export type HomeroomStudentListQuery = {
         gpa4: number;
         gpa10: number;
         sdt: string;
-        lienHe?:
-          | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
-          | null
-          | undefined;
+        lienHe: Array<{ __typename?: 'Contact'; mxh: string; url: string }>;
       }>
     | null
     | undefined;
