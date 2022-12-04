@@ -22,12 +22,30 @@ export type Scalars = {
   Float: number;
 };
 
+export type Contact = {
+  __typename?: 'Contact';
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type HomeroomListItem = {
   __typename?: 'HomeroomListItem';
-  name: Scalars['String'];
-  teacherId: Scalars['String'];
-  type: Scalars['String'];
-  year: Scalars['Int'];
+  heDaoTao: Scalars['String'];
+  khoa: Scalars['Int'];
+  maGV: Scalars['String'];
+  maSH: Scalars['String'];
+};
+
+export type HomeroomStudentListItem = {
+  __typename?: 'HomeroomStudentListItem';
+  gpa4: Scalars['Float'];
+  gpa10: Scalars['Float'];
+  lienHe?: Maybe<Array<Contact>>;
+  maCN: Scalars['String'];
+  maSV: Scalars['String'];
+  sdt: Scalars['String'];
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
 };
 
 export type Mutation = {
@@ -44,7 +62,12 @@ export type MutationResponse = {
 export type Query = {
   __typename?: 'Query';
   homeroomList?: Maybe<Array<HomeroomListItem>>;
+  homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   ping?: Maybe<Scalars['String']>;
+};
+
+export type QueryHomeroomStudentListArgs = {
+  homeroomId: Scalars['String'];
 };
 
 export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
@@ -54,10 +77,35 @@ export type HomeroomListQuery = {
   homeroomList?:
     | Array<{
         __typename?: 'HomeroomListItem';
-        name: string;
-        type: string;
-        year: number;
-        teacherId: string;
+        maSH: string;
+        heDaoTao: string;
+        khoa: number;
+        maGV: string;
+      }>
+    | null
+    | undefined;
+};
+
+export type HomeroomStudentListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+}>;
+
+export type HomeroomStudentListQuery = {
+  __typename?: 'Query';
+  homeroomStudentList?:
+    | Array<{
+        __typename?: 'HomeroomStudentListItem';
+        maSV: string;
+        tenSV: string;
+        maCN: string;
+        tinhTrang: string;
+        gpa4: number;
+        gpa10: number;
+        sdt: string;
+        lienHe?:
+          | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+          | null
+          | undefined;
       }>
     | null
     | undefined;
@@ -66,10 +114,10 @@ export type HomeroomListQuery = {
 export const HomeroomListDocument = gql`
   query HomeroomList {
     homeroomList {
-      name
-      type
-      year
-      teacherId
+      maSH
+      heDaoTao
+      khoa
+      maGV
     }
   }
 `;
@@ -122,4 +170,72 @@ export type HomeroomListLazyQueryHookResult = ReturnType<
 export type HomeroomListQueryResult = Apollo.QueryResult<
   HomeroomListQuery,
   HomeroomListQueryVariables
+>;
+export const HomeroomStudentListDocument = gql`
+  query HomeroomStudentList($homeroomId: String!) {
+    homeroomStudentList(homeroomId: $homeroomId) {
+      maSV
+      tenSV
+      maCN
+      tinhTrang
+      gpa4
+      gpa10
+      sdt
+      lienHe {
+        mxh
+        url
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomStudentListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomStudentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomStudentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomStudentListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *   },
+ * });
+ */
+export function useHomeroomStudentListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomStudentListQuery,
+    HomeroomStudentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HomeroomStudentListQuery,
+    HomeroomStudentListQueryVariables
+  >(HomeroomStudentListDocument, options);
+}
+export function useHomeroomStudentListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomStudentListQuery,
+    HomeroomStudentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomStudentListQuery,
+    HomeroomStudentListQueryVariables
+  >(HomeroomStudentListDocument, options);
+}
+export type HomeroomStudentListQueryHookResult = ReturnType<
+  typeof useHomeroomStudentListQuery
+>;
+export type HomeroomStudentListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomStudentListLazyQuery
+>;
+export type HomeroomStudentListQueryResult = Apollo.QueryResult<
+  HomeroomStudentListQuery,
+  HomeroomStudentListQueryVariables
 >;

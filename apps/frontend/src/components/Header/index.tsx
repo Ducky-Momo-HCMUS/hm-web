@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import SearchBar from '../SearchBar';
 import ActionsBar from '../ActionsBar';
-import { Link } from 'react-router-dom';
 
 import { StyledBox } from './styles';
 

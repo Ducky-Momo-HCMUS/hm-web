@@ -15,6 +15,16 @@ const resolvers: Resolvers<ContextType> = {
         (await dataSources.homeroomAPI.getHomeroomList(accessToken)) || null
       );
     },
+    homeroomStudentList: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.homeroomAPI.getHomeroomStudentList(
+          args,
+          accessToken
+        )) || null
+      );
+    },
   },
 };
 

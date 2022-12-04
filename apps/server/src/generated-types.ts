@@ -11,6 +11,9 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -20,12 +23,30 @@ export type Scalars = {
   Float: number;
 };
 
+export type Contact = {
+  __typename?: 'Contact';
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type HomeroomListItem = {
   __typename?: 'HomeroomListItem';
-  name: Scalars['String'];
-  teacherId: Scalars['String'];
-  type: Scalars['String'];
-  year: Scalars['Int'];
+  heDaoTao: Scalars['String'];
+  khoa: Scalars['Int'];
+  maGV: Scalars['String'];
+  maSH: Scalars['String'];
+};
+
+export type HomeroomStudentListItem = {
+  __typename?: 'HomeroomStudentListItem';
+  gpa4: Scalars['Float'];
+  gpa10: Scalars['Float'];
+  lienHe?: Maybe<Array<Contact>>;
+  maCN: Scalars['String'];
+  maSV: Scalars['String'];
+  sdt: Scalars['String'];
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
 };
 
 export type Mutation = {
@@ -42,7 +63,12 @@ export type MutationResponse = {
 export type Query = {
   __typename?: 'Query';
   homeroomList?: Maybe<Array<HomeroomListItem>>;
+  homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   ping?: Maybe<Scalars['String']>;
+};
+
+export type QueryHomeroomStudentListArgs = {
+  homeroomId: Scalars['String'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -153,7 +179,10 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Contact: ResolverTypeWrapper<Contact>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
+  HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationResponse: never;
@@ -164,7 +193,10 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  Contact: Contact;
+  Float: Scalars['Float'];
   HomeroomListItem: HomeroomListItem;
+  HomeroomStudentListItem: HomeroomStudentListItem;
   Int: Scalars['Int'];
   Mutation: {};
   MutationResponse: never;
@@ -172,14 +204,42 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
 };
 
+export type ContactResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Contact'] = ResolversParentTypes['Contact']
+> = {
+  mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HomeroomListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomListItem'] = ResolversParentTypes['HomeroomListItem']
 > = {
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  teacherId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  year?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  heDaoTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  khoa?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomStudentListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomStudentListItem'] = ResolversParentTypes['HomeroomStudentListItem']
+> = {
+  gpa4?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  gpa10?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  lienHe?: Resolver<
+    Maybe<Array<ResolversTypes['Contact']>>,
+    ParentType,
+    ContextType
+  >;
+  maCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -209,11 +269,19 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  homeroomStudentList?: Resolver<
+    Maybe<Array<ResolversTypes['HomeroomStudentListItem']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
+  >;
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Contact?: ContactResolvers<ContextType>;
   HomeroomListItem?: HomeroomListItemResolvers<ContextType>;
+  HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
