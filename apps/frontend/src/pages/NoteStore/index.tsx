@@ -29,9 +29,9 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import { CLASS_OPTIONS, NOTES_LIST } from '../../constants';
-import ConfirmDeleteNoteDialog from '../../components/ConfirmDeleteNoteDialog';
+import DeleteNoteDialog from '../../components/DeleteDialog';
 import { File } from '../../types';
-import NoteEditor from '../../components/NoteEditor';
+import NoteEditor from '../../components/Note/NoteEditor';
 import { mapImageUrlToFile } from '../../utils';
 
 import NoteCardItem from './NoteCardItem';
@@ -225,6 +225,7 @@ function NoteStore() {
                 onClickDelete={() =>
                   setValues({ ...values, deleteIndex: index })
                 }
+                onClickExpand={() => setValues({ ...values, selected: -1 })}
               />
             ))}
           </StyledGridContainer>
@@ -235,15 +236,6 @@ function NoteStore() {
           />
         </StyledContentWrapper>
       </StyledContainer>
-      {values.deleteIndex >= 0 && (
-        <ConfirmDeleteNoteDialog
-          open={values.deleteIndex >= 0}
-          onClose={() => setValues({ ...values, deleteIndex: -1 })}
-          title={NOTES_LIST[values.deleteIndex].title}
-          onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
-          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
-        />
-      )}
       {values.selected >= 0 && (
         <StyledDialog
           open={values.selected >= 0}
@@ -261,6 +253,16 @@ function NoteStore() {
             handleSelectTags={handleSelectTags}
           />
         </StyledDialog>
+      )}
+      {values.deleteIndex >= 0 && (
+        <DeleteNoteDialog
+          open={values.deleteIndex >= 0}
+          onClose={() => setValues({ ...values, deleteIndex: -1 })}
+          description="Bạn có đồng ý xoá ghi chú"
+          boldText={NOTES_LIST[values.deleteIndex].title}
+          onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
+          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+        />
       )}
     </>
   );

@@ -6,3 +6,8 @@ export const mapImageUrlToFile = (images: string[]) => {
     options: { type: 'local' },
   })) as File[];
 };
+
+export const extractContent = (html: string) => {
+  return new DOMParser().parseFromString(html, 'text/html').documentElement
+    .textContent;
+};

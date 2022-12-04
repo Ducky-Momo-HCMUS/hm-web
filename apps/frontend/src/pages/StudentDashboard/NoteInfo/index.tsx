@@ -20,7 +20,7 @@ import {
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import SortIcon from '@mui/icons-material/Sort';
 
-import NoteEditor from '../../../components/NoteEditor';
+import NoteEditor from '../../../components/Note/NoteEditor';
 import {
   Item,
   StyledBreadCrumbs,
@@ -30,7 +30,7 @@ import {
 import { NOTES_LIST, ROWS_PER_PAGE } from '../../../constants';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
-import ConfirmDeleteNoteDialog from '../../../components/ConfirmDeleteNoteDialog';
+import DeleteNoteDialog from '../../../components/DeleteDialog';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
@@ -193,10 +193,11 @@ function NoteInfo() {
         </Grid>
       </StyledGridContainer>
       {values.deleteIndex >= 0 && (
-        <ConfirmDeleteNoteDialog
+        <DeleteNoteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
-          title={NOTES_LIST[values.deleteIndex].title}
+          description="Bạn có đồng ý xoá ghi chú"
+          boldText={NOTES_LIST[values.deleteIndex].title}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />
