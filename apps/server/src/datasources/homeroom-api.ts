@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { ApolloError } from 'apollo-server-express';
 
-import { HOMEROOM_LIST, HOMEROOM_STUDENT_LIST } from '../constants/homeroom';
+import { HOMEROOM_LIST, HOMEROOM_STUDENT_LIST } from '../mocks/homeroom';
 import { QueryHomeroomStudentListArgs } from '../generated-types';
 import { BASE_URL } from '../utils/config';
 

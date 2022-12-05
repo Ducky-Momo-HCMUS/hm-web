@@ -27,7 +27,7 @@ import {
   StyledDivider,
   StyledTitle,
 } from '../../../components/styles';
-import { NOTES_LIST, ROWS_PER_PAGE } from '../../../constants';
+import { NOTES_LIST, ROWS_PER_PAGE } from '../../../mocks';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
 import ConfirmDeleteNoteDialog from '../../../components/ConfirmDeleteNoteDialog';

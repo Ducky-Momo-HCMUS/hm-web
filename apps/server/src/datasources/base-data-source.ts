@@ -1,8 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { ApolloError, UserInputError } from 'apollo-server-express';
 
-import { MSG_ERROR_DEFAULT } from '../constants/texts';
-
 export const apolloErrors = [
   'SyntaxError',
   'ValidationError',
@@ -13,6 +11,7 @@ export const apolloErrors = [
   'PersistedQueryNotSupportedError',
 ];
 
+const MSG_ERROR_DEFAULT = 'Something went wrong...';
 export class BaseDataSource<
   TContext = unknown
 > extends RESTDataSource<TContext> {
