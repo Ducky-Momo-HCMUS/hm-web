@@ -16,9 +16,9 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-import { API_KEY, NOTE_EDITOR_CONFIG, TAGS_OPTIONS } from '../../mocks';
-import { File } from '../../types';
-import { StyledTextField } from '../styles';
+import { API_KEY, NOTE_EDITOR_CONFIG, TAGS_OPTIONS } from '../../../mocks';
+import { File } from '../../../types';
+import { StyledTextField } from '../../styles';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 

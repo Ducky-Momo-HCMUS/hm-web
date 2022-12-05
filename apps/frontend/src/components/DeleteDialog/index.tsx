@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Button,
   Dialog,
@@ -6,37 +7,35 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import React from 'react';
 
-interface ConfirmDeleteNoteDialogProps {
+interface DeleteDialogProps {
+  description: string;
+  boldText: string;
   open: boolean;
   onClose: any;
-  title: string;
   onClickCancel: any;
   onClickConfirm: any;
 }
 
-function ConfirmDeleteNoteDialog({
+function DeleteDialog({
+  description,
+  boldText,
   open,
   onClose,
-  title,
   onClickCancel,
   onClickConfirm,
-}: ConfirmDeleteNoteDialogProps) {
+}: DeleteDialogProps) {
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      aria-labelledby="delete-note-dialog-title"
-      aria-describedby="delete-note-dialog-description"
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
     >
-      <DialogTitle id="delete-note-dialog-title">Xác nhận</DialogTitle>
+      <DialogTitle id="delete-dialog-title">Xác nhận</DialogTitle>
       <DialogContent>
-        <DialogContentText
-          id="delete-note-dialog-description"
-          color="text.primary"
-        >
-          Bạn có đồng ý xoá ghi chú <b>{title}</b> không?
+        <DialogContentText id="delete-dialog-description" color="text.primary">
+          {description} <b>{boldText}</b> không?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -49,4 +48,4 @@ function ConfirmDeleteNoteDialog({
   );
 }
 
-export default ConfirmDeleteNoteDialog;
+export default DeleteDialog;
