@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
+
 import { RegisteredSubjectsData } from '../../../../types';
 import { theme } from '../../../../theme';
 

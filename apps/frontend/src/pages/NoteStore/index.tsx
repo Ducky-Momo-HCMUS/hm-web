@@ -28,7 +28,7 @@ import {
   StyledContentWrapper,
   StyledTitle,
 } from '../../components/styles';
-import { CLASS_OPTIONS, NOTES_LIST } from '../../constants';
+import { CLASS_OPTIONS, NOTES_LIST } from '../../mocks';
 import DeleteNoteDialog from '../../components/DeleteDialog';
 import { File } from '../../types';
 import NoteEditor from '../../components/Note/NoteEditor';

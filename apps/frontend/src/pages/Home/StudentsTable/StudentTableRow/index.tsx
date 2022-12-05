@@ -1,28 +1,21 @@
 import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
 
-import { StudentData } from '../../../../types';
+import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
+import { mapMajorIdToName } from '../../../../utils';
 
 interface StudentTableRowProps {
-  data: StudentData;
+  data: HomeroomStudentListData;
   index: number;
 }
 function StudentTableRow({ data, index }: StudentTableRowProps) {
-  const {
-    studentId,
-    fullName,
-    major,
-    status,
-    gpaFourPointScale,
-    gpaTenPointScale,
-    contact,
-  } = data;
+  const { maSV, tenSV, maCN, tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
-    switch (status) {
+    switch (tinhTrang) {
       case 'Đang học': {
         color = theme.palette.text.primary;
         break;
@@ -45,31 +38,29 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
 
     return (
       <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
-        {status}
+        {tinhTrang}
       </Typography>
     );
-  }, [status]);
+  }, [tinhTrang]);
 
   return (
-    <TableRow hover role="checkbox" tabIndex={-1} key={data.studentId}>
+    <TableRow hover role="checkbox" tabIndex={-1} key={data.maSV}>
       <TableCell>{index}</TableCell>
-      <TableCell>{studentId}</TableCell>
+      <TableCell>{maSV}</TableCell>
       <TableCell>
-        <StyledRouterLink to={`/students/${studentId}`}>
-          {fullName}
-        </StyledRouterLink>
+        <StyledRouterLink to={`/students/${maSV}`}>{tenSV}</StyledRouterLink>
       </TableCell>
-      <TableCell>{major}</TableCell>
+      <TableCell>{mapMajorIdToName(maCN)}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{gpaFourPointScale}</TableCell>
-      <TableCell>{gpaTenPointScale}</TableCell>
+      <TableCell>{gpa4}</TableCell>
+      <TableCell>{gpa10}</TableCell>
       <TableCell>
-        {contact.phoneNumber}
-        {contact.socialInfoList.map((social) => (
+        {contact.sdt}
+        {contact.lienHe.map((social) => (
           <>
             ,{' '}
             <StyledMuiLink target="_blank" href={social.url}>
-              {social.name}
+              {social.mxh}
             </StyledMuiLink>
           </>
         ))}

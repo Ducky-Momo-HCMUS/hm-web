@@ -14,10 +14,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
+
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
+import { REGISTERED_SUBJECTS_DATA } from '../../../mocks';
+
 import { StyledFormControl, StyledHeader, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
-import { REGISTERED_SUBJECTS_DATA } from '../../../constants';
 import AcademicTableRow from './AcademicTableRow';
 
 interface State {

@@ -1,21 +1,26 @@
-interface SocialInfo {
-  name: string;
-  url: string;
+import { Contact } from '../generated-types';
+
+export type Property =
+  | 'maSV'
+  | 'tenSV'
+  | 'maCN'
+  | 'tinhTrang'
+  | 'gpa4'
+  | 'gpa10';
+
+export interface HomeroomStudentListData {
+  maSV: string;
+  tenSV: string;
+  maCN: string;
+  tinhTrang: string;
+  gpa4: number;
+  gpa10: number;
+  contact: ContactInfo;
 }
 
-export interface Contact {
-  phoneNumber: string;
-  socialInfoList: SocialInfo[];
-}
-
-export interface StudentData {
-  studentId: string;
-  fullName: string;
-  major: string;
-  status: string;
-  gpaFourPointScale: number;
-  gpaTenPointScale: number;
-  contact: Contact;
+export interface ContactInfo {
+  sdt: string;
+  lienHe: Contact[];
 }
 
 export interface RegisteredSubjectsData {

@@ -26,7 +26,6 @@ export const StyledContentWrapper = styled(Box)`
 export const StyledActionsBar = styled(Box)`
   display: flex;
   justify-content: space-between;
-  margin-top: 4rem;
 `;
 
 export const StyledCard = styled(Box)`
