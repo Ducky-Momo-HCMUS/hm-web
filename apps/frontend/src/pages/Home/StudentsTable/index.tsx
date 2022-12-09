@@ -139,13 +139,15 @@ function StudentsTable() {
               </Select>
             </StyledFormControl>
           </Box>
-          <Button
-            component={Link}
-            to={`/class/${values.class.toLowerCase()}`}
-            variant="contained"
-          >
-            Tổng quan lớp học
-          </Button>
+          {!!values.class && (
+            <Button
+              component={Link}
+              to={`/classes/${values.class.toLowerCase()}`}
+              variant="contained"
+            >
+              Tổng quan lớp học
+            </Button>
+          )}
         </StyledActionsBar>
       </AsyncDataRenderer>
       <AsyncDataRenderer
@@ -155,7 +157,7 @@ function StudentsTable() {
         {values.class.length ? (
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
-              <Table stickyHeader aria-label="sticky table">
+              <Table stickyHeader>
                 <StudentTableHead
                   order={order}
                   orderBy={orderBy}
