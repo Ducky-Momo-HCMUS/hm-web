@@ -1,5 +1,3 @@
-import { ApolloError } from 'apollo-server-express';
-
 import { DataSourceResponse } from '../types';
 import { BASE_URL } from '../utils/config';
 
@@ -19,9 +17,11 @@ export default class AuthAPI extends BaseDataSource {
 
   public async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      return await this.post('/v1/login', { email, password });
+      const response = await this.post('/v1/login', { email, password });
+      return response;
     } catch (error) {
-      this.handleError(error);
+      // TODO add log
+      throw this.handleError(error);
     }
   }
 }

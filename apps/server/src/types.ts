@@ -1,7 +1,19 @@
-import { IncomingHttpHeaders } from 'http';
+import { JwtPayload as _JwtPayload } from 'jsonwebtoken';
 
 export interface RequestContext {
-  headers: IncomingHttpHeaders;
+  authorization?: string;
+  user?: { id: string; email: string };
+}
+
+export interface JwtPayload extends _JwtPayload {
+  iss?: string | undefined;
+  sub: string;
+  aud?: string | string[] | undefined;
+  exp?: number | undefined;
+  nbf?: number | undefined;
+  iat?: number | undefined;
+  jti?: string | undefined;
+  email: string;
 }
 
 interface Object {

@@ -1,12 +1,8 @@
-import { DataSources } from '../datasources';
 import { Resolvers } from '../generated-types';
-import { RequestContext } from '../types';
 
-export interface ContextType extends RequestContext {
-  dataSources: DataSources;
-}
+import { ResolverContext } from './types';
 
-const resolvers: Resolvers<ContextType> = {
+export const homeroomResolver: Resolvers<ResolverContext> = {
   Query: {
     homeroomList: async (_, __, { dataSources }) => {
       // TODO: get accessToken
@@ -28,4 +24,4 @@ const resolvers: Resolvers<ContextType> = {
   },
 };
 
-export { resolvers };
+export default homeroomResolver;

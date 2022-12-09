@@ -22,7 +22,7 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');
-      return await this.handleError(error as ApolloError);
+      throw this.handleError(error as ApolloError);
     }
   }
 
@@ -44,7 +44,7 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_STUDENT_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
-      return this.handleError(error as ApolloError);
+      throw this.handleError(error as ApolloError);
     }
   }
 

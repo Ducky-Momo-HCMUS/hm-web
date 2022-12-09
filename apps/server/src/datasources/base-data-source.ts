@@ -1,19 +1,26 @@
 /* eslint-disable no-param-reassign */
-import { RESTDataSource } from 'apollo-datasource-rest';
+import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { ApolloError } from 'apollo-server-express';
 
-export class BaseDataSource<
-  TContext = unknown
-> extends RESTDataSource<TContext> {
+import { RequestContext } from '../types';
+
+export class BaseDataSource extends RESTDataSource<RequestContext> {
+  protected override willSendRequest(req: RequestOptions) {
+    const { authorization } = this.context;
+    if (authorization) {
+      req.headers.set('Authorization', authorization);
+    }
+  }
+
   /**
-   * Modify the error and rethrow it
+   * Modify the error
    * @param error
    */
   protected handleError(error: unknown) {
     // ApolloError has been replaced with GraphQLError in v4
     if (!(error instanceof ApolloError)) {
       // TODO add log
-      throw new ApolloError('Internal Server Error', 'INTERNAL_SERVER_ERROR');
+      return new ApolloError('Internal Server Error', 'INTERNAL_SERVER_ERROR');
     }
     // Possible exeptions from RESTDataSource:
     // - AuthenticationError (401)
@@ -23,6 +30,6 @@ export class BaseDataSource<
     if (errorResponse?.message) {
       error.message = errorResponse.message;
     }
-    throw error;
+    return error;
   }
 }

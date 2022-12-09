@@ -1,6 +1,9 @@
 import { DataSources } from '../datasources';
+import { Resolvers } from '../generated-types';
 
-const authResolvers = {
+import { ResolverContext } from './types';
+
+export const authResolvers: Resolvers<ResolverContext> = {
   Mutation: {
     login: async (
       _: any,
@@ -12,5 +15,3 @@ const authResolvers = {
     },
   },
 };
-
-export default authResolvers;

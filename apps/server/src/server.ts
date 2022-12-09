@@ -7,6 +7,7 @@ import { expressjwt } from 'express-jwt';
 import typeDefs from './schema';
 import resolvers from './resolvers';
 import dataSources from './datasources';
+import { JwtPayload, RequestContext } from './types';
 
 startServer();
 
@@ -25,10 +26,13 @@ export async function startServer() {
     typeDefs,
     resolvers: resolvers as IResolvers,
     dataSources,
-    context: ({ req }) => {
-      const { headers } = req;
-      const user = (req as any).user || null;
-      return { user, headers };
+    context: ({ req }): RequestContext => {
+      const payload: JwtPayload | undefined = (req as any).auth;
+      const user = payload
+        ? { id: payload.sub, email: payload.email }
+        : undefined;
+      const { authorization } = req.headers;
+      return { authorization, user };
     },
   });
   server.applyMiddleware({ app, path: '/graphql' });
