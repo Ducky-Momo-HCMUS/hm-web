@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express';
 
-import { typeDefs as homeroomTypeDefs } from './homeroom';
+import homeroomTypeDefs from './homeroom';
 
 const typeDefs = gql`
   #=============#

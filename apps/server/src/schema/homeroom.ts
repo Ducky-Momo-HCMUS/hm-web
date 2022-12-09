@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
+const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
     homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]
@@ -33,4 +33,4 @@ const typeDefs = gql`
   }
 `;
 
-export { typeDefs };
+export default homeroomTypeDefs;

@@ -12,10 +12,11 @@ export const apolloErrors = [
 ];
 
 const MSG_ERROR_DEFAULT = 'Something went wrong...';
+
 export class BaseDataSource<
   TContext = unknown
 > extends RESTDataSource<TContext> {
-  public async handleError(error: ApolloError): Promise<never> {
+  protected handleError(error: ApolloError): Promise<never> {
     if (
       error.extensions &&
       error.extensions.response &&

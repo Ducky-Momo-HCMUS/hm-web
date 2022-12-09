@@ -8,7 +8,10 @@ import { BASE_URL } from '../utils/config';
 import { BaseDataSource } from './base-data-source';
 
 class HomeroomAPI extends BaseDataSource {
-  public baseURL = BASE_URL;
+  constructor(baseUrl: string = BASE_URL) {
+    super();
+    this.baseURL = baseUrl;
+  }
 
   public async getHomeroomList(accessToken: string) {
     try {
@@ -41,7 +44,7 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_STUDENT_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
-      return await this.handleError(error as ApolloError);
+      return this.handleError(error as ApolloError);
     }
   }
 
