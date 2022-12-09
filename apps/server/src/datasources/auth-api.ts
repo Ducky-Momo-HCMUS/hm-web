@@ -21,9 +21,7 @@ export default class AuthAPI extends BaseDataSource {
     try {
       return await this.post('/v1/login', { email, password });
     } catch (error) {
-      // TODO handleError
-      // Mask 500 message code
-      throw new ApolloError('TODO');
+      this.handleError(error);
     }
   }
 }

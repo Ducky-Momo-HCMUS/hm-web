@@ -139,6 +139,7 @@ importers:
       '@types/jest': ^29.2.0
       '@types/node': ^16.11.64
       apollo-datasource-rest: ^3.7.0
+      apollo-server-errors: ^3.3.1
       apollo-server-express: ^2.11.0
       eslint: ~8.15.0
       express: ^4.17.1
@@ -154,6 +155,7 @@ importers:
       typescript: ^4.8.4
     dependencies:
       apollo-datasource-rest: 3.7.0_graphql@15.8.0
+      apollo-server-errors: 3.3.1_graphql@15.8.0
       apollo-server-express: 2.26.1_graphql@15.8.0
       express: 4.18.2
       express-jwt: 7.7.7
@@ -5036,6 +5038,7 @@ packages:
   /apollo-server-errors/2.5.0_graphql@15.8.0:
     resolution: {integrity: sha512-lO5oTjgiC3vlVg2RKr3RiXIIQ5pGXBFxYGGUkKDhTud3jMIhs+gel8L8zsEjKaKxkjHhCQAA/bcEfYiKkGQIvA==}
     engines: {node: '>=6'}
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
@@ -5045,6 +5048,7 @@ packages:
   /apollo-server-errors/3.3.1_graphql@15.8.0:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:

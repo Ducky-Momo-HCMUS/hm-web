@@ -6,13 +6,11 @@ export interface DataSources {
   authAPI: AuthAPI;
 }
 
-function getDataSources() {
-  const dataSources: DataSources = {
+function dataSources() {
+  return {
     homeroomAPI: new HomeroomAPI(),
     authAPI: new AuthAPI(),
   };
-
-  return dataSources;
 }
 
-export default getDataSources;
+export default dataSources;

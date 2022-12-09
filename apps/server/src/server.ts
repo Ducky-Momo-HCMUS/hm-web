@@ -26,8 +26,9 @@ export async function startServer() {
     resolvers: resolvers as IResolvers,
     dataSources,
     context: ({ req }) => {
+      const { headers } = req;
       const user = (req as any).user || null;
-      return { user };
+      return { user, headers };
     },
   });
   server.applyMiddleware({ app, path: '/graphql' });

@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -53,9 +52,20 @@ export type HomeroomStudentListItem = {
   tinhTrang: Scalars['String'];
 };
 
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  token?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  login?: Maybe<LoginResponse>;
   ping?: Maybe<Scalars['String']>;
+};
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type MutationResponse = {
@@ -189,6 +199,7 @@ export type ResolversTypes = {
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationResponse: never;
   Query: ResolverTypeWrapper<{}>;
@@ -204,6 +215,7 @@ export type ResolversParentTypes = {
   HomeroomListItem: HomeroomListItem;
   HomeroomStudentListItem: HomeroomStudentListItem;
   Int: Scalars['Int'];
+  LoginResponse: LoginResponse;
   Mutation: {};
   MutationResponse: never;
   Query: {};
@@ -256,10 +268,24 @@ export type HomeroomStudentListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LoginResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoginResponse'] = ResolversParentTypes['LoginResponse']
+> = {
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  login?: Resolver<
+    Maybe<ResolversTypes['LoginResponse']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'email' | 'password'>
+  >;
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -296,6 +322,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomList?: HomeroomListResolvers<ContextType>;
   HomeroomListItem?: HomeroomListItemResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
+  LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

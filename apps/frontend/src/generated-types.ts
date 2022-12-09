@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -52,9 +51,20 @@ export type HomeroomStudentListItem = {
   tinhTrang: Scalars['String'];
 };
 
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  token?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  login?: Maybe<LoginResponse>;
   ping?: Maybe<Scalars['String']>;
+};
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type MutationResponse = {

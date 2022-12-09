@@ -1,36 +1,28 @@
+/* eslint-disable no-param-reassign */
 import { RESTDataSource } from 'apollo-datasource-rest';
-import { ApolloError, UserInputError } from 'apollo-server-express';
-
-export const apolloErrors = [
-  'SyntaxError',
-  'ValidationError',
-  'UserInputError',
-  'AuthenticationError',
-  'ForbiddenError',
-  'PersistedQueryNotFoundError',
-  'PersistedQueryNotSupportedError',
-];
-
-const MSG_ERROR_DEFAULT = 'Something went wrong...';
+import { ApolloError } from 'apollo-server-express';
 
 export class BaseDataSource<
   TContext = unknown
 > extends RESTDataSource<TContext> {
-  protected handleError(error: ApolloError): Promise<never> {
-    if (
-      error.extensions &&
-      error.extensions.response &&
-      error.extensions.response.body
-    ) {
-      throw new UserInputError(
-        error.extensions.response.body.message || MSG_ERROR_DEFAULT
-      );
+  /**
+   * Modify the error and rethrow it
+   * @param error
+   */
+  protected handleError(error: unknown) {
+    // ApolloError has been replaced with GraphQLError in v4
+    if (!(error instanceof ApolloError)) {
+      // TODO add log
+      throw new ApolloError('Internal Server Error', 'INTERNAL_SERVER_ERROR');
     }
-
-    if (apolloErrors.includes(error.name)) {
-      throw error;
+    // Possible exeptions from RESTDataSource:
+    // - AuthenticationError (401)
+    // - ForbiddenError (403)
+    // - ApolloError
+    const errorResponse = error.extensions?.response?.body;
+    if (errorResponse?.message) {
+      error.message = errorResponse.message;
     }
-
-    throw new ApolloError('Internal Server Error');
+    throw error;
   }
 }
