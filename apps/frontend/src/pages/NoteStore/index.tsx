@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, {
   ChangeEvent,
   useCallback,
@@ -28,7 +27,7 @@ import {
   StyledContentWrapper,
   StyledTitle,
 } from '../../components/styles';
-import { CLASS_OPTIONS, NOTES_LIST } from '../../mocks';
+import { CLASS_OPTIONS, NOTES_LIST, TAGS_OPTIONS } from '../../mocks';
 import DeleteNoteDialog from '../../components/DeleteDialog';
 import { File } from '../../types';
 import NoteEditor from '../../components/Note/NoteEditor';
@@ -86,7 +85,6 @@ function NoteStore() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
     if (editorRef.current) {
-      // eslint-disable-next-line no-console
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);
@@ -137,7 +135,7 @@ function NoteStore() {
               }}
             />
             <StyledTextField
-              sx={{ width: '20%' }}
+              sx={{ width: '15%' }}
               id="student-keyword"
               variant="standard"
               label="Sinh viên"
@@ -211,6 +209,40 @@ function NoteStore() {
                 {CLASS_OPTIONS.map((item) => (
                   <MenuItem value={item}>
                     <Checkbox checked={values.classes.indexOf(item) > -1} />
+                    <ListItemText primary={item} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="standard" sx={{ width: '15%' }}>
+              <InputLabel
+                sx={{ fontWeight: 'bold' }}
+                shrink
+                id="class-select-label"
+              >
+                Tag
+              </InputLabel>
+              <Select
+                sx={{
+                  '& .MuiSelect-select .notranslate::after':
+                    values.tags.length === 0
+                      ? {
+                          content: `"Chọn tag..."`,
+                          opacity: 0.42,
+                        }
+                      : {},
+                }}
+                multiple
+                renderValue={(selected) => selected.join(', ')}
+                labelId="tag-select-label"
+                id="tag-select"
+                value={values.tags}
+                label="Tag"
+                onChange={handleSelectTags}
+              >
+                {TAGS_OPTIONS.map((item) => (
+                  <MenuItem value={item}>
+                    <Checkbox checked={values.tags.indexOf(item) > -1} />
                     <ListItemText primary={item} />
                   </MenuItem>
                 ))}

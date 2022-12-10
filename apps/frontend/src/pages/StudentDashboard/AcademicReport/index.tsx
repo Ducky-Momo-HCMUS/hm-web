@@ -46,9 +46,9 @@ function AcademicReport() {
         <Link underline="hover" color="inherit" href="/">
           Trang chủ
         </Link>
-        <Link underline="hover" color="inherit" href={`/students/${id}`}>
+        <Typography color="text.primary">
           {id} - Nguyễn Ngọc Thanh Tâm
-        </Link>
+        </Typography>
         <Typography color="text.primary">Tình hình học tập</Typography>
       </StyledBreadCrumbs>
       <Box

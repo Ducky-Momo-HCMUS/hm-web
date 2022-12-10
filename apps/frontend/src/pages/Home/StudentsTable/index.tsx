@@ -30,7 +30,6 @@ import {
   mapStudentDataToTable,
 } from '../../../utils';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import ErrorMessage from '../../../components/ErrorMessage';
 
 import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
@@ -56,18 +55,6 @@ function StudentsTable() {
   const homeroomList = useMemo(
     () => homeroomListData?.homeroomList.lopSinhHoat || [],
     [homeroomListData?.homeroomList.lopSinhHoat]
-  );
-
-  const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
-    useHomeroomStudentListQuery({
-      variables: {
-        homeroomId: values.class,
-      },
-      skip: !values.class,
-    });
-  const studentListData = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList || [],
-    [homeroomStudentListData?.homeroomStudentList]
   );
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
@@ -98,11 +85,46 @@ function StudentsTable() {
     [orderBy, order]
   );
 
-  const { years, classes } = useMemo(() => {
-    const mappedData = groupClassesByYear(homeroomList);
-    const classesByYear = mappedData[values.year]?.map((data) => data.maSH);
-    return { years: Object.keys(mappedData), classes: classesByYear || [] };
-  }, [homeroomList, values.year]);
+  const mappedData = useMemo(
+    () => groupClassesByYear(homeroomList),
+    [homeroomList]
+  );
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { classes } = useMemo(() => {
+    const classesByYear = mappedData[values.year || years[0]]?.map(
+      (data) => data.maSH
+    );
+    return {
+      years: Object.keys(mappedData),
+      classes: classesByYear || [],
+    };
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialClass } = useMemo(() => {
+    const classesByYear = mappedData[years[0]]?.map((data) => data.maSH);
+    return {
+      initialYear: years[0],
+      initialClass: classesByYear?.[0] || '',
+    };
+  }, [mappedData, years]);
+
+  const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
+    useHomeroomStudentListQuery({
+      variables: {
+        homeroomId: values.class || initialClass,
+      },
+    });
+  const studentListData = useMemo(
+    () => homeroomStudentListData?.homeroomStudentList || [],
+    [homeroomStudentListData?.homeroomStudentList]
+  );
+
+  const selectedClass = useMemo(
+    () => values.class || initialClass,
+    [values.class, initialClass]
+  );
 
   return (
     <StyledContentWrapper>
@@ -115,7 +137,7 @@ function StudentsTable() {
               <Select
                 labelId="year-select-label"
                 id="year-select"
-                value={values.year}
+                value={values.year || initialYear}
                 label="Khoá"
                 onChange={handleChange('year')}
               >
@@ -129,7 +151,7 @@ function StudentsTable() {
               <Select
                 labelId="class-select-label"
                 id="class-select"
-                value={values.class}
+                value={values.class || initialClass}
                 label="Lớp"
                 onChange={handleChange('class')}
               >
@@ -139,22 +161,20 @@ function StudentsTable() {
               </Select>
             </StyledFormControl>
           </Box>
-          {!!values.class && (
-            <Button
-              component={Link}
-              to={`/classes/${values.class.toLowerCase()}`}
-              variant="contained"
-            >
-              Tổng quan lớp học
-            </Button>
-          )}
+          <Button
+            component={Link}
+            to={`/classes/${selectedClass}`}
+            variant="contained"
+          >
+            Tổng quan lớp học
+          </Button>
         </StyledActionsBar>
       </AsyncDataRenderer>
       <AsyncDataRenderer
         loading={homeroomStudentListLoading}
         data={homeroomStudentListData}
       >
-        {values.class.length ? (
+        {(values.class || initialClass) && (
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
               <Table stickyHeader>
@@ -187,10 +207,6 @@ function StudentsTable() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
-        ) : (
-          <Box sx={{ marginTop: '1rem' }}>
-            <ErrorMessage content="Vui lòng chọn khoá và lớp" />
-          </Box>
         )}
       </AsyncDataRenderer>
     </StyledContentWrapper>
