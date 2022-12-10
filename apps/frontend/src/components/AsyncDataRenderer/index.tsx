@@ -15,13 +15,7 @@ export interface AsyncDataRendererProps {
 function AsyncDataRenderer({ children, loading }: AsyncDataRendererProps) {
   if (loading) {
     return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <Box sx={{ marginTop: '1rem' }}>
         <CircularProgress />
       </Box>
     );

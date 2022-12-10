@@ -110,7 +110,6 @@ function ClassDetail() {
           <Link underline="hover" color="inherit" href="/">
             Trang chủ
           </Link>
-          <Typography color="text.primary">{id}</Typography>
           <Typography color="text.primary">Tổng quan lớp học</Typography>
         </StyledBreadCrumbs>
         <Box
