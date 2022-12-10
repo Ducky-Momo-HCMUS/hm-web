@@ -95,7 +95,6 @@ function NoteEditor({
         <Editor
           apiKey={API_KEY}
           onInit={(evt, editor: any) => {
-            // eslint-disable-next-line no-param-reassign
             editorRef.current = editor;
           }}
           initialValue={initialValue}

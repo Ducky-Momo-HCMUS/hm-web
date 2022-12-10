@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, {
   ChangeEvent,
   useCallback,
@@ -86,7 +85,6 @@ function NoteStore() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
     if (editorRef.current) {
-      // eslint-disable-next-line no-console
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);

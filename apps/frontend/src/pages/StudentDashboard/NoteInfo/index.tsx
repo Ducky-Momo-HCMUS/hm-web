@@ -64,7 +64,6 @@ function NoteInfo() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
     if (editorRef.current) {
-      // eslint-disable-next-line no-console
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);
