@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NoteStore from './pages/NoteStore';
 import ResetPassword from './pages/ResetPassword';
-import StatisticalReport from './pages/StatisticalReport';
+import StatisticalReport from './pages/ClassReport';
 import StudentDashboard from './pages/StudentDashboard';
 
 function App() {

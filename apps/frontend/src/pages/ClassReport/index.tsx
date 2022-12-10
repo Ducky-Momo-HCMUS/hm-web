@@ -24,11 +24,14 @@ import {
 } from '../../components/styles';
 import TabPanel from '../../components/TabPanel';
 
+import ClassOverview from './ClassOverview';
+import PostponeExam from './PostponeExam';
+
 interface State {
   semester: string;
 }
 
-function StatisticalReport() {
+function ClassReport() {
   const { id } = useParams();
   const [values, setValues] = useState<State>({
     semester: 'all',
@@ -89,7 +92,7 @@ function StatisticalReport() {
             Xuất báo cáo
           </Button>
         </Box>
-        <Box sx={{ bgcolor: 'background.paper' }}>
+        <Box sx={{ marginTop: '1rem' }}>
           <AppBar position="static">
             <Tabs
               value={selectedTab}
@@ -104,10 +107,10 @@ function StatisticalReport() {
             </Tabs>
           </AppBar>
           <TabPanel index={0} value={selectedTab}>
-            Tổng kết lớp
+            <ClassOverview />
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
-            Hoãn/Vắng thi
+            <PostponeExam />
           </TabPanel>
         </Box>
       </StyledContentWrapper>
@@ -115,4 +118,4 @@ function StatisticalReport() {
   );
 }
 
-export default StatisticalReport;
+export default ClassReport;

@@ -1,8 +1,8 @@
 import { TableCell } from '@mui/material';
 import React from 'react';
 
-import { GenericObject } from '../../../../types';
-import { StyledTableRow } from '../styles';
+import { GenericObject } from '../../types';
+import { StyledTableRow } from '../../pages/ClassDetail/ClassTable/styles';
 
 interface CustomisedTableRowProps {
   data: GenericObject;

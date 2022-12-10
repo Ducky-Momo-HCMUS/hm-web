@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import {
   Box,
@@ -13,23 +14,24 @@ import {
 } from '@mui/material';
 
 import { Column } from '../../../types';
+import CustomisedTableRow from '../../../components/CustomisedTableRow';
+import CustomisedTableHead from '../../../components/CustomisedTableHead';
 
-import CustomisedTableRow from './CustomisedTableRow';
-import CustomisedTableHead from './CustomisedTableHead';
 import { StyledFormControl, StyledPaper } from './styles';
 
-interface ClassSectionProps {
+interface ClassTableProps {
   title: string;
   columns: Column[];
   data: any;
   page: number;
-  semester: string;
+  semester?: string;
   rowsPerPage: number;
   handleChangePage: any;
-  handleChangeSemester: any;
+  handleChangeSemester?: any;
+  hasFilter: boolean;
 }
 
-function ClassSection({
+function ClassTable({
   title,
   columns,
   data,
@@ -38,7 +40,8 @@ function ClassSection({
   rowsPerPage,
   handleChangePage,
   handleChangeSemester,
-}: ClassSectionProps) {
+  hasFilter,
+}: ClassTableProps) {
   return (
     <StyledPaper>
       <Box style={{ marginBottom: '2rem' }}>
@@ -47,21 +50,23 @@ function ClassSection({
         </Typography>
         <Divider />
       </Box>
-      <StyledFormControl>
-        <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
-        <Select
-          labelId="year-select-label"
-          id="year-select"
-          value={semester}
-          label="Học kỳ - năm học"
-          onChange={handleChangeSemester}
-        >
-          <MenuItem value="all">Tất cả</MenuItem>
-          <MenuItem value="1-2019">HK1 2019-2020</MenuItem>
-          <MenuItem value="2-2019">HK2 2019-2020</MenuItem>
-          <MenuItem value="3-2019">HK3 2019-2020</MenuItem>
-        </Select>
-      </StyledFormControl>
+      {hasFilter && (
+        <StyledFormControl>
+          <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
+          <Select
+            labelId="year-select-label"
+            id="year-select"
+            value={semester}
+            label="Học kỳ - năm học"
+            onChange={handleChangeSemester}
+          >
+            <MenuItem value="all">Tất cả</MenuItem>
+            <MenuItem value="1-2019">HK1 2019-2020</MenuItem>
+            <MenuItem value="2-2019">HK2 2019-2020</MenuItem>
+            <MenuItem value="3-2019">HK3 2019-2020</MenuItem>
+          </Select>
+        </StyledFormControl>
+      )}
       <TableContainer sx={{ maxHeight: 440, marginTop: '1rem' }}>
         <Table stickyHeader>
           <CustomisedTableHead columns={columns} />
@@ -86,4 +91,4 @@ function ClassSection({
   );
 }
 
-export default ClassSection;
+export default ClassTable;

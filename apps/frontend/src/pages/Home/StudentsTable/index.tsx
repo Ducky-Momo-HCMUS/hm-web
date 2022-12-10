@@ -121,6 +121,11 @@ function StudentsTable() {
     [homeroomStudentListData?.homeroomStudentList]
   );
 
+  const selectedClass = useMemo(
+    () => values.class || initialClass,
+    [values.class, initialClass]
+  );
+
   return (
     <StyledContentWrapper>
       <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
@@ -156,15 +161,13 @@ function StudentsTable() {
               </Select>
             </StyledFormControl>
           </Box>
-          {!!values.class && (
-            <Button
-              component={Link}
-              to={`/classes/${values.class.toLowerCase()}`}
-              variant="contained"
-            >
-              Tổng quan lớp học
-            </Button>
-          )}
+          <Button
+            component={Link}
+            to={`/classes/${selectedClass}`}
+            variant="contained"
+          >
+            Tổng quan lớp học
+          </Button>
         </StyledActionsBar>
       </AsyncDataRenderer>
       <AsyncDataRenderer

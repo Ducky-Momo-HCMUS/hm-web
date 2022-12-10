@@ -1,8 +1,8 @@
 import { TableCell, TableHead } from '@mui/material';
 import React from 'react';
 
-import { Column } from '../../../../types';
-import { StyledTableRow } from '../styles';
+import { Column } from '../../types';
+import { StyledTableRow } from '../../pages/ClassDetail/ClassTable/styles';
 
 interface CustomisedTableHeadProps {
   columns: Column[];

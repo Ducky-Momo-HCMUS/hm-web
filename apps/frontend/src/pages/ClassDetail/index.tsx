@@ -23,7 +23,7 @@ import {
 } from '../../mocks';
 
 import ClassInfo from './ClassInfo';
-import ClassSection from './ClassSection';
+import ClassTable from './ClassTable';
 
 const failedColumns = [
   { id: 'maSV', label: 'MSSV' },
@@ -142,7 +142,7 @@ function ClassDetail() {
             Báo cáo lớp học
           </Button>
         </Box>
-        <ClassSection
+        <ClassTable
           title="Tình hình rớt môn"
           columns={failedColumns}
           data={FAILED_SUBJECTS_STATUS}
@@ -151,10 +151,11 @@ function ClassDetail() {
           rowsPerPage={ROWS_PER_PAGE}
           handleChangePage={handleChangeSubjectStatusPage}
           handleChangeSemester={handleChange('semesterSubjectStatus')}
+          hasFilter
         />
         <Grid style={{ marginTop: '0.25rem' }} container spacing={3}>
           <Grid item xs={4}>
-            <ClassSection
+            <ClassTable
               title="Danh sách không đăng ký học phần"
               columns={notRegisteredSubjectColumns}
               data={NOT_REGISTERED_SUBJECT_LIST}
@@ -163,10 +164,11 @@ function ClassDetail() {
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangeNotRegisteredPage}
               handleChangeSemester={handleChange('semesterNotRegistered')}
+              hasFilter
             />
           </Grid>
           <Grid item xs={8}>
-            <ClassSection
+            <ClassTable
               title="Danh sách hoãn thi"
               columns={postponeExamColumns}
               data={POSTPONE_EXAM_LIST}
@@ -175,6 +177,7 @@ function ClassDetail() {
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangePostponeExamPage}
               handleChangeSemester={handleChange('semesterPostponeExam')}
+              hasFilter
             />
           </Grid>
         </Grid>
