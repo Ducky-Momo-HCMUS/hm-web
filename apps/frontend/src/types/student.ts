@@ -32,3 +32,10 @@ export interface RegisteredSubjectsData {
   theoryTeacher: string;
   practiceTeacher: string;
 }
+
+export interface ParentInfo {
+  fullName: string;
+  relationship: string;
+  phoneNumber: string;
+  contact: Contact[];
+}
