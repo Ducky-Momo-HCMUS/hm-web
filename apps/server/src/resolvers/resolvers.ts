@@ -1,5 +1,7 @@
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+
 import { DataSources } from '../datasources';
-import { Resolvers } from '../generated-types';
+import { Resolvers, UploadPhotoResponse } from '../generated-types';
 import { RequestContext } from '../types';
 
 export interface ContextType extends RequestContext {
@@ -7,6 +9,7 @@ export interface ContextType extends RequestContext {
 }
 
 const resolvers: Resolvers<ContextType> = {
+  UploadFile: GraphQLUpload,
   Query: {
     homeroomList: async (_, __, { dataSources }) => {
       // TODO: get accessToken
@@ -24,6 +27,16 @@ const resolvers: Resolvers<ContextType> = {
           accessToken
         )) || null
       );
+    },
+  },
+  Mutation: {
+    addPhoto: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (await dataSources.fileAPI.uploadPhoto(
+        args,
+        accessToken
+      )) as UploadPhotoResponse;
     },
   },
 };

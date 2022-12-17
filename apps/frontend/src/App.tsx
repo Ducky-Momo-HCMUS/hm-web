@@ -8,6 +8,7 @@ import NoteStore from './pages/NoteStore';
 import ResetPassword from './pages/ResetPassword';
 import StatisticalReport from './pages/ClassReport';
 import StudentDashboard from './pages/StudentDashboard';
+import UploadFile from './pages/UploadFile';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/notes" element={<NoteStore />} />
       <Route path="/classes/:id" element={<ClassDetail />} />
       <Route path="/classes/:id/report" element={<StatisticalReport />} />
+      <Route path="/upload" element={<UploadFile />} />
     </Routes>
   );
 }

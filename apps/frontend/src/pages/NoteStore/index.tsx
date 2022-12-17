@@ -29,7 +29,7 @@ import {
 } from '../../components/styles';
 import { CLASS_OPTIONS, NOTES_LIST, TAGS_OPTIONS } from '../../mocks';
 import DeleteNoteDialog from '../../components/DeleteDialog';
-import { File } from '../../types';
+import { CustomisedFile } from '../../types';
 import NoteEditor from '../../components/Note/NoteEditor';
 import { mapImageUrlToFile } from '../../utils';
 
@@ -80,7 +80,7 @@ function NoteStore() {
     [values.selected]
   );
 
-  const [files, setFiles] = useState<File[]>();
+  const [files, setFiles] = useState<CustomisedFile[]>();
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {

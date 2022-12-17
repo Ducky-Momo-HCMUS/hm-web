@@ -30,8 +30,8 @@ function NoteItem({
         <Typography variant="body1">{title}</Typography>
         <Typography variant="body2">{lastUpdate}</Typography>
         <Box>
-          {tags.map((tag) => (
-            <StyledTag label={tag} />
+          {tags.map((tag, tagIndex) => (
+            <StyledTag key={tagIndex} label={tag} />
           ))}
         </Box>
       </StyledContent>

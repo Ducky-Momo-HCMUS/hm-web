@@ -17,7 +17,6 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 import { API_KEY, NOTE_EDITOR_CONFIG, TAGS_OPTIONS } from '../../../mocks';
-import { File } from '../../../types';
 import { StyledTextField } from '../../styles';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -25,14 +24,74 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 interface NoteEditorProps {
   editorRef: any;
   initialValue: string;
-  files: File[] | undefined;
-  setFiles: React.Dispatch<SetStateAction<File[] | undefined>>;
+  files: any;
+  setFiles: React.Dispatch<SetStateAction<any>>;
   onClickSave: any;
   title: string;
   tags: string[];
   handleChangeValue: any;
   handleSelectTags: any;
 }
+
+// const baseUrl = 'http://localhost:3001/v1/actors/files';
+
+// export const makeUploadRequest = ({
+//   file,
+//   fieldName,
+//   progressCallback,
+//   successCallback,
+//   errorCallback,
+// }: any) => {
+//   const url = `${baseUrl}/upload`;
+
+//   const formData = new FormData();
+//   formData.append(fieldName, file);
+
+//   const request = new XMLHttpRequest();
+//   request.open('POST', url);
+
+//   request.upload.onprogress = (e) => {
+//     progressCallback(e.lengthComputable, e.loaded, e.total);
+//   };
+
+//   request.onload = () => {
+//     if (request.status >= 200 && request.status < 300) {
+//       const { delete_token: deleteToken } = JSON.parse(request.response);
+
+//       successCallback(deleteToken);
+//     } else {
+//       errorCallback(request.responseText);
+//     }
+//   };
+
+//   request.send(formData);
+
+//   return () => {
+//     request.abort();
+//   };
+// };
+
+// export const makeDeleteRequest = ({
+//   token,
+//   successCallback,
+//   errorCallback,
+// }: any) => {
+//   const url = `${baseUrl}/delete_by_token`;
+
+//   const request = new XMLHttpRequest();
+//   request.open('POST', url);
+
+//   request.setRequestHeader('Content-Type', 'application/json');
+
+//   request.onload = () => {
+//     if (request.status >= 200 && request.status < 300) {
+//       successCallback();
+//     } else {
+//       errorCallback(request.responseText);
+//     }
+//   };
+//   request.send(JSON.stringify({ token }));
+// };
 
 function NoteEditor({
   editorRef,
@@ -45,8 +104,40 @@ function NoteEditor({
   handleChangeValue,
   handleSelectTags,
 }: NoteEditorProps) {
+  // const revert = (token: any, successCallback: any, errorCallback: any) => {
+  //   makeDeleteRequest({
+  //     token,
+  //     successCallback,
+  //     errorCallback,
+  //   });
+  // };
+
+  // const process = (
+  //   fieldName: any,
+  //   file: any,
+  //   metadata: any,
+  //   load: any,
+  //   error: any,
+  //   progress: any,
+  //   abort: () => void
+  // ) => {
+  //   const abortRequest = makeUploadRequest({
+  //     file,
+  //     fieldName,
+  //     successCallback: load,
+  //     errorCallback: error,
+  //     progressCallback: progress,
+  //   });
+
+  //   return {
+  //     abort: () => {
+  //       abortRequest();
+  //       abort();
+  //     },
+  //   };
+  // };
   return (
-    <>
+    <Box component="form">
       <Box sx={{ padding: '1rem' }}>
         <StyledTextField
           sx={{ width: '100%' }}
@@ -82,8 +173,8 @@ function NoteEditor({
             label="Tag"
             onChange={handleSelectTags}
           >
-            {TAGS_OPTIONS.map((item) => (
-              <MenuItem value={item}>
+            {TAGS_OPTIONS.map((item, tagOptionIndex) => (
+              <MenuItem key={tagOptionIndex} value={item}>
                 <Checkbox checked={tags.indexOf(item) > -1} />
                 <ListItemText primary={item} />
               </MenuItem>
@@ -101,19 +192,10 @@ function NoteEditor({
           init={NOTE_EDITOR_CONFIG}
         />
         <FilePond
+          // server={{ process, revert }}
           allowMultiple
           files={files as any}
-          onupdatefiles={setFiles as any}
-          server={{
-            load: (source, load) => {
-              const myRequest = new Request(source);
-              fetch(myRequest).then((response) => {
-                response.blob().then((myBlob) => {
-                  load(myBlob);
-                });
-              });
-            },
-          }}
+          onupdatefiles={setFiles}
           name="files"
           labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
         />
@@ -131,7 +213,7 @@ function NoteEditor({
           Lưu ghi chú
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }
 

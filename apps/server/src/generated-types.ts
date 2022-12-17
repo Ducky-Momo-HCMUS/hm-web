@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -20,6 +24,11 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  UploadFile: any;
+};
+
+export type AddPhotoInput = {
+  name: Scalars['String'];
 };
 
 export type Contact = {
@@ -54,7 +63,13 @@ export type HomeroomStudentListItem = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addPhoto: UploadPhotoResponse;
   ping?: Maybe<Scalars['String']>;
+};
+
+export type MutationAddPhotoArgs = {
+  file: Scalars['UploadFile'];
+  input: AddPhotoInput;
 };
 
 export type MutationResponse = {
@@ -63,15 +78,31 @@ export type MutationResponse = {
   success: Scalars['Boolean'];
 };
 
+export type Photo = {
+  __typename?: 'Photo';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  photos: Array<Photo>;
   ping?: Maybe<Scalars['String']>;
 };
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
+};
+
+export type UploadPhotoResponse = MutationResponse & {
+  __typename?: 'UploadPhotoResponse';
+  code: Scalars['String'];
+  documentUniqueId: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -181,32 +212,42 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddPhotoInput: AddPhotoInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomList: ResolverTypeWrapper<HomeroomList>;
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
-  MutationResponse: never;
+  MutationResponse: ResolversTypes['UploadPhotoResponse'];
+  Photo: ResolverTypeWrapper<Photo>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
+  UploadPhotoResponse: ResolverTypeWrapper<UploadPhotoResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddPhotoInput: AddPhotoInput;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Float: Scalars['Float'];
   HomeroomList: HomeroomList;
   HomeroomListItem: HomeroomListItem;
   HomeroomStudentListItem: HomeroomStudentListItem;
+  ID: Scalars['ID'];
   Int: Scalars['Int'];
   Mutation: {};
-  MutationResponse: never;
+  MutationResponse: ResolversParentTypes['UploadPhotoResponse'];
+  Photo: Photo;
   Query: {};
   String: Scalars['String'];
+  UploadFile: Scalars['UploadFile'];
+  UploadPhotoResponse: UploadPhotoResponse;
 };
 
 export type ContactResolvers<
@@ -259,6 +300,12 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  addPhoto?: Resolver<
+    ResolversTypes['UploadPhotoResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddPhotoArgs, 'file' | 'input'>
+  >;
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -266,10 +313,20 @@ export type MutationResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']
 > = {
-  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'UploadPhotoResponse', ParentType, ContextType>;
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+};
+
+export type PhotoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Photo'] = ResolversParentTypes['Photo']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<
@@ -287,7 +344,28 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
   >;
+  photos?: Resolver<Array<ResolversTypes['Photo']>, ParentType, ContextType>;
   ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export interface UploadFileScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['UploadFile'], any> {
+  name: 'UploadFile';
+}
+
+export type UploadPhotoResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['UploadPhotoResponse'] = ResolversParentTypes['UploadPhotoResponse']
+> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  documentUniqueId?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType
+  >;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -297,5 +375,8 @@ export type Resolvers<ContextType = any> = {
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationResponse?: MutationResponseResolvers<ContextType>;
+  Photo?: PhotoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  UploadFile?: GraphQLScalarType;
+  UploadPhotoResponse?: UploadPhotoResponseResolvers<ContextType>;
 };

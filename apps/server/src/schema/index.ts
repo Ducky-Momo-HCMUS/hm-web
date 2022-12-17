@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 
 import { typeDefs as homeroomTypeDefs } from './homeroom';
+import { typeDefs as fileTypeDefs } from './file';
 
 const typeDefs = gql`
   #=============#
@@ -23,4 +24,4 @@ const typeDefs = gql`
   }
 `;
 
-export default [typeDefs, homeroomTypeDefs];
+export default [typeDefs, homeroomTypeDefs, fileTypeDefs];

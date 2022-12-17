@@ -1,3 +1,6 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable consistent-return */
 import React, {
   ChangeEvent,
   useCallback,
@@ -7,6 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import {
   Box,
@@ -29,7 +33,7 @@ import {
 } from '../../../components/styles';
 import { NOTES_LIST, ROWS_PER_PAGE } from '../../../mocks';
 import { mapImageUrlToFile } from '../../../utils';
-import { File } from '../../../types';
+import { CustomisedFile } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 
 import NoteItem from './NoteItem';
@@ -43,6 +47,27 @@ interface State {
   deleteIndex: number;
 }
 
+export const uploadFile = async (file: any) => {
+  try {
+    if (file) {
+      // const fd = new FormData();
+      // for (const name in file) {
+      //   fd.append(file, file[name]);
+      // }
+      console.log('file', file);
+      const data = await axios.post('http://localhost:3001/v1/actors/files', {
+        file,
+      });
+
+      const resp = data.data;
+      return resp;
+    }
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
+};
+
 function NoteInfo() {
   const { id } = useParams();
 
@@ -54,7 +79,7 @@ function NoteInfo() {
     deleteIndex: -1,
   });
 
-  const [files, setFiles] = useState<File[]>();
+  const [files, setFiles] = useState<CustomisedFile[]>();
 
   const initialValue = useMemo(
     () => (values.selected >= 0 ? NOTES_LIST[values.selected].content : ''),
@@ -62,11 +87,28 @@ function NoteInfo() {
   );
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  const handleClickSave = useCallback(() => {
+
+  const handleClickSave = useCallback(async () => {
+    console.log('file', files?.[0]);
+    const file = new File([files?.[0] as any], 'my_image.png', {
+      lastModified: new Date().getTime(),
+    });
+
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = 'tam';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
     }
-  }, [editorRef]);
+  }, [files, editorRef]);
 
   const [page, setPage] = useState(0);
   const handleChangePage = useCallback(
@@ -156,6 +198,7 @@ function NoteInfo() {
                   page * ROWS_PER_PAGE + ROWS_PER_PAGE
                 ).map((item, index) => (
                   <NoteItem
+                    key={index}
                     index={index}
                     selected={values.selected}
                     data={item}
@@ -183,7 +226,11 @@ function NoteInfo() {
               editorRef={editorRef}
               initialValue={initialValue}
               files={files}
-              setFiles={setFiles}
+              setFiles={(fileItems) => {
+                setFiles(
+                  fileItems.map((fileItem: { file: any }) => fileItem.file)
+                );
+              }}
               onClickSave={handleClickSave}
               title={values.title}
               tags={values.tags}
