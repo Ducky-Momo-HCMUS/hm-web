@@ -4,24 +4,27 @@ const typeDefs = gql`
   scalar UploadFile
 
   extend type Query {
-    photos: [Photo!]!
+    documents: [Document!]!
   }
 
   extend type Mutation {
-    addPhoto(input: AddPhotoInput!, file: UploadFile!): UploadPhotoResponse!
+    uploadDocument(
+      input: UploadDocumentInput!
+      file: UploadFile!
+    ): UploadDocumentResponse!
   }
 
-  input AddPhotoInput {
+  input UploadDocumentInput {
     name: String!
   }
 
-  type Photo {
+  type Document {
     id: ID!
     name: String!
     url: String!
   }
 
-  type UploadPhotoResponse implements MutationResponse {
+  type UploadDocumentResponse implements MutationResponse {
     code: String!
     success: Boolean!
     message: String!

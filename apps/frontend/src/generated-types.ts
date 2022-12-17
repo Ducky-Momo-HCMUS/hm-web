@@ -22,13 +22,16 @@ export type Scalars = {
   UploadFile: any;
 };
 
-export type AddPhotoInput = {
-  name: Scalars['String'];
-};
-
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Document = {
+  __typename?: 'Document';
+  id: Scalars['ID'];
+  name: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -58,13 +61,13 @@ export type HomeroomStudentListItem = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addPhoto: UploadPhotoResponse;
   ping?: Maybe<Scalars['String']>;
+  uploadDocument: UploadDocumentResponse;
 };
 
-export type MutationAddPhotoArgs = {
+export type MutationUploadDocumentArgs = {
   file: Scalars['UploadFile'];
-  input: AddPhotoInput;
+  input: UploadDocumentInput;
 };
 
 export type MutationResponse = {
@@ -73,18 +76,11 @@ export type MutationResponse = {
   success: Scalars['Boolean'];
 };
 
-export type Photo = {
-  __typename?: 'Photo';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  url: Scalars['String'];
-};
-
 export type Query = {
   __typename?: 'Query';
+  documents: Array<Document>;
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
-  photos: Array<Photo>;
   ping?: Maybe<Scalars['String']>;
 };
 
@@ -92,28 +88,44 @@ export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
 };
 
-export type UploadPhotoResponse = MutationResponse & {
-  __typename?: 'UploadPhotoResponse';
+export type UploadDocumentInput = {
+  name: Scalars['String'];
+};
+
+export type UploadDocumentResponse = MutationResponse & {
+  __typename?: 'UploadDocumentResponse';
   code: Scalars['String'];
   documentUniqueId: Scalars['String'];
   message: Scalars['String'];
   success: Scalars['Boolean'];
 };
 
-export type AddPhotoMutationVariables = Exact<{
+export type UploadDocumentMutationVariables = Exact<{
   file: Scalars['UploadFile'];
-  input: AddPhotoInput;
+  input: UploadDocumentInput;
 }>;
 
-export type AddPhotoMutation = {
+export type UploadDocumentMutation = {
   __typename?: 'Mutation';
-  addPhoto: {
-    __typename?: 'UploadPhotoResponse';
+  uploadDocument: {
+    __typename?: 'UploadDocumentResponse';
     code: string;
     success: boolean;
     message: string;
     documentUniqueId: string;
   };
+};
+
+export type PostsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PostsQuery = {
+  __typename?: 'Query';
+  documents: Array<{
+    __typename?: 'Document';
+    id: string;
+    name: string;
+    url: string;
+  }>;
 };
 
 export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
@@ -153,21 +165,9 @@ export type HomeroomStudentListQuery = {
     | undefined;
 };
 
-export type PostsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type PostsQuery = {
-  __typename?: 'Query';
-  photos: Array<{
-    __typename?: 'Photo';
-    id: string;
-    name: string;
-    url: string;
-  }>;
-};
-
-export const AddPhotoDocument = gql`
-  mutation AddPhoto($file: UploadFile!, $input: AddPhotoInput!) {
-    addPhoto(file: $file, input: $input) {
+export const UploadDocumentDocument = gql`
+  mutation UploadDocument($file: UploadFile!, $input: UploadDocumentInput!) {
+    uploadDocument(file: $file, input: $input) {
       code
       success
       message
@@ -175,46 +175,98 @@ export const AddPhotoDocument = gql`
     }
   }
 `;
-export type AddPhotoMutationFn = Apollo.MutationFunction<
-  AddPhotoMutation,
-  AddPhotoMutationVariables
+export type UploadDocumentMutationFn = Apollo.MutationFunction<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
 >;
 
 /**
- * __useAddPhotoMutation__
+ * __useUploadDocumentMutation__
  *
- * To run a mutation, you first call `useAddPhotoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddPhotoMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUploadDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadDocumentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addPhotoMutation, { data, loading, error }] = useAddPhotoMutation({
+ * const [uploadDocumentMutation, { data, loading, error }] = useUploadDocumentMutation({
  *   variables: {
  *      file: // value for 'file'
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useAddPhotoMutation(
+export function useUploadDocumentMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    AddPhotoMutation,
-    AddPhotoMutationVariables
+    UploadDocumentMutation,
+    UploadDocumentMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<AddPhotoMutation, AddPhotoMutationVariables>(
-    AddPhotoDocument,
+  return Apollo.useMutation<
+    UploadDocumentMutation,
+    UploadDocumentMutationVariables
+  >(UploadDocumentDocument, options);
+}
+export type UploadDocumentMutationHookResult = ReturnType<
+  typeof useUploadDocumentMutation
+>;
+export type UploadDocumentMutationResult =
+  Apollo.MutationResult<UploadDocumentMutation>;
+export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
+>;
+export const PostsDocument = gql`
+  query Posts {
+    documents {
+      id
+      name
+      url
+    }
+  }
+`;
+
+/**
+ * __usePostsQuery__
+ *
+ * To run a query within a React component, call `usePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePostsQuery(
+  baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PostsQuery, PostsQueryVariables>(
+    PostsDocument,
     options
   );
 }
-export type AddPhotoMutationHookResult = ReturnType<typeof useAddPhotoMutation>;
-export type AddPhotoMutationResult = Apollo.MutationResult<AddPhotoMutation>;
-export type AddPhotoMutationOptions = Apollo.BaseMutationOptions<
-  AddPhotoMutation,
-  AddPhotoMutationVariables
+export function usePostsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PostsQuery, PostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PostsQuery, PostsQueryVariables>(
+    PostsDocument,
+    options
+  );
+}
+export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
+export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
+export type PostsQueryResult = Apollo.QueryResult<
+  PostsQuery,
+  PostsQueryVariables
 >;
 export const HomeroomListDocument = gql`
   query HomeroomList {
@@ -344,53 +396,4 @@ export type HomeroomStudentListLazyQueryHookResult = ReturnType<
 export type HomeroomStudentListQueryResult = Apollo.QueryResult<
   HomeroomStudentListQuery,
   HomeroomStudentListQueryVariables
->;
-export const PostsDocument = gql`
-  query Posts {
-    photos {
-      id
-      name
-      url
-    }
-  }
-`;
-
-/**
- * __usePostsQuery__
- *
- * To run a query within a React component, call `usePostsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePostsQuery({
- *   variables: {
- *   },
- * });
- */
-export function usePostsQuery(
-  baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PostsQuery, PostsQueryVariables>(
-    PostsDocument,
-    options
-  );
-}
-export function usePostsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<PostsQuery, PostsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PostsQuery, PostsQueryVariables>(
-    PostsDocument,
-    options
-  );
-}
-export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
-export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
-export type PostsQueryResult = Apollo.QueryResult<
-  PostsQuery,
-  PostsQueryVariables
 >;

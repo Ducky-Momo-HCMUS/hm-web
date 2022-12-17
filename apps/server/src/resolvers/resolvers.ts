@@ -1,7 +1,7 @@
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 
 import { DataSources } from '../datasources';
-import { Resolvers, UploadPhotoResponse } from '../generated-types';
+import { Resolvers, UploadDocumentResponse } from '../generated-types';
 import { RequestContext } from '../types';
 
 export interface ContextType extends RequestContext {
@@ -30,13 +30,13 @@ const resolvers: Resolvers<ContextType> = {
     },
   },
   Mutation: {
-    addPhoto: async (_, args, { dataSources }) => {
+    uploadDocument: async (_, args, { dataSources }) => {
       // TODO: get accessToken
       const accessToken = '12345';
-      return (await dataSources.fileAPI.uploadPhoto(
+      return (await dataSources.fileAPI.uploadDocument(
         args,
         accessToken
-      )) as UploadPhotoResponse;
+      )) as UploadDocumentResponse;
     },
   },
 };

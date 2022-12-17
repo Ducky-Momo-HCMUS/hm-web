@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const POSTS_QUERY = gql`
   query Posts {
-    photos {
+    documents {
       id
       name
       url
