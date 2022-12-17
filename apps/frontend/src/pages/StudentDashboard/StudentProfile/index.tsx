@@ -5,8 +5,11 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { StyledHeader } from '../NoteInfo/styles';
 import ClassInfo from '../../ClassDetail/ClassInfo';
-import { StyledBreadCrumbs, StyledDivider } from '../../../components/styles';
-import { StyledTitle } from '../../ClassDetail/ClassInfo/styles';
+import {
+  StyledBreadCrumbs,
+  StyledDivider,
+  StyledTitle,
+} from '../../../components/styles';
 import { PARENTS_DATA } from '../../../mocks/parent';
 import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
 
@@ -123,7 +126,7 @@ function StudentProfile() {
           </Grid>
           <Grid item xs={7}>
             <Box display="flex" justifyContent="space-between">
-              <StyledTitle>Mạng xã hội</StyledTitle>
+              <ClassInfo title="Mạng xã hội" description=""/>
               <Button
                 variant="text"
                 onClick={handleOpenAddOrEditStudentContactDialog}
