@@ -1,3 +1,4 @@
+import { Contact } from '../generated-types';
 import { RegisteredSubjectsData } from '../types';
 
 export const REGISTERED_SUBJECTS_DATA: RegisteredSubjectsData[] = [
@@ -27,5 +28,16 @@ export const REGISTERED_SUBJECTS_DATA: RegisteredSubjectsData[] = [
     averagePoint: 5.6,
     theoryTeacher: 'Nguyễn Tiến Trung',
     practiceTeacher: 'Trần Khả Hân',
+  },
+];
+
+export const STUDENT_CONTACTS_DATA: Contact[] = [
+  {
+    mxh: 'Nguyen Huy Anh Thu - Facebook',
+    url: 'fb',
+  },
+  {
+    mxh: 'Nguyen Huy Anh Thu - Instagram',
+    url: 'ins',
   },
 ];

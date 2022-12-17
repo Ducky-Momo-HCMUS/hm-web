@@ -89,13 +89,13 @@ export const StyledTitle = styled(Typography)(({ theme }) => ({
 
 export const Item = styled(Paper)({
   backgroundColor: '#fff',
-
   height: '100%',
 });
 
-export const StyledDivider = styled(Divider)`
-  border-color: rgba(0, 0, 0, 0.87);
-`;
+export const StyledDivider = styled(Divider)(({ theme }) => ({
+  borderColor: theme.palette.grey[300],
+  borderWidth: '0.05rem',
+}));
 
 export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
   marginBottom: '1.5rem',
