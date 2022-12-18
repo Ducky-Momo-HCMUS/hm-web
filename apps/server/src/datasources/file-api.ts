@@ -13,9 +13,22 @@ class FileAPI extends BaseDataSource {
     payload: MutationUploadDocumentArgs,
     accessToken: string
   ) {
+    console.log('access token', accessToken);
     const { file } = payload;
 
     const { createReadStream, filename, mimetype, size } = await file;
+
+    const stream = createReadStream();
+
+    await new Promise((resolve) => {
+      stream.on('data', (data) => {
+        console.log('DATA**********************');
+        console.log(data);
+        resolve(() => {
+          console.log('done');
+        });
+      });
+    });
 
     const formData = new FormData();
     formData.append('file', createReadStream(), {
@@ -24,14 +37,14 @@ class FileAPI extends BaseDataSource {
       knownLength: size,
     });
 
-    const headers = this.getHeaders(accessToken);
+    // const headers = this.getHeaders(accessToken);
 
     try {
       const uploadedPhoto = await this.post(
         'http://localhost:3001/v1/actors/files/upload',
         formData,
         {
-          headers,
+          headers: formData.getHeaders(),
         }
       );
       return {
