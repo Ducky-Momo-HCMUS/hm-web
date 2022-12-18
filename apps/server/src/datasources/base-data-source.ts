@@ -2,12 +2,7 @@
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { ForbiddenError, ApolloError } from 'apollo-server-errors';
 
-import {
-  DataSourceGenericResponse,
-  DataSourceResponse,
-  RequestContext,
-  RolesContext,
-} from '../types';
+import { RequestContext, RolesContext } from '../types';
 
 import { getACL } from './access-control';
 
@@ -71,7 +66,7 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
     // ApolloError has been replaced with GraphQLError in v4
     if (!(error instanceof ApolloError)) {
       // TODO add log
-      return new ApolloError('Internal Server Error', 'INTERNAL_SERVER_ERROR');
+      return new ApolloError('Internal Server Error');
     }
     // Possible exeptions from RESTDataSource:
     // - AuthenticationError (401)

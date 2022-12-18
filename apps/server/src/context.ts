@@ -21,7 +21,7 @@ async function parseResponse(
   }
   const { status } = response;
   if (status >= 500) {
-    throw new ApolloError('Internal server error');
+    throw new ApolloError('Internal Server Error');
   } else {
     throw new AuthenticationError('Invalid user');
   }
