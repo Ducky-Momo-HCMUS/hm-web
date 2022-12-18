@@ -12,8 +12,12 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended"
   ],
-
-  "ignorePatterns": ["build/*", "dist/*", "**/.eslintrc.js"],
+  "ignorePatterns": [
+    "build/*",
+    "dist/*",
+    "**/.eslintrc.js",
+    "**/generated-types.ts"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",

@@ -11,7 +11,7 @@ export const authResolvers: Resolvers<ResolverContext> = {
       { dataSources }: { dataSources: DataSources }
     ) => {
       const res = await dataSources.authAPI.login(email, password);
-      return res.data;
+      return { code: 'OK', success: true, token: res.data.token };
     },
   },
 };

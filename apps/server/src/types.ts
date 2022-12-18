@@ -1,8 +1,19 @@
 import { JwtPayload as _JwtPayload } from 'jsonwebtoken';
 
+export interface RolesContext {
+  admin?: boolean;
+  gvcn?: boolean;
+  gvu?: boolean;
+}
+
+export interface UserContext extends RolesContext {
+  id: string;
+  email: string;
+}
+
 export interface RequestContext {
   authorization?: string;
-  user?: { id: string; email: string };
+  user?: UserContext;
 }
 
 export interface JwtPayload extends _JwtPayload {
@@ -16,20 +27,15 @@ export interface JwtPayload extends _JwtPayload {
   email: string;
 }
 
-interface Object {
-  [key: string]: any;
-}
-
-export interface DataSourceResponse {
-  data: Object;
+export interface DataSourceResponse<T = object> {
+  data: T;
 }
 
 interface HREF {
   href: string;
 }
 
-export interface DataSourcePaginatedResponse extends DataSourceResponse {
-  data: any[];
+export interface DataSourcePaginatedResponse extends DataSourceResponse<any[]> {
   page: number;
   total: number;
   size: number;
@@ -39,3 +45,13 @@ export interface DataSourcePaginatedResponse extends DataSourceResponse {
     last: HREF;
   };
 }
+
+export interface DataSourceErrorResponse {
+  errorId: string;
+  message: string;
+  detail?: object;
+}
+
+export interface DataSourceGenericResponse<Success = object>
+  extends Partial<DataSourceResponse<Success>>,
+    Partial<DataSourceErrorResponse> {}

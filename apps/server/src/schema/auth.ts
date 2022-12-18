@@ -6,6 +6,10 @@ const authTypeDefs = gql`
   }
 
   type LoginResponse {
+    code: String!
+    success: Boolean!
+    message: String
+
     token: String
   }
 `;
