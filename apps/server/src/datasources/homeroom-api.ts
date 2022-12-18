@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { ApolloError } from 'apollo-server-express';
 
 import { HOMEROOM_LIST, HOMEROOM_STUDENT_LIST } from '../mocks/homeroom';

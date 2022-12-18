@@ -72,10 +72,14 @@ function ResetPassword() {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
             label="Mã giảng viên"
+            placeholder="Nhập mã giảng viên"
             name="teacherId"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant="filled"
             onChange={handleChange('teacherId')}
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
 
           <Box sx={{ textAlign: 'right' }}>

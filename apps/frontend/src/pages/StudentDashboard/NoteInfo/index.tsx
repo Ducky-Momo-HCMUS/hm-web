@@ -64,7 +64,6 @@ function NoteInfo() {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
     if (editorRef.current) {
-      // eslint-disable-next-line no-console
       console.log(editorRef.current.getContent());
     }
   }, [editorRef]);
@@ -120,9 +119,9 @@ function NoteInfo() {
         <Link underline="hover" color="inherit" href="/">
           Trang chủ
         </Link>
-        <Link underline="hover" color="inherit" href={`/students/${id}`}>
+        <Typography color="text.primary">
           {id} - Nguyễn Ngọc Thanh Tâm
-        </Link>
+        </Typography>
         <Typography color="text.primary">Ghi chú sinh viên</Typography>
       </StyledBreadCrumbs>
       <StyledGridContainer container spacing={3} columns={20}>
@@ -160,7 +159,9 @@ function NoteInfo() {
                     index={index}
                     selected={values.selected}
                     data={item}
-                    onClick={() => handleSelectValue('selected', index)}
+                    onClick={() =>
+                      handleSelectValue('selected', (page + 1) * index)
+                    }
                     onClickDelete={() => handleClickDelete(index)}
                   />
                 ))}

@@ -80,12 +80,17 @@ function Login() {
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant="filled"
             onChange={handleChange('username')}
+            placeholder="Nhập mã giảng viên..."
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <StyledTextField
             label="Mật khẩu"
             name="password"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showPassword ? 'text' : 'password'}
+            placeholder="Nhập mật khẩu..."
             value={values.password}
             onChange={handleChange('password')}
             InputProps={{
@@ -104,6 +109,9 @@ function Login() {
                   </IconButton>
                 </InputAdornment>
               ),
+            }}
+            InputLabelProps={{
+              shrink: true,
             }}
             variant="filled"
           />
