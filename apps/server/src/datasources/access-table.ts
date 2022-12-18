@@ -1,10 +1,10 @@
 import { RolesContext } from '../types';
 
-interface AccessControl extends RolesContext {
+export interface AccessControl extends RolesContext {
   anonymous?: boolean;
 }
 
-type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
 interface AccessTable {
   readonly [path: string]: {
@@ -12,7 +12,7 @@ interface AccessTable {
   } & AccessControl;
 }
 
-const accessTable: AccessTable = {
+export const accessTable: AccessTable = {
   'v1/login': {
     anonymous: true,
   },
@@ -28,30 +28,6 @@ const accessTable: AccessTable = {
     gvu: true,
   },
 };
-
-export function getACL(path: string, method?: string) {
-  const p = path.startsWith('/') ? path.slice(1) : path;
-  const pathACL = accessTable[p];
-  if (!pathACL) {
-    // TODO add log
-    return {};
-  }
-  const pathRootACL: AccessControl = {
-    admin: pathACL.admin,
-    gvcn: pathACL.gvcn,
-    gvu: pathACL.gvu,
-    anonymous: pathACL.anonymous,
-  };
-  if (!method) {
-    return pathRootACL;
-  }
-  const methodACL = pathACL?.[<Method>method];
-  if (!methodACL) {
-    return pathRootACL;
-  }
-  const merged = { ...pathRootACL, ...methodACL };
-  return merged;
-}
 
 function verifyAccessTable() {
   Object.keys(accessTable).forEach((path) => {

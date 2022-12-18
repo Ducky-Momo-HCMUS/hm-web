@@ -35,7 +35,8 @@ interface HREF {
   href: string;
 }
 
-export interface DataSourcePaginatedResponse extends DataSourceResponse<any[]> {
+export interface DataSourcePaginatedResponse<T = any[]>
+  extends DataSourceResponse<T> {
   page: number;
   total: number;
   size: number;
@@ -52,6 +53,6 @@ export interface DataSourceErrorResponse {
   detail?: object;
 }
 
-export interface DataSourceGenericResponse<Success = object>
-  extends Partial<DataSourceResponse<Success>>,
+export interface DataSourceGenericResponse<TSuccess = object>
+  extends Partial<DataSourceResponse<TSuccess>>,
     Partial<DataSourceErrorResponse> {}

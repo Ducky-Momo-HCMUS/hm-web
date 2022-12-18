@@ -2,19 +2,16 @@
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { ForbiddenError, ApolloError } from 'apollo-server-errors';
 
-import { RequestContext, RolesContext } from '../types';
+import {
+  DataSourceGenericResponse,
+  DataSourceResponse,
+  RequestContext,
+  RolesContext,
+} from '../types';
 
-import { getACL } from './access-table';
+import { getACL } from './access-control';
 
 export class BaseDataSource extends RESTDataSource<RequestContext> {
-  unauthorizedError: ApolloError = new ForbiddenError(
-    'Insufficient role based permissions',
-    {
-      errorId: 'forbidden',
-      message: 'Insufficient role based permissions',
-    }
-  );
-
   protected override willSendRequest(req: RequestOptions) {
     this.authorize(req);
     const { authorization } = this.context;
@@ -32,10 +29,10 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
     const acl = getACL(req.path, req.method);
     if (!authorization || !user) {
       if (!acl.anonymous) {
-        throw this.unauthorizedError;
-      } else {
+        this.onUnauthorized(req);
         return;
       }
+      return;
     }
     const { admin, gvcn, gvu } = user;
     const userACL = {
@@ -50,13 +47,21 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
       // Permission mismatch
       !roles.some((role) => !!userACL[role] === !!acl[role])
     ) {
-      throw this.unauthorizedError;
+      this.onUnauthorized(req);
     }
   }
 
-  // protected override didReceiveResponse(res, req) {
-  //   const result =
-  // }
+  protected onUnauthorized(req: RequestOptions) {
+    const message = 'Insufficient role based permissions';
+    // https://github.com/apollographql/apollo-server/blob/c8ebdc7162a419cc4d00a90041cefbf2951535b6/packages/apollo-datasource-rest/src/RESTDataSource.ts#L143-L150
+    throw new ForbiddenError(message, {
+      response: {
+        url: req.path,
+        status: 403,
+        body: { errorId: 'forbidden', message },
+      },
+    });
+  }
 
   /**
    * Modify the error
@@ -71,7 +76,7 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
     // Possible exeptions from RESTDataSource:
     // - AuthenticationError (401)
     // - ForbiddenError (403)
-    // - ApolloError
+    // - ApolloError (>=300)
     const errorResponse = error.extensions?.response?.body;
     if (errorResponse?.message) {
       error.message = errorResponse.message;

@@ -3,10 +3,8 @@ import { BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
-export interface LoginResponse extends DataSourceResponse {
-  data: {
-    token: string;
-  };
+export interface LoginDTO {
+  token: string;
 }
 
 export default class AuthAPI extends BaseDataSource {
@@ -15,9 +13,12 @@ export default class AuthAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async login(email: string, password: string): Promise<LoginResponse> {
+  public async login(email: string, password: string) {
     try {
-      const response = await this.post('/v1/login', { email, password });
+      const response = await this.post<DataSourceResponse<LoginDTO>>(
+        '/v1/login',
+        { email, password }
+      );
       return response;
     } catch (error) {
       // TODO add log
