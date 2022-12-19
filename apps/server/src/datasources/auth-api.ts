@@ -1,5 +1,5 @@
 import { DataSourceResponse } from '../types';
-import { BASE_URL } from '../utils/config';
+import { ACCOUNT_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -8,7 +8,7 @@ export interface LoginDTO {
 }
 
 export default class AuthAPI extends BaseDataSource {
-  constructor(baseUrl: string = BASE_URL) {
+  constructor(baseUrl: string = ACCOUNT_BASE_URL) {
     super();
     this.baseURL = baseUrl;
   }

@@ -3,12 +3,12 @@ import { IncomingHttpHeaders } from 'http';
 import { ExpressContext } from 'apollo-server-express';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
-import { BASE_URL } from './utils/config';
+import { ACCOUNT_BASE_URL } from './utils/config';
 
 import type { DataSourceResponse, JwtPayload, RolesContext } from './types';
 
 async function getAccount(id: string, headers: IncomingHttpHeaders) {
-  return fetch(`${BASE_URL}/v1/accounts/${id}`, {
+  return fetch(`${ACCOUNT_BASE_URL}/v1/accounts/${id}`, {
     headers: <HeadersInit>headers,
   });
 }
