@@ -1,3 +1,6 @@
-import { resolvers } from './resolvers';
+import merge from 'lodash.merge';
 
-export default resolvers;
+import { authResolvers } from './auth-resolvers';
+import { homeroomResolver } from './homeroom-resolvers';
+
+export default merge(authResolvers, homeroomResolver);

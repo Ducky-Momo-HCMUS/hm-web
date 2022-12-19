@@ -51,22 +51,28 @@ export type HomeroomStudentListItem = {
   tinhTrang: Scalars['String'];
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  ping?: Maybe<Scalars['String']>;
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  code: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+  token?: Maybe<Scalars['String']>;
 };
 
-export type MutationResponse = {
-  code: Scalars['String'];
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
+export type Mutation = {
+  __typename?: 'Mutation';
+  login?: Maybe<LoginResponse>;
+};
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
-  ping?: Maybe<Scalars['String']>;
 };
 
 export type QueryHomeroomStudentListArgs = {

@@ -52,22 +52,28 @@ export type HomeroomStudentListItem = {
   tinhTrang: Scalars['String'];
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  ping?: Maybe<Scalars['String']>;
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  code: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+  token?: Maybe<Scalars['String']>;
 };
 
-export type MutationResponse = {
-  code: Scalars['String'];
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
+export type Mutation = {
+  __typename?: 'Mutation';
+  login?: Maybe<LoginResponse>;
+};
+
+export type MutationLoginArgs = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
-  ping?: Maybe<Scalars['String']>;
 };
 
 export type QueryHomeroomStudentListArgs = {
@@ -188,8 +194,8 @@ export type ResolversTypes = {
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
-  MutationResponse: never;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -203,8 +209,8 @@ export type ResolversParentTypes = {
   HomeroomListItem: HomeroomListItem;
   HomeroomStudentListItem: HomeroomStudentListItem;
   Int: Scalars['Int'];
+  LoginResponse: LoginResponse;
   Mutation: {};
-  MutationResponse: never;
   Query: {};
   String: Scalars['String'];
 };
@@ -255,21 +261,27 @@ export type HomeroomStudentListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LoginResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoginResponse'] = ResolversParentTypes['LoginResponse']
+> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
-  ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-};
-
-export type MutationResponseResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']
-> = {
-  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
-  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  login?: Resolver<
+    Maybe<ResolversTypes['LoginResponse']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'email' | 'password'>
+  >;
 };
 
 export type QueryResolvers<
@@ -287,7 +299,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
   >;
-  ping?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -295,7 +306,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomList?: HomeroomListResolvers<ContextType>;
   HomeroomListItem?: HomeroomListItemResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
+  LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };

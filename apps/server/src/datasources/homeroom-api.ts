@@ -2,12 +2,15 @@ import { ApolloError } from 'apollo-server-express';
 
 import { HOMEROOM_LIST, HOMEROOM_STUDENT_LIST } from '../mocks/homeroom';
 import { QueryHomeroomStudentListArgs } from '../generated-types';
-import { BASE_URL } from '../utils/config';
+import { CORE_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
 class HomeroomAPI extends BaseDataSource {
-  public baseURL = BASE_URL;
+  constructor(baseUrl: string = CORE_BASE_URL) {
+    super();
+    this.baseURL = baseUrl;
+  }
 
   public async getHomeroomList(accessToken: string) {
     try {
@@ -18,7 +21,7 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');
-      return await this.handleError(error as ApolloError);
+      throw this.handleError(error as ApolloError);
     }
   }
 
@@ -40,7 +43,7 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_STUDENT_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
-      return await this.handleError(error as ApolloError);
+      throw this.handleError(error as ApolloError);
     }
   }
 
