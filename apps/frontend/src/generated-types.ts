@@ -53,9 +53,6 @@ export type HomeroomStudentListItem = {
 
 export type LoginResponse = {
   __typename?: 'LoginResponse';
-  code: Scalars['String'];
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
 };
 
@@ -67,6 +64,12 @@ export type Mutation = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationResponse = {
+  code: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
 };
 
 export type Query = {

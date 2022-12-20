@@ -54,9 +54,6 @@ export type HomeroomStudentListItem = {
 
 export type LoginResponse = {
   __typename?: 'LoginResponse';
-  code: Scalars['String'];
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
 };
 
@@ -68,6 +65,12 @@ export type Mutation = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationResponse = {
+  code: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
 };
 
 export type Query = {
@@ -196,6 +199,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
+  MutationResponse: never;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -211,6 +215,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
   Mutation: {};
+  MutationResponse: never;
   Query: {};
   String: Scalars['String'];
 };
@@ -265,9 +270,6 @@ export type LoginResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LoginResponse'] = ResolversParentTypes['LoginResponse']
 > = {
-  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -282,6 +284,16 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginArgs, 'email' | 'password'>
   >;
+};
+
+export type MutationResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']
+> = {
+  __resolveType: TypeResolveFn<null, ParentType, ContextType>;
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type QueryResolvers<
@@ -308,5 +320,6 @@ export type Resolvers<ContextType = any> = {
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  MutationResponse?: MutationResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
