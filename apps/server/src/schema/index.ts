@@ -10,14 +10,13 @@ const typeDefs = gql`
   type Query
   type Mutation
 
+  type MutationStatusReponse {
+    status: Int
+  }
+
   #============#
   # Interfaces #
   #============#
-  interface MutationResponse {
-    code: String!
-    success: Boolean!
-    message: String
-  }
 `;
 
 export default [typeDefs, authTypeDefs, homeroomTypeDefs];
