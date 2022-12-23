@@ -27,6 +27,21 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type HomeroomFailList = {
+  __typename?: 'HomeroomFailList';
+  dsRotMon: Array<HomeroomFailListItem>;
+};
+
+export type HomeroomFailListItem = {
+  __typename?: 'HomeroomFailListItem';
+  dtb: Scalars['Float'];
+  maSV: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
+  vang: Scalars['Boolean'];
+};
+
 export type HomeroomList = {
   __typename?: 'HomeroomList';
   lopSinhHoat: Array<HomeroomListItem>;
@@ -39,6 +54,30 @@ export type HomeroomListItem = {
   maSH: Scalars['String'];
 };
 
+export type HomeroomNotEnrolledList = {
+  __typename?: 'HomeroomNotEnrolledList';
+  khongDangKy: Array<HomeroomNotEnrolledListItem>;
+};
+
+export type HomeroomNotEnrolledListItem = {
+  __typename?: 'HomeroomNotEnrolledListItem';
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
+export type HomeroomPostponeExamList = {
+  __typename?: 'HomeroomPostponeExamList';
+  hoanThi: Array<HomeroomPostponeExamListItem>;
+};
+
+export type HomeroomPostponeExamListItem = {
+  __typename?: 'HomeroomPostponeExamListItem';
+  maSV: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   gpa4: Scalars['Float'];
@@ -49,6 +88,18 @@ export type HomeroomStudentListItem = {
   sdt: Scalars['String'];
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
+};
+
+export type HomeroomTermList = {
+  __typename?: 'HomeroomTermList';
+  hocKyNamHoc: Array<HomeroomTermListItem>;
+};
+
+export type HomeroomTermListItem = {
+  __typename?: 'HomeroomTermListItem';
+  hocKy: Scalars['Int'];
+  maHK: Scalars['Int'];
+  namHocBD: Scalars['Int'];
 };
 
 export type LoginResponse = {
@@ -86,8 +137,12 @@ export type MutationStatusReponse = {
 
 export type Query = {
   __typename?: 'Query';
+  homeroomFailList: HomeroomFailList;
   homeroomList: HomeroomList;
+  homeroomNotEnrolledList: HomeroomNotEnrolledList;
+  homeroomPostponeExamList: HomeroomPostponeExamList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  homeroomTermList: HomeroomTermList;
   studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
@@ -97,7 +152,26 @@ export type Query = {
   studentTrainingPointByTerm: StudentTrainingPoint;
 };
 
+export type QueryHomeroomFailListArgs = {
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryHomeroomNotEnrolledListArgs = {
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryHomeroomPostponeExamListArgs = {
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
 export type QueryHomeroomStudentListArgs = {
+  homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomTermListArgs = {
   homeroomId: Scalars['String'];
 };
 
@@ -177,6 +251,27 @@ export type StudentTrainingPoint = {
   xepLoai: Scalars['String'];
 };
 
+export type HomeroomFailListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type HomeroomFailListQuery = {
+  __typename?: 'Query';
+  homeroomFailList: {
+    __typename?: 'HomeroomFailList';
+    dsRotMon: Array<{
+      __typename?: 'HomeroomFailListItem';
+      maSV: string;
+      tenSV: string;
+      tenMH: string;
+      tenLopHP: string;
+      dtb: number;
+      vang: boolean;
+    }>;
+  };
+};
+
 export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type HomeroomListQuery = {
@@ -188,6 +283,42 @@ export type HomeroomListQuery = {
       maSH: string;
       heDaoTao: string;
       khoa: number;
+    }>;
+  };
+};
+
+export type HomeroomNotEnrolledListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type HomeroomNotEnrolledListQuery = {
+  __typename?: 'Query';
+  homeroomNotEnrolledList: {
+    __typename?: 'HomeroomNotEnrolledList';
+    khongDangKy: Array<{
+      __typename?: 'HomeroomNotEnrolledListItem';
+      maSV: string;
+      tenSV: string;
+    }>;
+  };
+};
+
+export type HomeroomPostponeExamListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type HomeroomPostponeExamListQuery = {
+  __typename?: 'Query';
+  homeroomPostponeExamList: {
+    __typename?: 'HomeroomPostponeExamList';
+    hoanThi: Array<{
+      __typename?: 'HomeroomPostponeExamListItem';
+      maSV: string;
+      tenSV: string;
+      tenMH: string;
+      tenLopHP: string;
     }>;
   };
 };
@@ -212,6 +343,23 @@ export type HomeroomStudentListQuery = {
       }>
     | null
     | undefined;
+};
+
+export type HomeroomTermListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+}>;
+
+export type HomeroomTermListQuery = {
+  __typename?: 'Query';
+  homeroomTermList: {
+    __typename?: 'HomeroomTermList';
+    hocKyNamHoc: Array<{
+      __typename?: 'HomeroomTermListItem';
+      maHK: number;
+      hocKy: number;
+      namHocBD: number;
+    }>;
+  };
 };
 
 export type StudentAllSubjectsQueryVariables = Exact<{
@@ -328,6 +476,72 @@ export type StudentTrainingPointQuery = {
   };
 };
 
+export const HomeroomFailListDocument = gql`
+  query HomeroomFailList($homeroomId: String!, $term: Int!) {
+    homeroomFailList(homeroomId: $homeroomId, term: $term) {
+      dsRotMon {
+        maSV
+        tenSV
+        tenMH
+        tenLopHP
+        dtb
+        vang
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomFailListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomFailListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomFailListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomFailListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useHomeroomFailListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomFailListQuery,
+    HomeroomFailListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HomeroomFailListQuery, HomeroomFailListQueryVariables>(
+    HomeroomFailListDocument,
+    options
+  );
+}
+export function useHomeroomFailListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomFailListQuery,
+    HomeroomFailListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomFailListQuery,
+    HomeroomFailListQueryVariables
+  >(HomeroomFailListDocument, options);
+}
+export type HomeroomFailListQueryHookResult = ReturnType<
+  typeof useHomeroomFailListQuery
+>;
+export type HomeroomFailListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomFailListLazyQuery
+>;
+export type HomeroomFailListQueryResult = Apollo.QueryResult<
+  HomeroomFailListQuery,
+  HomeroomFailListQueryVariables
+>;
 export const HomeroomListDocument = gql`
   query HomeroomList {
     homeroomList {
@@ -388,6 +602,132 @@ export type HomeroomListLazyQueryHookResult = ReturnType<
 export type HomeroomListQueryResult = Apollo.QueryResult<
   HomeroomListQuery,
   HomeroomListQueryVariables
+>;
+export const HomeroomNotEnrolledListDocument = gql`
+  query HomeroomNotEnrolledList($homeroomId: String!, $term: Int!) {
+    homeroomNotEnrolledList(homeroomId: $homeroomId, term: $term) {
+      khongDangKy {
+        maSV
+        tenSV
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomNotEnrolledListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomNotEnrolledListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomNotEnrolledListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomNotEnrolledListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useHomeroomNotEnrolledListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomNotEnrolledListQuery,
+    HomeroomNotEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HomeroomNotEnrolledListQuery,
+    HomeroomNotEnrolledListQueryVariables
+  >(HomeroomNotEnrolledListDocument, options);
+}
+export function useHomeroomNotEnrolledListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomNotEnrolledListQuery,
+    HomeroomNotEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomNotEnrolledListQuery,
+    HomeroomNotEnrolledListQueryVariables
+  >(HomeroomNotEnrolledListDocument, options);
+}
+export type HomeroomNotEnrolledListQueryHookResult = ReturnType<
+  typeof useHomeroomNotEnrolledListQuery
+>;
+export type HomeroomNotEnrolledListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomNotEnrolledListLazyQuery
+>;
+export type HomeroomNotEnrolledListQueryResult = Apollo.QueryResult<
+  HomeroomNotEnrolledListQuery,
+  HomeroomNotEnrolledListQueryVariables
+>;
+export const HomeroomPostponeExamListDocument = gql`
+  query HomeroomPostponeExamList($homeroomId: String!, $term: Int!) {
+    homeroomPostponeExamList(homeroomId: $homeroomId, term: $term) {
+      hoanThi {
+        maSV
+        tenSV
+        tenMH
+        tenLopHP
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomPostponeExamListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomPostponeExamListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomPostponeExamListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomPostponeExamListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useHomeroomPostponeExamListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomPostponeExamListQuery,
+    HomeroomPostponeExamListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HomeroomPostponeExamListQuery,
+    HomeroomPostponeExamListQueryVariables
+  >(HomeroomPostponeExamListDocument, options);
+}
+export function useHomeroomPostponeExamListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomPostponeExamListQuery,
+    HomeroomPostponeExamListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomPostponeExamListQuery,
+    HomeroomPostponeExamListQueryVariables
+  >(HomeroomPostponeExamListDocument, options);
+}
+export type HomeroomPostponeExamListQueryHookResult = ReturnType<
+  typeof useHomeroomPostponeExamListQuery
+>;
+export type HomeroomPostponeExamListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomPostponeExamListLazyQuery
+>;
+export type HomeroomPostponeExamListQueryResult = Apollo.QueryResult<
+  HomeroomPostponeExamListQuery,
+  HomeroomPostponeExamListQueryVariables
 >;
 export const HomeroomStudentListDocument = gql`
   query HomeroomStudentList($homeroomId: String!) {
@@ -456,6 +796,68 @@ export type HomeroomStudentListLazyQueryHookResult = ReturnType<
 export type HomeroomStudentListQueryResult = Apollo.QueryResult<
   HomeroomStudentListQuery,
   HomeroomStudentListQueryVariables
+>;
+export const HomeroomTermListDocument = gql`
+  query HomeroomTermList($homeroomId: String!) {
+    homeroomTermList(homeroomId: $homeroomId) {
+      hocKyNamHoc {
+        maHK
+        hocKy
+        namHocBD
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomTermListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomTermListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomTermListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomTermListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *   },
+ * });
+ */
+export function useHomeroomTermListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomTermListQuery,
+    HomeroomTermListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HomeroomTermListQuery, HomeroomTermListQueryVariables>(
+    HomeroomTermListDocument,
+    options
+  );
+}
+export function useHomeroomTermListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomTermListQuery,
+    HomeroomTermListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomTermListQuery,
+    HomeroomTermListQueryVariables
+  >(HomeroomTermListDocument, options);
+}
+export type HomeroomTermListQueryHookResult = ReturnType<
+  typeof useHomeroomTermListQuery
+>;
+export type HomeroomTermListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomTermListLazyQuery
+>;
+export type HomeroomTermListQueryResult = Apollo.QueryResult<
+  HomeroomTermListQuery,
+  HomeroomTermListQueryVariables
 >;
 export const StudentAllSubjectsDocument = gql`
   query StudentAllSubjects($studentId: String!) {

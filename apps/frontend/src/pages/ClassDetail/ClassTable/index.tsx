@@ -13,8 +13,10 @@ import {
 } from '@mui/material';
 
 import { Column } from '../../../types';
+import { HomeroomTermListItem } from '../../../generated-types';
 import CustomisedTableRow from '../../../components/CustomisedTableRow';
 import CustomisedTableHead from '../../../components/CustomisedTableHead';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 import { StyledFormControl, StyledPaper } from './styles';
 
@@ -22,11 +24,14 @@ interface ClassTableProps {
   title: string;
   columns: Column[];
   data: any;
+  loading?: boolean;
   page: number;
-  semester?: string;
+  termList?: HomeroomTermListItem[];
+  termListLoading?: boolean;
+  term?: string;
   rowsPerPage: number;
   handleChangePage: any;
-  handleChangeSemester?: any;
+  handleChangeTerm?: any;
   hasFilter: boolean;
 }
 
@@ -34,11 +39,14 @@ function ClassTable({
   title,
   columns,
   data,
+  loading = false,
   page,
-  semester,
+  termList,
+  termListLoading = false,
+  term,
   rowsPerPage,
   handleChangePage,
-  handleChangeSemester,
+  handleChangeTerm,
   hasFilter,
 }: ClassTableProps) {
   return (
@@ -50,42 +58,48 @@ function ClassTable({
         <Divider />
       </Box>
       {hasFilter && (
-        <StyledFormControl>
-          <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={semester}
-            label="Học kỳ - năm học"
-            onChange={handleChangeSemester}
-          >
-            <MenuItem value="all">Tất cả</MenuItem>
-            <MenuItem value="1-2019">HK1 2019-2020</MenuItem>
-            <MenuItem value="2-2019">HK2 2019-2020</MenuItem>
-            <MenuItem value="3-2019">HK3 2019-2020</MenuItem>
-          </Select>
-        </StyledFormControl>
-      )}
-      <TableContainer sx={{ maxHeight: 440, marginTop: '1rem' }}>
-        <Table stickyHeader>
-          <CustomisedTableHead columns={columns} />
-          <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((item: any, index: number) => (
-                <CustomisedTableRow data={item} index={index + 1} />
+        <AsyncDataRenderer loading={termListLoading} data={termList}>
+          <StyledFormControl>
+            <InputLabel id="term-select-label">Học kỳ - năm học</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={term}
+              label="Học kỳ - năm học"
+              onChange={handleChangeTerm}
+            >
+              <MenuItem value="all">Tất cả</MenuItem>
+              {termList?.map((item) => (
+                <MenuItem key={item.maHK} value={item.maHK.toString()}>
+                  HK{item.hocKy} {item.namHocBD}-{item.namHocBD + 1}
+                </MenuItem>
               ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[]}
-        component="div"
-        count={data.length || 0}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-      />
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      )}
+      <AsyncDataRenderer loading={loading} data={data}>
+        <TableContainer sx={{ maxHeight: 440, marginTop: '1rem' }}>
+          <Table stickyHeader>
+            <CustomisedTableHead columns={columns} />
+            <TableBody>
+              {data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((item: any, index: number) => (
+                  <CustomisedTableRow data={item} index={index + 1} />
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          count={data.length || 0}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+        />
+      </AsyncDataRenderer>
     </StyledPaper>
   );
 }

@@ -12,6 +12,46 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         (await dataSources.homeroomAPI.getHomeroomStudentList(args)) || null
       );
     },
+    homeroomTermList: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.homeroomAPI.getHomeroomTermList(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    homeroomFailList: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.homeroomAPI.getHomeroomFailList(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    homeroomNotEnrolledList: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    homeroomPostponeExamList: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.homeroomAPI.getHomeroomPostponeExamList(
+          args,
+          accessToken
+        )) || null
+      );
+    },
   },
 };
 
