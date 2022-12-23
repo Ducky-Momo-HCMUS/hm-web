@@ -87,38 +87,48 @@ export type MutationStatusReponse = {
 
 export type Query = {
   __typename?: 'Query';
-  allSubjects?: Maybe<Array<Subject>>;
-  allTerms?: Maybe<Array<Term>>;
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
-  subjectsByTerm?: Maybe<Array<Subject>>;
-  trainingPointByTerm: TrainingPoint;
-};
-
-export type QueryAllSubjectsArgs = {
-  studentId: Scalars['String'];
-};
-
-export type QueryAllTermsArgs = {
-  studentId: Scalars['String'];
+  studentAllSubjects: StudentAllSubjects;
+  studentAllTerms: StudentAllTerms;
+  studentSubjectsByTerm: StudentSubjectsByTerm;
+  studentTrainingPointByTerm: StudentTrainingPoint;
 };
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
 };
 
-export type QuerySubjectsByTermArgs = {
+export type QueryStudentAllSubjectsArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentAllTermsArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentSubjectsByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
 };
 
-export type QueryTrainingPointByTermArgs = {
+export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
 };
 
-export type Subject = {
-  __typename?: 'Subject';
+export type StudentAllSubjects = {
+  __typename?: 'StudentAllSubjects';
+  monhoc: Array<StudentSubject>;
+};
+
+export type StudentAllTerms = {
+  __typename?: 'StudentAllTerms';
+  hocKyNamHoc: Array<StudentTerm>;
+};
+
+export type StudentSubject = {
+  __typename?: 'StudentSubject';
   dtb?: Maybe<Scalars['Float']>;
   gvlt: Scalars['String'];
   gvth: Scalars['String'];
@@ -128,15 +138,20 @@ export type Subject = {
   tinhTrang: Scalars['String'];
 };
 
-export type Term = {
-  __typename?: 'Term';
+export type StudentSubjectsByTerm = {
+  __typename?: 'StudentSubjectsByTerm';
+  monhoc: Array<StudentSubject>;
+};
+
+export type StudentTerm = {
+  __typename?: 'StudentTerm';
   hocKy: Scalars['Int'];
   maHK: Scalars['Int'];
   namHocBD: Scalars['Int'];
 };
 
-export type TrainingPoint = {
-  __typename?: 'TrainingPoint';
+export type StudentTrainingPoint = {
+  __typename?: 'StudentTrainingPoint';
   drl: Scalars['Int'];
   xepLoai: Scalars['String'];
 };
@@ -260,9 +275,12 @@ export type ResolversTypes = {
   MutationStatusReponse: ResolverTypeWrapper<MutationStatusReponse>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Subject: ResolverTypeWrapper<Subject>;
-  Term: ResolverTypeWrapper<Term>;
-  TrainingPoint: ResolverTypeWrapper<TrainingPoint>;
+  StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
+  StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
+  StudentSubject: ResolverTypeWrapper<StudentSubject>;
+  StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
+  StudentTerm: ResolverTypeWrapper<StudentTerm>;
+  StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -279,9 +297,12 @@ export type ResolversParentTypes = {
   MutationStatusReponse: MutationStatusReponse;
   Query: {};
   String: Scalars['String'];
-  Subject: Subject;
-  Term: Term;
-  TrainingPoint: TrainingPoint;
+  StudentAllSubjects: StudentAllSubjects;
+  StudentAllTerms: StudentAllTerms;
+  StudentSubject: StudentSubject;
+  StudentSubjectsByTerm: StudentSubjectsByTerm;
+  StudentTerm: StudentTerm;
+  StudentTrainingPoint: StudentTrainingPoint;
 };
 
 export type ContactResolvers<
@@ -377,18 +398,6 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
-  allSubjects?: Resolver<
-    Maybe<Array<ResolversTypes['Subject']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryAllSubjectsArgs, 'studentId'>
-  >;
-  allTerms?: Resolver<
-    Maybe<Array<ResolversTypes['Term']>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryAllTermsArgs, 'studentId'>
-  >;
   homeroomList?: Resolver<
     ResolversTypes['HomeroomList'],
     ParentType,
@@ -400,23 +409,59 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
   >;
-  subjectsByTerm?: Resolver<
-    Maybe<Array<ResolversTypes['Subject']>>,
+  studentAllSubjects?: Resolver<
+    ResolversTypes['StudentAllSubjects'],
     ParentType,
     ContextType,
-    RequireFields<QuerySubjectsByTermArgs, 'studentId' | 'term'>
+    RequireFields<QueryStudentAllSubjectsArgs, 'studentId'>
   >;
-  trainingPointByTerm?: Resolver<
-    ResolversTypes['TrainingPoint'],
+  studentAllTerms?: Resolver<
+    ResolversTypes['StudentAllTerms'],
     ParentType,
     ContextType,
-    RequireFields<QueryTrainingPointByTermArgs, 'studentId' | 'term'>
+    RequireFields<QueryStudentAllTermsArgs, 'studentId'>
+  >;
+  studentSubjectsByTerm?: Resolver<
+    ResolversTypes['StudentSubjectsByTerm'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentSubjectsByTermArgs, 'studentId' | 'term'>
+  >;
+  studentTrainingPointByTerm?: Resolver<
+    ResolversTypes['StudentTrainingPoint'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
 };
 
-export type SubjectResolvers<
+export type StudentAllSubjectsResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']
+  ParentType extends ResolversParentTypes['StudentAllSubjects'] = ResolversParentTypes['StudentAllSubjects']
+> = {
+  monhoc?: Resolver<
+    Array<ResolversTypes['StudentSubject']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentAllTermsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentAllTerms'] = ResolversParentTypes['StudentAllTerms']
+> = {
+  hocKyNamHoc?: Resolver<
+    Array<ResolversTypes['StudentTerm']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentSubjectResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
 > = {
   dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   gvlt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -428,9 +473,21 @@ export type SubjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TermResolvers<
+export type StudentSubjectsByTermResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Term'] = ResolversParentTypes['Term']
+  ParentType extends ResolversParentTypes['StudentSubjectsByTerm'] = ResolversParentTypes['StudentSubjectsByTerm']
+> = {
+  monhoc?: Resolver<
+    Array<ResolversTypes['StudentSubject']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentTermResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentTerm'] = ResolversParentTypes['StudentTerm']
 > = {
   hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maHK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -438,9 +495,9 @@ export type TermResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type TrainingPointResolvers<
+export type StudentTrainingPointResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['TrainingPoint'] = ResolversParentTypes['TrainingPoint']
+  ParentType extends ResolversParentTypes['StudentTrainingPoint'] = ResolversParentTypes['StudentTrainingPoint']
 > = {
   drl?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -456,7 +513,10 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Subject?: SubjectResolvers<ContextType>;
-  Term?: TermResolvers<ContextType>;
-  TrainingPoint?: TrainingPointResolvers<ContextType>;
+  StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
+  StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
+  StudentSubject?: StudentSubjectResolvers<ContextType>;
+  StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
+  StudentTerm?: StudentTermResolvers<ContextType>;
+  StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
 };

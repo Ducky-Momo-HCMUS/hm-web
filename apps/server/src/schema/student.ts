@@ -2,13 +2,31 @@ import { gql } from 'apollo-server-express';
 
 const studentTypeDefs = gql`
   extend type Query {
-    subjectsByTerm(studentId: String!, term: Int!): [Subject!]
-    allSubjects(studentId: String!): [Subject!]
-    trainingPointByTerm(studentId: String!, term: Int!): TrainingPoint!
-    allTerms(studentId: String!): [Term!]
+    studentSubjectsByTerm(
+      studentId: String!
+      term: Int!
+    ): StudentSubjectsByTerm!
+    studentAllSubjects(studentId: String!): StudentAllSubjects!
+    studentTrainingPointByTerm(
+      studentId: String!
+      term: Int!
+    ): StudentTrainingPoint!
+    studentAllTerms(studentId: String!): StudentAllTerms!
   }
 
-  type Subject {
+  type StudentSubjectsByTerm {
+    monhoc: [StudentSubject!]!
+  }
+
+  type StudentAllSubjects {
+    monhoc: [StudentSubject!]!
+  }
+
+  type StudentAllTerms {
+    hocKyNamHoc: [StudentTerm!]!
+  }
+
+  type StudentSubject {
     maMH: String!
     tenMH: String!
     tenLopHP: String!
@@ -18,12 +36,12 @@ const studentTypeDefs = gql`
     tinhTrang: String!
   }
 
-  type TrainingPoint {
+  type StudentTrainingPoint {
     drl: Int!
     xepLoai: String!
   }
 
-  type Term {
+  type StudentTerm {
     maHK: Int!
     hocKy: Int!
     namHocBD: Int!

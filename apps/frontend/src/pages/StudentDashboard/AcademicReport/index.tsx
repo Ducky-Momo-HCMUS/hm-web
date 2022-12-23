@@ -21,10 +21,10 @@ import {
   StyledHeader,
 } from '../../../components/styles';
 import {
-  useAllSubjectsQuery,
-  useAllTermsQuery,
-  useSubjectsByTermQuery,
-  useTrainingPointByTermQuery,
+  useStudentAllSubjectsQuery,
+  useStudentAllTermsQuery,
+  useStudentSubjectsByTermQuery,
+  useStudentTrainingPointByTermQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
@@ -49,19 +49,20 @@ function AcademicReport() {
     []
   );
 
-  const { loading: allTermsLoading, data: allTermsData } = useAllTermsQuery({
-    variables: {
-      studentId: id,
-    },
-  });
+  const { loading: allTermsLoading, data: allTermsData } =
+    useStudentAllTermsQuery({
+      variables: {
+        studentId: id,
+      },
+    });
 
   const termsData = useMemo(
-    () => allTermsData?.allTerms || [],
-    [allTermsData?.allTerms]
+    () => allTermsData?.studentAllTerms?.hocKyNamHoc || [],
+    [allTermsData?.studentAllTerms?.hocKyNamHoc]
   );
 
   const { loading: trainingPointByTermLoading, data: trainingPointByTermData } =
-    useTrainingPointByTermQuery({
+    useStudentTrainingPointByTermQuery({
       variables: {
         studentId: id,
         term: Number(values.term),
@@ -70,19 +71,19 @@ function AcademicReport() {
     });
 
   const trainingPointData = useMemo(
-    () => trainingPointByTermData?.trainingPointByTerm || null,
-    [trainingPointByTermData?.trainingPointByTerm]
+    () => trainingPointByTermData?.studentTrainingPointByTerm || null,
+    [trainingPointByTermData?.studentTrainingPointByTerm]
   );
 
   const { loading: allSubjectsLoading, data: allSubjectsData } =
-    useAllSubjectsQuery({
+    useStudentAllSubjectsQuery({
       variables: {
         studentId: id,
       },
     });
 
   const { loading: subjectsByTermLoading, data: subjectsByTermData } =
-    useSubjectsByTermQuery({
+    useStudentSubjectsByTermQuery({
       variables: {
         studentId: id,
         term: Number(values.term),
@@ -92,13 +93,13 @@ function AcademicReport() {
 
   const subjectsData = useMemo(() => {
     if (values.term === 'all') {
-      return allSubjectsData?.allSubjects || [];
+      return allSubjectsData?.studentAllSubjects?.monhoc || [];
     }
 
-    return subjectsByTermData?.subjectsByTerm || [];
+    return subjectsByTermData?.studentSubjectsByTerm?.monhoc || [];
   }, [
-    allSubjectsData?.allSubjects,
-    subjectsByTermData?.subjectsByTerm,
+    allSubjectsData?.studentAllSubjects?.monhoc,
+    subjectsByTermData?.studentSubjectsByTerm?.monhoc,
     values.term,
   ]);
 

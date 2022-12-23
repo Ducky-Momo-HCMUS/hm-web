@@ -4,36 +4,42 @@ import { ResolverContext } from './types';
 
 export const studentResolver: Resolvers<ResolverContext> = {
   Query: {
-    subjectsByTerm: async (_, args, { dataSources }) => {
+    studentSubjectsByTerm: async (_, args, { dataSources }) => {
       // TODO: get accessToken
       const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getSubjectsByTerm(args, accessToken)) ||
-        null
-      );
-    },
-    allSubjects: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.studentAPI.getAllSubjects(args, accessToken)) || null
-      );
-    },
-    trainingPointByTerm: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.studentAPI.getTrainingPointByTerm(
+        (await dataSources.studentAPI.getStudentSubjectsByTerm(
           args,
           accessToken
         )) || null
       );
     },
-    allTerms: async (_, args, { dataSources }) => {
+    studentAllSubjects: async (_, args, { dataSources }) => {
       // TODO: get accessToken
       const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getAllTerms(args, accessToken)) || null
+        (await dataSources.studentAPI.getStudentAllSubjects(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    studentTrainingPointByTerm: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.studentAPI.getStudentTrainingPointByTerm(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    studentAllTerms: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.studentAPI.getStudentAllTerms(args, accessToken)) ||
+        null
       );
     },
   },

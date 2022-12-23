@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
 
 import { theme } from '../../../../theme';
-import { Subject } from '../../../../generated-types';
+import { StudentSubject } from '../../../../generated-types';
 
 interface AcademicTableRowProps {
-  data: Subject;
+  data: StudentSubject;
   index: number;
 }
 function AcademicTableRow({ data, index }: AcademicTableRowProps) {

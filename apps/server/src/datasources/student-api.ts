@@ -1,10 +1,10 @@
 import { ApolloError } from 'apollo-server-express';
 
 import {
-  QueryAllSubjectsArgs,
-  QueryAllTermsArgs,
-  QuerySubjectsByTermArgs,
-  QueryTrainingPointByTermArgs,
+  QueryStudentAllSubjectsArgs,
+  QueryStudentAllTermsArgs,
+  QueryStudentSubjectsByTermArgs,
+  QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
 import {
   ALL_SUBJECTS,
@@ -22,8 +22,8 @@ class StudentAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getSubjectsByTerm(
-    { studentId, term }: QuerySubjectsByTermArgs,
+  public async getStudentSubjectsByTerm(
+    { studentId, term }: QueryStudentSubjectsByTermArgs,
     accessToken: string
   ) {
     try {
@@ -41,8 +41,8 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getAllSubjects(
-    { studentId }: QueryAllSubjectsArgs,
+  public async getStudentAllSubjects(
+    { studentId }: QueryStudentAllSubjectsArgs,
     accessToken: string
   ) {
     try {
@@ -60,8 +60,8 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getTrainingPointByTerm(
-    { studentId, term }: QueryTrainingPointByTermArgs,
+  public async getStudentTrainingPointByTerm(
+    { studentId, term }: QueryStudentTrainingPointByTermArgs,
     accessToken: string
   ) {
     try {
@@ -79,8 +79,8 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getAllTerms(
-    { studentId }: QueryAllTermsArgs,
+  public async getStudentAllTerms(
+    { studentId }: QueryStudentAllTermsArgs,
     accessToken: string
   ) {
     try {
