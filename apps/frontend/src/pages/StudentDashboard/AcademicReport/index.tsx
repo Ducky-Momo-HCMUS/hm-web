@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -17,23 +17,29 @@ import { useParams } from 'react-router-dom';
 
 import {
   StyledBreadCrumbs,
-  StyledHeader,
   StyledTitle,
+  StyledHeader,
 } from '../../../components/styles';
-import { REGISTERED_SUBJECTS_DATA } from '../../../mocks';
+import {
+  useAllSubjectsQuery,
+  useAllTermsQuery,
+  useSubjectsByTermQuery,
+  useTrainingPointByTermQuery,
+} from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
 import AcademicTableRow from './AcademicTableRow';
 
 interface State {
-  semester: string;
+  term: string;
 }
 
 function AcademicReport() {
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const [values, setValues] = useState<State>({
-    semester: 'all',
+    term: 'all',
   });
 
   const handleChange = useCallback(
@@ -41,6 +47,64 @@ function AcademicReport() {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
+  );
+
+  const { loading: allTermsLoading, data: allTermsData } = useAllTermsQuery({
+    variables: {
+      studentId: id,
+    },
+  });
+
+  const termsData = useMemo(
+    () => allTermsData?.allTerms || [],
+    [allTermsData?.allTerms]
+  );
+
+  const { loading: trainingPointByTermLoading, data: trainingPointByTermData } =
+    useTrainingPointByTermQuery({
+      variables: {
+        studentId: id,
+        term: Number(values.term),
+      },
+      skip: values.term === 'all',
+    });
+
+  const trainingPointData = useMemo(
+    () => trainingPointByTermData?.trainingPointByTerm || null,
+    [trainingPointByTermData?.trainingPointByTerm]
+  );
+
+  const { loading: allSubjectsLoading, data: allSubjectsData } =
+    useAllSubjectsQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const { loading: subjectsByTermLoading, data: subjectsByTermData } =
+    useSubjectsByTermQuery({
+      variables: {
+        studentId: id,
+        term: Number(values.term),
+      },
+      skip: values.term === 'all',
+    });
+
+  const subjectsData = useMemo(() => {
+    if (values.term === 'all') {
+      return allSubjectsData?.allSubjects || [];
+    }
+
+    return subjectsByTermData?.subjectsByTerm || [];
+  }, [
+    allSubjectsData?.allSubjects,
+    subjectsByTermData?.subjectsByTerm,
+    values.term,
+  ]);
+
+  const subjectsLoading = useMemo(
+    () => (values.term === 'all' ? allSubjectsLoading : subjectsByTermLoading),
+    [values.term, allSubjectsLoading, subjectsByTermLoading]
   );
 
   return (
@@ -62,40 +126,56 @@ function AcademicReport() {
           alignItems: 'center',
         }}
       >
-        <StyledFormControl>
-          <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.semester}
-            label="Học kỳ - năm học"
-            onChange={handleChange('semester')}
-          >
-            <MenuItem value="all">Tất cả</MenuItem>
-            <MenuItem value="1-2019">HK1 2019-2020</MenuItem>
-            <MenuItem value="2-2019">HK2 2019-2020</MenuItem>
-            <MenuItem value="3-2019">HK3 2019-2020</MenuItem>
-          </Select>
-        </StyledFormControl>
+        <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+          <StyledFormControl>
+            <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={values.term}
+              label="Học kỳ - năm học"
+              onChange={handleChange('term')}
+            >
+              <MenuItem key="all" value="all">
+                Tất cả
+              </MenuItem>
+              {termsData.map((item) => (
+                <MenuItem key={item.maHK} value={item.maHK.toString()}>
+                  HK{item.hocKy} {item.namHocBD}-{item.namHocBD + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+
         <StyledStatusBox>
-          <Button>ĐRL: 99 | GIỎI</Button>
+          <AsyncDataRenderer
+            loading={trainingPointByTermLoading}
+            data={trainingPointByTermData}
+          >
+            <Button>
+              ĐRL: {trainingPointData?.drl} | {trainingPointData?.xepLoai}
+            </Button>
+          </AsyncDataRenderer>
           <Button>ĐTB: 8.9 | GIỎI</Button>
         </StyledStatusBox>
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
-      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-        <StyledHeader>Các môn đã đăng ký</StyledHeader>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <AcademicTableHead />
-            <TableBody>
-              {REGISTERED_SUBJECTS_DATA.map((row, index) => (
-                <AcademicTableRow data={row} index={index + 1} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+      <AsyncDataRenderer loading={subjectsLoading} data={subjectsData}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+          <StyledHeader>Các môn đã đăng ký</StyledHeader>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <AcademicTableHead />
+              <TableBody>
+                {subjectsData.map((row, index) => (
+                  <AcademicTableRow data={row} index={index + 1} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </AsyncDataRenderer>
     </>
   );
 }

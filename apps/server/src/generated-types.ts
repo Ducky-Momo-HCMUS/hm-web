@@ -87,12 +87,58 @@ export type MutationStatusReponse = {
 
 export type Query = {
   __typename?: 'Query';
+  allSubjects?: Maybe<Array<Subject>>;
+  allTerms?: Maybe<Array<Term>>;
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  subjectsByTerm?: Maybe<Array<Subject>>;
+  trainingPointByTerm: TrainingPoint;
+};
+
+export type QueryAllSubjectsArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryAllTermsArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
+};
+
+export type QuerySubjectsByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryTrainingPointByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type Subject = {
+  __typename?: 'Subject';
+  dtb?: Maybe<Scalars['Float']>;
+  gvlt: Scalars['String'];
+  gvth: Scalars['String'];
+  maMH: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tinhTrang: Scalars['String'];
+};
+
+export type Term = {
+  __typename?: 'Term';
+  hocKy: Scalars['Int'];
+  maHK: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+};
+
+export type TrainingPoint = {
+  __typename?: 'TrainingPoint';
+  drl: Scalars['Int'];
+  xepLoai: Scalars['String'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -214,6 +260,9 @@ export type ResolversTypes = {
   MutationStatusReponse: ResolverTypeWrapper<MutationStatusReponse>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Subject: ResolverTypeWrapper<Subject>;
+  Term: ResolverTypeWrapper<Term>;
+  TrainingPoint: ResolverTypeWrapper<TrainingPoint>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -230,6 +279,9 @@ export type ResolversParentTypes = {
   MutationStatusReponse: MutationStatusReponse;
   Query: {};
   String: Scalars['String'];
+  Subject: Subject;
+  Term: Term;
+  TrainingPoint: TrainingPoint;
 };
 
 export type ContactResolvers<
@@ -325,6 +377,18 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
+  allSubjects?: Resolver<
+    Maybe<Array<ResolversTypes['Subject']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAllSubjectsArgs, 'studentId'>
+  >;
+  allTerms?: Resolver<
+    Maybe<Array<ResolversTypes['Term']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAllTermsArgs, 'studentId'>
+  >;
   homeroomList?: Resolver<
     ResolversTypes['HomeroomList'],
     ParentType,
@@ -336,6 +400,51 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
   >;
+  subjectsByTerm?: Resolver<
+    Maybe<Array<ResolversTypes['Subject']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySubjectsByTermArgs, 'studentId' | 'term'>
+  >;
+  trainingPointByTerm?: Resolver<
+    ResolversTypes['TrainingPoint'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryTrainingPointByTermArgs, 'studentId' | 'term'>
+  >;
+};
+
+export type SubjectResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']
+> = {
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gvlt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gvth?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TermResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Term'] = ResolversParentTypes['Term']
+> = {
+  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maHK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  namHocBD?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TrainingPointResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TrainingPoint'] = ResolversParentTypes['TrainingPoint']
+> = {
+  drl?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -347,4 +456,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subject?: SubjectResolvers<ContextType>;
+  Term?: TermResolvers<ContextType>;
+  TrainingPoint?: TrainingPointResolvers<ContextType>;
 };

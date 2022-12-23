@@ -23,16 +23,6 @@ export interface ContactInfo {
   lienHe: Contact[];
 }
 
-export interface RegisteredSubjectsData {
-  subjectId: string;
-  subjectName: string;
-  subjectClass: string;
-  status: string;
-  averagePoint: number | null;
-  theoryTeacher: string;
-  practiceTeacher: string;
-}
-
 export interface ParentInfo {
   fullName: string;
   relationship: string;

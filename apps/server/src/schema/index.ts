@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-express';
 
 import authTypeDefs from './auth';
 import homeroomTypeDefs from './homeroom';
+import studentTypeDefs from './student';
 
 const typeDefs = gql`
   #=============#
@@ -19,4 +20,4 @@ const typeDefs = gql`
   #============#
 `;
 
-export default [typeDefs, authTypeDefs, homeroomTypeDefs];
+export default [typeDefs, authTypeDefs, homeroomTypeDefs, studentTypeDefs];
