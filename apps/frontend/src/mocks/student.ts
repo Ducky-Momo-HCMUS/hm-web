@@ -56,11 +56,11 @@ export const ACADEMIC_INFO = [
     content: '38/38',
   },
   {
-    title: 'Kiến thức bắt buộc chuyên ngành',
+    title: 'Kiến thức bắt buộc ngành',
     content: '12/16',
   },
   {
-    title: 'Kiến thức tự chọn chuyên ngành',
+    title: 'Kiến thức tự chọn ngành',
     content: '8/8',
   },
   {
