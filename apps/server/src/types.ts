@@ -56,3 +56,6 @@ export interface DataSourceErrorResponse {
 export interface DataSourceGenericResponse<TSuccess = object>
   extends Partial<DataSourceResponse<TSuccess>>,
     Partial<DataSourceErrorResponse> {}
+
+export interface MutationStatusReponse
+  extends DataSourceResponse<{ status: number }> {}

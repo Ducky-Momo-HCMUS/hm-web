@@ -58,7 +58,13 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
+  resetPassword?: Maybe<MutationStatusReponse>;
+};
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
 };
 
 export type MutationLoginArgs = {
@@ -66,10 +72,16 @@ export type MutationLoginArgs = {
   password: Scalars['String'];
 };
 
-export type MutationResponse = {
-  code: Scalars['String'];
-  message?: Maybe<Scalars['String']>;
-  success: Scalars['Boolean'];
+export type MutationResetPasswordArgs = {
+  id: Scalars['Int'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type MutationStatusReponse = {
+  __typename?: 'MutationStatusReponse';
+  status?: Maybe<Scalars['Int']>;
 };
 
 export type Query = {
