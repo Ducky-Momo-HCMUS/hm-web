@@ -10,7 +10,7 @@ import {
   Breadcrumbs,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 
 export const StyledContainer = styled(Box)`
@@ -102,4 +102,12 @@ export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
   '& a': {
     color: theme.palette.primary.main,
   },
+}));
+
+export const StyledHeader = styled(Box)(({ theme }) => ({
+  textAlign: 'center',
+  background: theme.palette.info.light,
+  color: blue[900],
+  fontWeight: 'bold',
+  padding: '0.75rem 0',
 }));

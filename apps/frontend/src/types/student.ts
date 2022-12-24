@@ -39,3 +39,12 @@ export interface ParentInfo {
   phoneNumber: string;
   contact: Contact[];
 }
+
+export interface AcademicResultDetail {
+  maMH: string;
+  tenMH: string;
+  soTC: number;
+  namHocBD: number;
+  hocKy: number;
+  dtb: number;
+}

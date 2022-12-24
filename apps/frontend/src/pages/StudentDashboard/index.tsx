@@ -17,6 +17,7 @@ import {
 import NoteInfo from './NoteInfo';
 import AcademicReport from './AcademicReport';
 import StudentProfile from './StudentProfile';
+import AcademicOverview from './AcademicOverview';
 
 function StudentDashboard() {
   const [selected, setSelected] = useState(0);
@@ -53,7 +54,7 @@ function StudentDashboard() {
               onClick={() => setSelected(3)}
             >
               <StarIcon color="action" />
-              <StyledListItemText primary="Tiến độ học tập" />
+              <StyledListItemText primary="Kết quả học tập" />
             </StyledListItemButton>
           </List>
         </Drawer>
@@ -61,6 +62,7 @@ function StudentDashboard() {
           {selected === 0 && <StudentProfile />}
           {selected === 1 && <NoteInfo />}
           {selected === 2 && <AcademicReport />}
+          {selected === 3 && <AcademicOverview />}
         </StyledContent>
       </StyledContainer>
     </>

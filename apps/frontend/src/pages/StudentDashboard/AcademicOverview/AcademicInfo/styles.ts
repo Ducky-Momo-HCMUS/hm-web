@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const StyledInfoBox = styled(Box)`
@@ -10,3 +10,8 @@ export const StyledInfoBox = styled(Box)`
   }
   border-bottom: 1px solid #eee;
 `;
+
+export const StyledInfoWithColor = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  fontWeight: 'bold',
+}));
