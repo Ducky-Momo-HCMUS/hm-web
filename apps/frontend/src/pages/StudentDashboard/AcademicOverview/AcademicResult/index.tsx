@@ -30,27 +30,26 @@ function AcademicResult() {
     <Box mt={3}>
       <AppBar position="static">
         <Tabs
-          sx={{ justifyContent: 'space-around' }}
           value={selectedTab}
           onChange={handleChangeTab}
           indicatorColor="secondary"
           textColor="inherit"
           variant="scrollable"
         >
-          <Tab label="LL_CT" />
-          <Tab label="XH_TC" />
-          <Tab label="TN_TC" />
-          <Tab label="GD_TC" />
-          <Tab label="CN_CS" />
-          <Tab label="CN_NG" />
-          <Tab label="CN_TC" />
-          <Tab label="CN_TD" />
-          <Tab label="CN_TN" />
+          <Tab label="Giáo dục đại cương" />
+          <Tab label="Khoa học xã hội" />
+          <Tab label="Khoa học tự nhiên" />
+          <Tab label="Giáo dục thể chất" />
+          <Tab label="Cơ sở ngành" />
+          <Tab label="Bắt buộc ngành" />
+          <Tab label="Tự chọn ngành" />
+          <Tab label="Tự chọn tự do" />
+          <Tab label="Tốt nghiệp" />
         </Tabs>
       </AppBar>
       <TabPanel index={0} value={selectedTab}>
         <AcademicTable
-          header="Lý luận chính trị"
+          header="Giáo dục đại cương"
           description="Tích luỹ: 11/11"
           data={LY_LUAN_CHINH_TRI_DATA}
         />

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Paper, Typography } from '@mui/material';
 
-import { StyledHeader } from '../../../../components/styles';
+import { StyledHeader, StyledInfoBox } from '../../../../components/styles';
 
-import { StyledInfoBox, StyledInfoWithColor } from './styles';
+import { StyledInfoWithColor } from './styles';
 
 interface AcademicDetail {
   title: string;

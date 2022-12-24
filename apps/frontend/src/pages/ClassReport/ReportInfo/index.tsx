@@ -1,9 +1,7 @@
 import { Card, Typography } from '@mui/material';
 import React from 'react';
 
-import { StyledHeader } from '../../../components/styles';
-
-import { StyledInfoBox } from './styles';
+import { StyledHeader, StyledInfoBox } from '../../../components/styles';
 
 interface Info {
   title: string;

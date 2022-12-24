@@ -56,9 +56,18 @@ export const ACADEMIC_INFO = [
     content: '38/38',
   },
   {
-    title: 'Giáo dục chuyên nghiệp',
-    content: '0/34',
+    title: 'Kiến thức bắt buộc chuyên ngành',
+    content: '12/16',
   },
+  {
+    title: 'Kiến thức tự chọn chuyên ngành',
+    content: '8/8',
+  },
+  {
+    title: 'Kiến thức tự chọn tự do',
+    content: '4',
+  },
+
   {
     title: 'Kiến thức tốt nghiệp',
     content: '0/10',
@@ -68,7 +77,7 @@ export const ACADEMIC_INFO = [
     content: '124/138',
   },
   {
-    title: 'Điểm trung bình tích luỹ',
+    title: 'Điểm trung bình',
     content: 7.68,
   },
 ];
