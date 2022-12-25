@@ -5,20 +5,11 @@ import { ResolverContext } from './types';
 export const homeroomResolver: Resolvers<ResolverContext> = {
   Query: {
     homeroomList: async (_, __, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.homeroomAPI.getHomeroomList(accessToken)) || null
-      );
+      return (await dataSources.homeroomAPI.getHomeroomList()) || null;
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.homeroomAPI.getHomeroomStudentList(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.homeroomAPI.getHomeroomStudentList(args)) || null
       );
     },
   },

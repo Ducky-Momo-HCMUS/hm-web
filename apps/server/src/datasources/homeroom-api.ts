@@ -12,12 +12,9 @@ class HomeroomAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getHomeroomList(accessToken: string) {
+  public async getHomeroomList() {
     try {
-      // const homeroomList = await this.get('/v1/homerooms', {
-      //   headers: this.getHeaders(accessToken),
-      // });
-      console.log('accessToken', accessToken);
+      // const homeroomList = await this.get('/v1/homerooms');
       return HOMEROOM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');
@@ -25,32 +22,22 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomStudentList(
-    { homeroomId }: QueryHomeroomStudentListArgs,
-    accessToken: string
-  ) {
+  public async getHomeroomStudentList({
+    homeroomId,
+  }: QueryHomeroomStudentListArgs) {
     try {
       // const homeroomStudentList = await this.get(
       //   '/v1/homerooms/:id/students',
       //   {
       //     id: homeroomId,
       //   },
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('accessToken', accessToken, homeroomId);
+      console.log('accessToken', homeroomId);
       return HOMEROOM_STUDENT_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
       throw this.handleError(error as ApolloError);
     }
-  }
-
-  private getHeaders(accessToken: string) {
-    return {
-      Authorization: `Bearer ${accessToken}`,
-    };
   }
 }
 

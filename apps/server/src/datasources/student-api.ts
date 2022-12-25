@@ -28,18 +28,15 @@ class StudentAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getStudentSubjectsByTerm(
-    { studentId, term }: QueryStudentSubjectsByTermArgs,
-    accessToken: string
-  ) {
+  public async getStudentSubjectsByTerm({
+    studentId,
+    term,
+  }: QueryStudentSubjectsByTermArgs) {
     try {
       // const subjectList = await this.get(
       //   `/v1/students/${studentId}/subjects?term=${term}`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId, term);
+      console.log('params', studentId, term);
       return SUBJECTS_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch subject list by term');
@@ -47,18 +44,14 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentAllSubjects(
-    { studentId }: QueryStudentAllSubjectsArgs,
-    accessToken: string
-  ) {
+  public async getStudentAllSubjects({
+    studentId,
+  }: QueryStudentAllSubjectsArgs) {
     try {
       // const subjectList = await this.get(
       //   `/v1/students/${studentId}/subjects`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId);
+      console.log('params', studentId);
       return ALL_SUBJECTS;
     } catch (error) {
       console.error('Error: cannot fetch all subjects');
@@ -66,18 +59,15 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentTrainingPointByTerm(
-    { studentId, term }: QueryStudentTrainingPointByTermArgs,
-    accessToken: string
-  ) {
+  public async getStudentTrainingPointByTerm({
+    studentId,
+    term,
+  }: QueryStudentTrainingPointByTermArgs) {
     try {
       // const trainingPoint = await this.get(
       //   `/v1/students/${studentId}/drl?term=${term}`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId, term);
+      console.log('params', studentId, term);
       return TRAINING_POINT_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch training point by term');
@@ -85,18 +75,14 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentTrainingPoint(
-    { studentId }: QueryStudentTrainingPointArgs,
-    accessToken: string
-  ) {
+  public async getStudentTrainingPoint({
+    studentId,
+  }: QueryStudentTrainingPointArgs) {
     try {
       // const trainingPoint = await this.get(
       //   `/v1/students/${studentId}/drl`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId);
+      console.log('params', studentId);
       return TRAINING_POINT;
     } catch (error) {
       console.error('Error: cannot fetch training point');
@@ -104,18 +90,15 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentAveragePointByTerm(
-    { studentId, term }: QueryStudentAveragePointByTermArgs,
-    accessToken: string
-  ) {
+  public async getStudentAveragePointByTerm({
+    studentId,
+    term,
+  }: QueryStudentAveragePointByTermArgs) {
     try {
       // const averagePoint = await this.get(
       //   `/v1/students/${studentId}/point?term=${term}`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId, term);
+      console.log('params', studentId, term);
       return AVERAGE_POINT_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch average point by term');
@@ -123,18 +106,14 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentAveragePoint(
-    { studentId }: QueryStudentAveragePointArgs,
-    accessToken: string
-  ) {
+  public async getStudentAveragePoint({
+    studentId,
+  }: QueryStudentAveragePointArgs) {
     try {
       // const trainingPoint = await this.get(
       //   `/v1/students/${studentId}/point`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId);
+      console.log('params', studentId);
       return AVERAGE_POINT;
     } catch (error) {
       console.error('Error: cannot fetch average point');
@@ -142,29 +121,17 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentAllTerms(
-    { studentId }: QueryStudentAllTermsArgs,
-    accessToken: string
-  ) {
+  public async getStudentAllTerms({ studentId }: QueryStudentAllTermsArgs) {
     try {
       // const termList = await this.get(
       //   `/v1/students/${studentId}/terms`,
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('params', accessToken, studentId);
+      console.log('params', studentId);
       return ALL_TERMS;
     } catch (error) {
       console.error('Error: cannot fetch all terms');
       throw this.handleError(error as ApolloError);
     }
-  }
-
-  private getHeaders(accessToken: string) {
-    return {
-      Authorization: `Bearer ${accessToken}`,
-    };
   }
 }
 

@@ -5,72 +5,37 @@ import { ResolverContext } from './types';
 export const studentResolver: Resolvers<ResolverContext> = {
   Query: {
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getStudentSubjectsByTerm(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.studentAPI.getStudentSubjectsByTerm(args)) || null
       );
     },
     studentAllSubjects: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.studentAPI.getStudentAllSubjects(
-          args,
-          accessToken
-        )) || null
-      );
+      return (await dataSources.studentAPI.getStudentAllSubjects(args)) || null;
     },
     studentTrainingPointByTerm: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getStudentTrainingPointByTerm(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.studentAPI.getStudentTrainingPointByTerm(args)) ||
+        null
       );
     },
     studentTrainingPoint: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getStudentTrainingPoint(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.studentAPI.getStudentTrainingPoint(args)) || null
       );
     },
     studentAveragePointByTerm: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getStudentAveragePointByTerm(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.studentAPI.getStudentAveragePointByTerm(args)) ||
+        null
       );
     },
     studentAveragePoint: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.studentAPI.getStudentAveragePoint(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.studentAPI.getStudentAveragePoint(args)) || null
       );
     },
     studentAllTerms: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.studentAPI.getStudentAllTerms(args, accessToken)) ||
-        null
-      );
+      return (await dataSources.studentAPI.getStudentAllTerms(args)) || null;
     },
   },
 };
