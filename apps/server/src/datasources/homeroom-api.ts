@@ -45,7 +45,7 @@ class HomeroomAPI extends BaseDataSource {
       //     id: homeroomId,
       //   },
       // );
-      console.log('accessToken', homeroomId);
+      console.log('params', homeroomId);
       return HOMEROOM_STUDENT_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
@@ -53,21 +53,15 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomTermList(
-    { homeroomId }: QueryHomeroomTermListArgs,
-    accessToken: string
-  ) {
+  public async getHomeroomTermList({ homeroomId }: QueryHomeroomTermListArgs) {
     try {
       // const homeroomTermList = await this.get(
-      //   '/v1/homerooms/:id/terms',
+      //   'v1/homerooms/:id/terms',
       //   {
       //     id: homeroomId,
       //   },
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('accessToken', accessToken, homeroomId);
+      console.log('params', homeroomId);
       return HOMEROOM_TERM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom term list');
@@ -75,21 +69,18 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomFailList(
-    { homeroomId, term }: QueryHomeroomFailListArgs,
-    accessToken: string
-  ) {
+  public async getHomeroomFailList({
+    homeroomId,
+    term,
+  }: QueryHomeroomFailListArgs) {
     try {
       // const homeroomFailList = await this.get(
-      //   `/v1/homerooms/:id/fail?term=${term}`,
+      //   `v1/homerooms/:id/fail?term=${term}`,
       //   {
       //     id: homeroomId,
       //   },
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('accessToken', accessToken, homeroomId, term);
+      console.log('params', homeroomId, term);
       return HOMEROOM_FAIL_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom fail list');
@@ -97,21 +88,15 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomNotEnrolledList(
-    { homeroomId, term }: QueryHomeroomNotEnrolledListArgs,
-    accessToken: string
-  ) {
+  public async getHomeroomNotEnrolledList({
+    homeroomId,
+    term,
+  }: QueryHomeroomNotEnrolledListArgs) {
     try {
       // const homeroomNotEnrolledList = await this.get(
       //   `/v1/homerooms/:id/not-enrolled?term=${term}`,
-      //   {
-      //     id: homeroomId,
-      //   },
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('accessToken', accessToken, homeroomId, term);
+      console.log('params', homeroomId, term);
       return HOMEROOM_NOT_ENROLLED_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom not enrolled list');
@@ -119,32 +104,23 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomPostponeExamList(
-    { homeroomId, term }: QueryHomeroomPostponeExamListArgs,
-    accessToken: string
-  ) {
+  public async getHomeroomPostponeExamList({
+    homeroomId,
+    term,
+  }: QueryHomeroomPostponeExamListArgs) {
     try {
       // const homeroomPostponeExamList = await this.get(
-      //   `/v1/homerooms/:id/postpone-exam?term=${term}`,
+      //   `v1/homerooms/:id/postpone-exam?term=${term}`,
       //   {
       //     id: homeroomId,
       //   },
-      //   {
-      //     headers: this.getHeaders(accessToken),
-      //   }
       // );
-      console.log('accessToken', accessToken, homeroomId, term);
+      console.log('params', homeroomId, term);
       return HOMEROOM_POSTPONE_EXAM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom postpone exam list');
       throw this.handleError(error as ApolloError);
     }
-  }
-
-  private getHeaders(accessToken: string) {
-    return {
-      Authorization: `Bearer ${accessToken}`,
-    };
   }
 }
 

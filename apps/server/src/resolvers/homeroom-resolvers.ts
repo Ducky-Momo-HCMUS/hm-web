@@ -13,43 +13,20 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       );
     },
     homeroomTermList: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.homeroomAPI.getHomeroomTermList(
-          args,
-          accessToken
-        )) || null
-      );
+      return (await dataSources.homeroomAPI.getHomeroomTermList(args)) || null;
     },
     homeroomFailList: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
-      return (
-        (await dataSources.homeroomAPI.getHomeroomFailList(
-          args,
-          accessToken
-        )) || null
-      );
+      return (await dataSources.homeroomAPI.getHomeroomFailList(args)) || null;
     },
     homeroomNotEnrolledList: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(args)) || null
       );
     },
     homeroomPostponeExamList: async (_, args, { dataSources }) => {
-      // TODO: get accessToken
-      const accessToken = '12345';
       return (
-        (await dataSources.homeroomAPI.getHomeroomPostponeExamList(
-          args,
-          accessToken
-        )) || null
+        (await dataSources.homeroomAPI.getHomeroomPostponeExamList(args)) ||
+        null
       );
     },
   },
