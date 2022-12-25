@@ -1,14 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Link,
-} from '@mui/material';
+import { Box, Button, IconButton, InputAdornment } from '@mui/material';
 
 import Header from '../../components/Header';
 import {
@@ -19,19 +11,21 @@ import {
 } from '../../components/styles';
 import ErrorMessage from '../../components/ErrorMessage';
 
-import { StyledFormControlLabel } from './styles';
-
 interface State {
   username: string;
   password: string;
+  confirmPassword: string;
   showPassword: boolean;
+  showConfirmPassword: boolean;
 }
 
-function Login() {
+function Register() {
   const [values, setValues] = useState<State>({
     username: '',
     password: '',
+    confirmPassword: '',
     showPassword: false,
+    showConfirmPassword: false,
   });
 
   const handleChange = useCallback(
@@ -48,6 +42,13 @@ function Login() {
     }));
   }, []);
 
+  const handleClickShowConfirmPassword = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      showConfirmPassword: !v.showConfirmPassword,
+    }));
+  }, []);
+
   const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
@@ -60,9 +61,14 @@ function Login() {
         return;
       }
 
+      if (values.password !== values.confirmPassword) {
+        setError('Mật khẩu xác nhận không khớp');
+        return;
+      }
+
       setError('');
     },
-    [values.username]
+    [values.username, values.password, values.confirmPassword]
   );
 
   return (
@@ -117,22 +123,42 @@ function Login() {
             }}
             variant="filled"
           />
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <StyledFormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Ghi nhớ đăng nhập"
-              />
-            </Grid>
-            <Grid item>
-              <Link href="/reset-password" variant="body2">
-                Quên mật khẩu?
-              </Link>
-            </Grid>
-          </Grid>
+          <StyledTextField
+            label="Xác nhận mật khẩu"
+            name="confirmPassword"
+            sx={{ margin: '0.5rem 0', width: '100%' }}
+            type={values.showConfirmPassword ? 'text' : 'password'}
+            placeholder="Nhập lại mật khẩu..."
+            value={values.confirmPassword}
+            onChange={handleChange('confirmPassword')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    edge="end"
+                  >
+                    {values.showConfirmPassword ? (
+                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
+                    ) : (
+                      <Visibility sx={{ fontSize: '1.25rem' }} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="filled"
+          />
           <Box sx={{ textAlign: 'right' }}>
-            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
+            <Button href="/login" variant="text" sx={{ mt: 1, mr: 2 }}>
               Đăng nhập
+            </Button>
+            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
+              Tạo tài khoản
             </Button>
           </Box>
         </Box>
@@ -141,4 +167,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

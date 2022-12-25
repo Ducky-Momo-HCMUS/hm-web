@@ -126,7 +126,7 @@ function StudentProfile() {
           </Grid>
           <Grid item xs={7}>
             <Box display="flex" justifyContent="space-between">
-              <ClassInfo title="Mạng xã hội" description=""/>
+              <ClassInfo title="Mạng xã hội" description="" />
               <Button
                 variant="text"
                 onClick={handleOpenAddOrEditStudentContactDialog}

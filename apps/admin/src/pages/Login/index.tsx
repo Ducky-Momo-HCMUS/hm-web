@@ -131,6 +131,9 @@ function Login() {
             </Grid>
           </Grid>
           <Box sx={{ textAlign: 'right' }}>
+            <Button href="/register" variant="text" sx={{ mt: 1, mr: 2 }}>
+              Tạo tài khoản
+            </Button>
             <Button type="submit" variant="contained" sx={{ mt: 1 }}>
               Đăng nhập
             </Button>
