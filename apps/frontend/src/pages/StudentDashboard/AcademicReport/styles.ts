@@ -1,5 +1,4 @@
 import { Box, FormControl, styled } from '@mui/material';
-import { blue } from '@mui/material/colors';
 
 export const StyledFormControl = styled(FormControl)`
   min-width: 11rem;
@@ -21,12 +20,4 @@ export const StyledStatusBox = styled(Box)(({ theme }) => ({
   '& button:last-child': {
     background: theme.palette.success.light,
   },
-}));
-
-export const StyledHeader = styled(Box)(({ theme }) => ({
-  textAlign: 'center',
-  background: theme.palette.info.light,
-  color: blue[900],
-  fontWeight: 'bold',
-  padding: '0.75rem 0',
 }));
