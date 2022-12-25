@@ -3,14 +3,20 @@ import { ApolloError } from 'apollo-server-express';
 import {
   QueryStudentAllSubjectsArgs,
   QueryStudentAllTermsArgs,
+  QueryStudentAveragePointArgs,
+  QueryStudentAveragePointByTermArgs,
   QueryStudentSubjectsByTermArgs,
+  QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
 import {
   ALL_SUBJECTS,
   ALL_TERMS,
+  AVERAGE_POINT,
+  AVERAGE_POINT_BY_TERM,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
+  TRAINING_POINT_BY_TERM,
 } from '../mocks/student';
 import { CORE_BASE_URL } from '../utils/config';
 
@@ -72,9 +78,66 @@ class StudentAPI extends BaseDataSource {
       //   }
       // );
       console.log('params', accessToken, studentId, term);
-      return TRAINING_POINT;
+      return TRAINING_POINT_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch training point by term');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentTrainingPoint(
+    { studentId }: QueryStudentTrainingPointArgs,
+    accessToken: string
+  ) {
+    try {
+      // const trainingPoint = await this.get(
+      //   `/v1/students/${studentId}/drl`,
+      //   {
+      //     headers: this.getHeaders(accessToken),
+      //   }
+      // );
+      console.log('params', accessToken, studentId);
+      return TRAINING_POINT;
+    } catch (error) {
+      console.error('Error: cannot fetch training point');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentAveragePointByTerm(
+    { studentId, term }: QueryStudentAveragePointByTermArgs,
+    accessToken: string
+  ) {
+    try {
+      // const averagePoint = await this.get(
+      //   `/v1/students/${studentId}/point?term=${term}`,
+      //   {
+      //     headers: this.getHeaders(accessToken),
+      //   }
+      // );
+      console.log('params', accessToken, studentId, term);
+      return AVERAGE_POINT_BY_TERM;
+    } catch (error) {
+      console.error('Error: cannot fetch average point by term');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentAveragePoint(
+    { studentId }: QueryStudentAveragePointArgs,
+    accessToken: string
+  ) {
+    try {
+      // const trainingPoint = await this.get(
+      //   `/v1/students/${studentId}/point`,
+      //   {
+      //     headers: this.getHeaders(accessToken),
+      //   }
+      // );
+      console.log('params', accessToken, studentId);
+      return AVERAGE_POINT;
+    } catch (error) {
+      console.error('Error: cannot fetch average point');
       throw this.handleError(error as ApolloError);
     }
   }

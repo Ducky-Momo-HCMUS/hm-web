@@ -91,7 +91,10 @@ export type Query = {
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
+  studentAveragePoint: StudentAveragePoint;
+  studentAveragePointByTerm: StudentAveragePoint;
   studentSubjectsByTerm: StudentSubjectsByTerm;
+  studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
 };
 
@@ -107,9 +110,22 @@ export type QueryStudentAllTermsArgs = {
   studentId: Scalars['String'];
 };
 
+export type QueryStudentAveragePointArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentAveragePointByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
 export type QueryStudentSubjectsByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryStudentTrainingPointArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentTrainingPointByTermArgs = {
@@ -125,6 +141,12 @@ export type StudentAllSubjects = {
 export type StudentAllTerms = {
   __typename?: 'StudentAllTerms';
   hocKyNamHoc: Array<StudentTerm>;
+};
+
+export type StudentAveragePoint = {
+  __typename?: 'StudentAveragePoint';
+  dtbTong: Scalars['Float'];
+  xepLoai: Scalars['String'];
 };
 
 export type StudentSubject = {
@@ -277,6 +299,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
   StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
+  StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
@@ -299,6 +322,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   StudentAllSubjects: StudentAllSubjects;
   StudentAllTerms: StudentAllTerms;
+  StudentAveragePoint: StudentAveragePoint;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTerm: StudentTerm;
@@ -421,11 +445,29 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentAllTermsArgs, 'studentId'>
   >;
+  studentAveragePoint?: Resolver<
+    ResolversTypes['StudentAveragePoint'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentAveragePointArgs, 'studentId'>
+  >;
+  studentAveragePointByTerm?: Resolver<
+    ResolversTypes['StudentAveragePoint'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentAveragePointByTermArgs, 'studentId' | 'term'>
+  >;
   studentSubjectsByTerm?: Resolver<
     ResolversTypes['StudentSubjectsByTerm'],
     ParentType,
     ContextType,
     RequireFields<QueryStudentSubjectsByTermArgs, 'studentId' | 'term'>
+  >;
+  studentTrainingPoint?: Resolver<
+    ResolversTypes['StudentTrainingPoint'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentTrainingPointArgs, 'studentId'>
   >;
   studentTrainingPointByTerm?: Resolver<
     ResolversTypes['StudentTrainingPoint'],
@@ -456,6 +498,15 @@ export type StudentAllTermsResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentAveragePointResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentAveragePoint'] = ResolversParentTypes['StudentAveragePoint']
+> = {
+  dtbTong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -515,6 +566,7 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
   StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
+  StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;

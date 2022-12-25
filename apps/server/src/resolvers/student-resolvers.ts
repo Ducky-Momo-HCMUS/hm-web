@@ -34,6 +34,36 @@ export const studentResolver: Resolvers<ResolverContext> = {
         )) || null
       );
     },
+    studentTrainingPoint: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.studentAPI.getStudentTrainingPoint(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    studentAveragePointByTerm: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.studentAPI.getStudentAveragePointByTerm(
+          args,
+          accessToken
+        )) || null
+      );
+    },
+    studentAveragePoint: async (_, args, { dataSources }) => {
+      // TODO: get accessToken
+      const accessToken = '12345';
+      return (
+        (await dataSources.studentAPI.getStudentAveragePoint(
+          args,
+          accessToken
+        )) || null
+      );
+    },
     studentAllTerms: async (_, args, { dataSources }) => {
       // TODO: get accessToken
       const accessToken = '12345';

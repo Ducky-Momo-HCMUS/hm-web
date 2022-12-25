@@ -1,6 +1,7 @@
 import {
   StudentAllSubjects,
   StudentAllTerms,
+  StudentAveragePoint,
   StudentSubject,
   StudentSubjectsByTerm,
   StudentTerm,
@@ -71,9 +72,14 @@ export const ALL_SUBJECTS = {
   ] as StudentSubject[],
 } as StudentAllSubjects;
 
+export const TRAINING_POINT_BY_TERM = {
+  drl: 8,
+  xepLoai: 'Giỏi',
+} as StudentTrainingPoint;
+
 export const TRAINING_POINT = {
   drl: 9,
-  xepLoai: 'Giỏi',
+  xepLoai: 'Xuất sắc',
 } as StudentTrainingPoint;
 
 export const ALL_TERMS = {
@@ -85,3 +91,13 @@ export const ALL_TERMS = {
     { maHK: 5, hocKy: 2, namHocBD: 2020 },
   ] as StudentTerm[],
 } as StudentAllTerms;
+
+export const AVERAGE_POINT_BY_TERM = {
+  dtbTong: 9.0,
+  xepLoai: 'Xuất sắc',
+} as StudentAveragePoint;
+
+export const AVERAGE_POINT = {
+  dtbTong: 8.5,
+  xepLoai: 'Giỏi',
+} as StudentAveragePoint;

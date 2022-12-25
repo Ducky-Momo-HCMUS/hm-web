@@ -11,6 +11,12 @@ const studentTypeDefs = gql`
       studentId: String!
       term: Int!
     ): StudentTrainingPoint!
+    studentTrainingPoint(studentId: String!): StudentTrainingPoint!
+    studentAveragePointByTerm(
+      studentId: String!
+      term: Int!
+    ): StudentAveragePoint!
+    studentAveragePoint(studentId: String!): StudentAveragePoint!
     studentAllTerms(studentId: String!): StudentAllTerms!
   }
 
@@ -38,6 +44,11 @@ const studentTypeDefs = gql`
 
   type StudentTrainingPoint {
     drl: Int!
+    xepLoai: String!
+  }
+
+  type StudentAveragePoint {
+    dtbTong: Float!
     xepLoai: String!
   }
 

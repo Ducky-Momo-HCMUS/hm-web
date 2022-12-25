@@ -23,8 +23,11 @@ import {
 import {
   useStudentAllSubjectsQuery,
   useStudentAllTermsQuery,
+  useStudentAveragePointByTermQuery,
+  useStudentAveragePointQuery,
   useStudentSubjectsByTermQuery,
   useStudentTrainingPointByTermQuery,
+  useStudentTrainingPointQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
@@ -70,9 +73,69 @@ function AcademicReport() {
       skip: values.term === 'all',
     });
 
-  const trainingPointData = useMemo(
-    () => trainingPointByTermData?.studentTrainingPointByTerm || null,
-    [trainingPointByTermData?.studentTrainingPointByTerm]
+  const {
+    loading: trainingPointOverallLoading,
+    data: trainingPointOverallData,
+  } = useStudentTrainingPointQuery({
+    variables: {
+      studentId: id,
+    },
+  });
+
+  const trainingPoint = useMemo(() => {
+    if (values.term === 'all') {
+      return trainingPointOverallData?.studentTrainingPoint;
+    }
+
+    return trainingPointByTermData?.studentTrainingPointByTerm;
+  }, [
+    trainingPointByTermData?.studentTrainingPointByTerm,
+    trainingPointOverallData?.studentTrainingPoint,
+    values.term,
+  ]);
+
+  const trainingPointLoading = useMemo(
+    () =>
+      values.term === 'all'
+        ? trainingPointOverallLoading
+        : trainingPointByTermLoading,
+    [values.term, trainingPointOverallLoading, trainingPointByTermLoading]
+  );
+
+  const { loading: averagePointByTermLoading, data: averagePointByTermData } =
+    useStudentAveragePointByTermQuery({
+      variables: {
+        studentId: id,
+        term: Number(values.term),
+      },
+      skip: values.term === 'all',
+    });
+
+  const { loading: averagePointOverallLoading, data: averagePointOverallData } =
+    useStudentAveragePointQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const averagePoint = useMemo(() => {
+    if (values.term === 'all') {
+      return averagePointOverallData?.studentAveragePoint;
+    }
+
+    return averagePointByTermData?.studentAveragePointByTerm;
+  }, [
+    averagePointByTermData?.studentAveragePointByTerm,
+    averagePointOverallData?.studentAveragePoint,
+    values.term,
+  ]);
+
+  const averagePointLoading = useMemo(
+    () =>
+      values.term === 'all'
+        ? averagePointOverallLoading
+        : averagePointByTermLoading,
+    [values.term, averagePointOverallLoading, averagePointByTermLoading]
   );
 
   const { loading: allSubjectsLoading, data: allSubjectsData } =
@@ -151,14 +214,18 @@ function AcademicReport() {
 
         <StyledStatusBox>
           <AsyncDataRenderer
-            loading={trainingPointByTermLoading}
-            data={trainingPointByTermData}
+            loading={trainingPointLoading}
+            data={trainingPoint}
           >
             <Button>
-              ĐRL: {trainingPointData?.drl} | {trainingPointData?.xepLoai}
+              ĐRL: {trainingPoint?.drl} | {trainingPoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>
-          <Button>ĐTB: 8.9 | GIỎI</Button>
+          <AsyncDataRenderer loading={averagePointLoading} data={averagePoint}>
+            <Button>
+              ĐTB: {averagePoint?.dtbTong} | {averagePoint?.xepLoai}
+            </Button>
+          </AsyncDataRenderer>
         </StyledStatusBox>
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
