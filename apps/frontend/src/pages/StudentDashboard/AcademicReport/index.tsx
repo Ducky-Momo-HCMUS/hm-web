@@ -15,10 +15,14 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
+import {
+  StyledBreadCrumbs,
+  StyledHeader,
+  StyledTitle,
+} from '../../../components/styles';
 import { REGISTERED_SUBJECTS_DATA } from '../../../mocks';
 
-import { StyledFormControl, StyledHeader, StyledStatusBox } from './styles';
+import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
 import AcademicTableRow from './AcademicTableRow';
 
@@ -77,9 +81,7 @@ function AcademicReport() {
           <Button>ĐRL: 99 | GIỎI</Button>
           <Button>ĐTB: 8.9 | GIỎI</Button>
         </StyledStatusBox>
-        <Button sx={{ textTransform: 'uppercase' }} variant="contained">
-          Xuất phiếu điểm
-        </Button>
+        <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
         <StyledHeader>Các môn đã đăng ký</StyledHeader>
