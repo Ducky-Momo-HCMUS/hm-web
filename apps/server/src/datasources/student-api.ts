@@ -34,7 +34,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentSubjectsByTermArgs) {
     try {
       // const subjectList = await this.get(
-      //   `/v1/students/${studentId}/subjects?term=${term}`,
+      //   `v1/students/${studentId}/subjects?term=${term}`,
       // );
       console.log('params', studentId, term);
       return SUBJECTS_BY_TERM;
@@ -49,7 +49,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentAllSubjectsArgs) {
     try {
       // const subjectList = await this.get(
-      //   `/v1/students/${studentId}/subjects`,
+      //   `v1/students/${studentId}/subjects`,
       // );
       console.log('params', studentId);
       return ALL_SUBJECTS;
@@ -65,7 +65,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentTrainingPointByTermArgs) {
     try {
       // const trainingPoint = await this.get(
-      //   `/v1/students/${studentId}/drl?term=${term}`,
+      //   `v1/students/${studentId}/drl?term=${term}`,
       // );
       console.log('params', studentId, term);
       return TRAINING_POINT_BY_TERM;
@@ -80,7 +80,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentTrainingPointArgs) {
     try {
       // const trainingPoint = await this.get(
-      //   `/v1/students/${studentId}/drl`,
+      //   `v1/students/${studentId}/drl`,
       // );
       console.log('params', studentId);
       return TRAINING_POINT;
@@ -96,7 +96,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentAveragePointByTermArgs) {
     try {
       // const averagePoint = await this.get(
-      //   `/v1/students/${studentId}/point?term=${term}`,
+      //   `v1/students/${studentId}/point?term=${term}`,
       // );
       console.log('params', studentId, term);
       return AVERAGE_POINT_BY_TERM;
@@ -111,7 +111,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentAveragePointArgs) {
     try {
       // const trainingPoint = await this.get(
-      //   `/v1/students/${studentId}/point`,
+      //   `v1/students/${studentId}/point`,
       // );
       console.log('params', studentId);
       return AVERAGE_POINT;
@@ -124,7 +124,7 @@ class StudentAPI extends BaseDataSource {
   public async getStudentAllTerms({ studentId }: QueryStudentAllTermsArgs) {
     try {
       // const termList = await this.get(
-      //   `/v1/students/${studentId}/terms`,
+      //   `v1/students/${studentId}/terms`,
       // );
       console.log('params', studentId);
       return ALL_TERMS;

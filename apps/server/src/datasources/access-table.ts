@@ -27,6 +27,24 @@ export const accessTable: AccessTable = {
     gvcn: true,
     gvu: true,
   },
+  'v1/homerooms': {
+    gvcn: true,
+  },
+  'v1/homerooms/:id/students': {
+    gvcn: true,
+  },
+  'v1/students/:id/subjects': {
+    gvcn: true,
+  },
+  'v1/students/:id/drl': {
+    gvcn: true,
+  },
+  'v1/students/:id/point': {
+    gvcn: true,
+  },
+  'v1/students/:id/terms': {
+    gvcn: true,
+  },
 };
 
 function verifyAccessTable() {
