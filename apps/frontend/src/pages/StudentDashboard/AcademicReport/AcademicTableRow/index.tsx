@@ -1,27 +1,19 @@
 import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
 
-import { RegisteredSubjectsData } from '../../../../types';
 import { theme } from '../../../../theme';
+import { StudentSubject } from '../../../../generated-types';
 
 interface AcademicTableRowProps {
-  data: RegisteredSubjectsData;
+  data: StudentSubject;
   index: number;
 }
 function AcademicTableRow({ data, index }: AcademicTableRowProps) {
-  const {
-    subjectId,
-    subjectName,
-    subjectClass,
-    status,
-    averagePoint,
-    theoryTeacher,
-    practiceTeacher,
-  } = data;
+  const { maMH, tenMH, tenLopHP, dtb, gvlt, gvth, tinhTrang } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
-    switch (status) {
+    switch (tinhTrang) {
       case 'Đang học': {
         color = theme.palette.text.primary;
         break;
@@ -40,21 +32,21 @@ function AcademicTableRow({ data, index }: AcademicTableRowProps) {
 
     return (
       <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
-        {status}
+        {tinhTrang}
       </Typography>
     );
-  }, [status]);
+  }, [tinhTrang]);
 
   return (
-    <TableRow hover role="checkbox" tabIndex={-1} key={data.subjectId}>
+    <TableRow hover role="checkbox" tabIndex={-1} key={data.maMH}>
       <TableCell>{index}</TableCell>
-      <TableCell>{subjectId}</TableCell>
-      <TableCell>{subjectName}</TableCell>
-      <TableCell>{subjectClass}</TableCell>
+      <TableCell>{maMH}</TableCell>
+      <TableCell>{tenMH}</TableCell>
+      <TableCell>{tenLopHP}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{averagePoint || 'Chưa có'}</TableCell>
-      <TableCell>{theoryTeacher}</TableCell>
-      <TableCell>{practiceTeacher}</TableCell>
+      <TableCell>{dtb || 'Chưa có'}</TableCell>
+      <TableCell>{gvlt}</TableCell>
+      <TableCell>{gvth}</TableCell>
     </TableRow>
   );
 }

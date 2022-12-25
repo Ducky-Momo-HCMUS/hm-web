@@ -9,7 +9,7 @@ export interface AsyncDataRendererProps {
   children: ReactNode;
   error?: ApolloError;
   loading: boolean;
-  data?: GenericObject | GenericObject[];
+  data?: GenericObject | GenericObject[] | null;
 }
 
 function AsyncDataRenderer({ children, loading }: AsyncDataRendererProps) {

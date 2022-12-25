@@ -88,10 +88,93 @@ export type Query = {
   __typename?: 'Query';
   homeroomList: HomeroomList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  studentAllSubjects: StudentAllSubjects;
+  studentAllTerms: StudentAllTerms;
+  studentAveragePoint: StudentAveragePoint;
+  studentAveragePointByTerm: StudentAveragePoint;
+  studentSubjectsByTerm: StudentSubjectsByTerm;
+  studentTrainingPoint: StudentTrainingPoint;
+  studentTrainingPointByTerm: StudentTrainingPoint;
 };
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
+};
+
+export type QueryStudentAllSubjectsArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentAllTermsArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentAveragePointArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentAveragePointByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryStudentSubjectsByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryStudentTrainingPointArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentTrainingPointByTermArgs = {
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type StudentAllSubjects = {
+  __typename?: 'StudentAllSubjects';
+  monhoc: Array<StudentSubject>;
+};
+
+export type StudentAllTerms = {
+  __typename?: 'StudentAllTerms';
+  hocKyNamHoc: Array<StudentTerm>;
+};
+
+export type StudentAveragePoint = {
+  __typename?: 'StudentAveragePoint';
+  dtbTong: Scalars['Float'];
+  xepLoai: Scalars['String'];
+};
+
+export type StudentSubject = {
+  __typename?: 'StudentSubject';
+  dtb?: Maybe<Scalars['Float']>;
+  gvlt: Scalars['String'];
+  gvth: Scalars['String'];
+  maMH: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tinhTrang: Scalars['String'];
+};
+
+export type StudentSubjectsByTerm = {
+  __typename?: 'StudentSubjectsByTerm';
+  monhoc: Array<StudentSubject>;
+};
+
+export type StudentTerm = {
+  __typename?: 'StudentTerm';
+  hocKy: Scalars['Int'];
+  maHK: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+};
+
+export type StudentTrainingPoint = {
+  __typename?: 'StudentTrainingPoint';
+  drl: Scalars['Int'];
+  xepLoai: Scalars['String'];
 };
 
 export type HomeroomListQueryVariables = Exact<{ [key: string]: never }>;
@@ -129,6 +212,120 @@ export type HomeroomStudentListQuery = {
       }>
     | null
     | undefined;
+};
+
+export type StudentAllSubjectsQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentAllSubjectsQuery = {
+  __typename?: 'Query';
+  studentAllSubjects: {
+    __typename?: 'StudentAllSubjects';
+    monhoc: Array<{
+      __typename?: 'StudentSubject';
+      maMH: string;
+      tenMH: string;
+      tenLopHP: string;
+      dtb?: number | null | undefined;
+      gvlt: string;
+      gvth: string;
+      tinhTrang: string;
+    }>;
+  };
+};
+
+export type StudentAllTermsQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentAllTermsQuery = {
+  __typename?: 'Query';
+  studentAllTerms: {
+    __typename?: 'StudentAllTerms';
+    hocKyNamHoc: Array<{
+      __typename?: 'StudentTerm';
+      maHK: number;
+      hocKy: number;
+      namHocBD: number;
+    }>;
+  };
+};
+
+export type StudentAveragePointByTermQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type StudentAveragePointByTermQuery = {
+  __typename?: 'Query';
+  studentAveragePointByTerm: {
+    __typename?: 'StudentAveragePoint';
+    dtbTong: number;
+    xepLoai: string;
+  };
+};
+
+export type StudentAveragePointQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentAveragePointQuery = {
+  __typename?: 'Query';
+  studentAveragePoint: {
+    __typename?: 'StudentAveragePoint';
+    dtbTong: number;
+    xepLoai: string;
+  };
+};
+
+export type StudentSubjectsByTermQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type StudentSubjectsByTermQuery = {
+  __typename?: 'Query';
+  studentSubjectsByTerm: {
+    __typename?: 'StudentSubjectsByTerm';
+    monhoc: Array<{
+      __typename?: 'StudentSubject';
+      maMH: string;
+      tenMH: string;
+      tenLopHP: string;
+      dtb?: number | null | undefined;
+      gvlt: string;
+      gvth: string;
+      tinhTrang: string;
+    }>;
+  };
+};
+
+export type StudentTrainingPointByTermQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type StudentTrainingPointByTermQuery = {
+  __typename?: 'Query';
+  studentTrainingPointByTerm: {
+    __typename?: 'StudentTrainingPoint';
+    drl: number;
+    xepLoai: string;
+  };
+};
+
+export type StudentTrainingPointQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentTrainingPointQuery = {
+  __typename?: 'Query';
+  studentTrainingPoint: {
+    __typename?: 'StudentTrainingPoint';
+    drl: number;
+    xepLoai: string;
+  };
 };
 
 export const HomeroomListDocument = gql`
@@ -259,4 +456,437 @@ export type HomeroomStudentListLazyQueryHookResult = ReturnType<
 export type HomeroomStudentListQueryResult = Apollo.QueryResult<
   HomeroomStudentListQuery,
   HomeroomStudentListQueryVariables
+>;
+export const StudentAllSubjectsDocument = gql`
+  query StudentAllSubjects($studentId: String!) {
+    studentAllSubjects(studentId: $studentId) {
+      monhoc {
+        maMH
+        tenMH
+        tenLopHP
+        dtb
+        gvlt
+        gvth
+        tinhTrang
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentAllSubjectsQuery__
+ *
+ * To run a query within a React component, call `useStudentAllSubjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAllSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAllSubjectsQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentAllSubjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAllSubjectsQuery,
+    StudentAllSubjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAllSubjectsQuery,
+    StudentAllSubjectsQueryVariables
+  >(StudentAllSubjectsDocument, options);
+}
+export function useStudentAllSubjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAllSubjectsQuery,
+    StudentAllSubjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAllSubjectsQuery,
+    StudentAllSubjectsQueryVariables
+  >(StudentAllSubjectsDocument, options);
+}
+export type StudentAllSubjectsQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsQuery
+>;
+export type StudentAllSubjectsLazyQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsLazyQuery
+>;
+export type StudentAllSubjectsQueryResult = Apollo.QueryResult<
+  StudentAllSubjectsQuery,
+  StudentAllSubjectsQueryVariables
+>;
+export const StudentAllTermsDocument = gql`
+  query StudentAllTerms($studentId: String!) {
+    studentAllTerms(studentId: $studentId) {
+      hocKyNamHoc {
+        maHK
+        hocKy
+        namHocBD
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentAllTermsQuery__
+ *
+ * To run a query within a React component, call `useStudentAllTermsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAllTermsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAllTermsQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentAllTermsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAllTermsQuery,
+    StudentAllTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<StudentAllTermsQuery, StudentAllTermsQueryVariables>(
+    StudentAllTermsDocument,
+    options
+  );
+}
+export function useStudentAllTermsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAllTermsQuery,
+    StudentAllTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAllTermsQuery,
+    StudentAllTermsQueryVariables
+  >(StudentAllTermsDocument, options);
+}
+export type StudentAllTermsQueryHookResult = ReturnType<
+  typeof useStudentAllTermsQuery
+>;
+export type StudentAllTermsLazyQueryHookResult = ReturnType<
+  typeof useStudentAllTermsLazyQuery
+>;
+export type StudentAllTermsQueryResult = Apollo.QueryResult<
+  StudentAllTermsQuery,
+  StudentAllTermsQueryVariables
+>;
+export const StudentAveragePointByTermDocument = gql`
+  query StudentAveragePointByTerm($studentId: String!, $term: Int!) {
+    studentAveragePointByTerm(studentId: $studentId, term: $term) {
+      dtbTong
+      xepLoai
+    }
+  }
+`;
+
+/**
+ * __useStudentAveragePointByTermQuery__
+ *
+ * To run a query within a React component, call `useStudentAveragePointByTermQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAveragePointByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAveragePointByTermQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useStudentAveragePointByTermQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAveragePointByTermQuery,
+    StudentAveragePointByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAveragePointByTermQuery,
+    StudentAveragePointByTermQueryVariables
+  >(StudentAveragePointByTermDocument, options);
+}
+export function useStudentAveragePointByTermLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAveragePointByTermQuery,
+    StudentAveragePointByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAveragePointByTermQuery,
+    StudentAveragePointByTermQueryVariables
+  >(StudentAveragePointByTermDocument, options);
+}
+export type StudentAveragePointByTermQueryHookResult = ReturnType<
+  typeof useStudentAveragePointByTermQuery
+>;
+export type StudentAveragePointByTermLazyQueryHookResult = ReturnType<
+  typeof useStudentAveragePointByTermLazyQuery
+>;
+export type StudentAveragePointByTermQueryResult = Apollo.QueryResult<
+  StudentAveragePointByTermQuery,
+  StudentAveragePointByTermQueryVariables
+>;
+export const StudentAveragePointDocument = gql`
+  query StudentAveragePoint($studentId: String!) {
+    studentAveragePoint(studentId: $studentId) {
+      dtbTong
+      xepLoai
+    }
+  }
+`;
+
+/**
+ * __useStudentAveragePointQuery__
+ *
+ * To run a query within a React component, call `useStudentAveragePointQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAveragePointQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAveragePointQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentAveragePointQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAveragePointQuery,
+    StudentAveragePointQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAveragePointQuery,
+    StudentAveragePointQueryVariables
+  >(StudentAveragePointDocument, options);
+}
+export function useStudentAveragePointLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAveragePointQuery,
+    StudentAveragePointQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAveragePointQuery,
+    StudentAveragePointQueryVariables
+  >(StudentAveragePointDocument, options);
+}
+export type StudentAveragePointQueryHookResult = ReturnType<
+  typeof useStudentAveragePointQuery
+>;
+export type StudentAveragePointLazyQueryHookResult = ReturnType<
+  typeof useStudentAveragePointLazyQuery
+>;
+export type StudentAveragePointQueryResult = Apollo.QueryResult<
+  StudentAveragePointQuery,
+  StudentAveragePointQueryVariables
+>;
+export const StudentSubjectsByTermDocument = gql`
+  query StudentSubjectsByTerm($studentId: String!, $term: Int!) {
+    studentSubjectsByTerm(studentId: $studentId, term: $term) {
+      monhoc {
+        maMH
+        tenMH
+        tenLopHP
+        dtb
+        gvlt
+        gvth
+        tinhTrang
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentSubjectsByTermQuery__
+ *
+ * To run a query within a React component, call `useStudentSubjectsByTermQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentSubjectsByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentSubjectsByTermQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useStudentSubjectsByTermQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentSubjectsByTermQuery,
+    StudentSubjectsByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentSubjectsByTermQuery,
+    StudentSubjectsByTermQueryVariables
+  >(StudentSubjectsByTermDocument, options);
+}
+export function useStudentSubjectsByTermLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentSubjectsByTermQuery,
+    StudentSubjectsByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentSubjectsByTermQuery,
+    StudentSubjectsByTermQueryVariables
+  >(StudentSubjectsByTermDocument, options);
+}
+export type StudentSubjectsByTermQueryHookResult = ReturnType<
+  typeof useStudentSubjectsByTermQuery
+>;
+export type StudentSubjectsByTermLazyQueryHookResult = ReturnType<
+  typeof useStudentSubjectsByTermLazyQuery
+>;
+export type StudentSubjectsByTermQueryResult = Apollo.QueryResult<
+  StudentSubjectsByTermQuery,
+  StudentSubjectsByTermQueryVariables
+>;
+export const StudentTrainingPointByTermDocument = gql`
+  query StudentTrainingPointByTerm($studentId: String!, $term: Int!) {
+    studentTrainingPointByTerm(studentId: $studentId, term: $term) {
+      drl
+      xepLoai
+    }
+  }
+`;
+
+/**
+ * __useStudentTrainingPointByTermQuery__
+ *
+ * To run a query within a React component, call `useStudentTrainingPointByTermQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentTrainingPointByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentTrainingPointByTermQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useStudentTrainingPointByTermQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentTrainingPointByTermQuery,
+    StudentTrainingPointByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentTrainingPointByTermQuery,
+    StudentTrainingPointByTermQueryVariables
+  >(StudentTrainingPointByTermDocument, options);
+}
+export function useStudentTrainingPointByTermLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentTrainingPointByTermQuery,
+    StudentTrainingPointByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentTrainingPointByTermQuery,
+    StudentTrainingPointByTermQueryVariables
+  >(StudentTrainingPointByTermDocument, options);
+}
+export type StudentTrainingPointByTermQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointByTermQuery
+>;
+export type StudentTrainingPointByTermLazyQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointByTermLazyQuery
+>;
+export type StudentTrainingPointByTermQueryResult = Apollo.QueryResult<
+  StudentTrainingPointByTermQuery,
+  StudentTrainingPointByTermQueryVariables
+>;
+export const StudentTrainingPointDocument = gql`
+  query StudentTrainingPoint($studentId: String!) {
+    studentTrainingPoint(studentId: $studentId) {
+      drl
+      xepLoai
+    }
+  }
+`;
+
+/**
+ * __useStudentTrainingPointQuery__
+ *
+ * To run a query within a React component, call `useStudentTrainingPointQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentTrainingPointQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentTrainingPointQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentTrainingPointQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentTrainingPointQuery,
+    StudentTrainingPointQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentTrainingPointQuery,
+    StudentTrainingPointQueryVariables
+  >(StudentTrainingPointDocument, options);
+}
+export function useStudentTrainingPointLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentTrainingPointQuery,
+    StudentTrainingPointQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentTrainingPointQuery,
+    StudentTrainingPointQueryVariables
+  >(StudentTrainingPointDocument, options);
+}
+export type StudentTrainingPointQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointQuery
+>;
+export type StudentTrainingPointLazyQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointLazyQuery
+>;
+export type StudentTrainingPointQueryResult = Apollo.QueryResult<
+  StudentTrainingPointQuery,
+  StudentTrainingPointQueryVariables
 >;
