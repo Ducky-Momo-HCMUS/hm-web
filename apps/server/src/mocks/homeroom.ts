@@ -1,4 +1,5 @@
 import {
+  HomeroomDetail,
   HomeroomFailList,
   HomeroomFailListItem,
   HomeroomList,
@@ -100,6 +101,11 @@ export const HOMEROOM_STUDENT_LIST = [
   },
 ] as HomeroomStudentListItem[];
 
+export const HOMEROOM_DETAIL = {
+  tenGV: 'Hồ Tuấn Thanh',
+  soLuongSV: 40,
+} as HomeroomDetail;
+
 export const HOMEROOM_TERM_LIST = {
   hocKyNamHoc: [
     {
@@ -120,7 +126,7 @@ export const HOMEROOM_TERM_LIST = {
   ] as HomeroomTermListItem[],
 } as HomeroomTermList;
 
-export const HOMEROOM_FAIL_LIST = {
+export const HOMEROOM_FAIL_LIST_BY_TERM = {
   dsRotMon: [
     {
       maSV: '19127000',
@@ -149,7 +155,28 @@ export const HOMEROOM_FAIL_LIST = {
   ] as HomeroomFailListItem[],
 } as HomeroomFailList;
 
-export const HOMEROOM_NOT_ENROLLED_LIST = {
+export const HOMEROOM_FAIL_LIST = {
+  dsRotMon: [
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+      tenMH: 'Nhập môn lập trình',
+      tenLopHP: '19clc4',
+      dtb: 4.75,
+      vang: false,
+    },
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+      tenMH: 'Nhập môn công nghệ thông tin',
+      tenLopHP: '19clc4',
+      dtb: 4.75,
+      vang: false,
+    },
+  ] as HomeroomFailListItem[],
+} as HomeroomFailList;
+
+export const HOMEROOM_NOT_ENROLLED_LIST_BY_TERM = {
   khongDangKy: [
     {
       maSV: '19127000',
@@ -170,7 +197,20 @@ export const HOMEROOM_NOT_ENROLLED_LIST = {
   ] as HomeroomNotEnrolledListItem[],
 } as HomeroomNotEnrolledList;
 
-export const HOMEROOM_POSTPONE_EXAM_LIST = {
+export const HOMEROOM_NOT_ENROLLED_LIST = {
+  khongDangKy: [
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+    },
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+    },
+  ] as HomeroomNotEnrolledListItem[],
+} as HomeroomNotEnrolledList;
+
+export const HOMEROOM_POSTPONE_EXAM_LIST_BY_TERM = {
   hoanThi: [
     {
       maSV: '19127000',
@@ -178,6 +218,29 @@ export const HOMEROOM_POSTPONE_EXAM_LIST = {
       tenLopHP: '19clc3',
       tenMH: 'Chủ nghĩa xã hội khoa học',
     },
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+      tenLopHP: '19clc3',
+      tenMH: 'Chủ nghĩa xã hội khoa học',
+    },
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+      tenLopHP: '19clc3',
+      tenMH: 'Chủ nghĩa xã hội khoa học',
+    },
+    {
+      maSV: '19127000',
+      tenSV: 'Nguyễn Văn A',
+      tenLopHP: '19clc3',
+      tenMH: 'Chủ nghĩa xã hội khoa học',
+    },
+  ] as HomeroomPostponeExamListItem[],
+} as HomeroomPostponeExamList;
+
+export const HOMEROOM_POSTPONE_EXAM_LIST = {
+  hoanThi: [
     {
       maSV: '19127000',
       tenSV: 'Nguyễn Văn A',

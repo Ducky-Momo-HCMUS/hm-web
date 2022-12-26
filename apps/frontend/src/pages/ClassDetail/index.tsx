@@ -17,11 +17,16 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import {
+  useHomeroomDetailQuery,
+  useHomeroomFailListByTermQuery,
   useHomeroomFailListQuery,
+  useHomeroomNotEnrolledListByTermQuery,
   useHomeroomNotEnrolledListQuery,
+  useHomeroomPostponeExamListByTermQuery,
   useHomeroomPostponeExamListQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
+import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 
 import ClassInfo from './ClassInfo';
 import ClassTable from './ClassTable';
@@ -102,6 +107,22 @@ function ClassDetail() {
     []
   );
 
+  const { loading: homeroomDetailLoading, data: homeroomDetailData } =
+    useHomeroomDetailQuery({
+      variables: {
+        homeroomId: id,
+      },
+    });
+
+  const homeroomDetail = useMemo(
+    () =>
+      homeroomDetailData?.homeroomDetail || {
+        tenGV: '',
+        soLuongSV: '',
+      },
+    [homeroomDetailData?.homeroomDetail]
+  );
+
   const { loading: homeroomTermListLoading, data: homeroomTermListData } =
     useHomeroomTermListQuery({
       variables: {
@@ -114,28 +135,58 @@ function ClassDetail() {
     [homeroomTermListData?.homeroomTermList]
   );
 
-  const { loading: homeroomFailListLoading, data: homeroomFailListData } =
-    useHomeroomFailListQuery({
-      variables: {
-        homeroomId: id,
-        term: Number(values.termFailList),
-      },
-      skip: values.termFailList === 'all',
-    });
+  const {
+    loading: homeroomFailListByTermLoading,
+    data: homeroomFailListByTermData,
+  } = useHomeroomFailListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: Number(values.termFailList),
+    },
+    skip: values.termFailList === 'all',
+  });
+
+  const {
+    loading: homeroomFailListOverallLoading,
+    data: homeroomFailListOverallData,
+  } = useHomeroomFailListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
 
   const failList = useMemo(() => {
-    const failListData = homeroomFailListData?.homeroomFailList?.dsRotMon || [];
+    const failListData =
+      values.termFailList === 'all'
+        ? homeroomFailListOverallData?.homeroomFailList?.dsRotMon || []
+        : homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon || [];
     return failListData.map((item) => ({
       ..._omit(item, 'vang'),
       tenLopHP: item.tenLopHP.toUpperCase(),
       ghiChu: item.vang ? 'Vắng' : '',
     }));
-  }, [homeroomFailListData?.homeroomFailList]);
+  }, [
+    homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon,
+    homeroomFailListOverallData?.homeroomFailList?.dsRotMon,
+    values.termFailList,
+  ]);
+
+  const failListLoading = useMemo(
+    () =>
+      values.termFailList === 'all'
+        ? homeroomFailListOverallLoading
+        : homeroomFailListByTermLoading,
+    [
+      values.termFailList,
+      homeroomFailListOverallLoading,
+      homeroomFailListByTermLoading,
+    ]
+  );
 
   const {
-    loading: homeroomNotEnrolledListLoading,
-    data: homeroomNotEnrolledListData,
-  } = useHomeroomNotEnrolledListQuery({
+    loading: homeroomNotEnrolledListByTermLoading,
+    data: homeroomNotEnrolledListByTermData,
+  } = useHomeroomNotEnrolledListByTermQuery({
     variables: {
       homeroomId: id,
       term: Number(values.termNotRegistered),
@@ -143,16 +194,49 @@ function ClassDetail() {
     skip: values.termNotRegistered === 'all',
   });
 
-  const notEnrolledList = useMemo(
+  const {
+    loading: homeroomNotEnrolledListOverallLoading,
+    data: homeroomNotEnrolledListOverallData,
+  } = useHomeroomNotEnrolledListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
+
+  const notEnrolledList = useMemo(() => {
+    if (values.termNotRegistered === 'all') {
+      return (
+        homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList
+          ?.khongDangKy || []
+      );
+    }
+
+    return (
+      homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
+        ?.khongDangKy || []
+    );
+  }, [
+    homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList?.khongDangKy,
+    homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
+      ?.khongDangKy,
+  ]);
+
+  const notEnrolledListLoading = useMemo(
     () =>
-      homeroomNotEnrolledListData?.homeroomNotEnrolledList?.khongDangKy || [],
-    [homeroomNotEnrolledListData?.homeroomNotEnrolledList?.khongDangKy]
+      values.termNotRegistered === 'all'
+        ? homeroomNotEnrolledListOverallLoading
+        : homeroomNotEnrolledListByTermLoading,
+    [
+      values.termNotRegistered,
+      homeroomNotEnrolledListOverallLoading,
+      homeroomNotEnrolledListByTermLoading,
+    ]
   );
 
   const {
-    loading: homeroomPostponeExamListLoading,
-    data: homeroomPostponeExamListData,
-  } = useHomeroomPostponeExamListQuery({
+    loading: homeroomPostponeExamListByTermLoading,
+    data: homeroomPostponeExamListByTermData,
+  } = useHomeroomPostponeExamListByTermQuery({
     variables: {
       homeroomId: id,
       term: Number(values.termPostponeExam),
@@ -160,9 +244,41 @@ function ClassDetail() {
     skip: values.termPostponeExam === 'all',
   });
 
-  const postponeExamList = useMemo(
-    () => homeroomPostponeExamListData?.homeroomPostponeExamList?.hoanThi || [],
-    [homeroomPostponeExamListData?.homeroomPostponeExamList?.hoanThi]
+  const {
+    loading: homeroomPostponeExamListOverallLoading,
+    data: homeroomPostponeExamListOverallData,
+  } = useHomeroomPostponeExamListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
+
+  const postponeExamList = useMemo(() => {
+    if (values.termPostponeExam === 'all') {
+      return (
+        homeroomPostponeExamListOverallData?.homeroomPostponeExamList
+          ?.hoanThi || []
+      );
+    }
+    return (
+      homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
+        ?.hoanThi || []
+    );
+  }, [
+    homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.hoanThi,
+    homeroomPostponeExamListOverallData?.homeroomPostponeExamList?.hoanThi,
+  ]);
+
+  const postponeExamListLoading = useMemo(
+    () =>
+      values.termPostponeExam === 'all'
+        ? homeroomPostponeExamListOverallLoading
+        : homeroomPostponeExamListByTermLoading,
+    [
+      values.termPostponeExam,
+      homeroomPostponeExamListOverallLoading,
+      homeroomPostponeExamListByTermLoading,
+    ]
   );
 
   return (
@@ -184,20 +300,29 @@ function ClassDetail() {
             marginBottom: '2rem',
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+          <AsyncDataRenderer
+            loading={homeroomDetailLoading}
+            data={homeroomDetailData}
           >
-            <ClassInfo title="Lớp sinh hoạt" description="19CLC10" />
-            <ClassInfo
-              title="Giáo viên chủ nhiệm"
-              description="Hồ Tuấn Thanh"
-            />
-            <ClassInfo title="Số lượng sinh viên" description="10" />
-          </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <ClassInfo title="Lớp sinh hoạt" description={id.toUpperCase()} />
+              <ClassInfo
+                title="Giáo viên chủ nhiệm"
+                description={homeroomDetail?.tenGV}
+              />
+              <ClassInfo
+                title="Số lượng sinh viên"
+                description={homeroomDetail?.soLuongSV.toString()}
+              />
+            </Box>
+          </AsyncDataRenderer>
+
           <Button
             component={RouterLink}
             to={`/classes/${id}/report`}
@@ -210,7 +335,7 @@ function ClassDetail() {
           title="Tình hình rớt môn"
           columns={failedColumns}
           data={failList}
-          loading={homeroomFailListLoading}
+          loading={failListLoading}
           page={page.subjectStatus}
           termList={termList}
           termListLoading={homeroomTermListLoading}
@@ -226,7 +351,7 @@ function ClassDetail() {
               title="Danh sách không đăng ký học phần"
               columns={notRegisteredSubjectColumns}
               data={notEnrolledList}
-              loading={homeroomNotEnrolledListLoading}
+              loading={notEnrolledListLoading}
               page={page.notRegistered}
               termList={termList}
               termListLoading={homeroomTermListLoading}
@@ -242,7 +367,7 @@ function ClassDetail() {
               title="Danh sách hoãn thi"
               columns={postponeExamColumns}
               data={postponeExamList}
-              loading={homeroomPostponeExamListLoading}
+              loading={postponeExamListLoading}
               page={page.postponeExam}
               termList={termList}
               termListLoading={homeroomTermListLoading}

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_HOMEROOM_FAIL_LIST = gql`
-  query HomeroomFailList($homeroomId: String!, $term: Int!) {
-    homeroomFailList(homeroomId: $homeroomId, term: $term) {
+  query HomeroomFailList($homeroomId: String!) {
+    homeroomFailList(homeroomId: $homeroomId) {
       dsRotMon {
         maSV
         tenSV

@@ -12,15 +12,37 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         (await dataSources.homeroomAPI.getHomeroomStudentList(args)) || null
       );
     },
+    homeroomDetail: async (_, args, { dataSources }) => {
+      return (await dataSources.homeroomAPI.getHomeroomDetail(args)) || null;
+    },
     homeroomTermList: async (_, args, { dataSources }) => {
       return (await dataSources.homeroomAPI.getHomeroomTermList(args)) || null;
+    },
+    homeroomFailListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomFailListByTerm(args)) || null
+      );
     },
     homeroomFailList: async (_, args, { dataSources }) => {
       return (await dataSources.homeroomAPI.getHomeroomFailList(args)) || null;
     },
+    homeroomNotEnrolledListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomNotEnrolledListByTerm(
+          args
+        )) || null
+      );
+    },
     homeroomNotEnrolledList: async (_, args, { dataSources }) => {
       return (
         (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(args)) || null
+      );
+    },
+    homeroomPostponeExamListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomPostponeExamListByTerm(
+          args
+        )) || null
       );
     },
     homeroomPostponeExamList: async (_, args, { dataSources }) => {

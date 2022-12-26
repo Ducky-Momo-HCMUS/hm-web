@@ -4,16 +4,20 @@ const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
     homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]
+    homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): HomeroomTermList!
-    homeroomFailList(homeroomId: String!, term: Int!): HomeroomFailList!
-    homeroomNotEnrolledList(
+    homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
+    homeroomFailList(homeroomId: String!): HomeroomFailList!
+    homeroomNotEnrolledListByTerm(
       homeroomId: String!
       term: Int!
     ): HomeroomNotEnrolledList!
-    homeroomPostponeExamList(
+    homeroomNotEnrolledList(homeroomId: String!): HomeroomNotEnrolledList!
+    homeroomPostponeExamListByTerm(
       homeroomId: String!
       term: Int!
     ): HomeroomPostponeExamList!
+    homeroomPostponeExamList(homeroomId: String!): HomeroomPostponeExamList!
   }
 
   type HomeroomList {
@@ -40,6 +44,11 @@ const homeroomTypeDefs = gql`
   type Contact {
     mxh: String!
     url: String!
+  }
+
+  type HomeroomDetail {
+    tenGV: String!
+    soLuongSV: Int!
   }
 
   type HomeroomTermList {

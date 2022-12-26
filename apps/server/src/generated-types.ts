@@ -28,6 +28,12 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type HomeroomDetail = {
+  __typename?: 'HomeroomDetail';
+  soLuongSV: Scalars['Int'];
+  tenGV: Scalars['String'];
+};
+
 export type HomeroomFailList = {
   __typename?: 'HomeroomFailList';
   dsRotMon: Array<HomeroomFailListItem>;
@@ -138,10 +144,14 @@ export type MutationStatusReponse = {
 
 export type Query = {
   __typename?: 'Query';
+  homeroomDetail: HomeroomDetail;
   homeroomFailList: HomeroomFailList;
+  homeroomFailListByTerm: HomeroomFailList;
   homeroomList: HomeroomList;
   homeroomNotEnrolledList: HomeroomNotEnrolledList;
+  homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomPostponeExamList: HomeroomPostponeExamList;
+  homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
   homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
   homeroomTermList: HomeroomTermList;
   studentAllSubjects: StudentAllSubjects;
@@ -153,17 +163,33 @@ export type Query = {
   studentTrainingPointByTerm: StudentTrainingPoint;
 };
 
+export type QueryHomeroomDetailArgs = {
+  homeroomId: Scalars['String'];
+};
+
 export type QueryHomeroomFailListArgs = {
+  homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomFailListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
 
 export type QueryHomeroomNotEnrolledListArgs = {
   homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomNotEnrolledListByTermArgs = {
+  homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
 
 export type QueryHomeroomPostponeExamListArgs = {
+  homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomPostponeExamListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
@@ -362,6 +388,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  HomeroomDetail: ResolverTypeWrapper<HomeroomDetail>;
   HomeroomFailList: ResolverTypeWrapper<HomeroomFailList>;
   HomeroomFailListItem: ResolverTypeWrapper<HomeroomFailListItem>;
   HomeroomList: ResolverTypeWrapper<HomeroomList>;
@@ -393,6 +420,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Float: Scalars['Float'];
+  HomeroomDetail: HomeroomDetail;
   HomeroomFailList: HomeroomFailList;
   HomeroomFailListItem: HomeroomFailListItem;
   HomeroomList: HomeroomList;
@@ -425,6 +453,15 @@ export type ContactResolvers<
 > = {
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomDetailResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomDetail'] = ResolversParentTypes['HomeroomDetail']
+> = {
+  soLuongSV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -603,11 +640,23 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
+  homeroomDetail?: Resolver<
+    ResolversTypes['HomeroomDetail'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryHomeroomDetailArgs, 'homeroomId'>
+  >;
   homeroomFailList?: Resolver<
     ResolversTypes['HomeroomFailList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomFailListArgs, 'homeroomId' | 'term'>
+    RequireFields<QueryHomeroomFailListArgs, 'homeroomId'>
+  >;
+  homeroomFailListByTerm?: Resolver<
+    ResolversTypes['HomeroomFailList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryHomeroomFailListByTermArgs, 'homeroomId' | 'term'>
   >;
   homeroomList?: Resolver<
     ResolversTypes['HomeroomList'],
@@ -618,13 +667,28 @@ export type QueryResolvers<
     ResolversTypes['HomeroomNotEnrolledList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomNotEnrolledListArgs, 'homeroomId' | 'term'>
+    RequireFields<QueryHomeroomNotEnrolledListArgs, 'homeroomId'>
+  >;
+  homeroomNotEnrolledListByTerm?: Resolver<
+    ResolversTypes['HomeroomNotEnrolledList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryHomeroomNotEnrolledListByTermArgs, 'homeroomId' | 'term'>
   >;
   homeroomPostponeExamList?: Resolver<
     ResolversTypes['HomeroomPostponeExamList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomPostponeExamListArgs, 'homeroomId' | 'term'>
+    RequireFields<QueryHomeroomPostponeExamListArgs, 'homeroomId'>
+  >;
+  homeroomPostponeExamListByTerm?: Resolver<
+    ResolversTypes['HomeroomPostponeExamList'],
+    ParentType,
+    ContextType,
+    RequireFields<
+      QueryHomeroomPostponeExamListByTermArgs,
+      'homeroomId' | 'term'
+    >
   >;
   homeroomStudentList?: Resolver<
     Maybe<Array<ResolversTypes['HomeroomStudentListItem']>>,
@@ -762,6 +826,7 @@ export type StudentTrainingPointResolvers<
 
 export type Resolvers<ContextType = any> = {
   Contact?: ContactResolvers<ContextType>;
+  HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
   HomeroomFailList?: HomeroomFailListResolvers<ContextType>;
   HomeroomFailListItem?: HomeroomFailListItemResolvers<ContextType>;
   HomeroomList?: HomeroomListResolvers<ContextType>;
