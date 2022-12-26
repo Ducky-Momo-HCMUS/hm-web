@@ -6,8 +6,9 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
+import _omit from 'lodash/omit';
 
 import Header from '../../components/Header';
 import {
@@ -16,10 +17,16 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import {
-  FAILED_SUBJECTS_STATUS,
-  NOT_REGISTERED_SUBJECT_LIST,
-  POSTPONE_EXAM_LIST,
-} from '../../mocks';
+  useHomeroomDetailQuery,
+  useHomeroomFailListByTermQuery,
+  useHomeroomFailListQuery,
+  useHomeroomNotEnrolledListByTermQuery,
+  useHomeroomNotEnrolledListQuery,
+  useHomeroomPostponeExamListByTermQuery,
+  useHomeroomPostponeExamListQuery,
+  useHomeroomTermListQuery,
+} from '../../generated-types';
+import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 
 import ClassInfo from './ClassInfo';
 import ClassTable from './ClassTable';
@@ -28,8 +35,8 @@ const failedColumns = [
   { id: 'maSV', label: 'MSSV' },
   { id: 'tenSV', label: 'Họ và tên' },
   { id: 'tenMH', label: 'Môn học' },
-  { id: 'maSH', label: 'Lớp HP' },
-  { id: 'diem', label: 'Điểm' },
+  { id: 'tenLopHP', label: 'Lớp HP' },
+  { id: 'dtb', label: 'Điểm' },
   { id: 'ghiChu', label: 'Ghi chú' },
 ];
 
@@ -46,9 +53,9 @@ const postponeExamColumns = [
 ];
 
 interface Selection {
-  semesterSubjectStatus: string;
-  semesterNotRegistered: string;
-  semesterPostponeExam: string;
+  termFailList: string;
+  termNotRegistered: string;
+  termPostponeExam: string;
 }
 
 interface Page {
@@ -60,16 +67,16 @@ interface Page {
 const ROWS_PER_PAGE = 5;
 
 function ClassDetail() {
-  const { id } = useParams();
+  const { id = '' } = useParams();
   const [page, setPage] = useState<Page>({
     subjectStatus: 0,
     notRegistered: 0,
     postponeExam: 0,
   });
   const [values, setValues] = useState<Selection>({
-    semesterSubjectStatus: 'all',
-    semesterNotRegistered: 'all',
-    semesterPostponeExam: 'all',
+    termFailList: 'all',
+    termNotRegistered: 'all',
+    termPostponeExam: 'all',
   });
 
   const handleChange = useCallback(
@@ -100,6 +107,180 @@ function ClassDetail() {
     []
   );
 
+  const { loading: homeroomDetailLoading, data: homeroomDetailData } =
+    useHomeroomDetailQuery({
+      variables: {
+        homeroomId: id,
+      },
+    });
+
+  const homeroomDetail = useMemo(
+    () =>
+      homeroomDetailData?.homeroomDetail || {
+        tenGV: '',
+        soLuongSV: '',
+      },
+    [homeroomDetailData?.homeroomDetail]
+  );
+
+  const { loading: homeroomTermListLoading, data: homeroomTermListData } =
+    useHomeroomTermListQuery({
+      variables: {
+        homeroomId: id,
+      },
+    });
+
+  const termList = useMemo(
+    () => homeroomTermListData?.homeroomTermList?.hocKyNamHoc || [],
+    [homeroomTermListData?.homeroomTermList]
+  );
+
+  const {
+    loading: homeroomFailListByTermLoading,
+    data: homeroomFailListByTermData,
+  } = useHomeroomFailListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: Number(values.termFailList),
+    },
+    skip: values.termFailList === 'all',
+  });
+
+  const {
+    loading: homeroomFailListOverallLoading,
+    data: homeroomFailListOverallData,
+  } = useHomeroomFailListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
+
+  const failList = useMemo(() => {
+    const failListData =
+      values.termFailList === 'all'
+        ? homeroomFailListOverallData?.homeroomFailList?.dsRotMon || []
+        : homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon || [];
+    return failListData.map((item) => ({
+      ..._omit(item, 'vang'),
+      tenLopHP: item.tenLopHP.toUpperCase(),
+      ghiChu: item.vang ? 'Vắng' : '',
+    }));
+  }, [
+    homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon,
+    homeroomFailListOverallData?.homeroomFailList?.dsRotMon,
+    values.termFailList,
+  ]);
+
+  const failListLoading = useMemo(
+    () =>
+      values.termFailList === 'all'
+        ? homeroomFailListOverallLoading
+        : homeroomFailListByTermLoading,
+    [
+      values.termFailList,
+      homeroomFailListOverallLoading,
+      homeroomFailListByTermLoading,
+    ]
+  );
+
+  const {
+    loading: homeroomNotEnrolledListByTermLoading,
+    data: homeroomNotEnrolledListByTermData,
+  } = useHomeroomNotEnrolledListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: Number(values.termNotRegistered),
+    },
+    skip: values.termNotRegistered === 'all',
+  });
+
+  const {
+    loading: homeroomNotEnrolledListOverallLoading,
+    data: homeroomNotEnrolledListOverallData,
+  } = useHomeroomNotEnrolledListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
+
+  const notEnrolledList = useMemo(() => {
+    if (values.termNotRegistered === 'all') {
+      return (
+        homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList
+          ?.khongDangKy || []
+      );
+    }
+
+    return (
+      homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
+        ?.khongDangKy || []
+    );
+  }, [
+    homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList?.khongDangKy,
+    homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
+      ?.khongDangKy,
+  ]);
+
+  const notEnrolledListLoading = useMemo(
+    () =>
+      values.termNotRegistered === 'all'
+        ? homeroomNotEnrolledListOverallLoading
+        : homeroomNotEnrolledListByTermLoading,
+    [
+      values.termNotRegistered,
+      homeroomNotEnrolledListOverallLoading,
+      homeroomNotEnrolledListByTermLoading,
+    ]
+  );
+
+  const {
+    loading: homeroomPostponeExamListByTermLoading,
+    data: homeroomPostponeExamListByTermData,
+  } = useHomeroomPostponeExamListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: Number(values.termPostponeExam),
+    },
+    skip: values.termPostponeExam === 'all',
+  });
+
+  const {
+    loading: homeroomPostponeExamListOverallLoading,
+    data: homeroomPostponeExamListOverallData,
+  } = useHomeroomPostponeExamListQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
+
+  const postponeExamList = useMemo(() => {
+    if (values.termPostponeExam === 'all') {
+      return (
+        homeroomPostponeExamListOverallData?.homeroomPostponeExamList
+          ?.hoanThi || []
+      );
+    }
+    return (
+      homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
+        ?.hoanThi || []
+    );
+  }, [
+    homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.hoanThi,
+    homeroomPostponeExamListOverallData?.homeroomPostponeExamList?.hoanThi,
+  ]);
+
+  const postponeExamListLoading = useMemo(
+    () =>
+      values.termPostponeExam === 'all'
+        ? homeroomPostponeExamListOverallLoading
+        : homeroomPostponeExamListByTermLoading,
+    [
+      values.termPostponeExam,
+      homeroomPostponeExamListOverallLoading,
+      homeroomPostponeExamListByTermLoading,
+    ]
+  );
+
   return (
     <>
       <Header isAuthenticated />
@@ -119,20 +300,29 @@ function ClassDetail() {
             marginBottom: '2rem',
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+          <AsyncDataRenderer
+            loading={homeroomDetailLoading}
+            data={homeroomDetailData}
           >
-            <ClassInfo title="Lớp sinh hoạt" description="19CLC10" />
-            <ClassInfo
-              title="Giáo viên chủ nhiệm"
-              description="Hồ Tuấn Thanh"
-            />
-            <ClassInfo title="Số lượng sinh viên" description="10" />
-          </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <ClassInfo title="Lớp sinh hoạt" description={id.toUpperCase()} />
+              <ClassInfo
+                title="Giáo viên chủ nhiệm"
+                description={homeroomDetail?.tenGV}
+              />
+              <ClassInfo
+                title="Số lượng sinh viên"
+                description={homeroomDetail?.soLuongSV.toString()}
+              />
+            </Box>
+          </AsyncDataRenderer>
+
           <Button
             component={RouterLink}
             to={`/classes/${id}/report`}
@@ -144,12 +334,15 @@ function ClassDetail() {
         <ClassTable
           title="Tình hình rớt môn"
           columns={failedColumns}
-          data={FAILED_SUBJECTS_STATUS}
+          data={failList}
+          loading={failListLoading}
           page={page.subjectStatus}
-          semester={values.semesterSubjectStatus}
+          termList={termList}
+          termListLoading={homeroomTermListLoading}
+          term={values.termFailList}
           rowsPerPage={ROWS_PER_PAGE}
           handleChangePage={handleChangeSubjectStatusPage}
-          handleChangeSemester={handleChange('semesterSubjectStatus')}
+          handleChangeTerm={handleChange('termFailList')}
           hasFilter
         />
         <Grid style={{ marginTop: '0.25rem' }} container spacing={3}>
@@ -157,12 +350,15 @@ function ClassDetail() {
             <ClassTable
               title="Danh sách không đăng ký học phần"
               columns={notRegisteredSubjectColumns}
-              data={NOT_REGISTERED_SUBJECT_LIST}
+              data={notEnrolledList}
+              loading={notEnrolledListLoading}
               page={page.notRegistered}
-              semester={values.semesterNotRegistered}
+              termList={termList}
+              termListLoading={homeroomTermListLoading}
+              term={values.termNotRegistered}
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangeNotRegisteredPage}
-              handleChangeSemester={handleChange('semesterNotRegistered')}
+              handleChangeTerm={handleChange('termNotRegistered')}
               hasFilter
             />
           </Grid>
@@ -170,12 +366,15 @@ function ClassDetail() {
             <ClassTable
               title="Danh sách hoãn thi"
               columns={postponeExamColumns}
-              data={POSTPONE_EXAM_LIST}
+              data={postponeExamList}
+              loading={postponeExamListLoading}
               page={page.postponeExam}
-              semester={values.semesterPostponeExam}
+              termList={termList}
+              termListLoading={homeroomTermListLoading}
+              term={values.termPostponeExam}
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangePostponeExamPage}
-              handleChangeSemester={handleChange('semesterPostponeExam')}
+              handleChangeTerm={handleChange('termPostponeExam')}
               hasFilter
             />
           </Grid>

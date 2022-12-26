@@ -10,7 +10,9 @@ import { theme } from './theme';
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/graphql',
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
 });
 
 ReactDOM.render(

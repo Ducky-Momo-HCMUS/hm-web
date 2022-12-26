@@ -30,6 +30,21 @@ export const accessTable: AccessTable = {
   'v1/homerooms': {
     gvcn: true,
   },
+  'v1/homerooms/:id': {
+    gvcn: true,
+  },
+  'v1/homerooms/:id/terms': {
+    gvcn: true,
+  },
+  'v1/homerooms/:id/fail': {
+    gvcn: true,
+  },
+  'v1/homerooms/:id/not-enrolled': {
+    gvcn: true,
+  },
+  'v1/homerooms/:id/postpone-exam': {
+    gvcn: true,
+  },
   'v1/homerooms/:id/students': {
     gvcn: true,
   },
