@@ -158,6 +158,7 @@ export type Query = {
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentDetail: StudentDetail;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -219,6 +220,10 @@ export type QueryStudentAveragePointByTermArgs = {
   term: Scalars['Int'];
 };
 
+export type QueryStudentDetailArgs = {
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentSubjectsByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
@@ -247,6 +252,23 @@ export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
   dtbTong: Scalars['Float'];
   xepLoai: Scalars['String'];
+};
+
+export type StudentDetail = {
+  __typename?: 'StudentDetail';
+  dob: Scalars['String'];
+  emailCaNhan: Scalars['String'];
+  emailSV: Scalars['String'];
+  gioiTinh: Scalars['Int'];
+  gpa_4: Scalars['Float'];
+  gpa_10: Scalars['Float'];
+  maCN: Scalars['String'];
+  maSH?: Maybe<Scalars['String']>;
+  maSV: Scalars['String'];
+  ngoaiNgu: Scalars['Boolean'];
+  sdt: Scalars['String'];
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
 };
 
 export type StudentSubject = {
@@ -409,6 +431,7 @@ export type ResolversTypes = {
   StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
   StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
+  StudentDetail: ResolverTypeWrapper<StudentDetail>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
@@ -441,6 +464,7 @@ export type ResolversParentTypes = {
   StudentAllSubjects: StudentAllSubjects;
   StudentAllTerms: StudentAllTerms;
   StudentAveragePoint: StudentAveragePoint;
+  StudentDetail: StudentDetail;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTerm: StudentTerm;
@@ -726,6 +750,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentAveragePointByTermArgs, 'studentId' | 'term'>
   >;
+  studentDetail?: Resolver<
+    ResolversTypes['StudentDetail'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentDetailArgs, 'studentId'>
+  >;
   studentSubjectsByTerm?: Resolver<
     ResolversTypes['StudentSubjectsByTerm'],
     ParentType,
@@ -776,6 +806,26 @@ export type StudentAveragePointResolvers<
 > = {
   dtbTong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentDetailResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentDetail'] = ResolversParentTypes['StudentDetail']
+> = {
+  dob?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  emailCaNhan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gioiTinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  gpa_4?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  gpa_10?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  maCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maSH?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ngoaiNgu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -845,6 +895,7 @@ export type Resolvers<ContextType = any> = {
   StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
   StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
+  StudentDetail?: StudentDetailResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;

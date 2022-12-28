@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Grid, Link, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,8 +10,10 @@ import {
   StyledDivider,
   StyledTitle,
 } from '../../../components/styles';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { PARENTS_DATA } from '../../../mocks/parent';
 import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
+import { useStudentDetailQuery } from '../../../generated-types';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -20,12 +22,13 @@ import AddOrEditParentInfoDialog from './AddOrEditParentInfoDialog';
 import AddOrEditStudentContactDialog from './AddOrEditStudentContactDialog';
 
 function StudentProfile() {
-  const { id } = useParams();
+  const { id = '' } = useParams();
 
   const [
     openAddOrEditStudentContactDialog,
     setOpenAddOrEditStudentContactDialog,
   ] = useState(false);
+
   const [openAddOrEditParentInfoDialog, setOpenAddOrEditParentInfoDialog] =
     useState(false);
 
@@ -44,6 +47,18 @@ function StudentProfile() {
   const handleCloseAddOrEditParentInfoDialog = () => {
     setOpenAddOrEditParentInfoDialog(false);
   };
+
+  const { loading: studentDetailsLoading, data: studentDetailsData } =
+    useStudentDetailQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const studentDetails = useMemo(
+    () => studentDetailsData?.studentDetail,
+    [studentDetailsData?.studentDetail]
+  );
 
   return (
     <>
@@ -68,76 +83,98 @@ function StudentProfile() {
         </Button>
       </Box>
       <Box display="flex" justifyContent="space-between" marginLeft="1rem">
-        <StyledGridContainer
-          spacing={2}
-          container
-          width="28vw"
-          marginRight="3rem"
+        <AsyncDataRenderer
+          loading={studentDetailsLoading}
+          data={studentDetailsData}
         >
-          <Grid item xs={12}>
-            <StyledHeader>
-              <Typography component="p" variant="h5">
-                Thông tin cá nhân
-              </Typography>
-            </StyledHeader>
-            <StyledDivider />
-          </Grid>
-          <Grid item xs={12}>
-            <ClassInfo title="Họ và tên" description="Nguyễn Ngọc Thanh Tâm" />
-          </Grid>
-          <Grid item xs={7}>
-            <ClassInfo title="Lớp sinh hoạt" description="19CLC10" />
-          </Grid>
-          <Grid item xs={5}>
-            <ClassInfo title="MSSV" description="19127569" />
-          </Grid>
-          <Grid item xs={7}>
-            <ClassInfo title="Ngày sinh" description="12/12/2001" />
-          </Grid>
-          <Grid item xs={5}>
-            <ClassInfo title="Giới tính" description="Nữ" />
-          </Grid>
-        </StyledGridContainer>
-        <StyledGridContainer spacing={2} container width="50vw">
-          <Grid item xs={12}>
-            <StyledHeader>
-              <Typography component="p" variant="h5">
-                Thông tin liên lạc
-              </Typography>
-            </StyledHeader>
-            <StyledDivider />
-          </Grid>
-          <Grid item xs={5} spacing={2} container>
+          <StyledGridContainer
+            spacing={2}
+            container
+            width="28vw"
+            marginRight="3rem"
+          >
             <Grid item xs={12}>
-              <ClassInfo title="Số điện thoại" description="09xxxxxxxx" />
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Thông tin cá nhân
+                </Typography>
+              </StyledHeader>
+              <StyledDivider />
             </Grid>
             <Grid item xs={12}>
               <ClassInfo
-                title="Email cá nhân"
-                description="nakamurayumi556@gmail.com"
+                title="Họ và tên"
+                description={studentDetails?.tenSV}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={7}>
               <ClassInfo
-                title="Email sinh viên"
-                description="19127569@student.hcmus.edu.vn"
+                title="Lớp sinh hoạt"
+                description={studentDetails?.maSH?.toUpperCase()}
               />
             </Grid>
-          </Grid>
-          <Grid item xs={7}>
-            <Box display="flex" justifyContent="space-between">
-              <ClassInfo title="Mạng xã hội" description="" />
-              <Button
-                variant="text"
-                onClick={handleOpenAddOrEditStudentContactDialog}
-              >
-                <AddIcon />
-                Thêm
-              </Button>
-            </Box>
-            <StudentContactTable data={STUDENT_CONTACTS_DATA} />
-          </Grid>
-        </StyledGridContainer>
+            <Grid item xs={5}>
+              <ClassInfo title="MSSV" description={id} />
+            </Grid>
+            <Grid item xs={7}>
+              <ClassInfo title="Ngày sinh" description={studentDetails?.dob} />
+            </Grid>
+            <Grid item xs={5}>
+              <ClassInfo
+                title="Giới tính"
+                description={studentDetails?.gioiTinh === 1 ? 'Nam' : 'Nữ'}
+              />
+            </Grid>
+          </StyledGridContainer>
+        </AsyncDataRenderer>
+        <AsyncDataRenderer
+          loading={studentDetailsLoading}
+          data={studentDetailsData}
+        >
+          <StyledGridContainer spacing={2} container width="50vw">
+            <Grid item xs={12}>
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Thông tin liên lạc
+                </Typography>
+              </StyledHeader>
+              <StyledDivider />
+            </Grid>
+            <Grid item xs={5} spacing={2} container>
+              <Grid item xs={12}>
+                <ClassInfo
+                  title="Số điện thoại"
+                  description={studentDetails?.sdt}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ClassInfo
+                  title="Email cá nhân"
+                  description={studentDetails?.emailCaNhan}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <ClassInfo
+                  title="Email sinh viên"
+                  description={studentDetails?.emailSV}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={7}>
+              <Box display="flex" justifyContent="space-between">
+                <ClassInfo title="Mạng xã hội" description="" />
+                <Button
+                  variant="text"
+                  onClick={handleOpenAddOrEditStudentContactDialog}
+                >
+                  <AddIcon />
+                  Thêm
+                </Button>
+              </Box>
+              <StudentContactTable data={STUDENT_CONTACTS_DATA} />
+            </Grid>
+          </StyledGridContainer>
+        </AsyncDataRenderer>
         <AddOrEditStudentContactDialog
           open={openAddOrEditStudentContactDialog}
           onClose={handleCloseAddOrEditStudentContactDialog}
@@ -151,36 +188,53 @@ function StudentProfile() {
         marginLeft="1rem"
         marginTop="3rem"
       >
-        <StyledGridContainer
-          spacing={2}
-          container
-          width="28vw"
-          marginRight="3rem"
+        <AsyncDataRenderer
+          loading={studentDetailsLoading}
+          data={studentDetailsData}
         >
-          <Grid item xs={12}>
-            <StyledHeader>
-              <Typography component="p" variant="h5">
-                Thông tin học tập
-              </Typography>
-            </StyledHeader>
-            <StyledDivider />
-          </Grid>
-          <Grid item xs={7}>
-            <ClassInfo title="Chuyên ngành" description="Kỹ thuật phần mềm" />
-          </Grid>
-          <Grid item xs={5}>
-            <ClassInfo title="GPA" description="7.48" />
-          </Grid>
-          <Grid item xs={7}>
-            <ClassInfo title="Xếp loại học lực" description="Giỏi" />
-          </Grid>
-          <Grid item xs={5}>
-            <ClassInfo title="Tình trạng" description="Đang học" />
-          </Grid>
-          <Grid item xs={12}>
-            <ClassInfo title="Chứng chỉ ngoại ngữ" description="Đã nộp" />
-          </Grid>
-        </StyledGridContainer>
+          <StyledGridContainer
+            spacing={2}
+            container
+            width="28vw"
+            marginRight="3rem"
+          >
+            <Grid item xs={12}>
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Thông tin học tập
+                </Typography>
+              </StyledHeader>
+              <StyledDivider />
+            </Grid>
+            <Grid item xs={7}>
+              <ClassInfo
+                title="Chuyên ngành"
+                description={studentDetails?.maCN}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <ClassInfo
+                title="GPA"
+                description={studentDetails?.gpa_10.toString()}
+              />
+            </Grid>
+            <Grid item xs={7}>
+              <ClassInfo title="Xếp loại học lực" description="Giỏi" />
+            </Grid>
+            <Grid item xs={5}>
+              <ClassInfo
+                title="Tình trạng"
+                description={studentDetails?.tinhTrang}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ClassInfo
+                title="Chứng chỉ ngoại ngữ"
+                description={studentDetails?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp'}
+              />
+            </Grid>
+          </StyledGridContainer>
+        </AsyncDataRenderer>
         <StyledGridContainer spacing={2} container width="50vw">
           <Grid item xs={12}>
             <StyledHeader>

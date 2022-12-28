@@ -37,6 +37,9 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentAllTerms: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.getStudentAllTerms(args)) || null;
     },
+    studentDetail: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.getStudentDetail(args)) || null;
+    },
   },
 };
 

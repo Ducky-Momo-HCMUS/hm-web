@@ -2,6 +2,7 @@ import {
   StudentAllSubjects,
   StudentAllTerms,
   StudentAveragePoint,
+  StudentDetail,
   StudentSubject,
   StudentSubjectsByTerm,
   StudentTerm,
@@ -101,3 +102,19 @@ export const AVERAGE_POINT = {
   dtbTong: 8.5,
   xepLoai: 'Giỏi',
 } as StudentAveragePoint;
+
+export const STUDENT_DETAIL = {
+  maSV: '19127000',
+  tenSV: 'Nguyễn Văn A',
+  gioiTinh: 1,
+  dob: '22/10/2001',
+  emailSV: '19127000@student.hcmus.edu.vn',
+  emailCaNhan: 'abc@gmail.com',
+  sdt: '0123456789',
+  maCN: 'KTPM',
+  gpa_4: 3.7,
+  gpa_10: 9.2,
+  ngoaiNgu: true,
+  tinhTrang: 'Đang học',
+  maSH: '19clc3',
+} as StudentDetail;

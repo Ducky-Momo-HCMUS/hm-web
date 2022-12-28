@@ -5,6 +5,7 @@ import {
   QueryStudentAllTermsArgs,
   QueryStudentAveragePointArgs,
   QueryStudentAveragePointByTermArgs,
+  QueryStudentDetailArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
@@ -14,6 +15,7 @@ import {
   ALL_TERMS,
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
+  STUDENT_DETAIL,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -130,6 +132,19 @@ class StudentAPI extends BaseDataSource {
       return ALL_TERMS;
     } catch (error) {
       console.error('Error: cannot fetch all terms');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentDetail({ studentId }: QueryStudentDetailArgs) {
+    try {
+      // const studentDetail = await this.get(
+      //   `v1/students/${studentId}`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_DETAIL;
+    } catch (error) {
+      console.error('Error: cannot fetch student detail');
       throw this.handleError(error as ApolloError);
     }
   }

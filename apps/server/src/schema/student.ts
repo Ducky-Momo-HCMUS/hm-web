@@ -18,6 +18,7 @@ const studentTypeDefs = gql`
     ): StudentAveragePoint!
     studentAveragePoint(studentId: String!): StudentAveragePoint!
     studentAllTerms(studentId: String!): StudentAllTerms!
+    studentDetail(studentId: String!): StudentDetail!
   }
 
   type StudentSubjectsByTerm {
@@ -56,6 +57,22 @@ const studentTypeDefs = gql`
     maHK: Int!
     hocKy: Int!
     namHocBD: Int!
+  }
+
+  type StudentDetail {
+    maSV: String!
+    tenSV: String!
+    gioiTinh: Int!
+    dob: String!
+    emailSV: String!
+    emailCaNhan: String!
+    sdt: String!
+    maCN: String!
+    gpa_4: Float!
+    gpa_10: Float!
+    ngoaiNgu: Boolean!
+    tinhTrang: String!
+    maSH: String
   }
 `;
 
