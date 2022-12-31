@@ -27,6 +27,10 @@ const studentTypeDefs = gql`
       studentId: String!
       payload: StudentAddContactInput!
     ): StudentAddContactResponse!
+    studentAddParentInfo(
+      studentId: String!
+      payload: StudentAddParentInfoInput!
+    ): StudentParentInfo!
   }
 
   type StudentSubjectsByTerm {
@@ -112,6 +116,18 @@ const studentTypeDefs = gql`
     maSV: String!
     mxh: String!
     url: String!
+  }
+
+  input StudentParentContactInput {
+    mxh: String!
+    url: String!
+  }
+
+  input StudentAddParentInfoInput {
+    tenPH: String!
+    quanHe: String!
+    sdt: String!
+    lienHe: [StudentParentContactInput!]!
   }
 `;
 

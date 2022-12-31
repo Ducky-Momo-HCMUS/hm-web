@@ -21,7 +21,9 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
 import {
+  StudentAddParentInfoInput,
   useStudentAddContactMutation,
+  useStudentAddParentInfoMutation,
   useStudentDetailQuery,
   useStudentParentInfoListQuery,
 } from '../../../generated-types';
@@ -38,10 +40,11 @@ function StudentProfile() {
   const [openAddStudentContactDialog, setOpenAddStudentContactDialog] =
     useState(false);
 
-  const [openAddOrEditParentInfoDialog, setOpenAddOrEditParentInfoDialog] =
-    useState(false);
-
   const handleOpenAddStudentContactDialog = () => {
+    setOpenAddStudentContactDialog(true);
+  };
+
+  const handleCloseAddStudentContactDialog = () => {
     setOpenAddStudentContactDialog(true);
   };
 
@@ -64,13 +67,31 @@ function StudentProfile() {
     [addStudentContact, id]
   );
 
-  const handleOpenAddOrEditParentInfoDialog = () => {
-    setOpenAddOrEditParentInfoDialog(true);
+  const [openAddParentInfoDialog, setOpenAddParentInfoDialog] = useState(false);
+
+  const handleOpenAddParentInfoDialog = () => {
+    setOpenAddParentInfoDialog(true);
   };
 
-  const handleCloseAddOrEditParentInfoDialog = () => {
-    setOpenAddOrEditParentInfoDialog(false);
+  const handleCloseAddParentInfoDialog = () => {
+    setOpenAddParentInfoDialog(false);
   };
+
+  const [addStudentParentInfo, { loading: addStudentParentInfoLoading }] =
+    useStudentAddParentInfoMutation();
+
+  const handleAddParentInfo = useCallback(
+    (studentInfo: StudentAddParentInfoInput) => {
+      setOpenAddParentInfoDialog(false);
+      addStudentParentInfo({
+        variables: {
+          studentId: id,
+          payload: studentInfo,
+        },
+      });
+    },
+    [addStudentParentInfo, id]
+  );
 
   const { loading: studentDetailsLoading, data: studentDetailsData } =
     useStudentDetailQuery({
@@ -215,12 +236,8 @@ function StudentProfile() {
         </AsyncDataRenderer>
         <AddOrEditStudentContactDialog
           open={openAddStudentContactDialog}
-          onClose={() => {
-            setOpenAddStudentContactDialog(false);
-          }}
-          onClickCancel={() => {
-            setOpenAddStudentContactDialog(false);
-          }}
+          onClose={handleCloseAddStudentContactDialog}
+          onClickCancel={handleCloseAddStudentContactDialog}
           onClickConfirm={handleAddStudentContact}
         />
       </Box>
@@ -290,10 +307,7 @@ function StudentProfile() {
               </StyledHeader>
               <StyledDivider />
               <Box marginTop="0.85rem">
-                <Button
-                  variant="text"
-                  onClick={handleOpenAddOrEditParentInfoDialog}
-                >
+                <Button variant="text" onClick={handleOpenAddParentInfoDialog}>
                   <AddIcon />
                   Thêm phụ huynh
                 </Button>
@@ -304,15 +318,15 @@ function StudentProfile() {
         </AsyncDataRenderer>
 
         <AddOrEditParentInfoDialog
-          open={openAddOrEditParentInfoDialog}
-          onClose={handleCloseAddOrEditParentInfoDialog}
-          onClickCancel={handleCloseAddOrEditParentInfoDialog}
-          onClickConfirm={handleCloseAddOrEditParentInfoDialog}
+          open={openAddParentInfoDialog}
+          onClose={handleCloseAddParentInfoDialog}
+          onClickCancel={handleCloseAddParentInfoDialog}
+          onClickConfirm={handleAddParentInfo}
         />
       </Box>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={addStudentContactLoading}
+        open={addStudentContactLoading || addStudentParentInfoLoading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

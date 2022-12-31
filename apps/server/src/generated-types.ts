@@ -120,6 +120,7 @@ export type Mutation = {
   login?: Maybe<LoginResponse>;
   resetPassword?: Maybe<MutationStatusReponse>;
   studentAddContact: StudentAddContactResponse;
+  studentAddParentInfo: StudentParentInfo;
 };
 
 export type MutationForgotPasswordArgs = {
@@ -140,6 +141,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationStudentAddContactArgs = {
   payload: StudentAddContactInput;
+  studentId: Scalars['String'];
+};
+
+export type MutationStudentAddParentInfoArgs = {
+  payload: StudentAddParentInfoInput;
   studentId: Scalars['String'];
 };
 
@@ -262,6 +268,13 @@ export type StudentAddContactResponse = {
   url: Scalars['String'];
 };
 
+export type StudentAddParentInfoInput = {
+  lienHe: Array<StudentParentContactInput>;
+  quanHe: Scalars['String'];
+  sdt: Scalars['String'];
+  tenPH: Scalars['String'];
+};
+
 export type StudentAllSubjects = {
   __typename?: 'StudentAllSubjects';
   monhoc: Array<StudentSubject>;
@@ -298,6 +311,11 @@ export type StudentDetail = {
 export type StudentParentContact = {
   __typename?: 'StudentParentContact';
   maLHPH: Scalars['Int'];
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentParentContactInput = {
   mxh: Scalars['String'];
   url: Scalars['String'];
 };
@@ -476,11 +494,13 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAddContactInput: StudentAddContactInput;
   StudentAddContactResponse: ResolverTypeWrapper<StudentAddContactResponse>;
+  StudentAddParentInfoInput: StudentAddParentInfoInput;
   StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
   StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentDetail: ResolverTypeWrapper<StudentDetail>;
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
+  StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
   StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
@@ -514,11 +534,13 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   StudentAddContactInput: StudentAddContactInput;
   StudentAddContactResponse: StudentAddContactResponse;
+  StudentAddParentInfoInput: StudentAddParentInfoInput;
   StudentAllSubjects: StudentAllSubjects;
   StudentAllTerms: StudentAllTerms;
   StudentAveragePoint: StudentAveragePoint;
   StudentDetail: StudentDetail;
   StudentParentContact: StudentParentContact;
+  StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: StudentParentInfo;
   StudentParentInfoList: StudentParentInfoList;
   StudentSubject: StudentSubject;
@@ -711,6 +733,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationStudentAddContactArgs, 'payload' | 'studentId'>
+  >;
+  studentAddParentInfo?: Resolver<
+    ResolversTypes['StudentParentInfo'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationStudentAddParentInfoArgs, 'payload' | 'studentId'>
   >;
 };
 

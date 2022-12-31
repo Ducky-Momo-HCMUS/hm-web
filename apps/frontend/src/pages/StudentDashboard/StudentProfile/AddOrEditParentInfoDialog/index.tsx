@@ -20,16 +20,17 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { StyledTextField, StyledMuiLink } from '../../../../components/styles';
 import {
+  StudentAddParentInfoInput,
   StudentParentContact,
   StudentParentInfo,
 } from '../../../../generated-types';
 import { RELATIONSHIP_OPTIONS } from '../../../../mocks/parent';
 
 interface State {
-  fullName: string;
-  relationship: string;
-  phoneNumber: string;
-  contact: StudentParentContact[];
+  tenPH: string;
+  quanHe: string;
+  sdt: string;
+  lienHe: StudentParentContact[];
   mxh: string;
   url: string;
 }
@@ -38,7 +39,7 @@ interface AddOrEditParentInfoDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
+  onClickConfirm: (parentInfo: StudentAddParentInfoInput) => void;
   data?: StudentParentInfo;
 }
 
@@ -50,10 +51,10 @@ function AddOrEditParentInfoDialog({
   data,
 }: AddOrEditParentInfoDialogProps) {
   const [values, setValues] = useState<State>({
-    fullName: data ? data.tenPH : '',
-    relationship: data ? data.quanHe : '',
-    phoneNumber: data ? data.sdt : '',
-    contact: data ? data.lienHe : [],
+    tenPH: data ? data.tenPH : '',
+    quanHe: data ? data.quanHe : '',
+    sdt: data ? data.sdt : '',
+    lienHe: data ? data.lienHe : [],
     mxh: '',
     url: '',
   });
@@ -66,10 +67,10 @@ function AddOrEditParentInfoDialog({
   );
 
   const handleSelectRelationship = useCallback(
-    (event: SelectChangeEvent<typeof values.relationship>) => {
+    (event: SelectChangeEvent<typeof values.quanHe>) => {
       setValues((v) => ({
         ...v,
-        relationship: event.target.value,
+        quanHe: event.target.value,
       }));
     },
     []
@@ -99,11 +100,11 @@ function AddOrEditParentInfoDialog({
         <Box component="form">
           <StyledTextField
             label="Họ tên"
-            name="fullName"
-            value={values.fullName}
+            name="tenPH"
+            value={values.tenPH}
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant="filled"
-            onChange={handleChange('fullName')}
+            onChange={handleChange('tenPH')}
             placeholder="Nhập họ tên phụ huynh..."
             required
             InputLabelProps={{
@@ -121,7 +122,7 @@ function AddOrEditParentInfoDialog({
             <Select
               sx={{
                 '& .MuiSelect-select .notranslate::after':
-                  values.relationship.length === 0
+                  values.lienHe.length === 0
                     ? {
                         content: `"Chọn quan hệ"`,
                         opacity: 0.42,
@@ -131,7 +132,7 @@ function AddOrEditParentInfoDialog({
               labelId="relationship-select-label"
               id="relationship-select"
               label="Quan hệ"
-              value={values.relationship}
+              value={values.quanHe}
               onChange={handleSelectRelationship}
             >
               {RELATIONSHIP_OPTIONS.map((item) => (
@@ -144,17 +145,17 @@ function AddOrEditParentInfoDialog({
           <StyledTextField
             label="Số điện thoại"
             name="phoneNumber"
-            value={values.phoneNumber}
+            value={values.sdt}
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant="filled"
-            onChange={handleChange('phoneNumber')}
+            onChange={handleChange('sdt')}
             placeholder="Nhập số điện thoại..."
             required
             InputLabelProps={{
               shrink: true,
             }}
           />
-          {values.contact.map((social) => (
+          {values.lienHe.map((social) => (
             <Box display="flex" justifyContent="space-between">
               <Tooltip title={social.url} placement="top">
                 <StyledMuiLink href={social.url}>{social.mxh}</StyledMuiLink>
@@ -196,7 +197,18 @@ function AddOrEditParentInfoDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onClickConfirm({
+                tenPH: values.tenPH,
+                quanHe: values.quanHe,
+                sdt: values.sdt,
+                lienHe: values.lienHe,
+              });
+            }}
+          >
             {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>

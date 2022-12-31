@@ -50,6 +50,9 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentAddContact: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.addStudentContact(args)) || null;
     },
+    studentAddParentInfo: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.addStudentParentInfo(args)) || null;
+    },
   },
 };
 

@@ -4,6 +4,7 @@ import {
   StudentAllTerms,
   StudentAveragePoint,
   StudentDetail,
+  StudentParentInfo,
   StudentParentInfoList,
   StudentSubject,
   StudentSubjectsByTerm,
@@ -160,3 +161,18 @@ export const STUDENT_ADD_CONTACT_RESPONSE = {
   mxh: 'Facebook',
   url: 'abc',
 } as StudentAddContactResponse;
+
+export const STUDENT_ADD_PARENT_INFO_RESPONSE = {
+  maPH: 1,
+  tenPH: 'Nguyễn Văn B',
+  quanHe: 'Cha',
+  sdt: '0123456789',
+  sua: true,
+  lienHe: [
+    {
+      maLHPH: 1,
+      mxh: 'Facebook',
+      url: 'abc',
+    },
+  ],
+} as StudentParentInfo;

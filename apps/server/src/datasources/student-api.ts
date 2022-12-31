@@ -2,6 +2,7 @@ import { ApolloError } from 'apollo-server-express';
 
 import {
   MutationStudentAddContactArgs,
+  MutationStudentAddParentInfoArgs,
   QueryStudentAllSubjectsArgs,
   QueryStudentAllTermsArgs,
   QueryStudentAveragePointArgs,
@@ -18,6 +19,7 @@ import {
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
   STUDENT_ADD_CONTACT_RESPONSE,
+  STUDENT_ADD_PARENT_INFO_RESPONSE,
   STUDENT_DETAIL,
   STUDENT_PARENT_INFO_LIST,
   SUBJECTS_BY_TERM,
@@ -174,7 +176,7 @@ class StudentAPI extends BaseDataSource {
   }: MutationStudentAddContactArgs) {
     try {
       // const addedContact = await this.post(
-      //   `v1/students/${studentId}/parents`,
+      //   `v1/students/${studentId}/contacts`,
       //   payload
       // );
       console.log('params', studentId);
@@ -182,6 +184,24 @@ class StudentAPI extends BaseDataSource {
       return STUDENT_ADD_CONTACT_RESPONSE;
     } catch (error) {
       console.error('Error: cannot add student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addStudentParentInfo({
+    studentId,
+    payload,
+  }: MutationStudentAddParentInfoArgs) {
+    try {
+      // const addedParentInfo = await this.post(
+      //   `v1/students/${studentId}/parents`,
+      //   payload
+      // );
+      console.log('params', studentId);
+      console.log('payload', payload);
+      return STUDENT_ADD_PARENT_INFO_RESPONSE;
+    } catch (error) {
+      console.error('Error: cannot add student parent info');
       throw this.handleError(error as ApolloError);
     }
   }
