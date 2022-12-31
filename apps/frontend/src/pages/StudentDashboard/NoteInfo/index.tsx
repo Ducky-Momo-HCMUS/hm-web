@@ -27,16 +27,21 @@ import {
   StyledDivider,
   StyledTitle,
 } from '../../../components/styles';
-import { NOTES_LIST, ROWS_PER_PAGE } from '../../../mocks';
+import { ROWS_PER_PAGE } from '../../../mocks';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
+import {
+  useNoteDetailLazyQuery,
+  useStudentNoteListQuery,
+} from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 
 interface State {
-  selected: number;
+  selected: string;
   page: number;
   title: string;
   tags: string[];
@@ -44,10 +49,30 @@ interface State {
 }
 
 function NoteInfo() {
-  const { id } = useParams();
+  const { id = '' } = useParams();
+
+  const { loading: studentNoteListLoading, data: studentNoteListData } =
+    useStudentNoteListQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const studentNoteList = useMemo(
+    () => studentNoteListData?.studentNoteList?.danhSachGhiChu || [],
+    [studentNoteListData?.studentNoteList?.danhSachGhiChu]
+  );
+
+  const [getNoteDetail, { loading: noteDetailLoading, data: noteDetailData }] =
+    useNoteDetailLazyQuery();
+
+  const noteDetail = useMemo(
+    () => noteDetailData?.noteDetail,
+    [noteDetailData?.noteDetail]
+  );
 
   const [values, setValues] = useState<State>({
-    selected: -1,
+    selected: '',
     page: 0,
     title: '',
     tags: [],
@@ -56,10 +81,26 @@ function NoteInfo() {
 
   const [files, setFiles] = useState<File[]>();
 
-  const initialValue = useMemo(
-    () => (values.selected >= 0 ? NOTES_LIST[values.selected].content : ''),
-    [values.selected]
-  );
+  useEffect(() => {
+    if (values.selected.length > 0) {
+      getNoteDetail({
+        variables: {
+          noteId: values.selected,
+        },
+      });
+    }
+  }, [values.selected]);
+
+  useEffect(() => {
+    if (noteDetail) {
+      setValues((v) => ({
+        ...v,
+        title: noteDetail.tieuDe,
+      }));
+      setValues((v) => ({ ...v, tags: noteDetail.tag as string[] }));
+      setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
+    }
+  }, [noteDetail]);
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleClickSave = useCallback(() => {
@@ -104,14 +145,6 @@ function NoteInfo() {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
 
-  useEffect(() => {
-    if (values.selected >= 0) {
-      setValues((v) => ({ ...v, title: NOTES_LIST[values.selected].title }));
-      setValues((v) => ({ ...v, tags: NOTES_LIST[values.selected].tags }));
-      setFiles(mapImageUrlToFile(NOTES_LIST[values.selected].images));
-    }
-  }, [values.selected]);
-
   return (
     <>
       <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
@@ -151,25 +184,29 @@ function NoteInfo() {
                   </Box>
                 </StyledHeader>
                 <StyledDivider />
-                {NOTES_LIST.slice(
-                  page * ROWS_PER_PAGE,
-                  page * ROWS_PER_PAGE + ROWS_PER_PAGE
-                ).map((item, index) => (
-                  <NoteItem
-                    index={index}
-                    selected={values.selected}
-                    data={item}
-                    onClick={() =>
-                      handleSelectValue('selected', (page + 1) * index)
-                    }
-                    onClickDelete={() => handleClickDelete(index)}
-                  />
-                ))}
+                <AsyncDataRenderer
+                  loading={studentNoteListLoading}
+                  data={studentNoteListData}
+                >
+                  {studentNoteList
+                    .slice(
+                      page * ROWS_PER_PAGE,
+                      page * ROWS_PER_PAGE + ROWS_PER_PAGE
+                    )
+                    .map((item, index) => (
+                      <NoteItem
+                        selected={values.selected}
+                        data={item}
+                        onClick={() => handleSelectValue('selected', item.maGC)}
+                        onClickDelete={() => handleClickDelete(index)}
+                      />
+                    ))}
+                </AsyncDataRenderer>
               </List>
               <TablePagination
                 rowsPerPageOptions={[ROWS_PER_PAGE]}
                 component="div"
-                count={NOTES_LIST.length}
+                count={studentNoteList.length}
                 rowsPerPage={ROWS_PER_PAGE}
                 page={page}
                 onPageChange={handleChangePage}
@@ -177,28 +214,30 @@ function NoteInfo() {
             </Box>
           </Item>
         </Grid>
-        <Grid item xs={12}>
-          <Item>
-            <NoteEditor
-              editorRef={editorRef}
-              initialValue={initialValue}
-              files={files}
-              setFiles={setFiles}
-              onClickSave={handleClickSave}
-              title={values.title}
-              tags={values.tags}
-              handleChangeValue={handleChangeValue}
-              handleSelectTags={handleSelectTags}
-            />
-          </Item>
-        </Grid>
+        <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
+          <Grid item xs={12}>
+            <Item>
+              <NoteEditor
+                editorRef={editorRef}
+                initialValue={noteDetail?.noiDung || ''}
+                files={files}
+                setFiles={setFiles}
+                onClickSave={handleClickSave}
+                title={values.title}
+                tags={values.tags}
+                handleChangeValue={handleChangeValue}
+                handleSelectTags={handleSelectTags}
+              />
+            </Item>
+          </Grid>
+        </AsyncDataRenderer>
       </StyledGridContainer>
       {values.deleteIndex >= 0 && (
         <DeleteNoteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá ghi chú"
-          boldText={NOTES_LIST[values.deleteIndex].title}
+          boldText={studentNoteList[values.deleteIndex].tieuDe}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />

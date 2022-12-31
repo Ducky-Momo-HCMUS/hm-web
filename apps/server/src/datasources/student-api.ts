@@ -13,6 +13,7 @@ import {
   QueryStudentAveragePointByTermArgs,
   QueryStudentDetailArgs,
   QueryStudentParentInfoListArgs,
+  QueryStudentNoteListArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
@@ -27,6 +28,7 @@ import {
   STUDENT_EDIT_CONTACT_RESPONSE,
   STUDENT_PARENT_INFO_LIST,
   STUDENT_PARENT_INFO_RESPONSE,
+  STUDENT_NOTE_LIST,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -273,6 +275,19 @@ class StudentAPI extends BaseDataSource {
       return { status: 200 };
     } catch (error) {
       console.error('Error: cannot delete student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
+    try {
+      // const noteList = await this.get(
+      //   `v1/students/${studentId}/notes`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_NOTE_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch student note list');
       throw this.handleError(error as ApolloError);
     }
   }

@@ -78,6 +78,12 @@ export const accessTable: AccessTable = {
   'v1/students/:id/contacts': {
     gvcn: true,
   },
+  'v1/students/:id/notes': {
+    gvcn: true,
+  },
+  'v1/notes/:id': {
+    gvcn: true,
+  },
 };
 
 function verifyAccessTable() {
