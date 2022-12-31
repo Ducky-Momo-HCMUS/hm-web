@@ -11,9 +11,11 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { PARENTS_DATA } from '../../../mocks/parent';
 import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
-import { useStudentDetailQuery } from '../../../generated-types';
+import {
+  useStudentDetailQuery,
+  useStudentParentInfoListQuery,
+} from '../../../generated-types';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -58,6 +60,20 @@ function StudentProfile() {
   const studentDetails = useMemo(
     () => studentDetailsData?.studentDetail,
     [studentDetailsData?.studentDetail]
+  );
+
+  const {
+    loading: studentParentInfoListLoading,
+    data: studentParentInfoListData,
+  } = useStudentParentInfoListQuery({
+    variables: {
+      studentId: id,
+    },
+  });
+
+  const studentParentInfoList = useMemo(
+    () => studentParentInfoListData?.studentParentInfoList.dsPhuHuynh || [],
+    [studentParentInfoListData?.studentParentInfoList.dsPhuHuynh]
   );
 
   return (
@@ -235,26 +251,32 @@ function StudentProfile() {
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-        <StyledGridContainer spacing={2} container width="50vw">
-          <Grid item xs={12}>
-            <StyledHeader>
-              <Typography component="p" variant="h5">
-                Thông tin phụ huynh
-              </Typography>
-            </StyledHeader>
-            <StyledDivider />
-            <Box marginTop="0.85rem">
-              <Button
-                variant="text"
-                onClick={handleOpenAddOrEditParentInfoDialog}
-              >
-                <AddIcon />
-                Thêm phụ huynh
-              </Button>
-            </Box>
-            <ParentInfoTable data={PARENTS_DATA} />
-          </Grid>
-        </StyledGridContainer>
+        <AsyncDataRenderer
+          loading={studentParentInfoListLoading}
+          data={studentParentInfoListData}
+        >
+          <StyledGridContainer spacing={2} container width="50vw">
+            <Grid item xs={12}>
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Thông tin phụ huynh
+                </Typography>
+              </StyledHeader>
+              <StyledDivider />
+              <Box marginTop="0.85rem">
+                <Button
+                  variant="text"
+                  onClick={handleOpenAddOrEditParentInfoDialog}
+                >
+                  <AddIcon />
+                  Thêm phụ huynh
+                </Button>
+              </Box>
+              <ParentInfoTable data={studentParentInfoList} />
+            </Grid>
+          </StyledGridContainer>
+        </AsyncDataRenderer>
+
         <AddOrEditParentInfoDialog
           open={openAddOrEditParentInfoDialog}
           onClose={handleCloseAddOrEditParentInfoDialog}

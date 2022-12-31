@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { ParentInfo } from '../../../../types';
+import { StudentParentInfo } from '../../../../generated-types';
 import DeleteNoteDialog from '../../../../components/DeleteDialog';
 
 import ParentInfoRow from './ParentInfoRow';
@@ -18,7 +18,7 @@ interface State {
 }
 
 interface ParentInfoTableProps {
-  data: ParentInfo[];
+  data: StudentParentInfo[];
 }
 
 function ParentInfoTable({ data }: ParentInfoTableProps) {
@@ -63,7 +63,7 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
             .map((row, index) => (
               <ParentInfoRow
                 index={index}
-                key={row.fullName}
+                key={row.maPH}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -85,7 +85,7 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá thông tin phụ huynh"
-          boldText={data[values.deleteIndex].fullName}
+          boldText={data[values.deleteIndex].tenPH}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />

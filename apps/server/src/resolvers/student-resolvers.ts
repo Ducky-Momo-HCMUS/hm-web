@@ -40,6 +40,11 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentDetail: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.getStudentDetail(args)) || null;
     },
+    studentParentInfoList: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentParentInfoList(args)) || null
+      );
+    },
   },
 };
 

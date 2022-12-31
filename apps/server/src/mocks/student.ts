@@ -3,6 +3,7 @@ import {
   StudentAllTerms,
   StudentAveragePoint,
   StudentDetail,
+  StudentParentInfoList,
   StudentSubject,
   StudentSubjectsByTerm,
   StudentTerm,
@@ -118,3 +119,36 @@ export const STUDENT_DETAIL = {
   tinhTrang: 'Đang học',
   maSH: '19clc3',
 } as StudentDetail;
+
+export const STUDENT_PARENT_INFO_LIST = {
+  dsPhuHuynh: [
+    {
+      maPH: 1,
+      tenPH: 'Nguyễn Văn B',
+      quanHe: 'Cha',
+      sdt: '0123456789',
+      sua: true,
+      lienHe: [
+        {
+          maLHPH: 1,
+          mxh: 'Facebook',
+          url: 'abc',
+        },
+      ],
+    },
+    {
+      maPH: 2,
+      tenPH: 'Nguyễn Thị C',
+      quanHe: 'Mẹ',
+      sdt: '0123456789',
+      sua: true,
+      lienHe: [
+        {
+          maLHPH: 1,
+          mxh: 'Facebook',
+          url: 'abc',
+        },
+      ],
+    },
+  ],
+} as StudentParentInfoList;

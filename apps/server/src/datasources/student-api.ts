@@ -6,6 +6,7 @@ import {
   QueryStudentAveragePointArgs,
   QueryStudentAveragePointByTermArgs,
   QueryStudentDetailArgs,
+  QueryStudentParentInfoListArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
@@ -16,6 +17,7 @@ import {
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
   STUDENT_DETAIL,
+  STUDENT_PARENT_INFO_LIST,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -145,6 +147,21 @@ class StudentAPI extends BaseDataSource {
       return STUDENT_DETAIL;
     } catch (error) {
       console.error('Error: cannot fetch student detail');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentParentInfoList({
+    studentId,
+  }: QueryStudentParentInfoListArgs) {
+    try {
+      // const studentParentInfoList = await this.get(
+      //   `v1/students/${studentId}/parents`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_PARENT_INFO_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch student parent info list');
       throw this.handleError(error as ApolloError);
     }
   }

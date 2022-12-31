@@ -18,16 +18,18 @@ import {
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { ParentInfo } from '../../../../types';
 import { StyledTextField, StyledMuiLink } from '../../../../components/styles';
-import { Contact } from '../../../../generated-types';
+import {
+  StudentParentContact,
+  StudentParentInfo,
+} from '../../../../generated-types';
 import { RELATIONSHIP_OPTIONS } from '../../../../mocks/parent';
 
 interface State {
   fullName: string;
   relationship: string;
   phoneNumber: string;
-  contact: Contact[];
+  contact: StudentParentContact[];
   mxh: string;
   url: string;
 }
@@ -37,7 +39,7 @@ interface AddOrEditParentInfoDialogProps {
   onClose: any;
   onClickCancel: any;
   onClickConfirm: any;
-  data?: ParentInfo;
+  data?: StudentParentInfo;
 }
 
 function AddOrEditParentInfoDialog({
@@ -48,10 +50,10 @@ function AddOrEditParentInfoDialog({
   data,
 }: AddOrEditParentInfoDialogProps) {
   const [values, setValues] = useState<State>({
-    fullName: data ? data.fullName : '',
-    relationship: data ? data.relationship : '',
-    phoneNumber: data ? data.phoneNumber : '',
-    contact: data ? data.contact : [],
+    fullName: data ? data.tenPH : '',
+    relationship: data ? data.quanHe : '',
+    phoneNumber: data ? data.sdt : '',
+    contact: data ? data.lienHe : [],
     mxh: '',
     url: '',
   });
@@ -74,35 +76,24 @@ function AddOrEditParentInfoDialog({
   );
 
   const handleAddContactRow = useCallback(
-    (_mxh: string, _url: string) => () => {
-      setValues((v) => ({
-        ...v,
-        mxh: '',
-        url: '',
-        contact: values.contact.concat([{ mxh: _mxh, url: _url }]),
-      }));
+    () => () => {
+      // TODO: check required field
+      // TODO: call api
     },
-    [values.contact]
+    []
   );
 
   const handleRemoveContactRow = useCallback(
-    (contact: Contact) => () => {
-      setValues((v) => ({
-        ...v,
-        contact: values.contact.filter((item) => item !== contact),
-      }));
+    (contact: StudentParentContact) => () => {
+      console.log('contact', contact);
     },
-    [values.contact]
+    []
   );
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? (
-          <>Chỉnh sửa thông tin phụ huynh</>
-        ) : (
-          <>Thêm thông tin phụ huynh</>
-        )}
+        {data ? 'Chỉnh sửa thông tin phụ huynh' : 'Thêm thông tin phụ huynh'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">
@@ -198,7 +189,7 @@ function AddOrEditParentInfoDialog({
                 shrink: true,
               }}
             />
-            <IconButton onClick={handleAddContactRow(values.mxh, values.url)}>
+            <IconButton onClick={handleAddContactRow}>
               <AddCircleOutlineIcon />
             </IconButton>
           </Box>
