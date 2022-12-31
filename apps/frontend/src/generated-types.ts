@@ -559,6 +559,17 @@ export type StudentEditParentInfoMutation = {
       url: string;
     }>;
   };
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+export type LoginMutation = {
+  __typename?: 'Mutation';
+  login?:
+    | { __typename?: 'LoginResponse'; token?: string | null | undefined }
+    | null
+    | undefined;
 };
 
 export type HomeroomDetailQueryVariables = Exact<{
@@ -967,6 +978,23 @@ export type StudentAddContactMutationFn = Apollo.MutationFunction<
  *
  * To run a mutation, you first call `useStudentAddContactMutation` within a React component and pass it any options that fit your needs.
  * When your component renders, `useStudentAddContactMutation` returns a tuple that includes:
+export const LoginDocument = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+    }
+  }
+`;
+export type LoginMutationFn = Apollo.MutationFunction<
+  LoginMutation,
+  LoginMutationVariables
+>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
@@ -1283,6 +1311,30 @@ export type StudentEditParentInfoMutationResult =
 export type StudentEditParentInfoMutationOptions = Apollo.BaseMutationOptions<
   StudentEditParentInfoMutation,
   StudentEditParentInfoMutationVariables
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    LoginMutation,
+    LoginMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
+    LoginDocument,
+    options
+  );
+}
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<
+  LoginMutation,
+  LoginMutationVariables
 >;
 export const HomeroomDetailDocument = gql`
   query HomeroomDetail($homeroomId: String!) {
