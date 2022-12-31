@@ -197,7 +197,7 @@ function AddOrEditParentInfoDialog({
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
           <Button color="primary" variant="contained" onClick={onClickConfirm}>
-            {data ? <>Lưu</> : <>Thêm</>}
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>

@@ -119,6 +119,7 @@ export type Mutation = {
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
   resetPassword?: Maybe<MutationStatusReponse>;
+  studentAddContact: StudentAddContactResponse;
 };
 
 export type MutationForgotPasswordArgs = {
@@ -135,6 +136,11 @@ export type MutationResetPasswordArgs = {
   password: Scalars['String'];
   passwordConfirm: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationStudentAddContactArgs = {
+  payload: StudentAddContactInput;
+  studentId: Scalars['String'];
 };
 
 export type MutationStatusReponse = {
@@ -241,6 +247,19 @@ export type QueryStudentTrainingPointArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type StudentAddContactInput = {
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentAddContactResponse = {
+  __typename?: 'StudentAddContactResponse';
+  maLHSV: Scalars['Int'];
+  maSV: Scalars['String'];
+  mxh: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type StudentAllSubjects = {
@@ -455,6 +474,8 @@ export type ResolversTypes = {
   MutationStatusReponse: ResolverTypeWrapper<MutationStatusReponse>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  StudentAddContactInput: StudentAddContactInput;
+  StudentAddContactResponse: ResolverTypeWrapper<StudentAddContactResponse>;
   StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
   StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
@@ -491,6 +512,8 @@ export type ResolversParentTypes = {
   MutationStatusReponse: MutationStatusReponse;
   Query: {};
   String: Scalars['String'];
+  StudentAddContactInput: StudentAddContactInput;
+  StudentAddContactResponse: StudentAddContactResponse;
   StudentAllSubjects: StudentAllSubjects;
   StudentAllTerms: StudentAllTerms;
   StudentAveragePoint: StudentAveragePoint;
@@ -683,6 +706,12 @@ export type MutationResolvers<
       'id' | 'password' | 'passwordConfirm' | 'token'
     >
   >;
+  studentAddContact?: Resolver<
+    ResolversTypes['StudentAddContactResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationStudentAddContactArgs, 'payload' | 'studentId'>
+  >;
 };
 
 export type MutationStatusReponseResolvers<
@@ -813,6 +842,17 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
+};
+
+export type StudentAddContactResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentAddContactResponse'] = ResolversParentTypes['StudentAddContactResponse']
+> = {
+  maLHSV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StudentAllSubjectsResolvers<
@@ -970,6 +1010,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  StudentAddContactResponse?: StudentAddContactResponseResolvers<ContextType>;
   StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
   StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;

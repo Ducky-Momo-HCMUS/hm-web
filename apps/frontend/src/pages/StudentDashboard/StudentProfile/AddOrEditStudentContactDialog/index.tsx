@@ -20,7 +20,7 @@ interface AddOrEditStudentContactDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
+  onClickConfirm: (mxh: string, url: string) => void;
   data?: Contact;
 }
 
@@ -46,11 +46,7 @@ function AddOrEditStudentContactDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? (
-          <>Chỉnh sửa thông tin liên lạc</>
-        ) : (
-          <>Thêm thông tin liên lạc</>
-        )}
+        {data ? 'Chỉnh sửa thông tin liên lạc' : 'Thêm thông tin liên lạc'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">
@@ -83,8 +79,14 @@ function AddOrEditStudentContactDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
-            {data ? <>Lưu</> : <>Thêm</>}
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onClickConfirm(values.mxh, values.url);
+            }}
+          >
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>

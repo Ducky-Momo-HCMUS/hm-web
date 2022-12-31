@@ -1,4 +1,5 @@
 import {
+  StudentAddContactResponse,
   StudentAllSubjects,
   StudentAllTerms,
   StudentAveragePoint,
@@ -152,3 +153,10 @@ export const STUDENT_PARENT_INFO_LIST = {
     },
   ],
 } as StudentParentInfoList;
+
+export const STUDENT_ADD_CONTACT_RESPONSE = {
+  maLHSV: 1,
+  maSV: '19127000',
+  mxh: 'Facebook',
+  url: 'abc',
+} as StudentAddContactResponse;

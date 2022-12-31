@@ -46,6 +46,11 @@ export const studentResolver: Resolvers<ResolverContext> = {
       );
     },
   },
+  Mutation: {
+    studentAddContact: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.addStudentContact(args)) || null;
+    },
+  },
 };
 
 export default studentResolver;

@@ -118,6 +118,7 @@ export type Mutation = {
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
   resetPassword?: Maybe<MutationStatusReponse>;
+  studentAddContact: StudentAddContactResponse;
 };
 
 export type MutationForgotPasswordArgs = {
@@ -134,6 +135,11 @@ export type MutationResetPasswordArgs = {
   password: Scalars['String'];
   passwordConfirm: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationStudentAddContactArgs = {
+  payload: StudentAddContactInput;
+  studentId: Scalars['String'];
 };
 
 export type MutationStatusReponse = {
@@ -240,6 +246,19 @@ export type QueryStudentTrainingPointArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type StudentAddContactInput = {
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentAddContactResponse = {
+  __typename?: 'StudentAddContactResponse';
+  maLHSV: Scalars['Int'];
+  maSV: Scalars['String'];
+  mxh: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type StudentAllSubjects = {
@@ -501,6 +520,22 @@ export type HomeroomTermListQuery = {
       hocKy: number;
       namHocBD: number;
     }>;
+  };
+};
+
+export type StudentAddContactMutationVariables = Exact<{
+  studentId: Scalars['String'];
+  payload: StudentAddContactInput;
+}>;
+
+export type StudentAddContactMutation = {
+  __typename?: 'Mutation';
+  studentAddContact: {
+    __typename?: 'StudentAddContactResponse';
+    maLHSV: number;
+    maSV: string;
+    mxh: string;
+    url: string;
   };
 };
 
@@ -1297,6 +1332,63 @@ export type HomeroomTermListLazyQueryHookResult = ReturnType<
 export type HomeroomTermListQueryResult = Apollo.QueryResult<
   HomeroomTermListQuery,
   HomeroomTermListQueryVariables
+>;
+export const StudentAddContactDocument = gql`
+  mutation StudentAddContact(
+    $studentId: String!
+    $payload: StudentAddContactInput!
+  ) {
+    studentAddContact(studentId: $studentId, payload: $payload) {
+      maLHSV
+      maSV
+      mxh
+      url
+    }
+  }
+`;
+export type StudentAddContactMutationFn = Apollo.MutationFunction<
+  StudentAddContactMutation,
+  StudentAddContactMutationVariables
+>;
+
+/**
+ * __useStudentAddContactMutation__
+ *
+ * To run a mutation, you first call `useStudentAddContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentAddContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentAddContactMutation, { data, loading, error }] = useStudentAddContactMutation({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useStudentAddContactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentAddContactMutation,
+    StudentAddContactMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentAddContactMutation,
+    StudentAddContactMutationVariables
+  >(StudentAddContactDocument, options);
+}
+export type StudentAddContactMutationHookResult = ReturnType<
+  typeof useStudentAddContactMutation
+>;
+export type StudentAddContactMutationResult =
+  Apollo.MutationResult<StudentAddContactMutation>;
+export type StudentAddContactMutationOptions = Apollo.BaseMutationOptions<
+  StudentAddContactMutation,
+  StudentAddContactMutationVariables
 >;
 export const StudentAllSubjectsDocument = gql`
   query StudentAllSubjects($studentId: String!) {

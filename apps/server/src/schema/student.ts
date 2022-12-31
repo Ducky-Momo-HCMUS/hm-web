@@ -22,6 +22,13 @@ const studentTypeDefs = gql`
     studentParentInfoList(studentId: String!): StudentParentInfoList!
   }
 
+  extend type Mutation {
+    studentAddContact(
+      studentId: String!
+      payload: StudentAddContactInput!
+    ): StudentAddContactResponse!
+  }
+
   type StudentSubjectsByTerm {
     monhoc: [StudentSubject!]!
   }
@@ -91,6 +98,18 @@ const studentTypeDefs = gql`
 
   type StudentParentContact {
     maLHPH: Int!
+    mxh: String!
+    url: String!
+  }
+
+  input StudentAddContactInput {
+    mxh: String!
+    url: String!
+  }
+
+  type StudentAddContactResponse {
+    maLHSV: Int!
+    maSV: String!
     mxh: String!
     url: String!
   }

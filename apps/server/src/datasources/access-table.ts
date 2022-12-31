@@ -57,6 +57,9 @@ export const accessTable: AccessTable = {
   'v1/homerooms/:id/students': {
     gvcn: true,
   },
+  'v1/students/:id': {
+    gvcn: true,
+  },
   'v1/students/:id/subjects': {
     gvcn: true,
   },

@@ -1,6 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Button, Grid, Link, Typography } from '@mui/material';
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Link,
+  Typography,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import { StyledHeader } from '../NoteInfo/styles';
@@ -13,6 +21,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
 import {
+  useStudentAddContactMutation,
   useStudentDetailQuery,
   useStudentParentInfoListQuery,
 } from '../../../generated-types';
@@ -26,21 +35,34 @@ import AddOrEditStudentContactDialog from './AddOrEditStudentContactDialog';
 function StudentProfile() {
   const { id = '' } = useParams();
 
-  const [
-    openAddOrEditStudentContactDialog,
-    setOpenAddOrEditStudentContactDialog,
-  ] = useState(false);
+  const [openAddStudentContactDialog, setOpenAddStudentContactDialog] =
+    useState(false);
 
   const [openAddOrEditParentInfoDialog, setOpenAddOrEditParentInfoDialog] =
     useState(false);
 
-  const handleOpenAddOrEditStudentContactDialog = () => {
-    setOpenAddOrEditStudentContactDialog(true);
+  const handleOpenAddStudentContactDialog = () => {
+    setOpenAddStudentContactDialog(true);
   };
 
-  const handleCloseAddOrEditStudentContactDialog = () => {
-    setOpenAddOrEditStudentContactDialog(false);
-  };
+  const [addStudentContact, { loading: addStudentContactLoading }] =
+    useStudentAddContactMutation();
+
+  const handleAddStudentContact = useCallback(
+    (mxh: string, url: string) => {
+      setOpenAddStudentContactDialog(false);
+      addStudentContact({
+        variables: {
+          studentId: id,
+          payload: {
+            mxh,
+            url,
+          },
+        },
+      });
+    },
+    [addStudentContact, id]
+  );
 
   const handleOpenAddOrEditParentInfoDialog = () => {
     setOpenAddOrEditParentInfoDialog(true);
@@ -181,7 +203,7 @@ function StudentProfile() {
                 <ClassInfo title="Mạng xã hội" description="" />
                 <Button
                   variant="text"
-                  onClick={handleOpenAddOrEditStudentContactDialog}
+                  onClick={handleOpenAddStudentContactDialog}
                 >
                   <AddIcon />
                   Thêm
@@ -192,10 +214,14 @@ function StudentProfile() {
           </StyledGridContainer>
         </AsyncDataRenderer>
         <AddOrEditStudentContactDialog
-          open={openAddOrEditStudentContactDialog}
-          onClose={handleCloseAddOrEditStudentContactDialog}
-          onClickCancel={handleCloseAddOrEditStudentContactDialog}
-          onClickConfirm={handleCloseAddOrEditStudentContactDialog}
+          open={openAddStudentContactDialog}
+          onClose={() => {
+            setOpenAddStudentContactDialog(false);
+          }}
+          onClickCancel={() => {
+            setOpenAddStudentContactDialog(false);
+          }}
+          onClickConfirm={handleAddStudentContact}
         />
       </Box>
       <Box
@@ -284,6 +310,12 @@ function StudentProfile() {
           onClickConfirm={handleCloseAddOrEditParentInfoDialog}
         />
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={addStudentContactLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }
