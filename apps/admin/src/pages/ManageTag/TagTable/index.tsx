@@ -1,22 +1,28 @@
-import React, { useCallback, useState } from 'react';
-import { Table, TableBody, TablePagination } from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+} from '@mui/material';
 
-import { Contact } from '../../../../generated-types';
-import DeleteDialog from '../../../../components/DeleteDialog';
+import DeleteDialog from '../../../components/DeleteDialog';
 
-import StudentContactRow from './StudentContactRow';
+import TagTableRow from './TagTableRow';
 
 interface State {
   deleteIndex: number;
 }
-
-interface StudentContactTableProps {
-  data: Contact[];
+interface TagInfoTableProps {
+  data: string[];
 }
 
-function StudentContactTable({ data }: StudentContactTableProps) {
+function TagTable({ data }: TagInfoTableProps) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
@@ -39,14 +45,22 @@ function StudentContactTable({ data }: StudentContactTableProps) {
   );
 
   return (
-    <>
+    <Paper>
       <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>#</TableCell>
+            <TableCell>Tag</TableCell>
+            <TableCell align="center">Thao tác</TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody>
           {data
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => (
-              <StudentContactRow
+              <TagTableRow
                 index={index}
+                key={index}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -67,14 +81,14 @@ function StudentContactTable({ data }: StudentContactTableProps) {
         <DeleteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
-          description="Bạn có đồng ý xoá liên lạc"
-          boldText={data[values.deleteIndex].mxh}
+          description="Bạn có đồng ý xoá tag"
+          boldText={data[values.deleteIndex]}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />
       )}
-    </>
+    </Paper>
   );
 }
 
-export default StudentContactTable;
+export default TagTable;

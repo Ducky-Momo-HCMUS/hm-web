@@ -130,7 +130,7 @@ function AddOrEditParentInfoDialog({
             <Select
               sx={{
                 '& .MuiSelect-select .notranslate::after':
-                  values.contact.length === 0
+                  values.relationship.length === 0
                     ? {
                         content: `"Chọn quan hệ"`,
                         opacity: 0.42,
@@ -141,7 +141,7 @@ function AddOrEditParentInfoDialog({
               id="relationship-select"
               label="Quan hệ"
               value={values.relationship}
-              onChange={() => handleSelectRelationship}
+              onChange={handleSelectRelationship}
             >
               {RELATIONSHIP_OPTIONS.map((item) => (
                 <MenuItem value={item}>
