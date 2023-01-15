@@ -1,22 +1,29 @@
-import React, { useCallback, useState } from 'react';
-import { Table, TableBody, TablePagination } from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+} from '@mui/material';
 
-import { Contact } from '../../../../generated-types';
-import DeleteDialog from '../../../../components/DeleteDialog';
+import { AccountInfo } from '../../../types/account';
+import DeleteDialog from '../../../components/DeleteDialog';
 
-import StudentContactRow from './StudentContactRow';
+import AccountTableRow from './AccountTableRow';
 
 interface State {
   deleteIndex: number;
 }
-
-interface StudentContactTableProps {
-  data: Contact[];
+interface AccountInfoTableProps {
+  data: AccountInfo[];
 }
 
-function StudentContactTable({ data }: StudentContactTableProps) {
+function AccountTable({ data }: AccountInfoTableProps) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
@@ -39,14 +46,24 @@ function StudentContactTable({ data }: StudentContactTableProps) {
   );
 
   return (
-    <>
+    <Paper>
       <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>#</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Loại tài khoản</TableCell>
+            <TableCell>Trạng thái</TableCell>
+            <TableCell align="center">Thao tác</TableCell>
+          </TableRow>
+        </TableHead>
         <TableBody>
           {data
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => (
-              <StudentContactRow
+              <AccountTableRow
                 index={index}
+                key={row.email}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -67,14 +84,14 @@ function StudentContactTable({ data }: StudentContactTableProps) {
         <DeleteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
-          description="Bạn có đồng ý xoá liên lạc"
-          boldText={data[values.deleteIndex].mxh}
+          description="Bạn có đồng ý xoá tài khoản"
+          boldText={data[values.deleteIndex].email}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />
       )}
-    </>
+    </Paper>
   );
 }
 
-export default StudentContactTable;
+export default AccountTable;

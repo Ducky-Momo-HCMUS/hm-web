@@ -9,7 +9,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -27,14 +26,6 @@ function ActionsBar() {
   return (
     <>
       <Box>
-        <IconButton
-          size="large"
-          color="inherit"
-          aria-label="notification"
-          component="label"
-        >
-          <NotificationsIcon fontSize="inherit" />
-        </IconButton>
         <IconButton
           sx={{ paddingRight: 0 }}
           size="large"
