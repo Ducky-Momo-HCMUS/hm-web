@@ -21,8 +21,6 @@ import ErrorMessage from '../../components/ErrorMessage';
 import { useLoginMutation } from '../../generated-types';
 
 interface State {
-  email: string;
-  password: string;
   showPassword: boolean;
 }
 
@@ -36,17 +34,8 @@ const errorMessages = [
 
 function Login() {
   const [values, setValues] = useState<State>({
-    email: '',
-    password: '',
     showPassword: false,
   });
-
-  const handleChange = useCallback(
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues((v) => ({ ...v, [prop]: event.target.value }));
-    },
-    []
-  );
 
   const handleClickShowPassword = useCallback(() => {
     setValues((v) => ({
@@ -69,19 +58,19 @@ function Login() {
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (!values.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
-        setError('Email không hợp lệ');
-        return;
-      }
+      const data = new FormData(event.currentTarget);
 
-      await login({
+      const result = await login({
         variables: {
-          email: values.email,
-          password: values.password,
+          email: data.get('email')?.toString() || '',
+          password: data.get('password')?.toString() || '',
         },
       });
+
+      localStorage.setItem('ACCESS_TOKEN', result.data?.login?.token || '');
+      setError('');
     },
-    [values.email, values.password]
+    []
   );
 
   useEffect(() => {
@@ -91,7 +80,7 @@ function Login() {
     }
 
     const errorId =
-      loginError?.graphQLErrors[0].extensions.response.body.errorId;
+      loginError?.graphQLErrors[0].extensions.response?.body.errorId;
     setError(errorMessages.find((err) => err.id === errorId)?.message || '');
   }, [loginError]);
 
@@ -109,11 +98,11 @@ function Login() {
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <StyledTextField
               required
+              type="email"
               label="Email"
               name="email"
               sx={{ margin: '0.5rem 0', width: '100%' }}
               variant="filled"
-              onChange={handleChange('email')}
               placeholder="Nhập email..."
               InputLabelProps={{
                 shrink: true,
@@ -126,8 +115,6 @@ function Login() {
               sx={{ margin: '0.5rem 0', width: '100%' }}
               type={values.showPassword ? 'text' : 'password'}
               placeholder="Nhập mật khẩu..."
-              value={values.password}
-              onChange={handleChange('password')}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
