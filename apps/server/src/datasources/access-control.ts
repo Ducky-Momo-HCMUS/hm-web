@@ -1,5 +1,8 @@
 import { AccessControl, accessTable, Method } from './access-table';
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 export function getACL(path: string, method?: string) {
   const p = path.startsWith('/') ? path.slice(1) : path;
   const pathACL = accessTable[p];

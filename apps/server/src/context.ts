@@ -1,18 +1,30 @@
 import { IncomingHttpHeaders } from 'http';
 
+import fetch, { Response } from 'node-fetch';
 import { ExpressContext } from 'apollo-server-express';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { ACCOUNT_BASE_URL } from './utils/config';
 
-import type { DataSourceResponse, JwtPayload, RolesContext } from './types';
+import type {
+  DataSourceResponse,
+  JwtPayload,
+  RequestContext,
+  RolesContext,
+} from './types';
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 async function getAccount(id: string, headers: IncomingHttpHeaders) {
   return fetch(`${ACCOUNT_BASE_URL}/v1/accounts/${id}`, {
-    headers: <HeadersInit>headers,
+    headers: { Authorization: headers.authorization! },
   });
 }
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 async function parseResponse(
   response: Response
 ): Promise<DataSourceResponse<RolesContext>> {
@@ -27,26 +39,28 @@ async function parseResponse(
   }
 }
 
-export default async function context({ req }: ExpressContext) {
+export default async function context({
+  req,
+}: ExpressContext): Promise<RequestContext> {
   const { authorization } = req.headers;
-  // From express-jwt
-  const payload: JwtPayload | undefined = (req as any).auth;
-  if (!payload) {
-    return {};
-  }
-  const { sub: id, email } = payload;
-  const res = await getAccount(id, req.headers);
-  const account = await parseResponse(res);
-  const { data } = account;
-  const { admin, gvcn, gvu } = data;
+  // // From express-jwt
+  // const payload: JwtPayload | undefined = (req as any).auth;
+  // if (!payload) {
+  //   return {};
+  // }
+  // const { sub: id, email } = payload;
+  // const res = await getAccount(id, req.headers);
+  // const account = await parseResponse(res);
+  // const { data } = account;
+  // const { admin, gvcn, gvu } = data;
   return {
     authorization,
-    user: {
-      id,
-      email,
-      admin,
-      gvcn,
-      gvu,
-    },
+    // user: {
+    //   id,
+    //   email,
+    //   admin,
+    //   gvcn,
+    //   gvu,
+    // },
   };
 }

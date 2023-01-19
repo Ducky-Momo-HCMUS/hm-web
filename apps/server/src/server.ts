@@ -14,13 +14,13 @@ startServer();
 export async function startServer() {
   const app = express();
 
-  app.use(
-    expressjwt({
-      algorithms: ['ES256'],
-      credentialsRequired: false,
-      secret: await readFile('public.pem'),
-    })
-  );
+  // app.use(
+  //   expressjwt({
+  //     algorithms: ['ES256'],
+  //     credentialsRequired: false,
+  //     secret: await readFile('public.pem'),
+  //   })
+  // );
 
   const server = new ApolloServer({
     typeDefs,

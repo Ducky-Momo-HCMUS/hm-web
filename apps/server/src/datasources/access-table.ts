@@ -1,17 +1,26 @@
 import { RolesContext } from '../types';
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 export interface AccessControl extends RolesContext {
   anonymous?: boolean;
 }
 
 export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 interface AccessTable {
   readonly [path: string]: {
     [method in Method]?: AccessControl;
   } & AccessControl;
 }
 
+/**
+ * @deprecated RBAC now handles on BE
+ */
 export const accessTable: AccessTable = {
   'v1/login': {
     anonymous: true,

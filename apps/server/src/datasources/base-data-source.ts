@@ -8,7 +8,7 @@ import { getACL } from './access-control';
 
 export class BaseDataSource extends RESTDataSource<RequestContext> {
   protected override willSendRequest(req: RequestOptions) {
-    this.authorize(req);
+    // this.authorize(req);
     const { authorization } = this.context;
     if (authorization) {
       req.headers.set('Authorization', authorization);
@@ -18,6 +18,7 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
   /**
    * Compare user role with access table
    * @throws default to ForbiddenError
+   * @deprecated RBAC now handles on BE
    */
   private authorize(req: RequestOptions) {
     const { authorization, user } = this.context;
@@ -46,6 +47,9 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
     }
   }
 
+  /**
+   * @deprecated RBAC now handles on BE
+   */
   protected onUnauthorized(req: RequestOptions) {
     const message = 'Insufficient role based permissions';
     // https://github.com/apollographql/apollo-server/blob/c8ebdc7162a419cc4d00a90041cefbf2951535b6/packages/apollo-datasource-rest/src/RESTDataSource.ts#L143-L150
