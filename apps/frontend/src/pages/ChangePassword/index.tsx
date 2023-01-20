@@ -12,17 +12,21 @@ import {
 import ErrorMessage from '../../components/ErrorMessage';
 
 interface State {
-  password: string;
+  currentPassword: string;
+  newPassword: string;
   confirmPassword: string;
-  showPassword: boolean;
+  showCurrentPassword: boolean;
+  showNewPassword: boolean;
   showConfirmPassword: boolean;
 }
 
-function CreateNewPassword() {
+function ChangePassword() {
   const [values, setValues] = useState<State>({
-    password: '',
+    currentPassword: '',
+    newPassword: '',
     confirmPassword: '',
-    showPassword: false,
+    showCurrentPassword: false,
+    showNewPassword: false,
     showConfirmPassword: false,
   });
 
@@ -33,10 +37,17 @@ function CreateNewPassword() {
     []
   );
 
-  const handleClickShowPassword = useCallback(() => {
+  const handleClickShowCurrentPassword = useCallback(() => {
     setValues((v) => ({
       ...v,
-      showPassword: !v.showPassword,
+      showCurrentPassword: !v.showCurrentPassword,
+    }));
+  }, []);
+
+  const handleClickShowNewPassword = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      showNewPassword: !v.showNewPassword,
     }));
   }, []);
 
@@ -52,14 +63,14 @@ function CreateNewPassword() {
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (values.password !== values.confirmPassword) {
+      if (values.newPassword !== values.confirmPassword) {
         setError('Mật khẩu không khớp');
         return;
       }
 
       setError('');
     },
-    [values.confirmPassword, values.password]
+    [values.confirmPassword, values.newPassword]
   );
 
   return (
@@ -75,21 +86,53 @@ function CreateNewPassword() {
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
             required
-            label="Mật khẩu mới"
-            name="password"
+            label="Mật khẩu hiện tại"
+            placeholder="Nhập mật khẩu..."
+            name="currentPassword"
             sx={{ margin: '0.5rem 0', width: '100%' }}
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
+            type={values.showCurrentPassword ? 'text' : 'password'}
+            value={values.currentPassword}
+            onChange={handleChange('currentPassword')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
+                    onClick={handleClickShowCurrentPassword}
                     edge="end"
                   >
-                    {values.showPassword ? (
+                    {values.showCurrentPassword ? (
+                      <Visibility sx={{ fontSize: '1.25rem' }} />
+                    ) : (
+                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="filled"
+          />
+          <StyledTextField
+            required
+            label="Mật khẩu mới"
+            placeholder="Nhập mật khẩu..."
+            name="newPassword"
+            sx={{ margin: '0.5rem 0', width: '100%' }}
+            type={values.showNewPassword ? 'text' : 'password'}
+            value={values.newPassword}
+            onChange={handleChange('newPassword')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowNewPassword}
+                    edge="end"
+                  >
+                    {values.showNewPassword ? (
                       <Visibility sx={{ fontSize: '1.25rem' }} />
                     ) : (
                       <VisibilityOff sx={{ fontSize: '1.25rem' }} />
@@ -106,6 +149,7 @@ function CreateNewPassword() {
           <StyledTextField
             required
             label="Nhập lại mật khẩu mới"
+            placeholder="Nhập mật khẩu..."
             name="confirmPassword"
             sx={{ margin: '0.5rem 0', width: '100%' }}
             type={values.showConfirmPassword ? 'text' : 'password'}
@@ -144,4 +188,4 @@ function CreateNewPassword() {
   );
 }
 
-export default CreateNewPassword;
+export default ChangePassword;

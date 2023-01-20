@@ -14,6 +14,13 @@ const themeOptions: ThemeOptionsOld = {
       light: '#acd4ea',
     },
   },
+  components: {
+    MuiFormLabel: {
+      styleOverrides: {
+        asterisk: { color: 'red' },
+      },
+    },
+  },
 };
 
 // Create theme

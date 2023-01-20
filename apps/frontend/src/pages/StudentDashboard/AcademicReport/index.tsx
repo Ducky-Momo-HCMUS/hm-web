@@ -217,12 +217,12 @@ function AcademicReport() {
             loading={trainingPointLoading}
             data={trainingPoint}
           >
-            <Button>
+            <Button disabled sx={{ color: '#fff!important' }}>
               ĐRL: {trainingPoint?.drl} | {trainingPoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>
           <AsyncDataRenderer loading={averagePointLoading} data={averagePoint}>
-            <Button>
+            <Button disabled sx={{ color: '#fff!important' }}>
               ĐTB: {averagePoint?.dtbTong} | {averagePoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>

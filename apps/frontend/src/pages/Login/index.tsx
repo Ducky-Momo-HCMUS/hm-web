@@ -77,6 +77,7 @@ function Login() {
         {error && <ErrorMessage content={error} />}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
+            required
             label="Tên đăng nhập"
             name="username"
             sx={{ margin: '0.5rem 0', width: '100%' }}
@@ -88,6 +89,7 @@ function Login() {
             }}
           />
           <StyledTextField
+            required
             label="Mật khẩu"
             name="password"
             sx={{ margin: '0.5rem 0', width: '100%' }}
@@ -104,9 +106,9 @@ function Login() {
                     edge="end"
                   >
                     {values.showPassword ? (
-                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
-                    ) : (
                       <Visibility sx={{ fontSize: '1.25rem' }} />
+                    ) : (
+                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
                     )}
                   </IconButton>
                 </InputAdornment>

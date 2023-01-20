@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   IconButton,
@@ -9,7 +9,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Logout } from '@mui/icons-material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -25,17 +24,11 @@ function ActionsBar() {
     setAnchorEl(null);
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Box>
-        <IconButton
-          size="large"
-          color="inherit"
-          aria-label="notification"
-          component="label"
-        >
-          <NotificationsIcon fontSize="inherit" />
-        </IconButton>
         <IconButton
           sx={{ paddingRight: 0 }}
           size="large"
@@ -109,8 +102,7 @@ function ActionsBar() {
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}
-            href="/logout"
-            LinkComponent={Link}
+            onClick={() => navigate('/login')}
           >
             <ListItemIcon>
               <Logout fontSize="small" />

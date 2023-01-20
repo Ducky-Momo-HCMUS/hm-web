@@ -7,6 +7,8 @@ import React, {
   useState,
 } from 'react';
 import {
+  Box,
+  Button,
   Checkbox,
   FormControl,
   InputLabel,
@@ -122,7 +124,17 @@ function NoteStore() {
       <StyledContainer>
         <Header isAuthenticated />
         <StyledContentWrapper>
-          <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
+            <Button variant="contained">Tạo ghi chú mới</Button>
+          </Box>
           <StyledFilterBar>
             <StyledTextField
               sx={{ width: '20%' }}
