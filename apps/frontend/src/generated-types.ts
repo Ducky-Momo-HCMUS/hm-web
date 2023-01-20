@@ -256,7 +256,9 @@ export type Query = {
   studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
+  studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: StudentNoteList;
+  studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
@@ -327,7 +329,16 @@ export type QueryStudentDetailArgs = {
   studentId: Scalars['String'];
 };
 
+export type QueryStudentDetailSubjectsResultArgs = {
+  studentId: Scalars['String'];
+  subject: Scalars['String'];
+};
+
 export type QueryStudentNoteListArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentOverviewResultArgs = {
   studentId: Scalars['String'];
 };
 
@@ -421,6 +432,12 @@ export type StudentDetail = {
   xepLoai: Scalars['String'];
 };
 
+export type StudentDetailSubjectsResult = {
+  __typename?: 'StudentDetailSubjectsResult';
+  monHoc: Array<SubjectDetailResult>;
+  tichLuy: Scalars['Int'];
+};
+
 export type StudentEditContactInput = {
   mxh: Scalars['String'];
   url: Scalars['String'];
@@ -446,6 +463,19 @@ export type StudentNote = {
 export type StudentNoteList = {
   __typename?: 'StudentNoteList';
   danhSachGhiChu: Array<StudentNote>;
+};
+
+export type StudentOverviewResult = {
+  __typename?: 'StudentOverviewResult';
+  chuyenNganh: Scalars['Int'];
+  coSoNganh: Scalars['Int'];
+  daiCuong: Scalars['Int'];
+  dtb: Scalars['Float'];
+  tenCN: Scalars['String'];
+  tongTC: Scalars['Int'];
+  totNghiep: Scalars['Int'];
+  tuChonChuyenNganh: Scalars['Int'];
+  tuChonTuDo: Scalars['Int'];
 };
 
 export type StudentParentContact = {
@@ -503,6 +533,16 @@ export type StudentTrainingPoint = {
   __typename?: 'StudentTrainingPoint';
   drl: Scalars['Int'];
   xepLoai: Scalars['String'];
+};
+
+export type SubjectDetailResult = {
+  __typename?: 'SubjectDetailResult';
+  diem: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  maMH: Scalars['String'];
+  namHoc: Scalars['Int'];
+  soTC: Scalars['Int'];
+  tenMH: Scalars['String'];
 };
 
 export type LoginMutationVariables = Exact<{

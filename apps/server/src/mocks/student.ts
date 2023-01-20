@@ -7,6 +7,8 @@ import {
   StudentParentInfo,
   StudentParentInfoList,
   StudentNoteList,
+  StudentDetailSubjectsResult,
+  StudentOverviewResult,
   StudentSubject,
   StudentSubjectsByTerm,
   StudentTerm,
@@ -228,3 +230,52 @@ export const STUDENT_NOTE_LIST = {
     },
   ],
 } as StudentNoteList;
+export const STUDENT_OVERVIEW_RESULT = {
+  tenCN: 'Kỹ thuật phần mềm',
+  daiCuong: 56,
+  coSoNganh: 38,
+  chuyenNganh: 12,
+  tuChonChuyenNganh: 8,
+  tuChonTuDo: 4,
+  totNghiep: 0,
+  tongTC: 124,
+  dtb: 7.68,
+} as StudentOverviewResult;
+
+export const STUDENT_DETAIL_SUBJECTS_RESULT = {
+  tichLuy: 11,
+  monHoc: [
+    {
+      maMH: 'BAA00101',
+      tenMH: 'Triết học Mác-Lênin',
+      soTC: 3,
+      namHoc: 2019,
+      hocKy: 2,
+      diem: 7.5,
+    },
+    {
+      maMH: 'BAA00101',
+      tenMH: 'Triết học Mác-Lênin',
+      soTC: 3,
+      namHoc: 2019,
+      hocKy: 2,
+      diem: 7.5,
+    },
+    {
+      maMH: 'BAA00101',
+      tenMH: 'Triết học Mác-Lênin',
+      soTC: 3,
+      namHoc: 2019,
+      hocKy: 2,
+      diem: 7.5,
+    },
+    {
+      maMH: 'BAA00101',
+      tenMH: 'Triết học Mác-Lênin',
+      soTC: 3,
+      namHoc: 2019,
+      hocKy: 2,
+      diem: 7.5,
+    },
+  ],
+} as StudentDetailSubjectsResult;
