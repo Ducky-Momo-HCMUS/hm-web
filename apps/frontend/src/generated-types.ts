@@ -117,6 +117,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
+  noteAdd: NoteAddResponse;
+  noteDelete: NoteDeleteResponse;
+  noteEdit: NoteEditResponse;
   resetPassword?: Maybe<MutationStatusReponse>;
   studentAddContact: StudentContactResponse;
   studentAddParentInfo: StudentParentInfo;
@@ -133,6 +136,19 @@ export type MutationForgotPasswordArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationNoteAddArgs = {
+  payload: NoteAddInput;
+};
+
+export type MutationNoteDeleteArgs = {
+  noteId: Scalars['Int'];
+};
+
+export type MutationNoteEditArgs = {
+  noteId: Scalars['Int'];
+  payload: NoteEditInput;
 };
 
 export type MutationResetPasswordArgs = {
@@ -175,15 +191,45 @@ export type MutationStatusReponse = {
   status?: Maybe<Scalars['Int']>;
 };
 
+export type NoteAddInput = {
+  maSV: Scalars['String'];
+  noiDung: Scalars['String'];
+  tag: Array<Scalars['String']>;
+  tieuDe: Scalars['String'];
+  url: Array<Scalars['String']>;
+};
+
+export type NoteAddResponse = {
+  __typename?: 'NoteAddResponse';
+  status: Scalars['Int'];
+};
+
+export type NoteDeleteResponse = {
+  __typename?: 'NoteDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type NoteDetail = {
   __typename?: 'NoteDetail';
   hinhAnh: Array<NoteImage>;
-  maGC: Scalars['String'];
+  maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type NoteEditInput = {
+  maTag: Array<Scalars['Int']>;
+  noiDung: Scalars['String'];
+  tieuDe: Scalars['String'];
+  url: Array<Scalars['String']>;
+};
+
+export type NoteEditResponse = {
+  __typename?: 'NoteEditResponse';
+  status: Scalars['Int'];
 };
 
 export type NoteImage = {
@@ -257,7 +303,7 @@ export type QueryHomeroomTermListArgs = {
 };
 
 export type QueryNoteDetailArgs = {
-  noteId: Scalars['String'];
+  noteId: Scalars['Int'];
 };
 
 export type QueryStudentAllSubjectsArgs = {
@@ -417,7 +463,7 @@ export type StudentParentInfoList = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
-  maGC: Scalars['String'];
+  maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
@@ -570,6 +616,34 @@ export type LoginMutation = {
     | { __typename?: 'LoginResponse'; token?: string | null | undefined }
     | null
     | undefined;
+};
+
+export type NoteAddMutationVariables = Exact<{
+  payload: NoteAddInput;
+}>;
+
+export type NoteAddMutation = {
+  __typename?: 'Mutation';
+  noteAdd: { __typename?: 'NoteAddResponse'; status: number };
+};
+
+export type NoteDeleteMutationVariables = Exact<{
+  noteId: Scalars['Int'];
+}>;
+
+export type NoteDeleteMutation = {
+  __typename?: 'Mutation';
+  noteDelete: { __typename?: 'NoteDeleteResponse'; status: number };
+};
+
+export type NoteEditMutationVariables = Exact<{
+  noteId: Scalars['Int'];
+  payload: NoteEditInput;
+}>;
+
+export type NoteEditMutation = {
+  __typename?: 'Mutation';
+  noteEdit: { __typename?: 'NoteEditResponse'; status: number };
 };
 
 export type HomeroomDetailQueryVariables = Exact<{
@@ -751,14 +825,14 @@ export type HomeroomTermListQuery = {
 };
 
 export type NoteDetailQueryVariables = Exact<{
-  noteId: Scalars['String'];
+  noteId: Scalars['Int'];
 }>;
 
 export type NoteDetailQuery = {
   __typename?: 'Query';
   noteDetail: {
     __typename?: 'NoteDetail';
-    maGC: string;
+    maGC: number;
     tag: Array<string | null | undefined>;
     tieuDe: string;
     noiDung: string;
@@ -896,7 +970,7 @@ export type StudentNoteListQuery = {
     __typename?: 'StudentNoteList';
     danhSachGhiChu: Array<{
       __typename?: 'StudentNote';
-      maGC: string;
+      maGC: number;
       tag: Array<string | null | undefined>;
       tieuDe: string;
       noiDung: string;
@@ -1335,6 +1409,151 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+>;
+export const NoteAddDocument = gql`
+  mutation NoteAdd($payload: NoteAddInput!) {
+    noteAdd(payload: $payload) {
+      status
+    }
+  }
+`;
+export type NoteAddMutationFn = Apollo.MutationFunction<
+  NoteAddMutation,
+  NoteAddMutationVariables
+>;
+
+/**
+ * __useNoteAddMutation__
+ *
+ * To run a mutation, you first call `useNoteAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNoteAddMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [noteAddMutation, { data, loading, error }] = useNoteAddMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useNoteAddMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    NoteAddMutation,
+    NoteAddMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<NoteAddMutation, NoteAddMutationVariables>(
+    NoteAddDocument,
+    options
+  );
+}
+export type NoteAddMutationHookResult = ReturnType<typeof useNoteAddMutation>;
+export type NoteAddMutationResult = Apollo.MutationResult<NoteAddMutation>;
+export type NoteAddMutationOptions = Apollo.BaseMutationOptions<
+  NoteAddMutation,
+  NoteAddMutationVariables
+>;
+export const NoteDeleteDocument = gql`
+  mutation NoteDelete($noteId: Int!) {
+    noteDelete(noteId: $noteId) {
+      status
+    }
+  }
+`;
+export type NoteDeleteMutationFn = Apollo.MutationFunction<
+  NoteDeleteMutation,
+  NoteDeleteMutationVariables
+>;
+
+/**
+ * __useNoteDeleteMutation__
+ *
+ * To run a mutation, you first call `useNoteDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNoteDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [noteDeleteMutation, { data, loading, error }] = useNoteDeleteMutation({
+ *   variables: {
+ *      noteId: // value for 'noteId'
+ *   },
+ * });
+ */
+export function useNoteDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    NoteDeleteMutation,
+    NoteDeleteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<NoteDeleteMutation, NoteDeleteMutationVariables>(
+    NoteDeleteDocument,
+    options
+  );
+}
+export type NoteDeleteMutationHookResult = ReturnType<
+  typeof useNoteDeleteMutation
+>;
+export type NoteDeleteMutationResult =
+  Apollo.MutationResult<NoteDeleteMutation>;
+export type NoteDeleteMutationOptions = Apollo.BaseMutationOptions<
+  NoteDeleteMutation,
+  NoteDeleteMutationVariables
+>;
+export const NoteEditDocument = gql`
+  mutation NoteEdit($noteId: Int!, $payload: NoteEditInput!) {
+    noteEdit(noteId: $noteId, payload: $payload) {
+      status
+    }
+  }
+`;
+export type NoteEditMutationFn = Apollo.MutationFunction<
+  NoteEditMutation,
+  NoteEditMutationVariables
+>;
+
+/**
+ * __useNoteEditMutation__
+ *
+ * To run a mutation, you first call `useNoteEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNoteEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [noteEditMutation, { data, loading, error }] = useNoteEditMutation({
+ *   variables: {
+ *      noteId: // value for 'noteId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useNoteEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    NoteEditMutation,
+    NoteEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<NoteEditMutation, NoteEditMutationVariables>(
+    NoteEditDocument,
+    options
+  );
+}
+export type NoteEditMutationHookResult = ReturnType<typeof useNoteEditMutation>;
+export type NoteEditMutationResult = Apollo.MutationResult<NoteEditMutation>;
+export type NoteEditMutationOptions = Apollo.BaseMutationOptions<
+  NoteEditMutation,
+  NoteEditMutationVariables
 >;
 export const HomeroomDetailDocument = gql`
   query HomeroomDetail($homeroomId: String!) {
@@ -1968,7 +2187,7 @@ export type HomeroomTermListQueryResult = Apollo.QueryResult<
   HomeroomTermListQueryVariables
 >;
 export const NoteDetailDocument = gql`
-  query NoteDetail($noteId: String!) {
+  query NoteDetail($noteId: Int!) {
     noteDetail(noteId: $noteId) {
       maGC
       tag

@@ -7,7 +7,7 @@ import { StudentNote } from '../../../../generated-types';
 import { StyledContent, StyledListItem, StyledTag } from './styles';
 
 interface NoteItemProps {
-  selected: string;
+  selected: number;
   data: StudentNote;
   onClick: any;
   onClickDelete: any;

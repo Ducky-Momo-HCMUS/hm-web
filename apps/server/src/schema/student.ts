@@ -173,7 +173,7 @@ const studentTypeDefs = gql`
   }
 
   type StudentNote {
-    maGC: String!
+    maGC: Int!
     tag: [String]!
     tieuDe: String!
     noiDung: String!

@@ -8,6 +8,17 @@ export const noteResolver: Resolvers<ResolverContext> = {
       return (await dataSources.noteAPI.getNoteDetail(args)) || null;
     },
   },
+  Mutation: {
+    noteAdd: async (_, args, { dataSources }) => {
+      return (await dataSources.noteAPI.addNote(args)) || null;
+    },
+    noteEdit: async (_, args, { dataSources }) => {
+      return (await dataSources.noteAPI.editNote(args)) || null;
+    },
+    noteDelete: async (_, args, { dataSources }) => {
+      return (await dataSources.noteAPI.deleteNote(args)) || null;
+    },
+  },
 };
 
 export default noteResolver;

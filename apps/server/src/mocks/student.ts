@@ -195,7 +195,7 @@ export const STUDENT_PARENT_INFO_RESPONSE = {
 export const STUDENT_NOTE_LIST = {
   danhSachGhiChu: [
     {
-      maGC: 'GC001',
+      maGC: 1,
       tag: ['Học tập'],
       tieuDe: 'Ghi chú ngày 31/12/2022',
       noiDung: 'Cần cải thiện điểm số',
@@ -203,7 +203,7 @@ export const STUDENT_NOTE_LIST = {
       thoiGianSua: '31/12/2022 15:11',
     },
     {
-      maGC: 'GC002',
+      maGC: 2,
       tag: ['Học tập', 'Chuyên cần'],
       tieuDe: 'Ghi chú ngày 31/12/2022',
       noiDung: 'Cần đi học nhiều hơn',
@@ -211,7 +211,7 @@ export const STUDENT_NOTE_LIST = {
       thoiGianSua: '31/12/2022 15:11',
     },
     {
-      maGC: 'GC003',
+      maGC: 3,
       tag: ['Học tập'],
       tieuDe: 'Ghi chú ngày 31/12/2022',
       noiDung: 'Áp lực học tập',
@@ -219,7 +219,7 @@ export const STUDENT_NOTE_LIST = {
       thoiGianSua: '31/12/2022 15:11',
     },
     {
-      maGC: 'GC004',
+      maGC: 4,
       tag: ['Phụ huynh'],
       tieuDe: 'Ghi chú ngày 31/12/2022',
       noiDung: 'Cần liên hệ phụ huynh',

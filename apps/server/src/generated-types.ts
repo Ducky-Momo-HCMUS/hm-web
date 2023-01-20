@@ -118,6 +118,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
+  noteAdd: NoteAddResponse;
+  noteDelete: NoteDeleteResponse;
+  noteEdit: NoteEditResponse;
   resetPassword?: Maybe<MutationStatusReponse>;
   studentAddContact: StudentContactResponse;
   studentAddParentInfo: StudentParentInfo;
@@ -134,6 +137,19 @@ export type MutationForgotPasswordArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationNoteAddArgs = {
+  payload: NoteAddInput;
+};
+
+export type MutationNoteDeleteArgs = {
+  noteId: Scalars['Int'];
+};
+
+export type MutationNoteEditArgs = {
+  noteId: Scalars['Int'];
+  payload: NoteEditInput;
 };
 
 export type MutationResetPasswordArgs = {
@@ -176,15 +192,45 @@ export type MutationStatusReponse = {
   status?: Maybe<Scalars['Int']>;
 };
 
+export type NoteAddInput = {
+  maSV: Scalars['String'];
+  noiDung: Scalars['String'];
+  tag: Array<Scalars['String']>;
+  tieuDe: Scalars['String'];
+  url: Array<Scalars['String']>;
+};
+
+export type NoteAddResponse = {
+  __typename?: 'NoteAddResponse';
+  status: Scalars['Int'];
+};
+
+export type NoteDeleteResponse = {
+  __typename?: 'NoteDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type NoteDetail = {
   __typename?: 'NoteDetail';
   hinhAnh: Array<NoteImage>;
-  maGC: Scalars['String'];
+  maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type NoteEditInput = {
+  maTag: Array<Scalars['Int']>;
+  noiDung: Scalars['String'];
+  tieuDe: Scalars['String'];
+  url: Array<Scalars['String']>;
+};
+
+export type NoteEditResponse = {
+  __typename?: 'NoteEditResponse';
+  status: Scalars['Int'];
 };
 
 export type NoteImage = {
@@ -258,7 +304,7 @@ export type QueryHomeroomTermListArgs = {
 };
 
 export type QueryNoteDetailArgs = {
-  noteId: Scalars['String'];
+  noteId: Scalars['Int'];
 };
 
 export type QueryStudentAllSubjectsArgs = {
@@ -418,7 +464,7 @@ export type StudentParentInfoList = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
-  maGC: Scalars['String'];
+  maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
@@ -586,7 +632,12 @@ export type ResolversTypes = {
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationStatusReponse: ResolverTypeWrapper<MutationStatusReponse>;
+  NoteAddInput: NoteAddInput;
+  NoteAddResponse: ResolverTypeWrapper<NoteAddResponse>;
+  NoteDeleteResponse: ResolverTypeWrapper<NoteDeleteResponse>;
   NoteDetail: ResolverTypeWrapper<NoteDetail>;
+  NoteEditInput: NoteEditInput;
+  NoteEditResponse: ResolverTypeWrapper<NoteEditResponse>;
   NoteImage: ResolverTypeWrapper<NoteImage>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -635,7 +686,12 @@ export type ResolversParentTypes = {
   LoginResponse: LoginResponse;
   Mutation: {};
   MutationStatusReponse: MutationStatusReponse;
+  NoteAddInput: NoteAddInput;
+  NoteAddResponse: NoteAddResponse;
+  NoteDeleteResponse: NoteDeleteResponse;
   NoteDetail: NoteDetail;
+  NoteEditInput: NoteEditInput;
+  NoteEditResponse: NoteEditResponse;
   NoteImage: NoteImage;
   Query: {};
   String: Scalars['String'];
@@ -833,6 +889,24 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginArgs, 'email' | 'password'>
   >;
+  noteAdd?: Resolver<
+    ResolversTypes['NoteAddResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationNoteAddArgs, 'payload'>
+  >;
+  noteDelete?: Resolver<
+    ResolversTypes['NoteDeleteResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationNoteDeleteArgs, 'noteId'>
+  >;
+  noteEdit?: Resolver<
+    ResolversTypes['NoteEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationNoteEditArgs, 'noteId' | 'payload'>
+  >;
   resetPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
@@ -888,6 +962,22 @@ export type MutationStatusReponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type NoteAddResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteAddResponse'] = ResolversParentTypes['NoteAddResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NoteDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteDeleteResponse'] = ResolversParentTypes['NoteDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type NoteDetailResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NoteDetail'] = ResolversParentTypes['NoteDetail']
@@ -897,7 +987,7 @@ export type NoteDetailResolvers<
     ParentType,
     ContextType
   >;
-  maGC?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tag?: Resolver<
     Array<Maybe<ResolversTypes['String']>>,
@@ -907,6 +997,14 @@ export type NoteDetailResolvers<
   thoiGianSua?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NoteEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteEditResponse'] = ResolversParentTypes['NoteEditResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1186,7 +1284,7 @@ export type StudentNoteResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentNote'] = ResolversParentTypes['StudentNote']
 > = {
-  maGC?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tag?: Resolver<
     Array<Maybe<ResolversTypes['String']>>,
@@ -1273,7 +1371,10 @@ export type Resolvers<ContextType = any> = {
   LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;
+  NoteAddResponse?: NoteAddResponseResolvers<ContextType>;
+  NoteDeleteResponse?: NoteDeleteResponseResolvers<ContextType>;
   NoteDetail?: NoteDetailResolvers<ContextType>;
+  NoteEditResponse?: NoteEditResponseResolvers<ContextType>;
   NoteImage?: NoteImageResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;

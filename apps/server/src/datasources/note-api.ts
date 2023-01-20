@@ -1,6 +1,11 @@
 import { ApolloError } from 'apollo-server-express';
 
-import { QueryNoteDetailArgs } from '../generated-types';
+import {
+  MutationNoteAddArgs,
+  MutationNoteDeleteArgs,
+  MutationNoteEditArgs,
+  QueryNoteDetailArgs,
+} from '../generated-types';
 import { NOTE_DETAIL } from '../mocks/note';
 import { CORE_BASE_URL } from '../utils/config';
 
@@ -24,6 +29,51 @@ class NoteAPI extends BaseDataSource {
       return NOTE_DETAIL;
     } catch (error) {
       console.error('Error: cannot fetch note detail');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addNote({ payload }: MutationNoteAddArgs) {
+    try {
+      // const response = await this.post(
+      //   `v1/notes`,
+      //   {
+      //     payload
+      //   },
+      // );
+      console.log('params', payload);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot add new note');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async editNote({ noteId, payload }: MutationNoteEditArgs) {
+    try {
+      // const response = await this.put(
+      //   `v1/notes/${noteId}`,
+      //   {
+      //     payload
+      //   },
+      // );
+      console.log('params', noteId, payload);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot edit note');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteNote({ noteId }: MutationNoteDeleteArgs) {
+    try {
+      // const response = await this.delete(
+      //   `v1/notes/${noteId}`,
+      // );
+      console.log('params', noteId);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot delete note');
       throw this.handleError(error as ApolloError);
     }
   }

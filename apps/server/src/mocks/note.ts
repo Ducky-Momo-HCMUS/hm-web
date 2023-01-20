@@ -1,7 +1,7 @@
 import { NoteDetail } from '../generated-types';
 
 export const NOTE_DETAIL = {
-  maGC: 'GC001',
+  maGC: 1,
   tag: ['Học tập'],
   tieuDe: 'Ghi chú ngày 31/12/2022',
   noiDung: 'Cần cải thiện điểm số',

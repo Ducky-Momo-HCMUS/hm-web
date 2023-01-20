@@ -38,6 +38,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "eslint-plugin-react-hooks": "^4.6.0",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.12.6"
   }

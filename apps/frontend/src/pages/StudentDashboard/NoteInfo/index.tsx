@@ -9,7 +9,9 @@ import React, {
 import { useParams } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import {
+  Backdrop,
   Box,
+  CircularProgress,
   Grid,
   Link,
   List,
@@ -32,8 +34,13 @@ import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 import {
+  NoteAddInput,
+  NoteEditInput,
+  useNoteAddMutation,
+  useNoteDeleteMutation,
   useNoteDetailLazyQuery,
   useStudentNoteListQuery,
+  useNoteEditMutation,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
@@ -41,11 +48,12 @@ import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 
 interface State {
-  selected: string;
+  selected: number;
   page: number;
   title: string;
   tags: string[];
   deleteIndex: number;
+  isAdding: boolean;
 }
 
 function NoteInfo() {
@@ -72,24 +80,27 @@ function NoteInfo() {
   );
 
   const [values, setValues] = useState<State>({
-    selected: '',
+    selected: -1,
     page: 0,
     title: '',
     tags: [],
     deleteIndex: -1,
+    isAdding: true,
   });
 
   const [files, setFiles] = useState<File[]>();
 
   useEffect(() => {
-    if (values.selected.length > 0) {
+    if (values.selected >= 0) {
       getNoteDetail({
         variables: {
           noteId: values.selected,
         },
       });
     }
-  }, [values.selected]);
+  }, [getNoteDetail, values.selected]);
+
+  const editorRef = useRef<TinyMCEEditor | null>(null);
 
   useEffect(() => {
     if (noteDetail) {
@@ -97,17 +108,58 @@ function NoteInfo() {
         ...v,
         title: noteDetail.tieuDe,
       }));
+      if (editorRef.current) {
+        editorRef.current.setContent(noteDetail.noiDung);
+      }
       setValues((v) => ({ ...v, tags: noteDetail.tag as string[] }));
       setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
     }
   }, [noteDetail]);
 
-  const editorRef = useRef<TinyMCEEditor | null>(null);
-  const handleClickSave = useCallback(() => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+  const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
+  const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+
+  const handleClickSave = useCallback(async () => {
+    if (values.isAdding) {
+      const payload = {
+        tieuDe: values.title,
+        tag: values.tags,
+        noiDung: editorRef.current?.getContent() || '',
+        maSV: id,
+        url: ['https://picsum.photos/200'],
+      } as NoteAddInput;
+
+      await addNote({
+        variables: {
+          payload,
+        },
+      });
+
+      return;
     }
-  }, [editorRef]);
+
+    const payload = {
+      tieuDe: values.title,
+      noiDung: editorRef.current?.getContent() || '',
+      maTag: [1, 2],
+      url: ['https://picsum.photos/200'],
+    } as NoteEditInput;
+
+    await editNote({
+      variables: {
+        noteId: values.selected,
+        payload,
+      },
+    });
+  }, [
+    addNote,
+    editNote,
+    id,
+    values.isAdding,
+    values.selected,
+    values.tags,
+    values.title,
+  ]);
 
   const [page, setPage] = useState(0);
   const handleChangePage = useCallback(
@@ -138,12 +190,31 @@ function NoteInfo() {
   );
 
   const handleSelectValue = useCallback((prop: keyof State, value: any) => {
-    setValues((v) => ({ ...v, [prop]: value }));
+    setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
   }, []);
 
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
+
+  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
+
+  const handleDeleteNote = useCallback(async () => {
+    setValues({ ...values, deleteIndex: -1 });
+    await deleteNote({
+      variables: {
+        noteId: values.deleteIndex,
+      },
+    });
+  }, [deleteNote, values]);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({ ...v, selected: -1, title: '', tags: [] }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+  }, [editorRef]);
 
   return (
     <>
@@ -171,6 +242,7 @@ function NoteInfo() {
                       size="large"
                       aria-label="add note"
                       color="inherit"
+                      onClick={handleReset}
                     >
                       <AddCircleOutlineOutlinedIcon fontSize="inherit" />
                     </StyledIconButton>
@@ -227,6 +299,8 @@ function NoteInfo() {
                 tags={values.tags}
                 handleChangeValue={handleChangeValue}
                 handleSelectTags={handleSelectTags}
+                handleReset={handleReset}
+                isAdding={values.isAdding}
               />
             </Item>
           </Grid>
@@ -239,9 +313,15 @@ function NoteInfo() {
           description="Bạn có đồng ý xoá ghi chú"
           boldText={studentNoteList[values.deleteIndex].tieuDe}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
-          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+          onClickConfirm={handleDeleteNote}
         />
       )}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={deleteNoteLoading || addNoteLoading || editNoteLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }
