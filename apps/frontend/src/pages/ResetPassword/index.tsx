@@ -72,6 +72,7 @@ function ResetPassword() {
         {error && <ErrorMessage content={error} />}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
+            required
             label="Email"
             placeholder="Nhập email..."
             name="teacherId"

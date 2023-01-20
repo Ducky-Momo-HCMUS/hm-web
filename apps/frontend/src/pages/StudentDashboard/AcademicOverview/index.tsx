@@ -24,9 +24,9 @@ function AcademicOverview() {
           <Link underline="hover" color="inherit" href="/">
             Trang chủ
           </Link>
-          <Link underline="hover" color="inherit" href={`/students/${id}`}>
+          <Typography color="text.primary">
             {id} - Nguyễn Ngọc Thanh Tâm
-          </Link>
+          </Typography>
           <Typography color="text.primary">Kết quả học tập</Typography>
         </StyledBreadCrumbs>
         <Button variant="contained">Xuất phiếu điểm</Button>

@@ -8,6 +8,7 @@ import NoteStore from './pages/NoteStore';
 import ResetPassword from './pages/ResetPassword';
 import StatisticalReport from './pages/ClassReport';
 import StudentDashboard from './pages/StudentDashboard';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/students/:id" element={<StudentDashboard />} />
       <Route path="/notes" element={<NoteStore />} />
       <Route path="/classes/:id" element={<ClassDetail />} />

@@ -46,14 +46,6 @@ export const NUMBER_REPORT_INFO = [
     title: 'Tổng số sinh viên nữ',
     value: 23,
   },
-  {
-    title: 'Số lượng sinh viên tăng',
-    value: 0,
-  },
-  {
-    title: 'Số lượng sinh viên giảm',
-    value: 0,
-  },
 ];
 
 export const LEARNING_REPORT_INFO = [

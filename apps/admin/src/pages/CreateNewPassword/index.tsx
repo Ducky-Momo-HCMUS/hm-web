@@ -74,6 +74,7 @@ function CreateNewPassword() {
         {error && <ErrorMessage content={error} />}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <StyledTextField
+            required
             label="Mật khẩu mới"
             name="password"
             sx={{ margin: '0.5rem 0', width: '100%' }}
@@ -89,9 +90,9 @@ function CreateNewPassword() {
                     edge="end"
                   >
                     {values.showPassword ? (
-                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
-                    ) : (
                       <Visibility sx={{ fontSize: '1.25rem' }} />
+                    ) : (
+                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
                     )}
                   </IconButton>
                 </InputAdornment>
@@ -100,6 +101,7 @@ function CreateNewPassword() {
             variant="filled"
           />
           <StyledTextField
+            required
             label="Nhập lại mật khẩu mới"
             name="confirmPassword"
             sx={{ margin: '0.5rem 0', width: '100%' }}
@@ -115,9 +117,9 @@ function CreateNewPassword() {
                     edge="end"
                   >
                     {values.showPassword ? (
-                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
-                    ) : (
                       <Visibility sx={{ fontSize: '1.25rem' }} />
+                    ) : (
+                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
                     )}
                   </IconButton>
                 </InputAdornment>
