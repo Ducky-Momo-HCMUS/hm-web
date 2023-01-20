@@ -21,6 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { StyledTextField, StyledMuiLink } from '../../../../components/styles';
 import {
   StudentAddParentInfoInput,
+  StudentEditParentInfoInput,
   StudentParentContact,
   StudentParentInfo,
 } from '../../../../generated-types';
@@ -30,7 +31,7 @@ interface State {
   tenPH: string;
   quanHe: string;
   sdt: string;
-  lienHe: StudentParentContact[];
+  lienHePH: StudentParentContact[];
   mxh: string;
   url: string;
 }
@@ -39,7 +40,9 @@ interface AddOrEditParentInfoDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: (parentInfo: StudentAddParentInfoInput) => void;
+  onClickConfirm: (
+    parentInfo: StudentAddParentInfoInput | StudentEditParentInfoInput
+  ) => void;
   data?: StudentParentInfo;
 }
 
@@ -54,7 +57,7 @@ function AddOrEditParentInfoDialog({
     tenPH: data ? data.tenPH : '',
     quanHe: data ? data.quanHe : '',
     sdt: data ? data.sdt : '',
-    lienHe: data ? data.lienHe : [],
+    lienHePH: data ? data.lienHePH : [],
     mxh: '',
     url: '',
   });
@@ -76,19 +79,31 @@ function AddOrEditParentInfoDialog({
     []
   );
 
-  const handleAddContactRow = useCallback(
-    () => () => {
-      // TODO: check required field
-      // TODO: call api
-    },
-    []
-  );
+  const handleAddContactRow = useCallback(() => {
+    // TODO: check required field
+    // TODO: call api
+    setValues((v) => ({
+      ...v,
+      lienHe: [...values.lienHePH, { mxh: values.mxh, url: values.url }],
+    }));
+
+    setValues((v) => ({
+      ...v,
+      mxh: '',
+      url: '',
+    }));
+  }, [values.lienHePH, values.mxh, values.url]);
 
   const handleRemoveContactRow = useCallback(
     (contact: StudentParentContact) => () => {
-      console.log('contact', contact);
+      setValues((v) => ({
+        ...v,
+        lienHePH: [
+          ...values.lienHePH.filter((item) => item.url !== contact.url),
+        ],
+      }));
     },
-    []
+    [values.lienHePH]
   );
 
   return (
@@ -122,7 +137,7 @@ function AddOrEditParentInfoDialog({
             <Select
               sx={{
                 '& .MuiSelect-select .notranslate::after':
-                  values.lienHe.length === 0
+                  values.lienHePH.length === 0
                     ? {
                         content: `"Chọn quan hệ"`,
                         opacity: 0.42,
@@ -155,7 +170,7 @@ function AddOrEditParentInfoDialog({
               shrink: true,
             }}
           />
-          {values.lienHe.map((social) => (
+          {values.lienHePH.map((social) => (
             <Box display="flex" justifyContent="space-between">
               <Tooltip title={social.url} placement="top">
                 <StyledMuiLink href={social.url}>{social.mxh}</StyledMuiLink>
@@ -205,7 +220,7 @@ function AddOrEditParentInfoDialog({
                 tenPH: values.tenPH,
                 quanHe: values.quanHe,
                 sdt: values.sdt,
-                lienHe: values.lienHe,
+                lienHePH: values.lienHePH,
               });
             }}
           >

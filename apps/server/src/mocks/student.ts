@@ -1,8 +1,8 @@
 import {
-  StudentAddContactResponse,
   StudentAllSubjects,
   StudentAllTerms,
   StudentAveragePoint,
+  StudentContactResponse,
   StudentDetail,
   StudentParentInfo,
   StudentParentInfoList,
@@ -114,12 +114,20 @@ export const STUDENT_DETAIL = {
   emailSV: '19127000@student.hcmus.edu.vn',
   emailCaNhan: 'abc@gmail.com',
   sdt: '0123456789',
-  maCN: 'KTPM',
+  tenCN: 'Nguyễn Ngọc Thanh Tâm',
   gpa_4: 3.7,
   gpa_10: 9.2,
   ngoaiNgu: true,
   tinhTrang: 'Đang học',
   maSH: '19clc3',
+  xepLoai: 'Giỏi',
+  lienHeSV: [
+    {
+      maLHSV: 1,
+      mxh: 'Facebook',
+      url: 'abc',
+    },
+  ],
 } as StudentDetail;
 
 export const STUDENT_PARENT_INFO_LIST = {
@@ -130,7 +138,7 @@ export const STUDENT_PARENT_INFO_LIST = {
       quanHe: 'Cha',
       sdt: '0123456789',
       sua: true,
-      lienHe: [
+      lienHePH: [
         {
           maLHPH: 1,
           mxh: 'Facebook',
@@ -144,7 +152,7 @@ export const STUDENT_PARENT_INFO_LIST = {
       quanHe: 'Mẹ',
       sdt: '0123456789',
       sua: true,
-      lienHe: [
+      lienHePH: [
         {
           maLHPH: 1,
           mxh: 'Facebook',
@@ -160,15 +168,22 @@ export const STUDENT_ADD_CONTACT_RESPONSE = {
   maSV: '19127000',
   mxh: 'Facebook',
   url: 'abc',
-} as StudentAddContactResponse;
+} as StudentContactResponse;
 
-export const STUDENT_ADD_PARENT_INFO_RESPONSE = {
+export const STUDENT_EDIT_CONTACT_RESPONSE = {
+  maLHSV: 1,
+  maSV: '19127000',
+  mxh: 'Facebook',
+  url: 'abc',
+} as StudentContactResponse;
+
+export const STUDENT_PARENT_INFO_RESPONSE = {
   maPH: 1,
   tenPH: 'Nguyễn Văn B',
   quanHe: 'Cha',
   sdt: '0123456789',
   sua: true,
-  lienHe: [
+  lienHePH: [
     {
       maLHPH: 1,
       mxh: 'Facebook',

@@ -3,6 +3,10 @@ import { ApolloError } from 'apollo-server-express';
 import {
   MutationStudentAddContactArgs,
   MutationStudentAddParentInfoArgs,
+  MutationStudentDeleteContactArgs,
+  MutationStudentDeleteParentInfoArgs,
+  MutationStudentEditContactArgs,
+  MutationStudentEditParentInfoArgs,
   QueryStudentAllSubjectsArgs,
   QueryStudentAllTermsArgs,
   QueryStudentAveragePointArgs,
@@ -19,9 +23,10 @@ import {
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
   STUDENT_ADD_CONTACT_RESPONSE,
-  STUDENT_ADD_PARENT_INFO_RESPONSE,
   STUDENT_DETAIL,
+  STUDENT_EDIT_CONTACT_RESPONSE,
   STUDENT_PARENT_INFO_LIST,
+  STUDENT_PARENT_INFO_RESPONSE,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -188,6 +193,39 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
+  public async editStudentContact({
+    contactId,
+    payload,
+  }: MutationStudentEditContactArgs) {
+    try {
+      // const editedContact = await this.patch(
+      //   `v1/students/contacts/${contactId}`,
+      //   payload
+      // );
+      console.log('params', contactId);
+      console.log('payload', payload);
+      return STUDENT_EDIT_CONTACT_RESPONSE;
+    } catch (error) {
+      console.error('Error: cannot edit student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteStudentContact({
+    contactId,
+  }: MutationStudentDeleteContactArgs) {
+    try {
+      // const response = await this.delete(
+      //   `v1/students/contacts/${contactId}`
+      // );
+      console.log('params', contactId);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot delete student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
   public async addStudentParentInfo({
     studentId,
     payload,
@@ -199,9 +237,42 @@ class StudentAPI extends BaseDataSource {
       // );
       console.log('params', studentId);
       console.log('payload', payload);
-      return STUDENT_ADD_PARENT_INFO_RESPONSE;
+      return STUDENT_PARENT_INFO_RESPONSE;
     } catch (error) {
       console.error('Error: cannot add student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async editStudentParentInfo({
+    parentId,
+    payload,
+  }: MutationStudentEditParentInfoArgs) {
+    try {
+      // const editedParentInfo = await this.post(
+      //   `v1/students/parents/${parentId}`,
+      //   payload
+      // );
+      console.log('params', parentId);
+      console.log('payload', payload);
+      return STUDENT_PARENT_INFO_RESPONSE;
+    } catch (error) {
+      console.error('Error: cannot edit student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteStudentParentInfo({
+    parentId,
+  }: MutationStudentDeleteParentInfoArgs) {
+    try {
+      // const response = await this.delete(
+      //   `v1/students/parents/${parentId}`
+      // );
+      console.log('params', parentId);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot delete student parent info');
       throw this.handleError(error as ApolloError);
     }
   }

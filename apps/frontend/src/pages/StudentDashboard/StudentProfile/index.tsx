@@ -19,8 +19,8 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { STUDENT_CONTACTS_DATA } from '../../../mocks/student';
 import {
+  StudentAddContactInput,
   StudentAddParentInfoInput,
   useStudentAddContactMutation,
   useStudentAddParentInfoMutation,
@@ -31,8 +31,8 @@ import {
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
 import StudentContactTable from './StudentContactTable';
-import AddOrEditParentInfoDialog from './AddOrEditParentInfoDialog';
-import AddOrEditStudentContactDialog from './AddOrEditStudentContactDialog';
+import AddParentInfoDialog from './AddOrEditParentInfoDialog';
+import AddStudentContactDialog from './AddOrEditStudentContactDialog';
 
 function StudentProfile() {
   const { id = '' } = useParams();
@@ -52,15 +52,12 @@ function StudentProfile() {
     useStudentAddContactMutation();
 
   const handleAddStudentContact = useCallback(
-    (mxh: string, url: string) => {
+    (payload: StudentAddContactInput) => {
       setOpenAddStudentContactDialog(false);
       addStudentContact({
         variables: {
           studentId: id,
-          payload: {
-            mxh,
-            url,
-          },
+          payload,
         },
       });
     },
@@ -230,11 +227,11 @@ function StudentProfile() {
                   Thêm
                 </Button>
               </Box>
-              <StudentContactTable data={STUDENT_CONTACTS_DATA} />
+              <StudentContactTable data={studentDetails?.lienHeSV || []} />
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-        <AddOrEditStudentContactDialog
+        <AddStudentContactDialog
           open={openAddStudentContactDialog}
           onClose={handleCloseAddStudentContactDialog}
           onClickCancel={handleCloseAddStudentContactDialog}
@@ -268,7 +265,7 @@ function StudentProfile() {
             <Grid item xs={7}>
               <ClassInfo
                 title="Chuyên ngành"
-                description={studentDetails?.maCN}
+                description={studentDetails?.tenCN}
               />
             </Grid>
             <Grid item xs={5}>
@@ -316,8 +313,7 @@ function StudentProfile() {
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-
-        <AddOrEditParentInfoDialog
+        <AddParentInfoDialog
           open={openAddParentInfoDialog}
           onClose={handleCloseAddParentInfoDialog}
           onClickCancel={handleCloseAddParentInfoDialog}

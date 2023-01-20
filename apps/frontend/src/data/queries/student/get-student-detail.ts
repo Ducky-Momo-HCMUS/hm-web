@@ -10,12 +10,18 @@ export const GET_STUDENT_DETAIL = gql`
       emailSV
       emailCaNhan
       sdt
-      maCN
+      tenCN
       gpa_4
       gpa_10
       ngoaiNgu
       tinhTrang
       maSH
+      xepLoai
+      lienHeSV {
+        maLHSV
+        mxh
+        url
+      }
     }
   }
 `;

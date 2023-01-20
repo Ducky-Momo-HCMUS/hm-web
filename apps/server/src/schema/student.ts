@@ -26,11 +26,21 @@ const studentTypeDefs = gql`
     studentAddContact(
       studentId: String!
       payload: StudentAddContactInput!
-    ): StudentAddContactResponse!
+    ): StudentContactResponse!
+    studentEditContact(
+      contactId: Int!
+      payload: StudentEditContactInput!
+    ): StudentContactResponse!
+    studentDeleteContact(contactId: Int!): StudentDeleteContactResponse!
     studentAddParentInfo(
       studentId: String!
       payload: StudentAddParentInfoInput!
     ): StudentParentInfo!
+    studentEditParentInfo(
+      parentId: Int!
+      payload: StudentEditParentInfoInput!
+    ): StudentParentInfo!
+    studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
   }
 
   type StudentSubjectsByTerm {
@@ -71,6 +81,12 @@ const studentTypeDefs = gql`
     namHocBD: Int!
   }
 
+  type StudentContact {
+    maLHSV: Int!
+    mxh: String!
+    url: String!
+  }
+
   type StudentDetail {
     maSV: String!
     tenSV: String!
@@ -79,12 +95,14 @@ const studentTypeDefs = gql`
     emailSV: String!
     emailCaNhan: String!
     sdt: String!
-    maCN: String!
+    tenCN: String!
     gpa_4: Float!
     gpa_10: Float!
     ngoaiNgu: Boolean!
     tinhTrang: String!
-    maSH: String
+    maSH: String!
+    xepLoai: String!
+    lienHeSV: [StudentContact!]!
   }
 
   type StudentParentInfoList {
@@ -97,11 +115,11 @@ const studentTypeDefs = gql`
     quanHe: String!
     sdt: String!
     sua: Boolean!
-    lienHe: [StudentParentContact!]!
+    lienHePH: [StudentParentContact!]!
   }
 
   type StudentParentContact {
-    maLHPH: Int!
+    maLHPH: Int
     mxh: String!
     url: String!
   }
@@ -111,23 +129,44 @@ const studentTypeDefs = gql`
     url: String!
   }
 
-  type StudentAddContactResponse {
+  input StudentEditContactInput {
+    mxh: String!
+    url: String!
+  }
+
+  type StudentContactResponse {
     maLHSV: Int!
     maSV: String!
     mxh: String!
     url: String!
   }
 
+  type StudentDeleteContactResponse {
+    status: Int!
+  }
+
   input StudentParentContactInput {
     mxh: String!
     url: String!
+    maLHPH: Int
   }
 
   input StudentAddParentInfoInput {
     tenPH: String!
     quanHe: String!
     sdt: String!
-    lienHe: [StudentParentContactInput!]!
+    lienHePH: [StudentParentContactInput!]!
+  }
+
+  input StudentEditParentInfoInput {
+    tenPH: String!
+    quanHe: String!
+    sdt: String!
+    lienHePH: [StudentParentContactInput!]!
+  }
+
+  type StudentDeleteParentInfoResponse {
+    status: Int!
   }
 `;
 

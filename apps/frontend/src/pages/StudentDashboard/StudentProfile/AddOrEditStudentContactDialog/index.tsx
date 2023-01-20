@@ -9,7 +9,11 @@ import {
 import React, { useCallback, useState } from 'react';
 
 import { StyledTextField } from '../../../../components/styles';
-import { Contact } from '../../../../generated-types';
+import {
+  StudentAddContactInput,
+  StudentContact,
+  StudentEditContactInput,
+} from '../../../../generated-types';
 
 interface State {
   mxh: string;
@@ -20,8 +24,10 @@ interface AddOrEditStudentContactDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: (mxh: string, url: string) => void;
-  data?: Contact;
+  onClickConfirm: (
+    payload: StudentEditContactInput | StudentAddContactInput
+  ) => void;
+  data?: StudentContact;
 }
 
 function AddOrEditStudentContactDialog({
@@ -83,7 +89,7 @@ function AddOrEditStudentContactDialog({
             color="primary"
             variant="contained"
             onClick={() => {
-              onClickConfirm(values.mxh, values.url);
+              onClickConfirm({ mxh: values.mxh, url: values.url });
             }}
           >
             {data ? 'Lưu' : 'Thêm'}

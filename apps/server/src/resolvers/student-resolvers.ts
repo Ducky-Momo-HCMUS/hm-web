@@ -50,8 +50,22 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentAddContact: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.addStudentContact(args)) || null;
     },
+    studentEditContact: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.editStudentContact(args)) || null;
+    },
+    studentDeleteContact: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.deleteStudentContact(args)) || null;
+    },
     studentAddParentInfo: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.addStudentParentInfo(args)) || null;
+    },
+    studentEditParentInfo: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.editStudentParentInfo(args)) || null;
+    },
+    studentDeleteParentInfo: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.deleteStudentParentInfo(args)) || null
+      );
     },
   },
 };

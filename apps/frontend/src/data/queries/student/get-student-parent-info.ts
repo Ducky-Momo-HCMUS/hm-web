@@ -9,7 +9,7 @@ export const GET_STUDENT_PARENT_INFO_LIST = gql`
         quanHe
         sdt
         sua
-        lienHe {
+        lienHePH {
           maLHPH
           mxh
           url

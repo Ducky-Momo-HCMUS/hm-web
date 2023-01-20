@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import {
+  Backdrop,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -8,13 +10,20 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { StudentParentInfo } from '../../../../generated-types';
-import DeleteNoteDialog from '../../../../components/DeleteDialog';
+import {
+  StudentEditParentInfoInput,
+  StudentParentInfo,
+  useStudentDeleteParentInfoMutation,
+  useStudentEditParentInfoMutation,
+} from '../../../../generated-types';
+import DeleteDialog from '../../../../components/DeleteDialog';
+import EditParentInfoDialog from '../AddOrEditParentInfoDialog';
 
 import ParentInfoRow from './ParentInfoRow';
 
 interface State {
   deleteIndex: number;
+  editIndex: number;
 }
 
 interface ParentInfoTableProps {
@@ -27,7 +36,12 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
+    editIndex: -1,
   });
+
+  const handleClickEdit = useCallback((index: number) => {
+    setValues((v) => ({ ...v, editIndex: index }));
+  }, []);
 
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
@@ -44,6 +58,34 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
     },
     []
   );
+
+  const [editStudentParentInfo, { loading: editStudentParentInfoLoading }] =
+    useStudentEditParentInfoMutation();
+
+  const handleEditStudentParentInfo = useCallback(
+    async (payload: StudentEditParentInfoInput) => {
+      setValues((v) => ({ ...v, editIndex: -1 }));
+      await editStudentParentInfo({
+        variables: {
+          parentId: data[values.editIndex].maPH,
+          payload,
+        },
+      });
+    },
+    [data, editStudentParentInfo, values.editIndex]
+  );
+
+  const [deleteStudentParentInfo, { loading: deleteStudentParentInfoLoading }] =
+    useStudentDeleteParentInfoMutation();
+
+  const handleDeleteStudentParentInfo = useCallback(async () => {
+    setValues((v) => ({ ...v, deleteIndex: -1 }));
+    await deleteStudentParentInfo({
+      variables: {
+        parentId: data[values.deleteIndex].maPH,
+      },
+    });
+  }, [data, deleteStudentParentInfo, values.deleteIndex]);
 
   return (
     <>
@@ -66,6 +108,7 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
                 key={row.maPH}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
+                onClickEdit={() => handleClickEdit(index)}
               />
             ))}
         </TableBody>
@@ -81,15 +124,32 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
       {values.deleteIndex >= 0 && (
-        <DeleteNoteDialog
+        <DeleteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá thông tin phụ huynh"
           boldText={data[values.deleteIndex].tenPH}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
-          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+          onClickConfirm={handleDeleteStudentParentInfo}
         />
       )}
+
+      {values.editIndex >= 0 && (
+        <EditParentInfoDialog
+          open={values.editIndex >= 0}
+          onClose={() => setValues({ ...values, editIndex: -1 })}
+          onClickCancel={() => setValues({ ...values, editIndex: -1 })}
+          onClickConfirm={handleEditStudentParentInfo}
+          data={data[values.editIndex]}
+        />
+      )}
+
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={editStudentParentInfoLoading || deleteStudentParentInfoLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }

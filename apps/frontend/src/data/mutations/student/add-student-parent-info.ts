@@ -11,7 +11,7 @@ export const ADD_STUDENT_PARENT_INFO = gql`
       quanHe
       sdt
       sua
-      lienHe {
+      lienHePH {
         maLHPH
         mxh
         url
