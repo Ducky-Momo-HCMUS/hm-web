@@ -949,6 +949,28 @@ export type StudentAveragePointQuery = {
   };
 };
 
+export type StudentDetailSubjectsResultQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  subject: Scalars['String'];
+}>;
+
+export type StudentDetailSubjectsResultQuery = {
+  __typename?: 'Query';
+  studentDetailSubjectsResult: {
+    __typename?: 'StudentDetailSubjectsResult';
+    tichLuy: number;
+    monHoc: Array<{
+      __typename?: 'SubjectDetailResult';
+      maMH: string;
+      tenMH: string;
+      soTC: number;
+      namHoc: number;
+      hocKy: number;
+      diem: number;
+    }>;
+  };
+};
+
 export type StudentDetailQueryVariables = Exact<{
   studentId: Scalars['String'];
 }>;
@@ -997,6 +1019,26 @@ export type StudentNoteListQuery = {
       thoiGianTao: string;
       thoiGianSua: string;
     }>;
+  };
+};
+
+export type StudentOverviewResultQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentOverviewResultQuery = {
+  __typename?: 'Query';
+  studentOverviewResult: {
+    __typename?: 'StudentOverviewResult';
+    tenCN: string;
+    daiCuong: number;
+    coSoNganh: number;
+    chuyenNganh: number;
+    tuChonTuDo: number;
+    tuChonChuyenNganh: number;
+    totNghiep: number;
+    tongTC: number;
+    dtb: number;
   };
 };
 
@@ -2550,6 +2592,73 @@ export type StudentAveragePointQueryResult = Apollo.QueryResult<
   StudentAveragePointQuery,
   StudentAveragePointQueryVariables
 >;
+export const StudentDetailSubjectsResultDocument = gql`
+  query StudentDetailSubjectsResult($studentId: String!, $subject: String!) {
+    studentDetailSubjectsResult(studentId: $studentId, subject: $subject) {
+      tichLuy
+      monHoc {
+        maMH
+        tenMH
+        soTC
+        namHoc
+        hocKy
+        diem
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentDetailSubjectsResultQuery__
+ *
+ * To run a query within a React component, call `useStudentDetailSubjectsResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentDetailSubjectsResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentDetailSubjectsResultQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      subject: // value for 'subject'
+ *   },
+ * });
+ */
+export function useStudentDetailSubjectsResultQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentDetailSubjectsResultQuery,
+    StudentDetailSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentDetailSubjectsResultQuery,
+    StudentDetailSubjectsResultQueryVariables
+  >(StudentDetailSubjectsResultDocument, options);
+}
+export function useStudentDetailSubjectsResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentDetailSubjectsResultQuery,
+    StudentDetailSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentDetailSubjectsResultQuery,
+    StudentDetailSubjectsResultQueryVariables
+  >(StudentDetailSubjectsResultDocument, options);
+}
+export type StudentDetailSubjectsResultQueryHookResult = ReturnType<
+  typeof useStudentDetailSubjectsResultQuery
+>;
+export type StudentDetailSubjectsResultLazyQueryHookResult = ReturnType<
+  typeof useStudentDetailSubjectsResultLazyQuery
+>;
+export type StudentDetailSubjectsResultQueryResult = Apollo.QueryResult<
+  StudentDetailSubjectsResultQuery,
+  StudentDetailSubjectsResultQueryVariables
+>;
 export const StudentDetailDocument = gql`
   query StudentDetail($studentId: String!) {
     studentDetail(studentId: $studentId) {
@@ -2690,6 +2799,72 @@ export type StudentNoteListLazyQueryHookResult = ReturnType<
 export type StudentNoteListQueryResult = Apollo.QueryResult<
   StudentNoteListQuery,
   StudentNoteListQueryVariables
+>;
+export const StudentOverviewResultDocument = gql`
+  query StudentOverviewResult($studentId: String!) {
+    studentOverviewResult(studentId: $studentId) {
+      tenCN
+      daiCuong
+      coSoNganh
+      chuyenNganh
+      tuChonTuDo
+      tuChonChuyenNganh
+      totNghiep
+      tongTC
+      dtb
+    }
+  }
+`;
+
+/**
+ * __useStudentOverviewResultQuery__
+ *
+ * To run a query within a React component, call `useStudentOverviewResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentOverviewResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentOverviewResultQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentOverviewResultQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentOverviewResultQuery,
+    StudentOverviewResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentOverviewResultQuery,
+    StudentOverviewResultQueryVariables
+  >(StudentOverviewResultDocument, options);
+}
+export function useStudentOverviewResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentOverviewResultQuery,
+    StudentOverviewResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentOverviewResultQuery,
+    StudentOverviewResultQueryVariables
+  >(StudentOverviewResultDocument, options);
+}
+export type StudentOverviewResultQueryHookResult = ReturnType<
+  typeof useStudentOverviewResultQuery
+>;
+export type StudentOverviewResultLazyQueryHookResult = ReturnType<
+  typeof useStudentOverviewResultLazyQuery
+>;
+export type StudentOverviewResultQueryResult = Apollo.QueryResult<
+  StudentOverviewResultQuery,
+  StudentOverviewResultQueryVariables
 >;
 export const StudentParentInfoListDocument = gql`
   query StudentParentInfoList($studentId: String!) {
