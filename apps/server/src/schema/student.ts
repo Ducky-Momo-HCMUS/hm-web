@@ -21,6 +21,11 @@ const studentTypeDefs = gql`
     studentDetail(studentId: String!): StudentDetail!
     studentParentInfoList(studentId: String!): StudentParentInfoList!
     studentNoteList(studentId: String!): StudentNoteList!
+    studentOverviewResult(studentId: String!): StudentOverviewResult!
+    studentDetailSubjectsResult(
+      studentId: String!
+      subject: String!
+    ): StudentDetailSubjectsResult!
   }
 
   extend type Mutation {
@@ -181,6 +186,32 @@ const studentTypeDefs = gql`
     noiDung: String!
     thoiGianTao: String!
     thoiGianSua: String!
+  }
+
+  type StudentOverviewResult {
+    tenCN: String!
+    daiCuong: Int!
+    coSoNganh: Int!
+    chuyenNganh: Int!
+    tuChonTuDo: Int!
+    tuChonChuyenNganh: Int!
+    totNghiep: Int!
+    tongTC: Int!
+    dtb: Float!
+  }
+
+  type StudentDetailSubjectsResult {
+    tichLuy: Int!
+    monHoc: [SubjectDetailResult!]!
+  }
+
+  type SubjectDetailResult {
+    maMH: String!
+    tenMH: String!
+    soTC: Int!
+    namHoc: Int!
+    hocKy: Int!
+    diem: Float!
   }
 `;
 

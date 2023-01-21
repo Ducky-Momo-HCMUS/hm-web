@@ -10,11 +10,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-import { AcademicResultDetail } from '../../../../../types';
 import { StyledHeader } from '../../../../../components/styles';
+import { SubjectDetailResult } from '../../../../../generated-types';
 
 interface Column {
-  id: 'maMH' | 'tenMH' | 'soTC' | 'namHocBD' | 'hocKy' | 'dtb';
+  id: 'maMH' | 'tenMH' | 'soTC' | 'namHoc' | 'hocKy' | 'diem';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -34,7 +34,7 @@ const columns: readonly Column[] = [
     minWidth: 60,
   },
   {
-    id: 'namHocBD',
+    id: 'namHoc',
     label: 'Năm học',
     minWidth: 120,
   },
@@ -44,7 +44,7 @@ const columns: readonly Column[] = [
     minWidth: 60,
   },
   {
-    id: 'dtb',
+    id: 'diem',
     label: 'Điểm',
     minWidth: 60,
   },
@@ -53,7 +53,7 @@ const columns: readonly Column[] = [
 interface AcademicTableProps {
   header: string;
   description?: string;
-  data: AcademicResultDetail[];
+  data: SubjectDetailResult[];
 }
 
 function AcademicTable({ header, description, data }: AcademicTableProps) {
@@ -81,10 +81,10 @@ function AcademicTable({ header, description, data }: AcademicTableProps) {
                 <TableCell>{item.tenMH}</TableCell>
                 <TableCell>{item.soTC}</TableCell>
                 <TableCell>
-                  {item.namHocBD} - {item.namHocBD + 1}
+                  {item.namHoc} - {item.namHoc + 1}
                 </TableCell>
                 <TableCell>{item.hocKy}</TableCell>
-                <TableCell>{item.dtb}</TableCell>
+                <TableCell>{item.diem}</TableCell>
               </TableRow>
             ))}
           </TableBody>

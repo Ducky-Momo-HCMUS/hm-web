@@ -48,6 +48,17 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentNoteList: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.getStudentNoteList(args)) || null;
     },
+    studentOverviewResult: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentOverviewResult(args)) || null
+      );
+    },
+    studentDetailSubjectsResult: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentDetailSubjectsResult(args)) ||
+        null
+      );
+    },
   },
   Mutation: {
     studentAddContact: async (_, args, { dataSources }) => {

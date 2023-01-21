@@ -257,7 +257,9 @@ export type Query = {
   studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
+  studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: StudentNoteList;
+  studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
@@ -328,7 +330,16 @@ export type QueryStudentDetailArgs = {
   studentId: Scalars['String'];
 };
 
+export type QueryStudentDetailSubjectsResultArgs = {
+  studentId: Scalars['String'];
+  subject: Scalars['String'];
+};
+
 export type QueryStudentNoteListArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentOverviewResultArgs = {
   studentId: Scalars['String'];
 };
 
@@ -422,6 +433,12 @@ export type StudentDetail = {
   xepLoai: Scalars['String'];
 };
 
+export type StudentDetailSubjectsResult = {
+  __typename?: 'StudentDetailSubjectsResult';
+  monHoc: Array<SubjectDetailResult>;
+  tichLuy: Scalars['Int'];
+};
+
 export type StudentEditContactInput = {
   mxh: Scalars['String'];
   url: Scalars['String'];
@@ -447,6 +464,19 @@ export type StudentNote = {
 export type StudentNoteList = {
   __typename?: 'StudentNoteList';
   danhSachGhiChu: Array<StudentNote>;
+};
+
+export type StudentOverviewResult = {
+  __typename?: 'StudentOverviewResult';
+  chuyenNganh: Scalars['Int'];
+  coSoNganh: Scalars['Int'];
+  daiCuong: Scalars['Int'];
+  dtb: Scalars['Float'];
+  tenCN: Scalars['String'];
+  tongTC: Scalars['Int'];
+  totNghiep: Scalars['Int'];
+  tuChonChuyenNganh: Scalars['Int'];
+  tuChonTuDo: Scalars['Int'];
 };
 
 export type StudentParentContact = {
@@ -504,6 +534,16 @@ export type StudentTrainingPoint = {
   __typename?: 'StudentTrainingPoint';
   drl: Scalars['Int'];
   xepLoai: Scalars['String'];
+};
+
+export type SubjectDetailResult = {
+  __typename?: 'SubjectDetailResult';
+  diem: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  maMH: Scalars['String'];
+  namHoc: Scalars['Int'];
+  soTC: Scalars['Int'];
+  tenMH: Scalars['String'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -651,10 +691,12 @@ export type ResolversTypes = {
   StudentDeleteContactResponse: ResolverTypeWrapper<StudentDeleteContactResponse>;
   StudentDeleteParentInfoResponse: ResolverTypeWrapper<StudentDeleteParentInfoResponse>;
   StudentDetail: ResolverTypeWrapper<StudentDetail>;
+  StudentDetailSubjectsResult: ResolverTypeWrapper<StudentDetailSubjectsResult>;
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentNote: ResolverTypeWrapper<StudentNote>;
   StudentNoteList: ResolverTypeWrapper<StudentNoteList>;
+  StudentOverviewResult: ResolverTypeWrapper<StudentOverviewResult>;
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
@@ -663,6 +705,7 @@ export type ResolversTypes = {
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
+  SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -705,10 +748,12 @@ export type ResolversParentTypes = {
   StudentDeleteContactResponse: StudentDeleteContactResponse;
   StudentDeleteParentInfoResponse: StudentDeleteParentInfoResponse;
   StudentDetail: StudentDetail;
+  StudentDetailSubjectsResult: StudentDetailSubjectsResult;
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentNote: StudentNote;
   StudentNoteList: StudentNoteList;
+  StudentOverviewResult: StudentOverviewResult;
   StudentParentContact: StudentParentContact;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: StudentParentInfo;
@@ -717,6 +762,7 @@ export type ResolversParentTypes = {
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTerm: StudentTerm;
   StudentTrainingPoint: StudentTrainingPoint;
+  SubjectDetailResult: SubjectDetailResult;
 };
 
 export type ContactResolvers<
@@ -1119,11 +1165,23 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentDetailArgs, 'studentId'>
   >;
+  studentDetailSubjectsResult?: Resolver<
+    ResolversTypes['StudentDetailSubjectsResult'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentDetailSubjectsResultArgs, 'studentId' | 'subject'>
+  >;
   studentNoteList?: Resolver<
     ResolversTypes['StudentNoteList'],
     ParentType,
     ContextType,
     RequireFields<QueryStudentNoteListArgs, 'studentId'>
+  >;
+  studentOverviewResult?: Resolver<
+    ResolversTypes['StudentOverviewResult'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentOverviewResultArgs, 'studentId'>
   >;
   studentParentInfoList?: Resolver<
     ResolversTypes['StudentParentInfoList'],
@@ -1247,6 +1305,19 @@ export type StudentDetailResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StudentDetailSubjectsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentDetailSubjectsResult'] = ResolversParentTypes['StudentDetailSubjectsResult']
+> = {
+  monHoc?: Resolver<
+    Array<ResolversTypes['SubjectDetailResult']>,
+    ParentType,
+    ContextType
+  >;
+  tichLuy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type StudentNoteResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentNote'] = ResolversParentTypes['StudentNote']
@@ -1273,6 +1344,22 @@ export type StudentNoteListResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentOverviewResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentOverviewResult'] = ResolversParentTypes['StudentOverviewResult']
+> = {
+  chuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  coSoNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  daiCuong?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tongTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totNghiep?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tuChonChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tuChonTuDo?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1360,6 +1447,19 @@ export type StudentTrainingPointResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SubjectDetailResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SubjectDetailResult'] = ResolversParentTypes['SubjectDetailResult']
+> = {
+  diem?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  soTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Contact?: ContactResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
@@ -1391,8 +1491,10 @@ export type Resolvers<ContextType = any> = {
   StudentDeleteContactResponse?: StudentDeleteContactResponseResolvers<ContextType>;
   StudentDeleteParentInfoResponse?: StudentDeleteParentInfoResponseResolvers<ContextType>;
   StudentDetail?: StudentDetailResolvers<ContextType>;
+  StudentDetailSubjectsResult?: StudentDetailSubjectsResultResolvers<ContextType>;
   StudentNote?: StudentNoteResolvers<ContextType>;
   StudentNoteList?: StudentNoteListResolvers<ContextType>;
+  StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;
   StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
@@ -1400,4 +1502,5 @@ export type Resolvers<ContextType = any> = {
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
+  SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;
 };

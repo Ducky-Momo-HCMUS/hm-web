@@ -14,6 +14,8 @@ import {
   QueryStudentDetailArgs,
   QueryStudentParentInfoListArgs,
   QueryStudentNoteListArgs,
+  QueryStudentDetailSubjectsResultArgs,
+  QueryStudentOverviewResultArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
@@ -29,6 +31,8 @@ import {
   STUDENT_PARENT_INFO_LIST,
   STUDENT_PARENT_INFO_RESPONSE,
   STUDENT_NOTE_LIST,
+  STUDENT_DETAIL_SUBJECTS_RESULT,
+  STUDENT_OVERVIEW_RESULT,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -228,6 +232,21 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
+  public async getStudentOverviewResult({
+    studentId,
+  }: QueryStudentOverviewResultArgs) {
+    try {
+      // const overviewResult = await this.get(
+      //   `v1/students/${studentId}/general`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_OVERVIEW_RESULT;
+    } catch (error) {
+      console.error('Error: cannot fetch student overview result');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
   public async addStudentParentInfo({
     studentId,
     payload,
@@ -288,6 +307,22 @@ class StudentAPI extends BaseDataSource {
       return STUDENT_NOTE_LIST;
     } catch (error) {
       console.error('Error: cannot fetch student note list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentDetailSubjectsResult({
+    studentId,
+    subject,
+  }: QueryStudentDetailSubjectsResultArgs) {
+    try {
+      // const detailSubjectsResult = await this.get(
+      //   `v1/students/${studentId}?subject=${subject}`,
+      // );
+      console.log('params', studentId, subject);
+      return STUDENT_DETAIL_SUBJECTS_RESULT;
+    } catch (error) {
+      console.error('Error: cannot fetch student detail subjects result');
       throw this.handleError(error as ApolloError);
     }
   }
