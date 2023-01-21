@@ -36,6 +36,8 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomList() {
     try {
       // const homeroomList = await this.get('v1/homerooms');
+
+      // return homeroomList;
       return HOMEROOM_LIST;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');

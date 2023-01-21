@@ -41,6 +41,7 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+    studentNoteList(studentId: String!): StudentNoteList!
   }
 
   type StudentSubjectsByTerm {
@@ -167,6 +168,17 @@ const studentTypeDefs = gql`
 
   type StudentDeleteParentInfoResponse {
     status: Int!
+  type StudentNoteList {
+    danhSachGhiChu: [StudentNote!]!
+  }
+
+  type StudentNote {
+    maGC: Int!
+    tag: [String]!
+    tieuDe: String!
+    noiDung: String!
+    thoiGianTao: String!
+    thoiGianSua: String!
   }
 `;
 

@@ -9,7 +9,9 @@ import React, {
 import { useParams } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import {
+  Backdrop,
   Box,
+  CircularProgress,
   Grid,
   Link,
   List,
@@ -27,10 +29,20 @@ import {
   StyledDivider,
   StyledTitle,
 } from '../../../components/styles';
-import { NOTES_LIST, ROWS_PER_PAGE } from '../../../mocks';
+import { ROWS_PER_PAGE } from '../../../mocks';
 import { mapImageUrlToFile } from '../../../utils';
 import { File } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
+import {
+  NoteAddInput,
+  NoteEditInput,
+  useNoteAddMutation,
+  useNoteDeleteMutation,
+  useNoteDetailLazyQuery,
+  useStudentNoteListQuery,
+  useNoteEditMutation,
+} from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
@@ -41,10 +53,31 @@ interface State {
   title: string;
   tags: string[];
   deleteIndex: number;
+  isAdding: boolean;
 }
 
 function NoteInfo() {
-  const { id } = useParams();
+  const { id = '' } = useParams();
+
+  const { loading: studentNoteListLoading, data: studentNoteListData } =
+    useStudentNoteListQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const studentNoteList = useMemo(
+    () => studentNoteListData?.studentNoteList?.danhSachGhiChu || [],
+    [studentNoteListData?.studentNoteList?.danhSachGhiChu]
+  );
+
+  const [getNoteDetail, { loading: noteDetailLoading, data: noteDetailData }] =
+    useNoteDetailLazyQuery();
+
+  const noteDetail = useMemo(
+    () => noteDetailData?.noteDetail,
+    [noteDetailData?.noteDetail]
+  );
 
   const [values, setValues] = useState<State>({
     selected: -1,
@@ -52,21 +85,81 @@ function NoteInfo() {
     title: '',
     tags: [],
     deleteIndex: -1,
+    isAdding: true,
   });
 
   const [files, setFiles] = useState<File[]>();
 
-  const initialValue = useMemo(
-    () => (values.selected >= 0 ? NOTES_LIST[values.selected].content : ''),
-    [values.selected]
-  );
+  useEffect(() => {
+    if (values.selected >= 0) {
+      getNoteDetail({
+        variables: {
+          noteId: values.selected,
+        },
+      });
+    }
+  }, [getNoteDetail, values.selected]);
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  const handleClickSave = useCallback(() => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
+
+  useEffect(() => {
+    if (noteDetail) {
+      setValues((v) => ({
+        ...v,
+        title: noteDetail.tieuDe,
+      }));
+      if (editorRef.current) {
+        editorRef.current.setContent(noteDetail.noiDung);
+      }
+      setValues((v) => ({ ...v, tags: noteDetail.tag as string[] }));
+      setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
     }
-  }, [editorRef]);
+  }, [noteDetail]);
+
+  const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
+  const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+
+  const handleClickSave = useCallback(async () => {
+    if (values.isAdding) {
+      const payload = {
+        tieuDe: values.title,
+        tag: values.tags,
+        noiDung: editorRef.current?.getContent() || '',
+        maSV: id,
+        url: ['https://picsum.photos/200'],
+      } as NoteAddInput;
+
+      await addNote({
+        variables: {
+          payload,
+        },
+      });
+
+      return;
+    }
+
+    const payload = {
+      tieuDe: values.title,
+      noiDung: editorRef.current?.getContent() || '',
+      maTag: [1, 2],
+      url: ['https://picsum.photos/200'],
+    } as NoteEditInput;
+
+    await editNote({
+      variables: {
+        noteId: values.selected,
+        payload,
+      },
+    });
+  }, [
+    addNote,
+    editNote,
+    id,
+    values.isAdding,
+    values.selected,
+    values.tags,
+    values.title,
+  ]);
 
   const [page, setPage] = useState(0);
   const handleChangePage = useCallback(
@@ -97,20 +190,31 @@ function NoteInfo() {
   );
 
   const handleSelectValue = useCallback((prop: keyof State, value: any) => {
-    setValues((v) => ({ ...v, [prop]: value }));
+    setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
   }, []);
 
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
 
-  useEffect(() => {
-    if (values.selected >= 0) {
-      setValues((v) => ({ ...v, title: NOTES_LIST[values.selected].title }));
-      setValues((v) => ({ ...v, tags: NOTES_LIST[values.selected].tags }));
-      setFiles(mapImageUrlToFile(NOTES_LIST[values.selected].images));
+  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
+
+  const handleDeleteNote = useCallback(async () => {
+    setValues({ ...values, deleteIndex: -1 });
+    await deleteNote({
+      variables: {
+        noteId: values.deleteIndex,
+      },
+    });
+  }, [deleteNote, values]);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({ ...v, selected: -1, title: '', tags: [] }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
     }
-  }, [values.selected]);
+  }, [editorRef]);
 
   return (
     <>
@@ -138,6 +242,7 @@ function NoteInfo() {
                       size="large"
                       aria-label="add note"
                       color="inherit"
+                      onClick={handleReset}
                     >
                       <AddCircleOutlineOutlinedIcon fontSize="inherit" />
                     </StyledIconButton>
@@ -151,25 +256,29 @@ function NoteInfo() {
                   </Box>
                 </StyledHeader>
                 <StyledDivider />
-                {NOTES_LIST.slice(
-                  page * ROWS_PER_PAGE,
-                  page * ROWS_PER_PAGE + ROWS_PER_PAGE
-                ).map((item, index) => (
-                  <NoteItem
-                    index={index}
-                    selected={values.selected}
-                    data={item}
-                    onClick={() =>
-                      handleSelectValue('selected', (page + 1) * index)
-                    }
-                    onClickDelete={() => handleClickDelete(index)}
-                  />
-                ))}
+                <AsyncDataRenderer
+                  loading={studentNoteListLoading}
+                  data={studentNoteListData}
+                >
+                  {studentNoteList
+                    .slice(
+                      page * ROWS_PER_PAGE,
+                      page * ROWS_PER_PAGE + ROWS_PER_PAGE
+                    )
+                    .map((item, index) => (
+                      <NoteItem
+                        selected={values.selected}
+                        data={item}
+                        onClick={() => handleSelectValue('selected', item.maGC)}
+                        onClickDelete={() => handleClickDelete(index)}
+                      />
+                    ))}
+                </AsyncDataRenderer>
               </List>
               <TablePagination
                 rowsPerPageOptions={[ROWS_PER_PAGE]}
                 component="div"
-                count={NOTES_LIST.length}
+                count={studentNoteList.length}
                 rowsPerPage={ROWS_PER_PAGE}
                 page={page}
                 onPageChange={handleChangePage}
@@ -177,32 +286,42 @@ function NoteInfo() {
             </Box>
           </Item>
         </Grid>
-        <Grid item xs={12}>
-          <Item>
-            <NoteEditor
-              editorRef={editorRef}
-              initialValue={initialValue}
-              files={files}
-              setFiles={setFiles}
-              onClickSave={handleClickSave}
-              title={values.title}
-              tags={values.tags}
-              handleChangeValue={handleChangeValue}
-              handleSelectTags={handleSelectTags}
-            />
-          </Item>
-        </Grid>
+        <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
+          <Grid item xs={12}>
+            <Item>
+              <NoteEditor
+                editorRef={editorRef}
+                initialValue={noteDetail?.noiDung || ''}
+                files={files}
+                setFiles={setFiles}
+                onClickSave={handleClickSave}
+                title={values.title}
+                tags={values.tags}
+                handleChangeValue={handleChangeValue}
+                handleSelectTags={handleSelectTags}
+                handleReset={handleReset}
+                isAdding={values.isAdding}
+              />
+            </Item>
+          </Grid>
+        </AsyncDataRenderer>
       </StyledGridContainer>
       {values.deleteIndex >= 0 && (
         <DeleteNoteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá ghi chú"
-          boldText={NOTES_LIST[values.deleteIndex].title}
+          boldText={studentNoteList[values.deleteIndex].tieuDe}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
-          onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+          onClickConfirm={handleDeleteNote}
         />
       )}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={deleteNoteLoading || addNoteLoading || editNoteLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }

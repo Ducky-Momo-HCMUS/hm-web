@@ -45,6 +45,9 @@ export const studentResolver: Resolvers<ResolverContext> = {
         (await dataSources.studentAPI.getStudentParentInfoList(args)) || null
       );
     },
+    studentNoteList: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.getStudentNoteList(args)) || null;
+    },
   },
   Mutation: {
     studentAddContact: async (_, args, { dataSources }) => {

@@ -1,4 +1,4 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -32,6 +32,8 @@ interface NoteEditorProps {
   tags: string[];
   handleChangeValue: any;
   handleSelectTags: any;
+  handleReset?: any;
+  isAdding?: boolean;
 }
 
 function NoteEditor({
@@ -44,6 +46,8 @@ function NoteEditor({
   tags,
   handleChangeValue,
   handleSelectTags,
+  handleReset,
+  isAdding,
 }: NoteEditorProps) {
   return (
     <>
@@ -120,11 +124,18 @@ function NoteEditor({
       </Box>
 
       <Box>
-        <Button sx={{ width: '50%', borderRadius: 0 }} variant="outlined">
-          Hủy ghi chú
-        </Button>
+        {isAdding && (
+          <Button
+            sx={{ width: '50%', borderRadius: 0 }}
+            variant="outlined"
+            onClick={handleReset}
+          >
+            Hủy ghi chú
+          </Button>
+        )}
+
         <Button
-          sx={{ width: '50%', borderRadius: 0 }}
+          sx={{ width: isAdding ? '50%' : '100%', borderRadius: 0 }}
           variant="contained"
           onClick={onClickSave}
         >

@@ -2,36 +2,29 @@ import React, { useMemo } from 'react';
 import { IconButton, Typography, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { NoteItemData } from '../../../../types';
+import { StudentNote } from '../../../../generated-types';
 
 import { StyledContent, StyledListItem, StyledTag } from './styles';
 
 interface NoteItemProps {
-  index: number;
   selected: number;
-  data: NoteItemData;
+  data: StudentNote;
   onClick: any;
   onClickDelete: any;
 }
 
-function NoteItem({
-  index,
-  selected,
-  data,
-  onClick,
-  onClickDelete,
-}: NoteItemProps) {
-  const { title, lastUpdate, tags } = data;
-  const isActive = useMemo(() => index === selected, [index, selected]);
+function NoteItem({ selected, data, onClick, onClickDelete }: NoteItemProps) {
+  const { maGC, tieuDe, thoiGianSua, tag } = data;
+  const isActive = useMemo(() => maGC === selected, [maGC, selected]);
 
   return (
     <StyledListItem divider onClick={onClick} active={isActive}>
       <StyledContent>
-        <Typography variant="body1">{title}</Typography>
-        <Typography variant="body2">{lastUpdate}</Typography>
+        <Typography variant="body1">{tieuDe}</Typography>
+        <Typography variant="body2">{thoiGianSua}</Typography>
         <Box>
-          {tags.map((tag) => (
-            <StyledTag label={tag} />
+          {tag.map((item) => (
+            <StyledTag label={item} />
           ))}
         </Box>
       </StyledContent>
