@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { List } from '@mui/material';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import TagIcon from '@mui/icons-material/Tag';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 import Header from '../../components/Header';
 import ManageAccount from '../ManageAccount';
 import ManageTag from '../ManageTag';
+import ManageHomeroomTeacher from '../ManageHomeroomTeacher';
 
 import {
   Drawer,
@@ -35,6 +37,13 @@ function Home() {
               active={selected === 1}
               onClick={() => setSelected(1)}
             >
+              <AssignmentIndIcon color="action" />
+              <StyledListItemText primary="Quản lý GVCN" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 2}
+              onClick={() => setSelected(2)}
+            >
               <TagIcon color="action" />
               <StyledListItemText primary="Quản lý tag" />
             </StyledListItemButton>
@@ -42,7 +51,8 @@ function Home() {
         </Drawer>
         <StyledContent component="main">
           {selected === 0 && <ManageAccount />}
-          {selected === 1 && <ManageTag />}
+          {selected === 1 && <ManageHomeroomTeacher />}
+          {selected === 2 && <ManageTag />}
         </StyledContent>
       </StyledContainer>
     </>

@@ -9,19 +9,19 @@ import {
   TablePagination,
 } from '@mui/material';
 
-import { AccountInfo } from '../../../types/account';
+import { HomeroomTeacherInfo } from '../../../types/teacher';
 import DeleteDialog from '../../../components/DeleteDialog';
 
-import AccountTableRow from './AccountTableRow';
+import HomeroomTeacherTableRow from './HomeroomTeacherTableRow';
 
 interface State {
   deleteIndex: number;
 }
-interface AccountInfoTableProps {
-  data: AccountInfo[];
+interface HomeroomTeacherInfoTableProps {
+  data: HomeroomTeacherInfo[];
 }
 
-function AccountTable({ data }: AccountInfoTableProps) {
+function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -51,10 +51,8 @@ function AccountTable({ data }: AccountInfoTableProps) {
         <TableHead>
           <TableRow>
             <TableCell>#</TableCell>
-            <TableCell>Email</TableCell>
             <TableCell>Họ tên</TableCell>
-            <TableCell>Loại tài khoản</TableCell>
-            <TableCell>Trạng thái</TableCell>
+            <TableCell>Lớp chủ nhiệm</TableCell>
             <TableCell align="center">Thao tác</TableCell>
           </TableRow>
         </TableHead>
@@ -62,9 +60,9 @@ function AccountTable({ data }: AccountInfoTableProps) {
           {data
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => (
-              <AccountTableRow
+              <HomeroomTeacherTableRow
                 index={index}
-                key={row.email}
+                key={row.className}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -85,8 +83,8 @@ function AccountTable({ data }: AccountInfoTableProps) {
         <DeleteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
-          description="Bạn có đồng ý xoá tài khoản"
-          boldText={data[values.deleteIndex].email}
+          description="Bạn có đồng ý xoá giáo viên chủ nhiệm"
+          boldText={data[values.deleteIndex].fullName}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />
@@ -95,4 +93,4 @@ function AccountTable({ data }: AccountInfoTableProps) {
   );
 }
 
-export default AccountTable;
+export default HomeroomTeacherTable;

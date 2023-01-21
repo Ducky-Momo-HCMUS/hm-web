@@ -20,6 +20,7 @@ import { AccountInfo } from '../../../types';
 
 interface State {
   email: string;
+  fullName: string;
   type: string;
   status: string;
 }
@@ -41,6 +42,7 @@ function AddOrEditAccountInfoDialog({
 }: AddOrEditAccountInfoDialogProps) {
   const [values, setValues] = useState<State>({
     email: data ? data.email : '',
+    fullName: data ? data.fullName : '',
     type: data ? data.type : '',
     status: data ? data.status : '',
   });
@@ -63,7 +65,7 @@ function AddOrEditAccountInfoDialog({
   );
 
   const handleSelectAccountStatus = useCallback(
-    (event: SelectChangeEvent<typeof values.type>) => {
+    (event: SelectChangeEvent<typeof values.status>) => {
       setValues((v) => ({
         ...v,
         status: event.target.value,
@@ -87,6 +89,19 @@ function AddOrEditAccountInfoDialog({
             variant="filled"
             onChange={handleChange('email')}
             placeholder="Nhập email đăng nhập..."
+            required
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <StyledTextField
+            label="Họ tên"
+            name="fullName"
+            value={values.fullName}
+            sx={{ margin: '0.5rem 0', width: '100%' }}
+            variant="filled"
+            onChange={handleChange('fullName')}
+            placeholder="Nhập họ tên..."
             required
             InputLabelProps={{
               shrink: true,
