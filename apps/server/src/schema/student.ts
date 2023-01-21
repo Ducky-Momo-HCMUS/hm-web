@@ -20,6 +20,7 @@ const studentTypeDefs = gql`
     studentAllTerms(studentId: String!): StudentAllTerms!
     studentDetail(studentId: String!): StudentDetail!
     studentParentInfoList(studentId: String!): StudentParentInfoList!
+    studentNoteList(studentId: String!): StudentNoteList!
   }
 
   extend type Mutation {
@@ -41,7 +42,6 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
-    studentNoteList(studentId: String!): StudentNoteList!
   }
 
   type StudentSubjectsByTerm {
@@ -168,6 +168,8 @@ const studentTypeDefs = gql`
 
   type StudentDeleteParentInfoResponse {
     status: Int!
+  }
+
   type StudentNoteList {
     danhSachGhiChu: [StudentNote!]!
   }
