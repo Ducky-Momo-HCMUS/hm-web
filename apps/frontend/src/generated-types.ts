@@ -118,6 +118,12 @@ export type Mutation = {
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
   resetPassword?: Maybe<MutationStatusReponse>;
+  studentAddContact: StudentContactResponse;
+  studentAddParentInfo: StudentParentInfo;
+  studentDeleteContact: StudentDeleteContactResponse;
+  studentDeleteParentInfo: StudentDeleteParentInfoResponse;
+  studentEditContact: StudentContactResponse;
+  studentEditParentInfo: StudentParentInfo;
 };
 
 export type MutationForgotPasswordArgs = {
@@ -134,6 +140,34 @@ export type MutationResetPasswordArgs = {
   password: Scalars['String'];
   passwordConfirm: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type MutationStudentAddContactArgs = {
+  payload: StudentAddContactInput;
+  studentId: Scalars['String'];
+};
+
+export type MutationStudentAddParentInfoArgs = {
+  payload: StudentAddParentInfoInput;
+  studentId: Scalars['String'];
+};
+
+export type MutationStudentDeleteContactArgs = {
+  contactId: Scalars['Int'];
+};
+
+export type MutationStudentDeleteParentInfoArgs = {
+  parentId: Scalars['Int'];
+};
+
+export type MutationStudentEditContactArgs = {
+  contactId: Scalars['Int'];
+  payload: StudentEditContactInput;
+};
+
+export type MutationStudentEditParentInfoArgs = {
+  parentId: Scalars['Int'];
+  payload: StudentEditParentInfoInput;
 };
 
 export type MutationStatusReponse = {
@@ -157,6 +191,8 @@ export type Query = {
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentDetail: StudentDetail;
+  studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -218,6 +254,14 @@ export type QueryStudentAveragePointByTermArgs = {
   term: Scalars['Int'];
 };
 
+export type QueryStudentDetailArgs = {
+  studentId: Scalars['String'];
+};
+
+export type QueryStudentParentInfoListArgs = {
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentSubjectsByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
@@ -230,6 +274,18 @@ export type QueryStudentTrainingPointArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type StudentAddContactInput = {
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentAddParentInfoInput = {
+  lienHePH: Array<StudentParentContactInput>;
+  quanHe: Scalars['String'];
+  sdt: Scalars['String'];
+  tenPH: Scalars['String'];
 };
 
 export type StudentAllSubjects = {
@@ -246,6 +302,90 @@ export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
   dtbTong: Scalars['Float'];
   xepLoai: Scalars['String'];
+};
+
+export type StudentContact = {
+  __typename?: 'StudentContact';
+  maLHSV: Scalars['Int'];
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentContactResponse = {
+  __typename?: 'StudentContactResponse';
+  maLHSV: Scalars['Int'];
+  maSV: Scalars['String'];
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentDeleteContactResponse = {
+  __typename?: 'StudentDeleteContactResponse';
+  status: Scalars['Int'];
+};
+
+export type StudentDeleteParentInfoResponse = {
+  __typename?: 'StudentDeleteParentInfoResponse';
+  status: Scalars['Int'];
+};
+
+export type StudentDetail = {
+  __typename?: 'StudentDetail';
+  dob: Scalars['String'];
+  emailCaNhan: Scalars['String'];
+  emailSV: Scalars['String'];
+  gioiTinh: Scalars['Int'];
+  gpa_4: Scalars['Float'];
+  gpa_10: Scalars['Float'];
+  lienHeSV: Array<StudentContact>;
+  maSH: Scalars['String'];
+  maSV: Scalars['String'];
+  ngoaiNgu: Scalars['Boolean'];
+  sdt: Scalars['String'];
+  tenCN: Scalars['String'];
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
+  xepLoai: Scalars['String'];
+};
+
+export type StudentEditContactInput = {
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentEditParentInfoInput = {
+  lienHePH: Array<StudentParentContactInput>;
+  quanHe: Scalars['String'];
+  sdt: Scalars['String'];
+  tenPH: Scalars['String'];
+};
+
+export type StudentParentContact = {
+  __typename?: 'StudentParentContact';
+  maLHPH?: Maybe<Scalars['Int']>;
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentParentContactInput = {
+  maLHPH?: InputMaybe<Scalars['Int']>;
+  mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type StudentParentInfo = {
+  __typename?: 'StudentParentInfo';
+  lienHePH: Array<StudentParentContact>;
+  maPH: Scalars['Int'];
+  quanHe: Scalars['String'];
+  sdt: Scalars['String'];
+  sua: Scalars['Boolean'];
+  tenPH: Scalars['String'];
+};
+
+export type StudentParentInfoList = {
+  __typename?: 'StudentParentInfoList';
+  dsPhuHuynh: Array<StudentParentInfo>;
 };
 
 export type StudentSubject = {
@@ -275,6 +415,108 @@ export type StudentTrainingPoint = {
   __typename?: 'StudentTrainingPoint';
   drl: Scalars['Int'];
   xepLoai: Scalars['String'];
+};
+
+export type StudentAddContactMutationVariables = Exact<{
+  studentId: Scalars['String'];
+  payload: StudentAddContactInput;
+}>;
+
+export type StudentAddContactMutation = {
+  __typename?: 'Mutation';
+  studentAddContact: {
+    __typename?: 'StudentContactResponse';
+    maLHSV: number;
+    maSV: string;
+    mxh: string;
+    url: string;
+  };
+};
+
+export type StudentAddParentInfoMutationVariables = Exact<{
+  studentId: Scalars['String'];
+  payload: StudentAddParentInfoInput;
+}>;
+
+export type StudentAddParentInfoMutation = {
+  __typename?: 'Mutation';
+  studentAddParentInfo: {
+    __typename?: 'StudentParentInfo';
+    maPH: number;
+    tenPH: string;
+    quanHe: string;
+    sdt: string;
+    sua: boolean;
+    lienHePH: Array<{
+      __typename?: 'StudentParentContact';
+      maLHPH?: number | null | undefined;
+      mxh: string;
+      url: string;
+    }>;
+  };
+};
+
+export type StudentDeleteContactMutationVariables = Exact<{
+  contactId: Scalars['Int'];
+}>;
+
+export type StudentDeleteContactMutation = {
+  __typename?: 'Mutation';
+  studentDeleteContact: {
+    __typename?: 'StudentDeleteContactResponse';
+    status: number;
+  };
+};
+
+export type StudentDeleteParentInfoMutationVariables = Exact<{
+  parentId: Scalars['Int'];
+}>;
+
+export type StudentDeleteParentInfoMutation = {
+  __typename?: 'Mutation';
+  studentDeleteParentInfo: {
+    __typename?: 'StudentDeleteParentInfoResponse';
+    status: number;
+  };
+};
+
+export type StudentEditContactMutationVariables = Exact<{
+  contactId: Scalars['Int'];
+  payload: StudentEditContactInput;
+}>;
+
+export type StudentEditContactMutation = {
+  __typename?: 'Mutation';
+  studentEditContact: {
+    __typename?: 'StudentContactResponse';
+    maLHSV: number;
+    maSV: string;
+    mxh: string;
+    url: string;
+  };
+};
+
+export type StudentEditParentInfoMutationVariables = Exact<{
+  parentId: Scalars['Int'];
+  payload: StudentEditParentInfoInput;
+}>;
+
+export type StudentEditParentInfoMutation = {
+  __typename?: 'Mutation';
+  studentEditParentInfo: {
+    __typename?: 'StudentParentInfo';
+    maPH: number;
+    tenPH: string;
+    quanHe: string;
+    sdt: string;
+    sua: boolean;
+    lienHePH: Array<{
+      __typename?: 'StudentParentContact';
+      maLHPH?: number | null | undefined;
+      mxh: string;
+      url: string;
+    }>;
+  };
 };
 
 export type HomeroomDetailQueryVariables = Exact<{
@@ -520,6 +762,62 @@ export type StudentAveragePointQuery = {
   };
 };
 
+export type StudentDetailQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentDetailQuery = {
+  __typename?: 'Query';
+  studentDetail: {
+    __typename?: 'StudentDetail';
+    maSV: string;
+    tenSV: string;
+    gioiTinh: number;
+    dob: string;
+    emailSV: string;
+    emailCaNhan: string;
+    sdt: string;
+    tenCN: string;
+    gpa_4: number;
+    gpa_10: number;
+    ngoaiNgu: boolean;
+    tinhTrang: string;
+    maSH: string;
+    xepLoai: string;
+    lienHeSV: Array<{
+      __typename?: 'StudentContact';
+      maLHSV: number;
+      mxh: string;
+      url: string;
+    }>;
+  };
+};
+
+export type StudentParentInfoListQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentParentInfoListQuery = {
+  __typename?: 'Query';
+  studentParentInfoList: {
+    __typename?: 'StudentParentInfoList';
+    dsPhuHuynh: Array<{
+      __typename?: 'StudentParentInfo';
+      maPH: number;
+      tenPH: string;
+      quanHe: string;
+      sdt: string;
+      sua: boolean;
+      lienHePH: Array<{
+        __typename?: 'StudentParentContact';
+        maLHPH?: number | null | undefined;
+        mxh: string;
+        url: string;
+      }>;
+    }>;
+  };
+};
+
 export type StudentSubjectsByTermQueryVariables = Exact<{
   studentId: Scalars['String'];
   term: Scalars['Int'];
@@ -569,6 +867,346 @@ export type StudentTrainingPointQuery = {
   };
 };
 
+export const StudentAddContactDocument = gql`
+  mutation StudentAddContact(
+    $studentId: String!
+    $payload: StudentAddContactInput!
+  ) {
+    studentAddContact(studentId: $studentId, payload: $payload) {
+      maLHSV
+      maSV
+      mxh
+      url
+    }
+  }
+`;
+export type StudentAddContactMutationFn = Apollo.MutationFunction<
+  StudentAddContactMutation,
+  StudentAddContactMutationVariables
+>;
+
+/**
+ * __useStudentAddContactMutation__
+ *
+ * To run a mutation, you first call `useStudentAddContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentAddContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentAddContactMutation, { data, loading, error }] = useStudentAddContactMutation({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useStudentAddContactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentAddContactMutation,
+    StudentAddContactMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentAddContactMutation,
+    StudentAddContactMutationVariables
+  >(StudentAddContactDocument, options);
+}
+export type StudentAddContactMutationHookResult = ReturnType<
+  typeof useStudentAddContactMutation
+>;
+export type StudentAddContactMutationResult =
+  Apollo.MutationResult<StudentAddContactMutation>;
+export type StudentAddContactMutationOptions = Apollo.BaseMutationOptions<
+  StudentAddContactMutation,
+  StudentAddContactMutationVariables
+>;
+export const StudentAddParentInfoDocument = gql`
+  mutation StudentAddParentInfo(
+    $studentId: String!
+    $payload: StudentAddParentInfoInput!
+  ) {
+    studentAddParentInfo(studentId: $studentId, payload: $payload) {
+      maPH
+      tenPH
+      quanHe
+      sdt
+      sua
+      lienHePH {
+        maLHPH
+        mxh
+        url
+      }
+    }
+  }
+`;
+export type StudentAddParentInfoMutationFn = Apollo.MutationFunction<
+  StudentAddParentInfoMutation,
+  StudentAddParentInfoMutationVariables
+>;
+
+/**
+ * __useStudentAddParentInfoMutation__
+ *
+ * To run a mutation, you first call `useStudentAddParentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentAddParentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentAddParentInfoMutation, { data, loading, error }] = useStudentAddParentInfoMutation({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useStudentAddParentInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentAddParentInfoMutation,
+    StudentAddParentInfoMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentAddParentInfoMutation,
+    StudentAddParentInfoMutationVariables
+  >(StudentAddParentInfoDocument, options);
+}
+export type StudentAddParentInfoMutationHookResult = ReturnType<
+  typeof useStudentAddParentInfoMutation
+>;
+export type StudentAddParentInfoMutationResult =
+  Apollo.MutationResult<StudentAddParentInfoMutation>;
+export type StudentAddParentInfoMutationOptions = Apollo.BaseMutationOptions<
+  StudentAddParentInfoMutation,
+  StudentAddParentInfoMutationVariables
+>;
+export const StudentDeleteContactDocument = gql`
+  mutation StudentDeleteContact($contactId: Int!) {
+    studentDeleteContact(contactId: $contactId) {
+      status
+    }
+  }
+`;
+export type StudentDeleteContactMutationFn = Apollo.MutationFunction<
+  StudentDeleteContactMutation,
+  StudentDeleteContactMutationVariables
+>;
+
+/**
+ * __useStudentDeleteContactMutation__
+ *
+ * To run a mutation, you first call `useStudentDeleteContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentDeleteContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentDeleteContactMutation, { data, loading, error }] = useStudentDeleteContactMutation({
+ *   variables: {
+ *      contactId: // value for 'contactId'
+ *   },
+ * });
+ */
+export function useStudentDeleteContactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentDeleteContactMutation,
+    StudentDeleteContactMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentDeleteContactMutation,
+    StudentDeleteContactMutationVariables
+  >(StudentDeleteContactDocument, options);
+}
+export type StudentDeleteContactMutationHookResult = ReturnType<
+  typeof useStudentDeleteContactMutation
+>;
+export type StudentDeleteContactMutationResult =
+  Apollo.MutationResult<StudentDeleteContactMutation>;
+export type StudentDeleteContactMutationOptions = Apollo.BaseMutationOptions<
+  StudentDeleteContactMutation,
+  StudentDeleteContactMutationVariables
+>;
+export const StudentDeleteParentInfoDocument = gql`
+  mutation StudentDeleteParentInfo($parentId: Int!) {
+    studentDeleteParentInfo(parentId: $parentId) {
+      status
+    }
+  }
+`;
+export type StudentDeleteParentInfoMutationFn = Apollo.MutationFunction<
+  StudentDeleteParentInfoMutation,
+  StudentDeleteParentInfoMutationVariables
+>;
+
+/**
+ * __useStudentDeleteParentInfoMutation__
+ *
+ * To run a mutation, you first call `useStudentDeleteParentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentDeleteParentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentDeleteParentInfoMutation, { data, loading, error }] = useStudentDeleteParentInfoMutation({
+ *   variables: {
+ *      parentId: // value for 'parentId'
+ *   },
+ * });
+ */
+export function useStudentDeleteParentInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentDeleteParentInfoMutation,
+    StudentDeleteParentInfoMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentDeleteParentInfoMutation,
+    StudentDeleteParentInfoMutationVariables
+  >(StudentDeleteParentInfoDocument, options);
+}
+export type StudentDeleteParentInfoMutationHookResult = ReturnType<
+  typeof useStudentDeleteParentInfoMutation
+>;
+export type StudentDeleteParentInfoMutationResult =
+  Apollo.MutationResult<StudentDeleteParentInfoMutation>;
+export type StudentDeleteParentInfoMutationOptions = Apollo.BaseMutationOptions<
+  StudentDeleteParentInfoMutation,
+  StudentDeleteParentInfoMutationVariables
+>;
+export const StudentEditContactDocument = gql`
+  mutation StudentEditContact(
+    $contactId: Int!
+    $payload: StudentEditContactInput!
+  ) {
+    studentEditContact(contactId: $contactId, payload: $payload) {
+      maLHSV
+      maSV
+      mxh
+      url
+    }
+  }
+`;
+export type StudentEditContactMutationFn = Apollo.MutationFunction<
+  StudentEditContactMutation,
+  StudentEditContactMutationVariables
+>;
+
+/**
+ * __useStudentEditContactMutation__
+ *
+ * To run a mutation, you first call `useStudentEditContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentEditContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentEditContactMutation, { data, loading, error }] = useStudentEditContactMutation({
+ *   variables: {
+ *      contactId: // value for 'contactId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useStudentEditContactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentEditContactMutation,
+    StudentEditContactMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentEditContactMutation,
+    StudentEditContactMutationVariables
+  >(StudentEditContactDocument, options);
+}
+export type StudentEditContactMutationHookResult = ReturnType<
+  typeof useStudentEditContactMutation
+>;
+export type StudentEditContactMutationResult =
+  Apollo.MutationResult<StudentEditContactMutation>;
+export type StudentEditContactMutationOptions = Apollo.BaseMutationOptions<
+  StudentEditContactMutation,
+  StudentEditContactMutationVariables
+>;
+export const StudentEditParentInfoDocument = gql`
+  mutation StudentEditParentInfo(
+    $parentId: Int!
+    $payload: StudentEditParentInfoInput!
+  ) {
+    studentEditParentInfo(parentId: $parentId, payload: $payload) {
+      maPH
+      tenPH
+      quanHe
+      sdt
+      sua
+      lienHePH {
+        maLHPH
+        mxh
+        url
+      }
+    }
+  }
+`;
+export type StudentEditParentInfoMutationFn = Apollo.MutationFunction<
+  StudentEditParentInfoMutation,
+  StudentEditParentInfoMutationVariables
+>;
+
+/**
+ * __useStudentEditParentInfoMutation__
+ *
+ * To run a mutation, you first call `useStudentEditParentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStudentEditParentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [studentEditParentInfoMutation, { data, loading, error }] = useStudentEditParentInfoMutation({
+ *   variables: {
+ *      parentId: // value for 'parentId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useStudentEditParentInfoMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    StudentEditParentInfoMutation,
+    StudentEditParentInfoMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    StudentEditParentInfoMutation,
+    StudentEditParentInfoMutationVariables
+  >(StudentEditParentInfoDocument, options);
+}
+export type StudentEditParentInfoMutationHookResult = ReturnType<
+  typeof useStudentEditParentInfoMutation
+>;
+export type StudentEditParentInfoMutationResult =
+  Apollo.MutationResult<StudentEditParentInfoMutation>;
+export type StudentEditParentInfoMutationOptions = Apollo.BaseMutationOptions<
+  StudentEditParentInfoMutation,
+  StudentEditParentInfoMutationVariables
+>;
 export const HomeroomDetailDocument = gql`
   query HomeroomDetail($homeroomId: String!) {
     homeroomDetail(homeroomId: $homeroomId) {
@@ -1446,6 +2084,151 @@ export type StudentAveragePointLazyQueryHookResult = ReturnType<
 export type StudentAveragePointQueryResult = Apollo.QueryResult<
   StudentAveragePointQuery,
   StudentAveragePointQueryVariables
+>;
+export const StudentDetailDocument = gql`
+  query StudentDetail($studentId: String!) {
+    studentDetail(studentId: $studentId) {
+      maSV
+      tenSV
+      gioiTinh
+      dob
+      emailSV
+      emailCaNhan
+      sdt
+      tenCN
+      gpa_4
+      gpa_10
+      ngoaiNgu
+      tinhTrang
+      maSH
+      xepLoai
+      lienHeSV {
+        maLHSV
+        mxh
+        url
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentDetailQuery__
+ *
+ * To run a query within a React component, call `useStudentDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentDetailQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentDetailQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentDetailQuery,
+    StudentDetailQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<StudentDetailQuery, StudentDetailQueryVariables>(
+    StudentDetailDocument,
+    options
+  );
+}
+export function useStudentDetailLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentDetailQuery,
+    StudentDetailQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<StudentDetailQuery, StudentDetailQueryVariables>(
+    StudentDetailDocument,
+    options
+  );
+}
+export type StudentDetailQueryHookResult = ReturnType<
+  typeof useStudentDetailQuery
+>;
+export type StudentDetailLazyQueryHookResult = ReturnType<
+  typeof useStudentDetailLazyQuery
+>;
+export type StudentDetailQueryResult = Apollo.QueryResult<
+  StudentDetailQuery,
+  StudentDetailQueryVariables
+>;
+export const StudentParentInfoListDocument = gql`
+  query StudentParentInfoList($studentId: String!) {
+    studentParentInfoList(studentId: $studentId) {
+      dsPhuHuynh {
+        maPH
+        tenPH
+        quanHe
+        sdt
+        sua
+        lienHePH {
+          maLHPH
+          mxh
+          url
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentParentInfoListQuery__
+ *
+ * To run a query within a React component, call `useStudentParentInfoListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentParentInfoListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentParentInfoListQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentParentInfoListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentParentInfoListQuery,
+    StudentParentInfoListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentParentInfoListQuery,
+    StudentParentInfoListQueryVariables
+  >(StudentParentInfoListDocument, options);
+}
+export function useStudentParentInfoListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentParentInfoListQuery,
+    StudentParentInfoListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentParentInfoListQuery,
+    StudentParentInfoListQueryVariables
+  >(StudentParentInfoListDocument, options);
+}
+export type StudentParentInfoListQueryHookResult = ReturnType<
+  typeof useStudentParentInfoListQuery
+>;
+export type StudentParentInfoListLazyQueryHookResult = ReturnType<
+  typeof useStudentParentInfoListLazyQuery
+>;
+export type StudentParentInfoListQueryResult = Apollo.QueryResult<
+  StudentParentInfoListQuery,
+  StudentParentInfoListQueryVariables
 >;
 export const StudentSubjectsByTermDocument = gql`
   query StudentSubjectsByTerm($studentId: String!, $term: Int!) {

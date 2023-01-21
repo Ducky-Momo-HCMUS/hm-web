@@ -5,10 +5,10 @@ import { StyledContainer, StyledTitle } from './styles';
 
 interface ClassInfoProps {
   title: string;
-  description: string;
+  description: string | undefined;
 }
 
-function ClassInfo({ title, description }: ClassInfoProps) {
+function ClassInfo({ title, description = '' }: ClassInfoProps) {
   return (
     <StyledContainer>
       <StyledTitle>{title}</StyledTitle>

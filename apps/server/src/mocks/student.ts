@@ -2,6 +2,10 @@ import {
   StudentAllSubjects,
   StudentAllTerms,
   StudentAveragePoint,
+  StudentContactResponse,
+  StudentDetail,
+  StudentParentInfo,
+  StudentParentInfoList,
   StudentSubject,
   StudentSubjectsByTerm,
   StudentTerm,
@@ -101,3 +105,89 @@ export const AVERAGE_POINT = {
   dtbTong: 8.5,
   xepLoai: 'Giỏi',
 } as StudentAveragePoint;
+
+export const STUDENT_DETAIL = {
+  maSV: '19127000',
+  tenSV: 'Nguyễn Văn A',
+  gioiTinh: 1,
+  dob: '22/10/2001',
+  emailSV: '19127000@student.hcmus.edu.vn',
+  emailCaNhan: 'abc@gmail.com',
+  sdt: '0123456789',
+  tenCN: 'Nguyễn Ngọc Thanh Tâm',
+  gpa_4: 3.7,
+  gpa_10: 9.2,
+  ngoaiNgu: true,
+  tinhTrang: 'Đang học',
+  maSH: '19clc3',
+  xepLoai: 'Giỏi',
+  lienHeSV: [
+    {
+      maLHSV: 1,
+      mxh: 'Facebook',
+      url: 'abc',
+    },
+  ],
+} as StudentDetail;
+
+export const STUDENT_PARENT_INFO_LIST = {
+  dsPhuHuynh: [
+    {
+      maPH: 1,
+      tenPH: 'Nguyễn Văn B',
+      quanHe: 'Cha',
+      sdt: '0123456789',
+      sua: true,
+      lienHePH: [
+        {
+          maLHPH: 1,
+          mxh: 'Facebook',
+          url: 'abc',
+        },
+      ],
+    },
+    {
+      maPH: 2,
+      tenPH: 'Nguyễn Thị C',
+      quanHe: 'Mẹ',
+      sdt: '0123456789',
+      sua: true,
+      lienHePH: [
+        {
+          maLHPH: 1,
+          mxh: 'Facebook',
+          url: 'abc',
+        },
+      ],
+    },
+  ],
+} as StudentParentInfoList;
+
+export const STUDENT_ADD_CONTACT_RESPONSE = {
+  maLHSV: 1,
+  maSV: '19127000',
+  mxh: 'Facebook',
+  url: 'abc',
+} as StudentContactResponse;
+
+export const STUDENT_EDIT_CONTACT_RESPONSE = {
+  maLHSV: 1,
+  maSV: '19127000',
+  mxh: 'Facebook',
+  url: 'abc',
+} as StudentContactResponse;
+
+export const STUDENT_PARENT_INFO_RESPONSE = {
+  maPH: 1,
+  tenPH: 'Nguyễn Văn B',
+  quanHe: 'Cha',
+  sdt: '0123456789',
+  sua: true,
+  lienHePH: [
+    {
+      maLHPH: 1,
+      mxh: 'Facebook',
+      url: 'abc',
+    },
+  ],
+} as StudentParentInfo;
