@@ -133,6 +133,7 @@ export type Mutation = {
   studentDeleteParentInfo: StudentDeleteParentInfoResponse;
   studentEditContact: StudentContactResponse;
   studentEditParentInfo: StudentParentInfo;
+  studentNoteList: StudentNoteList;
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
@@ -200,6 +201,10 @@ export type MutationStudentEditContactArgs = {
 export type MutationStudentEditParentInfoArgs = {
   parentId: Scalars['Int'];
   payload: StudentEditParentInfoInput;
+};
+
+export type MutationStudentNoteListArgs = {
+  studentId: Scalars['String'];
 };
 
 export type MutationTagAddArgs = {

@@ -134,6 +134,7 @@ export type Mutation = {
   studentDeleteParentInfo: StudentDeleteParentInfoResponse;
   studentEditContact: StudentContactResponse;
   studentEditParentInfo: StudentParentInfo;
+  studentNoteList: StudentNoteList;
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
@@ -201,6 +202,10 @@ export type MutationStudentEditContactArgs = {
 export type MutationStudentEditParentInfoArgs = {
   parentId: Scalars['Int'];
   payload: StudentEditParentInfoInput;
+};
+
+export type MutationStudentNoteListArgs = {
+  studentId: Scalars['String'];
 };
 
 export type MutationTagAddArgs = {
@@ -1088,6 +1093,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationStudentEditParentInfoArgs, 'parentId' | 'payload'>
+  >;
+  studentNoteList?: Resolver<
+    ResolversTypes['StudentNoteList'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationStudentNoteListArgs, 'studentId'>
   >;
   tagAdd?: Resolver<
     ResolversTypes['Tag'],
