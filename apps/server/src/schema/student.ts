@@ -47,7 +47,6 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
-    studentNoteList(studentId: String!): StudentNoteList!
   }
 
   type StudentSubjectsByTerm {
