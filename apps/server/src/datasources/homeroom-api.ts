@@ -8,7 +8,6 @@ import {
   HOMEROOM_NOT_ENROLLED_LIST_BY_TERM,
   HOMEROOM_POSTPONE_EXAM_LIST,
   HOMEROOM_POSTPONE_EXAM_LIST_BY_TERM,
-  HOMEROOM_STUDENT_LIST,
   HOMEROOM_TERM_LIST,
 } from '../mocks/homeroom';
 import {
@@ -46,14 +45,10 @@ class HomeroomAPI extends BaseDataSource {
     homeroomId,
   }: QueryHomeroomStudentListArgs) {
     try {
-      // const homeroomStudentList = await this.get(
-      //   'v1/homerooms/:id/students',
-      //   {
-      //     id: homeroomId,
-      //   },
-      // );
-      console.log('params', homeroomId);
-      return HOMEROOM_STUDENT_LIST;
+      const homeroomStudentList = await this.get(
+        `v1/homerooms/${homeroomId}/students`
+      );
+      return homeroomStudentList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
       throw this.handleError(error as ApolloError);

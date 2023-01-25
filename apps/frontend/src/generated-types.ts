@@ -84,12 +84,17 @@ export type HomeroomPostponeExamListItem = {
   tenSV: Scalars['String'];
 };
 
+export type HomeroomStudentList = {
+  __typename?: 'HomeroomStudentList';
+  sinhVien: Array<HomeroomStudentListItem>;
+};
+
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
-  gpa4: Scalars['Float'];
-  gpa10: Scalars['Float'];
-  lienHe: Array<Contact>;
-  maCN: Scalars['String'];
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
+  lienHe?: Maybe<Array<Contact>>;
+  maCN?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
   sdt: Scalars['String'];
   tenSV: Scalars['String'];
@@ -256,7 +261,7 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomPostponeExamList: HomeroomPostponeExamList;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
   studentAllSubjects: StudentAllSubjects;
@@ -859,20 +864,23 @@ export type HomeroomStudentListQueryVariables = Exact<{
 
 export type HomeroomStudentListQuery = {
   __typename?: 'Query';
-  homeroomStudentList?:
-    | Array<{
-        __typename?: 'HomeroomStudentListItem';
-        maSV: string;
-        tenSV: string;
-        maCN: string;
-        tinhTrang: string;
-        gpa4: number;
-        gpa10: number;
-        sdt: string;
-        lienHe: Array<{ __typename?: 'Contact'; mxh: string; url: string }>;
-      }>
-    | null
-    | undefined;
+  homeroomStudentList: {
+    __typename?: 'HomeroomStudentList';
+    sinhVien: Array<{
+      __typename?: 'HomeroomStudentListItem';
+      maSV: string;
+      tenSV: string;
+      maCN?: string | null | undefined;
+      tinhTrang: string;
+      gpa4?: number | null | undefined;
+      gpa10?: number | null | undefined;
+      sdt: string;
+      lienHe?:
+        | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+        | null
+        | undefined;
+    }>;
+  };
 };
 
 export type HomeroomTermListQueryVariables = Exact<{
@@ -2242,16 +2250,18 @@ export type HomeroomPostponeExamListQueryResult = Apollo.QueryResult<
 export const HomeroomStudentListDocument = gql`
   query HomeroomStudentList($homeroomId: String!) {
     homeroomStudentList(homeroomId: $homeroomId) {
-      maSV
-      tenSV
-      maCN
-      tinhTrang
-      gpa4
-      gpa10
-      sdt
-      lienHe {
-        mxh
-        url
+      sinhVien {
+        maSV
+        tenSV
+        maCN
+        tinhTrang
+        gpa4
+        gpa10
+        sdt
+        lienHe {
+          mxh
+          url
+        }
       }
     }
   }

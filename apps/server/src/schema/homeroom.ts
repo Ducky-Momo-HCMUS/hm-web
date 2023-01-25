@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
-    homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]
+    homeroomStudentList(homeroomId: String!): HomeroomStudentList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): HomeroomTermList!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
@@ -30,15 +30,19 @@ const homeroomTypeDefs = gql`
     khoa: Int!
   }
 
+  type HomeroomStudentList {
+    sinhVien: [HomeroomStudentListItem!]!
+  }
+
   type HomeroomStudentListItem {
     maSV: String!
     tenSV: String!
-    maCN: String!
+    maCN: String
     tinhTrang: String!
-    gpa4: Float!
-    gpa10: Float!
+    gpa4: Float
+    gpa10: Float
     sdt: String!
-    lienHe: [Contact!]!
+    lienHe: [Contact!]
   }
 
   type Contact {

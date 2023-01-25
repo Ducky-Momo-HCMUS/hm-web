@@ -11,25 +11,30 @@ interface StudentTableRowProps {
   index: number;
 }
 function StudentTableRow({ data, index }: StudentTableRowProps) {
-  const { maSV, tenSV, maCN, tinhTrang, gpa4, gpa10, contact } = data;
+  const { maSV, tenSV, maCN = '', tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
+    let text = '';
     switch (tinhTrang) {
-      case 'Đang học': {
+      case 'DANG_HOC': {
         color = theme.palette.text.primary;
+        text = 'Đang học';
         break;
       }
-      case 'Bị buộc thôi học': {
+      case 'BI_BUOC_THOI_HOC': {
         color = theme.palette.error.main;
+        text = 'Bị buộc thôi học';
         break;
       }
-      case 'Đình chỉ học': {
+      case 'DINH_CHI_HOC': {
         color = theme.palette.warning.main;
+        text = 'Đình chỉ học';
         break;
       }
-      case 'Đã tốt nghiệp': {
+      case 'DA_TOT_NGHIEP': {
         color = theme.palette.success.main;
+        text = 'Đã tốt nghiệp';
         break;
       }
       default:
@@ -38,7 +43,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
 
     return (
       <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
-        {tinhTrang}
+        {text}
       </Typography>
     );
   }, [tinhTrang]);
@@ -56,7 +61,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
       <TableCell>{gpa10}</TableCell>
       <TableCell>
         {contact.sdt}
-        {contact.lienHe.map((social) => (
+        {contact.lienHe?.map((social) => (
           <>
             ,{' '}
             <StyledMuiLink target="_blank" href={social.url}>

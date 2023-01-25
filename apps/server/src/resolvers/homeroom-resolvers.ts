@@ -9,9 +9,8 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomStudentList(args)) || null
-      );
+      const res = await dataSources.homeroomAPI.getHomeroomStudentList(args);
+      return res.data;
     },
     homeroomDetail: async (_, args, { dataSources }) => {
       return (await dataSources.homeroomAPI.getHomeroomDetail(args)) || null;

@@ -25,7 +25,7 @@ import {
 } from '../../../components/styles';
 import { Order, Property } from '../../../types';
 import {
-  getComparator,
+  // getComparator,
   groupClassesByYear,
   mapStudentDataToTable,
 } from '../../../utils';
@@ -117,7 +117,7 @@ function StudentsTable() {
       },
     });
   const studentListData = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList || [],
+    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
     [homeroomStudentListData?.homeroomStudentList]
   );
 
@@ -185,7 +185,7 @@ function StudentsTable() {
                 />
                 <TableBody>
                   {[...studentListData]
-                    ?.sort(getComparator(order, orderBy))
+                    // ?.sort(getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <StudentTableRow
