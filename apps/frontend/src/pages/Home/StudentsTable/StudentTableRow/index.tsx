@@ -15,35 +15,32 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
-    let text = '';
+
     switch (tinhTrang) {
-      case 'DANG_HOC': {
+      case 'Đang học': {
         color = theme.palette.text.primary;
-        text = 'Đang học';
         break;
       }
-      case 'BI_BUOC_THOI_HOC': {
+      case 'Bị buộc thôi học': {
         color = theme.palette.error.main;
-        text = 'Bị buộc thôi học';
         break;
       }
-      case 'DINH_CHI_HOC': {
+      case 'Đình chỉ học': {
         color = theme.palette.warning.main;
-        text = 'Đình chỉ học';
         break;
       }
-      case 'DA_TOT_NGHIEP': {
+      case 'Đã tốt nghiệp': {
         color = theme.palette.success.main;
-        text = 'Đã tốt nghiệp';
         break;
       }
       default:
+        color = theme.palette.text.primary;
         break;
     }
 
     return (
       <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
-        {text}
+        {tinhTrang}
       </Typography>
     );
   }, [tinhTrang]);
