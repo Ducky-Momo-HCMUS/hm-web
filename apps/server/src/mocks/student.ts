@@ -3,7 +3,6 @@ import {
   StudentAllTerms,
   StudentAveragePoint,
   StudentContactResponse,
-  StudentDetail,
   StudentParentInfo,
   StudentParentInfoList,
   StudentNoteList,
@@ -108,30 +107,6 @@ export const AVERAGE_POINT = {
   dtbTong: 8.5,
   xepLoai: 'Giỏi',
 } as StudentAveragePoint;
-
-export const STUDENT_DETAIL = {
-  maSV: '19127000',
-  tenSV: 'Nguyễn Văn A',
-  gioiTinh: 1,
-  dob: '22/10/2001',
-  emailSV: '19127000@student.hcmus.edu.vn',
-  emailCaNhan: 'abc@gmail.com',
-  sdt: '0123456789',
-  tenCN: 'Nguyễn Ngọc Thanh Tâm',
-  gpa_4: 3.7,
-  gpa_10: 9.2,
-  ngoaiNgu: true,
-  tinhTrang: 'Đang học',
-  maSH: '19clc3',
-  xepLoai: 'Giỏi',
-  lienHeSV: [
-    {
-      maLHSV: 1,
-      mxh: 'Facebook',
-      url: 'abc',
-    },
-  ],
-} as StudentDetail;
 
 export const STUDENT_PARENT_INFO_LIST = {
   dsPhuHuynh: [

@@ -207,8 +207,8 @@ export type MutationStatusReponse = {
 
 export type NoteAddInput = {
   maSV: Scalars['String'];
+  maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
-  tag: Array<Scalars['String']>;
   tieuDe: Scalars['String'];
   url: Array<Scalars['String']>;
 };

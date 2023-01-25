@@ -123,7 +123,8 @@ function NoteInfo() {
     if (values.isAdding) {
       const payload = {
         tieuDe: values.title,
-        tag: values.tags,
+        // TODO: dynamic tag number
+        maTag: [1, 2],
         noiDung: editorRef.current?.getContent() || '',
         maSV: id,
         url: ['https://picsum.photos/200'],
@@ -223,9 +224,7 @@ function NoteInfo() {
         <Link underline="hover" color="inherit" href="/">
           Trang chủ
         </Link>
-        <Typography color="text.primary">
-          {id} - Nguyễn Ngọc Thanh Tâm
-        </Typography>
+        <Typography color="text.primary">{id}</Typography>
         <Typography color="text.primary">Ghi chú sinh viên</Typography>
       </StyledBreadCrumbs>
       <StyledGridContainer container spacing={3} columns={20}>

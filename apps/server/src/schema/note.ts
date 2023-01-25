@@ -28,7 +28,7 @@ const noteTypeDefs = gql`
 
   input NoteAddInput {
     tieuDe: String!
-    tag: [String!]!
+    maTag: [Int!]!
     noiDung: String!
     maSV: String!
     url: [String!]!

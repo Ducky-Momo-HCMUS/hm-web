@@ -174,10 +174,11 @@ function StudentProfile() {
             <Grid item xs={7}>
               <ClassInfo
                 title="Ngày sinh"
-                description={format(
-                  new Date(studentDetails?.dob || ''),
-                  'dd/MM/yyyy'
-                )}
+                description={
+                  studentDetails?.dob && studentDetails?.dob.length > 0
+                    ? format(new Date(studentDetails?.dob || ''), 'dd/MM/yyyy')
+                    : ''
+                }
               />
             </Grid>
             <Grid item xs={5}>

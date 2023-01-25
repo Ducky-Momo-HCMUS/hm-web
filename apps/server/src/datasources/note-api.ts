@@ -35,14 +35,9 @@ class NoteAPI extends BaseDataSource {
 
   public async addNote({ payload }: MutationNoteAddArgs) {
     try {
-      // const response = await this.post(
-      //   `v1/notes`,
-      //   {
-      //     payload
-      //   },
-      // );
-      console.log('params', payload);
-      return { status: 200 };
+      const res = await this.post(`v1/notes`, payload);
+      console.log('res', res);
+      return res;
     } catch (error) {
       console.error('Error: cannot add new note');
       throw this.handleError(error as ApolloError);
