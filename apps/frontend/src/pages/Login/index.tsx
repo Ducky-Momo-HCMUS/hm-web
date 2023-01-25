@@ -67,10 +67,11 @@ function Login() {
         },
       });
 
+      localStorage.setItem('EMAIL', data.get('email')?.toString() || '');
       localStorage.setItem('ACCESS_TOKEN', result.data?.login?.token || '');
       setError('');
     },
-    []
+    [login]
   );
 
   useEffect(() => {

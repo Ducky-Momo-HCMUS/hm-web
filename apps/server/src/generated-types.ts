@@ -116,6 +116,7 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
   noteAdd: NoteAddResponse;
@@ -128,6 +129,13 @@ export type Mutation = {
   studentDeleteParentInfo: StudentDeleteParentInfoResponse;
   studentEditContact: StudentContactResponse;
   studentEditParentInfo: StudentParentInfo;
+};
+
+export type MutationEditPasswordArgs = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -923,6 +931,15 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  editPassword?: Resolver<
+    Maybe<ResolversTypes['MutationStatusReponse']>,
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationEditPasswordArgs,
+      'email' | 'newPassword' | 'password' | 'passwordConfirm'
+    >
+  >;
   forgotPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,

@@ -10,6 +10,12 @@ const authTypeDefs = gql`
       password: String!
       passwordConfirm: String!
     ): MutationStatusReponse
+    editPassword(
+      email: String!
+      password: String!
+      newPassword: String!
+      passwordConfirm: String!
+    ): MutationStatusReponse
   }
 
   type LoginResponse {

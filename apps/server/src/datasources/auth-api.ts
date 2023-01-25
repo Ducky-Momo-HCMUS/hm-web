@@ -1,3 +1,4 @@
+import { MutationEditPasswordArgs } from '../generated-types';
 import { DataSourceResponse, MutationStatusReponse } from '../types';
 import { ACCOUNT_BASE_URL } from '../utils/config';
 
@@ -49,6 +50,24 @@ export default class AuthAPI extends BaseDataSource {
       const response = await this.post<MutationStatusReponse>(
         'v1/reset-password',
         { id, token, password, passwordConfirm }
+      );
+      return response;
+    } catch (error) {
+      // TODO add log
+      throw this.handleError(error);
+    }
+  }
+
+  public async editPassword({
+    email,
+    password,
+    newPassword,
+    passwordConfirm,
+  }: MutationEditPasswordArgs) {
+    try {
+      const response = await this.post<MutationStatusReponse>(
+        'v1/accounts/edit-password',
+        { email, password, newPassword, passwordConfirm }
       );
       return response;
     } catch (error) {
