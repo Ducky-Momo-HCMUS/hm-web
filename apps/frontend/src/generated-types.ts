@@ -432,17 +432,17 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4: Scalars['Float'];
-  gpa_10: Scalars['Float'];
-  lienHeSV: Array<StudentContact>;
+  gpa_4?: Maybe<Scalars['Float']>;
+  gpa_10?: Maybe<Scalars['Float']>;
+  lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
   ngoaiNgu: Scalars['Boolean'];
   sdt: Scalars['String'];
-  tenCN: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
-  xepLoai: Scalars['String'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentDetailSubjectsResult = {
@@ -1020,19 +1020,22 @@ export type StudentDetailQuery = {
     emailSV: string;
     emailCaNhan: string;
     sdt: string;
-    tenCN: string;
-    gpa_4: number;
-    gpa_10: number;
+    tenCN?: string | null | undefined;
+    gpa_4?: number | null | undefined;
+    gpa_10?: number | null | undefined;
     ngoaiNgu: boolean;
     tinhTrang: string;
     maSH: string;
-    xepLoai: string;
-    lienHeSV: Array<{
-      __typename?: 'StudentContact';
-      maLHSV: number;
-      mxh: string;
-      url: string;
-    }>;
+    xepLoai?: string | null | undefined;
+    lienHeSV?:
+      | Array<{
+          __typename?: 'StudentContact';
+          maLHSV: number;
+          mxh: string;
+          url: string;
+        }>
+      | null
+      | undefined;
   };
 };
 

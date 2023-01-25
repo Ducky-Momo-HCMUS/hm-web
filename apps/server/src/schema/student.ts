@@ -101,14 +101,14 @@ const studentTypeDefs = gql`
     emailSV: String!
     emailCaNhan: String!
     sdt: String!
-    tenCN: String!
-    gpa_4: Float!
-    gpa_10: Float!
+    tenCN: String
+    gpa_4: Float
+    gpa_10: Float
     ngoaiNgu: Boolean!
     tinhTrang: String!
     maSH: String!
-    xepLoai: String!
-    lienHeSV: [StudentContact!]!
+    xepLoai: String
+    lienHeSV: [StudentContact!]
   }
 
   type StudentParentInfoList {

@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { format } from 'date-fns';
 
 import { StyledHeader } from '../NoteInfo/styles';
 import ClassInfo from '../../ClassDetail/ClassInfo';
@@ -129,9 +130,7 @@ function StudentProfile() {
           <Link underline="hover" color="inherit" href="/">
             Trang chủ
           </Link>
-          <Typography color="text.primary">
-            {id} - Nguyễn Ngọc Thanh Tâm
-          </Typography>
+          <Typography color="text.primary">{id}</Typography>
           <Typography color="text.primary">Thông tin sinh viên</Typography>
         </StyledBreadCrumbs>
         <Button sx={{ textTransform: 'uppercase' }} variant="contained">
@@ -173,7 +172,13 @@ function StudentProfile() {
               <ClassInfo title="MSSV" description={id} />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo title="Ngày sinh" description={studentDetails?.dob} />
+              <ClassInfo
+                title="Ngày sinh"
+                description={format(
+                  new Date(studentDetails?.dob || ''),
+                  'dd/MM/yyyy'
+                )}
+              />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
@@ -265,17 +270,20 @@ function StudentProfile() {
             <Grid item xs={7}>
               <ClassInfo
                 title="Chuyên ngành"
-                description={studentDetails?.tenCN}
+                description={studentDetails?.tenCN || 'Chưa có'}
               />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
                 title="GPA"
-                description={studentDetails?.gpa_10.toString()}
+                description={studentDetails?.gpa_10?.toString() || 'Chưa có'}
               />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo title="Xếp loại học lực" description="Giỏi" />
+              <ClassInfo
+                title="Xếp loại học lực"
+                description={studentDetails?.xepLoai || 'Chưa có'}
+              />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo

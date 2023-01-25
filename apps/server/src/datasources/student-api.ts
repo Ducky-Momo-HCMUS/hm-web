@@ -155,11 +155,8 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentDetail({ studentId }: QueryStudentDetailArgs) {
     try {
-      // const studentDetail = await this.get(
-      //   `v1/students/${studentId}`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_DETAIL;
+      const studentDetail = await this.get(`v1/students/${studentId}`);
+      return studentDetail;
     } catch (error) {
       console.error('Error: cannot fetch student detail');
       throw this.handleError(error as ApolloError);

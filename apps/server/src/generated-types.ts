@@ -433,17 +433,17 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4: Scalars['Float'];
-  gpa_10: Scalars['Float'];
-  lienHeSV: Array<StudentContact>;
+  gpa_4?: Maybe<Scalars['Float']>;
+  gpa_10?: Maybe<Scalars['Float']>;
+  lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
   ngoaiNgu: Scalars['Boolean'];
   sdt: Scalars['String'];
-  tenCN: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
-  xepLoai: Scalars['String'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentDetailSubjectsResult = {
@@ -1327,10 +1327,10 @@ export type StudentDetailResolvers<
   emailCaNhan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gioiTinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  gpa_4?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  gpa_10?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  gpa_4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa_10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   lienHeSV?: Resolver<
-    Array<ResolversTypes['StudentContact']>,
+    Maybe<Array<ResolversTypes['StudentContact']>>,
     ParentType,
     ContextType
   >;
@@ -1338,10 +1338,10 @@ export type StudentDetailResolvers<
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ngoaiNgu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

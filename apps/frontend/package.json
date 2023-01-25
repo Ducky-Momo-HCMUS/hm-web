@@ -42,6 +42,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "@types/react-show-more-text": "^1.4.2",
+    "date-fns": "^2.29.3",
     "dayjs": "^1.11.6",
     "filepond": "^4.30.4",
     "filepond-plugin-image-exif-orientation": "^1.0.11",
