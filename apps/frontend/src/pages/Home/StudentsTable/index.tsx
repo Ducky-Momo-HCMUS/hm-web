@@ -53,8 +53,8 @@ function StudentsTable() {
   const { loading: homeroomListLoading, data: homeroomListData } =
     useHomeroomListQuery();
   const homeroomList = useMemo(
-    () => homeroomListData?.homeroomList.lopSinhHoat || [],
-    [homeroomListData?.homeroomList.lopSinhHoat]
+    () => homeroomListData?.homeroomList.lopChuNhiem || [],
+    [homeroomListData?.homeroomList.lopChuNhiem]
   );
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {

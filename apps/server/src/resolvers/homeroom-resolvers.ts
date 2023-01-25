@@ -5,7 +5,8 @@ import { ResolverContext } from './types';
 export const homeroomResolver: Resolvers<ResolverContext> = {
   Query: {
     homeroomList: async (_, __, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomList()) || null;
+      const res = await dataSources.homeroomAPI.getHomeroomList();
+      return res.data;
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
       return (

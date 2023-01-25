@@ -2,8 +2,6 @@ import {
   HomeroomDetail,
   HomeroomFailList,
   HomeroomFailListItem,
-  HomeroomList,
-  HomeroomListItem,
   HomeroomNotEnrolledList,
   HomeroomNotEnrolledListItem,
   HomeroomPostponeExamList,
@@ -12,31 +10,6 @@ import {
   HomeroomTermList,
   HomeroomTermListItem,
 } from '../generated-types';
-
-export const HOMEROOM_LIST = {
-  lopSinhHoat: [
-    {
-      maSH: '19clc5',
-      heDaoTao: 'Chương trình chất lượng cao',
-      khoa: 2019,
-    },
-    {
-      maSH: '19clc6',
-      heDaoTao: 'Chương trình chất lượng cao',
-      khoa: 2019,
-    },
-    {
-      maSH: '20clc3',
-      heDaoTao: 'Chương trình chất lượng cao',
-      khoa: 2020,
-    },
-    {
-      maSH: '21clc4',
-      heDaoTao: 'Chương trình chất lượng cao',
-      khoa: 2021,
-    },
-  ] as HomeroomListItem[],
-} as HomeroomList;
 
 export const HOMEROOM_STUDENT_LIST = [
   {

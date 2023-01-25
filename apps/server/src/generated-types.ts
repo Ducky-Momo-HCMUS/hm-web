@@ -51,7 +51,7 @@ export type HomeroomFailListItem = {
 
 export type HomeroomList = {
   __typename?: 'HomeroomList';
-  lopSinhHoat: Array<HomeroomListItem>;
+  lopChuNhiem: Array<HomeroomListItem>;
 };
 
 export type HomeroomListItem = {
@@ -820,7 +820,7 @@ export type HomeroomListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomList'] = ResolversParentTypes['HomeroomList']
 > = {
-  lopSinhHoat?: Resolver<
+  lopChuNhiem?: Resolver<
     Array<ResolversTypes['HomeroomListItem']>,
     ParentType,
     ContextType

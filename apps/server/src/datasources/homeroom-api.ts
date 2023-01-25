@@ -4,7 +4,6 @@ import {
   HOMEROOM_DETAIL,
   HOMEROOM_FAIL_LIST,
   HOMEROOM_FAIL_LIST_BY_TERM,
-  HOMEROOM_LIST,
   HOMEROOM_NOT_ENROLLED_LIST,
   HOMEROOM_NOT_ENROLLED_LIST_BY_TERM,
   HOMEROOM_POSTPONE_EXAM_LIST,
@@ -35,10 +34,8 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomList() {
     try {
-      // const homeroomList = await this.get('v1/homerooms');
-
-      // return homeroomList;
-      return HOMEROOM_LIST;
+      const homeroomList = await this.get('v1/homerooms');
+      return homeroomList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');
       throw this.handleError(error as ApolloError);

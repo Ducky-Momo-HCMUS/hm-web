@@ -28,6 +28,7 @@ function ActionsBar() {
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem('EMAIL');
     navigate('/login');
   }, [navigate]);
 

@@ -21,7 +21,7 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomList {
-    lopSinhHoat: [HomeroomListItem!]!
+    lopChuNhiem: [HomeroomListItem!]!
   }
 
   type HomeroomListItem {

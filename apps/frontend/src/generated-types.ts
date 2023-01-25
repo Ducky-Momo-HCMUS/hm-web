@@ -50,7 +50,7 @@ export type HomeroomFailListItem = {
 
 export type HomeroomList = {
   __typename?: 'HomeroomList';
-  lopSinhHoat: Array<HomeroomListItem>;
+  lopChuNhiem: Array<HomeroomListItem>;
 };
 
 export type HomeroomListItem = {
@@ -774,7 +774,7 @@ export type HomeroomListQuery = {
   __typename?: 'Query';
   homeroomList: {
     __typename?: 'HomeroomList';
-    lopSinhHoat: Array<{
+    lopChuNhiem: Array<{
       __typename?: 'HomeroomListItem';
       maSH: string;
       heDaoTao: string;
@@ -1931,7 +1931,7 @@ export type HomeroomFailListQueryResult = Apollo.QueryResult<
 export const HomeroomListDocument = gql`
   query HomeroomList {
     homeroomList {
-      lopSinhHoat {
+      lopChuNhiem {
         maSH
         heDaoTao
         khoa
