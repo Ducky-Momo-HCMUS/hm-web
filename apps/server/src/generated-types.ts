@@ -134,6 +134,9 @@ export type Mutation = {
   studentDeleteParentInfo: StudentDeleteParentInfoResponse;
   studentEditContact: StudentContactResponse;
   studentEditParentInfo: StudentParentInfo;
+  tagAdd: Tag;
+  tagDelete: TagDeleteResponse;
+  tagEdit: Tag;
 };
 
 export type MutationEditPasswordArgs = {
@@ -198,6 +201,19 @@ export type MutationStudentEditContactArgs = {
 export type MutationStudentEditParentInfoArgs = {
   parentId: Scalars['Int'];
   payload: StudentEditParentInfoInput;
+};
+
+export type MutationTagAddArgs = {
+  payload: TagAddInput;
+};
+
+export type MutationTagDeleteArgs = {
+  tagId: Scalars['Int'];
+};
+
+export type MutationTagEditArgs = {
+  payload: TagEditInput;
+  tagId: Scalars['Int'];
 };
 
 export type MutationStatusReponse = {
@@ -566,6 +582,19 @@ export type Tag = {
   tenTag: Scalars['String'];
 };
 
+export type TagAddInput = {
+  tenTag: Scalars['String'];
+};
+
+export type TagDeleteResponse = {
+  __typename?: 'TagDeleteResponse';
+  status: Scalars['Int'];
+};
+
+export type TagEditInput = {
+  tenTag: Scalars['String'];
+};
+
 export type TagList = {
   __typename?: 'TagList';
   tags: Array<Tag>;
@@ -733,6 +762,9 @@ export type ResolversTypes = {
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
   SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
   Tag: ResolverTypeWrapper<Tag>;
+  TagAddInput: TagAddInput;
+  TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
+  TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
 };
 
@@ -793,6 +825,9 @@ export type ResolversParentTypes = {
   StudentTrainingPoint: StudentTrainingPoint;
   SubjectDetailResult: SubjectDetailResult;
   Tag: Tag;
+  TagAddInput: TagAddInput;
+  TagDeleteResponse: TagDeleteResponse;
+  TagEditInput: TagEditInput;
   TagList: TagList;
 };
 
@@ -1053,6 +1088,24 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationStudentEditParentInfoArgs, 'parentId' | 'payload'>
+  >;
+  tagAdd?: Resolver<
+    ResolversTypes['Tag'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagAddArgs, 'payload'>
+  >;
+  tagDelete?: Resolver<
+    ResolversTypes['TagDeleteResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagDeleteArgs, 'tagId'>
+  >;
+  tagEdit?: Resolver<
+    ResolversTypes['Tag'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
   >;
 };
 
@@ -1526,6 +1579,14 @@ export type TagResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TagDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TagDeleteResponse'] = ResolversParentTypes['TagDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TagListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList']
@@ -1579,5 +1640,6 @@ export type Resolvers<ContextType = any> = {
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
   SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
+  TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
 };

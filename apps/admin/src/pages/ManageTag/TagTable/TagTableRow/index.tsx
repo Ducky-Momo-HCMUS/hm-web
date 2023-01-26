@@ -4,14 +4,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState } from 'react';
 
 import AddOrEditTagInfoDialog from '../../AddOrEditTagInfoDialog';
+import { Tag } from '../../../../generated-types';
 
 interface TagTableRowProps {
-  index: number;
-  data: string;
+  data: Tag;
   onClickDelete: any;
 }
 
-function TagTableRow({ index, data, onClickDelete }: TagTableRowProps) {
+function TagTableRow({ data, onClickDelete }: TagTableRowProps) {
   const [openAddOrEditTagInfoDialog, setOpenAddOrEditTagInfoDialog] =
     useState(false);
 
@@ -24,9 +24,9 @@ function TagTableRow({ index, data, onClickDelete }: TagTableRowProps) {
   };
   return (
     <>
-      <TableRow key={index}>
-        <TableCell>{index + 1}</TableCell>
-        <TableCell>{data}</TableCell>
+      <TableRow key={data.maTag}>
+        <TableCell>{data.maTag}</TableCell>
+        <TableCell>{data.tenTag}</TableCell>
         <TableCell align="center">
           <IconButton onClick={handleOpenAddOrEditTagInfoDialog}>
             <EditIcon />

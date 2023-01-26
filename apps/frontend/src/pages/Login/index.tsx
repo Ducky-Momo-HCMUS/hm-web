@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import {
   Backdrop,
   Box,
   Button,
   CircularProgress,
+  Grid,
   IconButton,
   InputAdornment,
+  Link,
 } from '@mui/material';
 
 import Header from '../../components/Header';
@@ -138,6 +140,17 @@ function Login() {
               }}
               variant="filled"
             />
+            <Grid container alignItems="center" justifyContent="flex-end">
+              <Grid item>
+                <Link
+                  sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
+                  component={RouterLink}
+                  to="/reset-password"
+                >
+                  Quên mật khẩu?
+                </Link>
+              </Grid>
+            </Grid>
             <Box sx={{ textAlign: 'right' }}>
               <Button type="submit" variant="contained" sx={{ mt: 1 }}>
                 Đăng nhập

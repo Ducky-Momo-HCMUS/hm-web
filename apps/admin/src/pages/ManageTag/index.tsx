@@ -1,9 +1,10 @@
 import { Button, Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
 import { StyledTitle } from '../../components/styles';
-import { TAGS_OPTIONS } from '../../mocks/tag';
+import { useTagListQuery } from '../../generated-types';
+import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 
 import TagTable from './TagTable';
 import AddOrEditTagInfoDialog from './AddOrEditTagInfoDialog';
@@ -19,6 +20,13 @@ function ManageTag() {
   const handleCloseAddOrEditTagInfoDialog = () => {
     setOpenAddOrEditTagInfoDialog(false);
   };
+
+  const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
+  const tagList = useMemo(
+    () => tagListData?.tagList.tags || [],
+    [tagListData?.tagList.tags]
+  );
+
   return (
     <Box display="flex" flexDirection="column" gap={1}>
       <Box display="flex" justifyContent="space-between" alignItems="baseline">
@@ -34,7 +42,9 @@ function ManageTag() {
           </Button>
         </Box>
       </Box>
-      <TagTable data={TAGS_OPTIONS} />
+      <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
+        <TagTable data={tagList} />
+      </AsyncDataRenderer>
       <AddOrEditTagInfoDialog
         open={openAddOrEditTagInfoDialog}
         onClose={handleCloseAddOrEditTagInfoDialog}

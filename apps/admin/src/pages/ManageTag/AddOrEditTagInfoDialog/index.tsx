@@ -9,6 +9,7 @@ import {
 import React, { useCallback, useState } from 'react';
 
 import { StyledTextField } from '../../../components/styles';
+import { Tag } from '../../../generated-types';
 
 interface State {
   tag: string;
@@ -19,7 +20,7 @@ interface AddOrEditTagInfoDialogProps {
   onClose: any;
   onClickCancel: any;
   onClickConfirm: any;
-  data?: string;
+  data?: Tag;
 }
 
 function AddOrEditTagInfoDialog({
@@ -30,7 +31,7 @@ function AddOrEditTagInfoDialog({
   data,
 }: AddOrEditTagInfoDialogProps) {
   const [values, setValues] = useState<State>({
-    tag: data || '',
+    tag: data?.tenTag || '',
   });
 
   const handleChange = useCallback(

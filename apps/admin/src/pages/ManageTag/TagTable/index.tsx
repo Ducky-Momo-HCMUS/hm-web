@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 
 import DeleteDialog from '../../../components/DeleteDialog';
+import { Tag } from '../../../generated-types';
 
 import TagTableRow from './TagTableRow';
 
@@ -17,7 +18,7 @@ interface State {
   deleteIndex: number;
 }
 interface TagInfoTableProps {
-  data: string[];
+  data: Tag[];
 }
 
 function TagTable({ data }: TagInfoTableProps) {
@@ -59,8 +60,6 @@ function TagTable({ data }: TagInfoTableProps) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => (
               <TagTableRow
-                index={index}
-                key={index}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -82,7 +81,7 @@ function TagTable({ data }: TagInfoTableProps) {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá tag"
-          boldText={data[values.deleteIndex]}
+          boldText={data[values.deleteIndex].tenTag}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />
