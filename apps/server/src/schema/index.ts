@@ -4,6 +4,7 @@ import authTypeDefs from './auth';
 import homeroomTypeDefs from './homeroom';
 import noteTypeDefs from './note';
 import studentTypeDefs from './student';
+import tagTypeDefs from './tag';
 
 const typeDefs = gql`
   #=============#
@@ -27,4 +28,5 @@ export default [
   homeroomTypeDefs,
   studentTypeDefs,
   noteTypeDefs,
+  tagTypeDefs,
 ];

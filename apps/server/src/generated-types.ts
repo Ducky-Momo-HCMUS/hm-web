@@ -277,6 +277,7 @@ export type Query = {
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
+  tagList: TagList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -559,6 +560,17 @@ export type SubjectDetailResult = {
   tenMH: Scalars['String'];
 };
 
+export type Tag = {
+  __typename?: 'Tag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type TagList = {
+  __typename?: 'TagList';
+  tags: Array<Tag>;
+};
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -720,6 +732,8 @@ export type ResolversTypes = {
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
   SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
+  Tag: ResolverTypeWrapper<Tag>;
+  TagList: ResolverTypeWrapper<TagList>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -778,6 +792,8 @@ export type ResolversParentTypes = {
   StudentTerm: StudentTerm;
   StudentTrainingPoint: StudentTrainingPoint;
   SubjectDetailResult: SubjectDetailResult;
+  Tag: Tag;
+  TagList: TagList;
 };
 
 export type ContactResolvers<
@@ -1247,6 +1263,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
+  tagList?: Resolver<ResolversTypes['TagList'], ParentType, ContextType>;
 };
 
 export type StudentAllSubjectsResolvers<
@@ -1500,6 +1517,23 @@ export type SubjectDetailResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']
+> = {
+  maTag?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenTag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList']
+> = {
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Contact?: ContactResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
@@ -1544,4 +1578,6 @@ export type Resolvers<ContextType = any> = {
   StudentTerm?: StudentTermResolvers<ContextType>;
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
   SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
+  TagList?: TagListResolvers<ContextType>;
 };

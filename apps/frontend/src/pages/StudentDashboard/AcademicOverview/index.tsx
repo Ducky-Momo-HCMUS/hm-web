@@ -1,6 +1,6 @@
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
@@ -68,9 +68,7 @@ function AcademicOverview() {
         }}
       >
         <StyledBreadCrumbs sx={{ marginBottom: 0 }} aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Trang chủ
-          </Link>
+          <Link to="/">Trang chủ</Link>
           <Typography color="text.primary">{id}</Typography>
           <Typography color="text.primary">Kết quả học tập</Typography>
         </StyledBreadCrumbs>

@@ -84,6 +84,9 @@ export const accessTable: AccessTable = {
   'v1/notes/:id': {
     gvcn: true,
   },
+  'v1/tags': {
+    gvcn: true,
+  },
 };
 
 function verifyAccessTable() {

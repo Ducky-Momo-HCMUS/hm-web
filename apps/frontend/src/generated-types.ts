@@ -276,6 +276,7 @@ export type Query = {
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
+  tagList: TagList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -556,6 +557,17 @@ export type SubjectDetailResult = {
   namHoc: Scalars['Int'];
   soTC: Scalars['Int'];
   tenMH: Scalars['String'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type TagList = {
+  __typename?: 'TagList';
+  tags: Array<Tag>;
 };
 
 export type EditPasswordMutationVariables = Exact<{
@@ -1150,6 +1162,16 @@ export type StudentTrainingPointQuery = {
     __typename?: 'StudentTrainingPoint';
     drl: number;
     xepLoai: string;
+  };
+};
+
+export type TagListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TagListQuery = {
+  __typename?: 'Query';
+  tagList: {
+    __typename?: 'TagList';
+    tags: Array<{ __typename?: 'Tag'; maTag: number; tenTag: string }>;
   };
 };
 
@@ -3222,4 +3244,54 @@ export type StudentTrainingPointLazyQueryHookResult = ReturnType<
 export type StudentTrainingPointQueryResult = Apollo.QueryResult<
   StudentTrainingPointQuery,
   StudentTrainingPointQueryVariables
+>;
+export const TagListDocument = gql`
+  query TagList {
+    tagList {
+      tags {
+        maTag
+        tenTag
+      }
+    }
+  }
+`;
+
+/**
+ * __useTagListQuery__
+ *
+ * To run a query within a React component, call `useTagListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTagListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTagListQuery(
+  baseOptions?: Apollo.QueryHookOptions<TagListQuery, TagListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TagListQuery, TagListQueryVariables>(
+    TagListDocument,
+    options
+  );
+}
+export function useTagListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TagListQuery, TagListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TagListQuery, TagListQueryVariables>(
+    TagListDocument,
+    options
+  );
+}
+export type TagListQueryHookResult = ReturnType<typeof useTagListQuery>;
+export type TagListLazyQueryHookResult = ReturnType<typeof useTagListLazyQuery>;
+export type TagListQueryResult = Apollo.QueryResult<
+  TagListQuery,
+  TagListQueryVariables
 >;

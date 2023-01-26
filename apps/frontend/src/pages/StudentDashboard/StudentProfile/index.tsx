@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   Backdrop,
   Box,
   Button,
   CircularProgress,
   Grid,
-  Link,
   Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -127,9 +126,7 @@ function StudentProfile() {
         marginBottom="1.5rem"
       >
         <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Trang chủ
-          </Link>
+          <Link to="/">Trang chủ</Link>
           <Typography color="text.primary">{id}</Typography>
           <Typography color="text.primary">Thông tin sinh viên</Typography>
         </StyledBreadCrumbs>
