@@ -6,7 +6,7 @@ import {
   MutationNoteEditArgs,
   QueryNoteDetailArgs,
 } from '../generated-types';
-import { NOTE_DETAIL } from '../mocks/note';
+import { NOTE_DETAIL, NOTE_LIST } from '../mocks/note';
 import { CORE_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -33,11 +33,24 @@ class NoteAPI extends BaseDataSource {
     }
   }
 
+  public async getNoteList() {
+    try {
+      // const noteList = await this.get(
+      //   'v1/notes',
+      // );
+
+      return NOTE_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch note list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
   public async addNote({ payload }: MutationNoteAddArgs) {
     try {
-      const res = await this.post(`v1/notes`, payload);
-      console.log('res', res);
-      return res;
+      // const res = await this.post(`v1/notes`, payload);
+      console.log('payload', payload);
+      return { status: 200 };
     } catch (error) {
       console.error('Error: cannot add new note');
       throw this.handleError(error as ApolloError);

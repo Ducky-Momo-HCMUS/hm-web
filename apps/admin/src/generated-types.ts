@@ -244,7 +244,7 @@ export type NoteDetail = {
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
-  thoiGianSua: Scalars['String'];
+  thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
 };
@@ -267,6 +267,22 @@ export type NoteImage = {
   url: Scalars['String'];
 };
 
+export type NoteList = {
+  __typename?: 'NoteList';
+  danhSachGhiChu: Array<NoteListItem>;
+};
+
+export type NoteListItem = {
+  __typename?: 'NoteListItem';
+  maGC: Scalars['Int'];
+  maSV?: Maybe<Scalars['String']>;
+  noiDung: Scalars['String'];
+  tag: Array<Maybe<Scalars['String']>>;
+  thoiGianSua?: Maybe<Scalars['String']>;
+  thoiGianTao: Scalars['String'];
+  tieuDe: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   homeroomDetail: HomeroomDetail;
@@ -280,6 +296,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
+  noteList: NoteList;
   studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
@@ -992,8 +1009,27 @@ export type NoteDetailQuery = {
     tieuDe: string;
     noiDung: string;
     thoiGianTao: string;
-    thoiGianSua: string;
+    thoiGianSua?: string | null | undefined;
     hinhAnh: Array<{ __typename?: 'NoteImage'; stt: number; url: string }>;
+  };
+};
+
+export type NoteListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type NoteListQuery = {
+  __typename?: 'Query';
+  noteList: {
+    __typename?: 'NoteList';
+    danhSachGhiChu: Array<{
+      __typename?: 'NoteListItem';
+      maGC: number;
+      tag: Array<string | null | undefined>;
+      tieuDe: string;
+      noiDung: string;
+      thoiGianTao: string;
+      thoiGianSua?: string | null | undefined;
+      maSV?: string | null | undefined;
+    }>;
   };
 };
 
@@ -2721,6 +2757,66 @@ export type NoteDetailLazyQueryHookResult = ReturnType<
 export type NoteDetailQueryResult = Apollo.QueryResult<
   NoteDetailQuery,
   NoteDetailQueryVariables
+>;
+export const NoteListDocument = gql`
+  query NoteList {
+    noteList {
+      danhSachGhiChu {
+        maGC
+        tag
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
+        maSV
+      }
+    }
+  }
+`;
+
+/**
+ * __useNoteListQuery__
+ *
+ * To run a query within a React component, call `useNoteListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNoteListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNoteListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNoteListQuery(
+  baseOptions?: Apollo.QueryHookOptions<NoteListQuery, NoteListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<NoteListQuery, NoteListQueryVariables>(
+    NoteListDocument,
+    options
+  );
+}
+export function useNoteListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    NoteListQuery,
+    NoteListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<NoteListQuery, NoteListQueryVariables>(
+    NoteListDocument,
+    options
+  );
+}
+export type NoteListQueryHookResult = ReturnType<typeof useNoteListQuery>;
+export type NoteListLazyQueryHookResult = ReturnType<
+  typeof useNoteListLazyQuery
+>;
+export type NoteListQueryResult = Apollo.QueryResult<
+  NoteListQuery,
+  NoteListQueryVariables
 >;
 export const StudentAllSubjectsDocument = gql`
   query StudentAllSubjects($studentId: String!) {

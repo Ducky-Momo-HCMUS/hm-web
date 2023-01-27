@@ -7,6 +7,9 @@ export const noteResolver: Resolvers<ResolverContext> = {
     noteDetail: async (_, args, { dataSources }) => {
       return (await dataSources.noteAPI.getNoteDetail(args)) || null;
     },
+    noteList: async (_, __, { dataSources }) => {
+      return (await dataSources.noteAPI.getNoteList()) || null;
+    },
   },
   Mutation: {
     noteAdd: async (_, args, { dataSources }) => {
