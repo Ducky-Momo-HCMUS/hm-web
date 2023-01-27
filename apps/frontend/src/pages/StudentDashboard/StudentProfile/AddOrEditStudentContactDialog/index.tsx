@@ -9,7 +9,11 @@ import {
 import React, { useCallback, useState } from 'react';
 
 import { StyledTextField } from '../../../../components/styles';
-import { Contact } from '../../../../generated-types';
+import {
+  StudentAddContactInput,
+  StudentContact,
+  StudentEditContactInput,
+} from '../../../../generated-types';
 
 interface State {
   mxh: string;
@@ -20,8 +24,10 @@ interface AddOrEditStudentContactDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
-  data?: Contact;
+  onClickConfirm: (
+    payload: StudentEditContactInput | StudentAddContactInput
+  ) => void;
+  data?: StudentContact;
 }
 
 function AddOrEditStudentContactDialog({
@@ -46,11 +52,7 @@ function AddOrEditStudentContactDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? (
-          <>Chỉnh sửa thông tin liên lạc</>
-        ) : (
-          <>Thêm thông tin liên lạc</>
-        )}
+        {data ? 'Chỉnh sửa thông tin liên lạc' : 'Thêm thông tin liên lạc'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">
@@ -83,8 +85,14 @@ function AddOrEditStudentContactDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
-            {data ? <>Lưu</> : <>Thêm</>}
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onClickConfirm({ mxh: values.mxh, url: values.url });
+            }}
+          >
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>

@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   InputLabel,
-  Link,
   MenuItem,
   Paper,
   Select,
@@ -13,7 +12,7 @@ import {
   TableContainer,
   Typography,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import {
   StyledBreadCrumbs,
@@ -175,9 +174,7 @@ function AcademicReport() {
     <>
       <StyledTitle variant="h1">Tình hình học tập</StyledTitle>
       <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          Trang chủ
-        </Link>
+        <Link to="/">Trang chủ</Link>
         <Typography color="text.primary">
           {id} - Nguyễn Ngọc Thanh Tâm
         </Typography>
@@ -217,12 +214,12 @@ function AcademicReport() {
             loading={trainingPointLoading}
             data={trainingPoint}
           >
-            <Button>
+            <Button disabled sx={{ color: '#fff!important' }}>
               ĐRL: {trainingPoint?.drl} | {trainingPoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>
           <AsyncDataRenderer loading={averagePointLoading} data={averagePoint}>
-            <Button>
+            <Button disabled sx={{ color: '#fff!important' }}>
               ĐTB: {averagePoint?.dtbTong} | {averagePoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>

@@ -2,12 +2,11 @@ import {
   Box,
   Button,
   Grid,
-  Link,
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import _omit from 'lodash/omit';
 
 import Header from '../../components/Header';
@@ -216,9 +215,10 @@ function ClassDetail() {
         ?.khongDangKy || []
     );
   }, [
-    homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList?.khongDangKy,
+    values.termNotRegistered,
     homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
       ?.khongDangKy,
+    homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList?.khongDangKy,
   ]);
 
   const notEnrolledListLoading = useMemo(
@@ -267,6 +267,7 @@ function ClassDetail() {
   }, [
     homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.hoanThi,
     homeroomPostponeExamListOverallData?.homeroomPostponeExamList?.hoanThi,
+    values.termPostponeExam,
   ]);
 
   const postponeExamListLoading = useMemo(
@@ -287,9 +288,7 @@ function ClassDetail() {
       <StyledContentWrapper>
         <StyledTitle>Tổng quan lớp học</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Trang chủ
-          </Link>
+          <Link to="/">Trang chủ</Link>
           <Typography color="text.primary">Tổng quan lớp học</Typography>
         </StyledBreadCrumbs>
         <Box
@@ -324,7 +323,7 @@ function ClassDetail() {
           </AsyncDataRenderer>
 
           <Button
-            component={RouterLink}
+            component={Link}
             to={`/classes/${id}/report`}
             variant="contained"
           >

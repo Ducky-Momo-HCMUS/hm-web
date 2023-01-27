@@ -101,6 +101,7 @@ export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
   marginBottom: '1.5rem',
   '& a': {
     color: theme.palette.primary.main,
+    textDecoration: 'none',
   },
 }));
 

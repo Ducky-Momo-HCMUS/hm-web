@@ -1,10 +1,21 @@
 import { ApolloError } from 'apollo-server-express';
 
 import {
+  MutationStudentAddContactArgs,
+  MutationStudentAddParentInfoArgs,
+  MutationStudentDeleteContactArgs,
+  MutationStudentDeleteParentInfoArgs,
+  MutationStudentEditContactArgs,
+  MutationStudentEditParentInfoArgs,
   QueryStudentAllSubjectsArgs,
   QueryStudentAllTermsArgs,
   QueryStudentAveragePointArgs,
   QueryStudentAveragePointByTermArgs,
+  QueryStudentDetailArgs,
+  QueryStudentParentInfoListArgs,
+  QueryStudentNoteListArgs,
+  QueryStudentDetailSubjectsResultArgs,
+  QueryStudentOverviewResultArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointArgs,
   QueryStudentTrainingPointByTermArgs,
@@ -14,6 +25,13 @@ import {
   ALL_TERMS,
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
+  STUDENT_ADD_CONTACT_RESPONSE,
+  STUDENT_EDIT_CONTACT_RESPONSE,
+  STUDENT_PARENT_INFO_LIST,
+  STUDENT_PARENT_INFO_RESPONSE,
+  STUDENT_NOTE_LIST,
+  STUDENT_DETAIL_SUBJECTS_RESULT,
+  STUDENT_OVERVIEW_RESULT,
   SUBJECTS_BY_TERM,
   TRAINING_POINT,
   TRAINING_POINT_BY_TERM,
@@ -130,6 +148,170 @@ class StudentAPI extends BaseDataSource {
       return ALL_TERMS;
     } catch (error) {
       console.error('Error: cannot fetch all terms');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentDetail({ studentId }: QueryStudentDetailArgs) {
+    try {
+      const studentDetail = await this.get(`v1/students/${studentId}`);
+      return studentDetail;
+    } catch (error) {
+      console.error('Error: cannot fetch student detail');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentParentInfoList({
+    studentId,
+  }: QueryStudentParentInfoListArgs) {
+    try {
+      // const studentParentInfoList = await this.get(
+      //   `v1/students/${studentId}/parents`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_PARENT_INFO_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch student parent info list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addStudentContact({
+    studentId,
+    payload,
+  }: MutationStudentAddContactArgs) {
+    try {
+      const addedContact = await this.post(
+        `v1/students/${studentId}/contacts`,
+        payload
+      );
+      return addedContact;
+    } catch (error) {
+      console.error('Error: cannot add student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async editStudentContact({
+    contactId,
+    payload,
+  }: MutationStudentEditContactArgs) {
+    try {
+      const res = await this.patch(
+        `v1/students/contacts/${contactId}`,
+        payload
+      );
+      return res;
+    } catch (error) {
+      console.error('Error: cannot edit student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteStudentContact({
+    contactId,
+  }: MutationStudentDeleteContactArgs) {
+    try {
+      const res = await this.delete(`v1/students/contacts/${contactId}`);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot delete student contact');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentOverviewResult({
+    studentId,
+  }: QueryStudentOverviewResultArgs) {
+    try {
+      // const overviewResult = await this.get(
+      //   `v1/students/${studentId}/general`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_OVERVIEW_RESULT;
+    } catch (error) {
+      console.error('Error: cannot fetch student overview result');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addStudentParentInfo({
+    studentId,
+    payload,
+  }: MutationStudentAddParentInfoArgs) {
+    try {
+      // const addedParentInfo = await this.post(
+      //   `v1/students/${studentId}/parents`,
+      //   payload
+      // );
+      console.log('params', studentId);
+      console.log('payload', payload);
+      return STUDENT_PARENT_INFO_RESPONSE;
+    } catch (error) {
+      console.error('Error: cannot add student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async editStudentParentInfo({
+    parentId,
+    payload,
+  }: MutationStudentEditParentInfoArgs) {
+    try {
+      // const editedParentInfo = await this.post(
+      //   `v1/students/parents/${parentId}`,
+      //   payload
+      // );
+      console.log('params', parentId);
+      console.log('payload', payload);
+      return STUDENT_PARENT_INFO_RESPONSE;
+    } catch (error) {
+      console.error('Error: cannot edit student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteStudentParentInfo({
+    parentId,
+  }: MutationStudentDeleteParentInfoArgs) {
+    try {
+      // const response = await this.delete(
+      //   `v1/students/parents/${parentId}`
+      // );
+      console.log('params', parentId);
+      return { status: 200 };
+    } catch (error) {
+      console.error('Error: cannot delete student parent info');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
+    try {
+      // const noteList = await this.get(
+      //   `v1/students/${studentId}/notes`,
+      // );
+      console.log('params', studentId);
+      return STUDENT_NOTE_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch student note list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentDetailSubjectsResult({
+    studentId,
+    subject,
+  }: QueryStudentDetailSubjectsResultArgs) {
+    try {
+      // const detailSubjectsResult = await this.get(
+      //   `v1/students/${studentId}?subject=${subject}`,
+      // );
+      console.log('params', studentId, subject);
+      return STUDENT_DETAIL_SUBJECTS_RESULT;
+    } catch (error) {
+      console.error('Error: cannot fetch student detail subjects result');
       throw this.handleError(error as ApolloError);
     }
   }

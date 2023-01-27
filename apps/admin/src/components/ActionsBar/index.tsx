@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   IconButton,
@@ -22,6 +22,8 @@ function ActionsBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -87,8 +89,7 @@ function ActionsBar() {
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}
-            href="/logout"
-            LinkComponent={Link}
+            onClick={() => navigate('/login')}
           >
             <ListItemIcon>
               <Logout fontSize="small" />

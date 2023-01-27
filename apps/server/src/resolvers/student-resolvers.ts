@@ -37,6 +37,53 @@ export const studentResolver: Resolvers<ResolverContext> = {
     studentAllTerms: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.getStudentAllTerms(args)) || null;
     },
+    studentDetail: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.getStudentDetail(args)) || null;
+    },
+    studentParentInfoList: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentParentInfoList(args)) || null
+      );
+    },
+    studentNoteList: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.getStudentNoteList(args)) || null;
+    },
+    studentOverviewResult: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentOverviewResult(args)) || null
+      );
+    },
+    studentDetailSubjectsResult: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.getStudentDetailSubjectsResult(args)) ||
+        null
+      );
+    },
+  },
+  Mutation: {
+    studentAddContact: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.addStudentContact(args);
+      return res.data;
+    },
+    studentEditContact: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.editStudentContact(args);
+      return res.data;
+    },
+    studentDeleteContact: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.deleteStudentContact(args);
+      return res.data;
+    },
+    studentAddParentInfo: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.addStudentParentInfo(args)) || null;
+    },
+    studentEditParentInfo: async (_, args, { dataSources }) => {
+      return (await dataSources.studentAPI.editStudentParentInfo(args)) || null;
+    },
+    studentDeleteParentInfo: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.studentAPI.deleteStudentParentInfo(args)) || null
+      );
+    },
   },
 };
 

@@ -13,7 +13,7 @@ interface AccountTableRowProps {
 }
 
 function AccountTableRow({ index, data, onClickDelete }: AccountTableRowProps) {
-  const { email, type, status } = data;
+  const { email, fullName, type, status } = data;
   const [openAddOrEditAccountInfoDialog, setOpenAddOrEditAccountInfoDialog] =
     useState(false);
 
@@ -29,6 +29,7 @@ function AccountTableRow({ index, data, onClickDelete }: AccountTableRowProps) {
       <TableRow key={index}>
         <TableCell>{index + 1}</TableCell>
         <TableCell>{email}</TableCell>
+        <TableCell>{fullName}</TableCell>
         <TableCell>{type}</TableCell>
         <TableCell>{status}</TableCell>
         <TableCell align="center">

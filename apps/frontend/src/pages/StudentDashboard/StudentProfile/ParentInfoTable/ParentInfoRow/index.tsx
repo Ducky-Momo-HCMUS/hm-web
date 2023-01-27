@@ -1,64 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IconButton, TableCell, TableRow, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { ParentInfo } from '../../../../../types';
 import { StyledMuiLink } from '../../../../../components/styles';
-import AddOrEditParentInfoDialog from '../../AddOrEditParentInfoDialog';
+import { StudentParentInfo } from '../../../../../generated-types';
 
 interface ParentInfoRowProps {
   index: number;
-  data: ParentInfo;
+  data: StudentParentInfo;
   onClickDelete: any;
+  onClickEdit: any;
 }
 
-function ParentInfoRow({ index, data, onClickDelete }: ParentInfoRowProps) {
-  const { fullName, relationship, phoneNumber, contact } = data;
-
-  const [openAddOrEditParentInfoDialog, setOpenAddOrEditParentInfoDialog] =
-    useState(false);
-
-  const handleOpenAddOrEditParentInfoDialog = () => {
-    setOpenAddOrEditParentInfoDialog(true);
-  };
-
-  const handleCloseAddOrEditParentInfoDialog = () => {
-    setOpenAddOrEditParentInfoDialog(false);
-  };
+function ParentInfoRow({
+  index,
+  data,
+  onClickDelete,
+  onClickEdit,
+}: ParentInfoRowProps) {
+  const { tenPH, quanHe, sdt, sua, lienHePH } = data;
 
   return (
     <>
       <TableRow key={index}>
-        <TableCell>{fullName}</TableCell>
-        <TableCell>{relationship}</TableCell>
-        <TableCell>{phoneNumber}</TableCell>
+        <TableCell>{tenPH}</TableCell>
+        <TableCell>{quanHe}</TableCell>
+        <TableCell>{sdt}</TableCell>
         <TableCell>
-          {contact.map((social) => (
+          {lienHePH.map((social) => (
             <>
               <Tooltip title={social.url} placement="top">
                 <StyledMuiLink href={social.url}>{social.mxh}</StyledMuiLink>
               </Tooltip>
-              {contact.at(contact.length - 1) === social ? '' : ', '}
+              {lienHePH.at(lienHePH.length - 1) === social ? '' : ', '}
             </>
           ))}
         </TableCell>
         <TableCell align="center">
-          <IconButton onClick={handleOpenAddOrEditParentInfoDialog}>
-            <EditIcon />
-          </IconButton>
+          {sua && (
+            <IconButton onClick={onClickEdit}>
+              <EditIcon />
+            </IconButton>
+          )}
           <IconButton onClick={onClickDelete}>
             <DeleteIcon />
           </IconButton>
         </TableCell>
       </TableRow>
-      <AddOrEditParentInfoDialog
-        open={openAddOrEditParentInfoDialog}
-        onClose={handleCloseAddOrEditParentInfoDialog}
-        onClickCancel={handleCloseAddOrEditParentInfoDialog}
-        onClickConfirm={handleCloseAddOrEditParentInfoDialog}
-        data={data}
-      />
     </>
   );
 }

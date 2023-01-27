@@ -52,6 +52,7 @@ function AccountTable({ data }: AccountInfoTableProps) {
           <TableRow>
             <TableCell>#</TableCell>
             <TableCell>Email</TableCell>
+            <TableCell>Họ tên</TableCell>
             <TableCell>Loại tài khoản</TableCell>
             <TableCell>Trạng thái</TableCell>
             <TableCell align="center">Thao tác</TableCell>

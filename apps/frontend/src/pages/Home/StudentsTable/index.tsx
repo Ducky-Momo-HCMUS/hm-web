@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -16,7 +16,7 @@ import TablePagination from '@mui/material/TablePagination';
 
 import {
   useHomeroomListQuery,
-  useHomeroomStudentListQuery,
+  useHomeroomStudentListLazyQuery,
 } from '../../../generated-types';
 import {
   StyledActionsBar,
@@ -25,7 +25,7 @@ import {
 } from '../../../components/styles';
 import { Order, Property } from '../../../types';
 import {
-  getComparator,
+  // getComparator,
   groupClassesByYear,
   mapStudentDataToTable,
 } from '../../../utils';
@@ -53,8 +53,8 @@ function StudentsTable() {
   const { loading: homeroomListLoading, data: homeroomListData } =
     useHomeroomListQuery();
   const homeroomList = useMemo(
-    () => homeroomListData?.homeroomList.lopSinhHoat || [],
-    [homeroomListData?.homeroomList.lopSinhHoat]
+    () => homeroomListData?.homeroomList.lopChuNhiem || [],
+    [homeroomListData?.homeroomList.lopChuNhiem]
   );
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
@@ -110,16 +110,24 @@ function StudentsTable() {
     };
   }, [mappedData, years]);
 
-  const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
-    useHomeroomStudentListQuery({
-      variables: {
-        homeroomId: values.class || initialClass,
-      },
-    });
+  const [
+    getHomeroomStudentList,
+    { loading: homeroomStudentListLoading, data: homeroomStudentListData },
+  ] = useHomeroomStudentListLazyQuery();
   const studentListData = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList || [],
+    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
     [homeroomStudentListData?.homeroomStudentList]
   );
+
+  useEffect(() => {
+    if (values.class.length > 0 || initialClass.length > 0) {
+      getHomeroomStudentList({
+        variables: {
+          homeroomId: values.class.length > 0 ? values.class : initialClass,
+        },
+      });
+    }
+  }, [getHomeroomStudentList, initialClass, values.class]);
 
   const selectedClass = useMemo(
     () => values.class || initialClass,
@@ -185,7 +193,7 @@ function StudentsTable() {
                 />
                 <TableBody>
                   {[...studentListData]
-                    ?.sort(getComparator(order, orderBy))
+                    // ?.sort(getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <StudentTableRow

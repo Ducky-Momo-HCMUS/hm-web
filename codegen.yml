@@ -1,6 +1,6 @@
 schema:
     - "apps/server/src/schema/*.ts"
-documents: "apps/frontend/src/data/**/*.ts"
+documents: ["apps/frontend/src/data/**/*.ts", "apps/admin/src/data/**/*.ts"]
 generates:
     apps/frontend/src/generated-types.ts:
       plugins:
@@ -17,6 +17,14 @@ generates:
       config:
           maybeValue: T | null | undefined
           enumsAsConst: true
+    apps/admin/src/generated-types.ts:
+      plugins:
+          - typescript
+          - typescript-operations
+          - typescript-react-apollo
+      config:
+          maybeValue: T | null | undefined
+          enumsAsConst: true     
 hooks:
     afterOneFileWrite:
       - prettier --write

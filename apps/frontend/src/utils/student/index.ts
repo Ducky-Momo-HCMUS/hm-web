@@ -4,6 +4,7 @@ import {
   HomeroomListItem,
   HomeroomStudentListItem,
 } from '../../generated-types';
+import { HomeroomStudentListData } from '../../types';
 
 export const mapStudentDataToTable = (data: HomeroomStudentListItem) => {
   return {
@@ -12,7 +13,7 @@ export const mapStudentDataToTable = (data: HomeroomStudentListItem) => {
       sdt: data.sdt,
       lienHe: data.lienHe,
     },
-  };
+  } as HomeroomStudentListData;
 };
 
 export const mapMajorIdToName = (maCN: string) => {

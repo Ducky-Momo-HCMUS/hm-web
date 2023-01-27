@@ -5,12 +5,12 @@ import { ResolverContext } from './types';
 export const homeroomResolver: Resolvers<ResolverContext> = {
   Query: {
     homeroomList: async (_, __, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomList()) || null;
+      const res = await dataSources.homeroomAPI.getHomeroomList();
+      return res.data;
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomStudentList(args)) || null
-      );
+      const res = await dataSources.homeroomAPI.getHomeroomStudentList(args);
+      return res.data;
     },
     homeroomDetail: async (_, args, { dataSources }) => {
       return (await dataSources.homeroomAPI.getHomeroomDetail(args)) || null;
