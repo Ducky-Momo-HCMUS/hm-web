@@ -38,6 +38,16 @@ interface NoteEditorProps {
   isAdding?: boolean;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function NoteEditor({
   tagList = [],
   editorRef,
@@ -88,6 +98,7 @@ function NoteEditor({
             value={tags}
             label="Tag"
             onChange={handleSelectTags}
+            MenuProps={MenuProps}
           >
             {tagList.map((item) => (
               <MenuItem value={item.tenTag}>
