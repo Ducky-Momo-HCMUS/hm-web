@@ -599,6 +599,34 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TagAddMutationVariables = Exact<{
+  payload: TagAddInput;
+}>;
+
+export type TagAddMutation = {
+  __typename?: 'Mutation';
+  tagAdd: { __typename?: 'Tag'; maTag: number; tenTag: string };
+};
+
+export type TagDeleteMutationVariables = Exact<{
+  tagId: Scalars['Int'];
+}>;
+
+export type TagDeleteMutation = {
+  __typename?: 'Mutation';
+  tagDelete: { __typename?: 'TagDeleteResponse'; status: number };
+};
+
+export type TagEditMutationVariables = Exact<{
+  tagId: Scalars['Int'];
+  payload: TagEditInput;
+}>;
+
+export type TagEditMutation = {
+  __typename?: 'Mutation';
+  tagEdit: { __typename?: 'Tag'; maTag: number; tenTag: string };
+};
+
 export type EditPasswordMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -1204,6 +1232,152 @@ export type TagListQuery = {
   };
 };
 
+export const TagAddDocument = gql`
+  mutation TagAdd($payload: TagAddInput!) {
+    tagAdd(payload: $payload) {
+      maTag
+      tenTag
+    }
+  }
+`;
+export type TagAddMutationFn = Apollo.MutationFunction<
+  TagAddMutation,
+  TagAddMutationVariables
+>;
+
+/**
+ * __useTagAddMutation__
+ *
+ * To run a mutation, you first call `useTagAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTagAddMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tagAddMutation, { data, loading, error }] = useTagAddMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useTagAddMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TagAddMutation,
+    TagAddMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<TagAddMutation, TagAddMutationVariables>(
+    TagAddDocument,
+    options
+  );
+}
+export type TagAddMutationHookResult = ReturnType<typeof useTagAddMutation>;
+export type TagAddMutationResult = Apollo.MutationResult<TagAddMutation>;
+export type TagAddMutationOptions = Apollo.BaseMutationOptions<
+  TagAddMutation,
+  TagAddMutationVariables
+>;
+export const TagDeleteDocument = gql`
+  mutation TagDelete($tagId: Int!) {
+    tagDelete(tagId: $tagId) {
+      status
+    }
+  }
+`;
+export type TagDeleteMutationFn = Apollo.MutationFunction<
+  TagDeleteMutation,
+  TagDeleteMutationVariables
+>;
+
+/**
+ * __useTagDeleteMutation__
+ *
+ * To run a mutation, you first call `useTagDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTagDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tagDeleteMutation, { data, loading, error }] = useTagDeleteMutation({
+ *   variables: {
+ *      tagId: // value for 'tagId'
+ *   },
+ * });
+ */
+export function useTagDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TagDeleteMutation,
+    TagDeleteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<TagDeleteMutation, TagDeleteMutationVariables>(
+    TagDeleteDocument,
+    options
+  );
+}
+export type TagDeleteMutationHookResult = ReturnType<
+  typeof useTagDeleteMutation
+>;
+export type TagDeleteMutationResult = Apollo.MutationResult<TagDeleteMutation>;
+export type TagDeleteMutationOptions = Apollo.BaseMutationOptions<
+  TagDeleteMutation,
+  TagDeleteMutationVariables
+>;
+export const TagEditDocument = gql`
+  mutation TagEdit($tagId: Int!, $payload: TagEditInput!) {
+    tagEdit(tagId: $tagId, payload: $payload) {
+      maTag
+      tenTag
+    }
+  }
+`;
+export type TagEditMutationFn = Apollo.MutationFunction<
+  TagEditMutation,
+  TagEditMutationVariables
+>;
+
+/**
+ * __useTagEditMutation__
+ *
+ * To run a mutation, you first call `useTagEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTagEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [tagEditMutation, { data, loading, error }] = useTagEditMutation({
+ *   variables: {
+ *      tagId: // value for 'tagId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useTagEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TagEditMutation,
+    TagEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<TagEditMutation, TagEditMutationVariables>(
+    TagEditDocument,
+    options
+  );
+}
+export type TagEditMutationHookResult = ReturnType<typeof useTagEditMutation>;
+export type TagEditMutationResult = Apollo.MutationResult<TagEditMutation>;
+export type TagEditMutationOptions = Apollo.BaseMutationOptions<
+  TagEditMutation,
+  TagEditMutationVariables
+>;
 export const EditPasswordDocument = gql`
   mutation EditPassword(
     $email: String!

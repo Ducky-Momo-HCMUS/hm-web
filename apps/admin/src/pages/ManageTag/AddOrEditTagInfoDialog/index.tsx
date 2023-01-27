@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useState } from 'react';
 
 import { StyledTextField } from '../../../components/styles';
-import { Tag } from '../../../generated-types';
+import { Tag, TagAddInput, TagEditInput } from '../../../generated-types';
 
 interface State {
   tag: string;
@@ -19,7 +19,7 @@ interface AddOrEditTagInfoDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
+  onClickConfirm: (payload: TagAddInput | TagEditInput) => void;
   data?: Tag;
 }
 
@@ -62,7 +62,13 @@ function AddOrEditTagInfoDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onClickConfirm({ tenTag: values.tag });
+            }}
+          >
             {data ? <>Lưu</> : <>Thêm</>}
           </Button>
         </DialogActions>

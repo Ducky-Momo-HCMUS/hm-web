@@ -1,34 +1,24 @@
 import { IconButton, TableRow, TableCell } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState } from 'react';
+import React from 'react';
 
-import AddOrEditTagInfoDialog from '../../AddOrEditTagInfoDialog';
 import { Tag } from '../../../../generated-types';
 
 interface TagTableRowProps {
   data: Tag;
   onClickDelete: any;
+  onClickEdit: any;
 }
 
-function TagTableRow({ data, onClickDelete }: TagTableRowProps) {
-  const [openAddOrEditTagInfoDialog, setOpenAddOrEditTagInfoDialog] =
-    useState(false);
-
-  const handleOpenAddOrEditTagInfoDialog = () => {
-    setOpenAddOrEditTagInfoDialog(true);
-  };
-
-  const handleCloseAddOrEditTagInfoDialog = () => {
-    setOpenAddOrEditTagInfoDialog(false);
-  };
+function TagTableRow({ data, onClickDelete, onClickEdit }: TagTableRowProps) {
   return (
     <>
       <TableRow key={data.maTag}>
         <TableCell>{data.maTag}</TableCell>
         <TableCell>{data.tenTag}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={handleOpenAddOrEditTagInfoDialog}>
+          <IconButton onClick={onClickEdit}>
             <EditIcon />
           </IconButton>
           <IconButton onClick={onClickDelete}>
@@ -36,13 +26,6 @@ function TagTableRow({ data, onClickDelete }: TagTableRowProps) {
           </IconButton>
         </TableCell>
       </TableRow>
-      <AddOrEditTagInfoDialog
-        open={openAddOrEditTagInfoDialog}
-        onClose={handleCloseAddOrEditTagInfoDialog}
-        onClickCancel={handleCloseAddOrEditTagInfoDialog}
-        onClickConfirm={handleCloseAddOrEditTagInfoDialog}
-        data={data}
-      />
     </>
   );
 }

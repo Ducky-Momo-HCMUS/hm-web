@@ -12,11 +12,11 @@ export const tagResolver: Resolvers<ResolverContext> = {
   Mutation: {
     tagAdd: async (_, args, { dataSources }) => {
       const res = await dataSources.tagAPI.addTag(args);
-      return res.data;
+      return res.data.tag;
     },
     tagEdit: async (_, args, { dataSources }) => {
       const res = await dataSources.tagAPI.editTag(args);
-      return res.data;
+      return res.data.tag;
     },
     tagDelete: async (_, args, { dataSources }) => {
       const res = await dataSources.tagAPI.deleteTag(args);
