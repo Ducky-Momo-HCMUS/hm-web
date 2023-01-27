@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -27,6 +28,7 @@ import {
   useStudentDetailQuery,
   useStudentParentInfoListQuery,
 } from '../../../generated-types';
+import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -59,6 +61,10 @@ function StudentProfile() {
           studentId: id,
           payload,
         },
+        refetchQueries: [
+          { query: GET_STUDENT_DETAIL, variables: { studentId: id } },
+          'StudentDetail',
+        ],
       });
     },
     [addStudentContact, id]

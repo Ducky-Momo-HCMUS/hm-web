@@ -182,13 +182,11 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentAddContactArgs) {
     try {
-      // const addedContact = await this.post(
-      //   `v1/students/${studentId}/contacts`,
-      //   payload
-      // );
-      console.log('params', studentId);
-      console.log('payload', payload);
-      return STUDENT_ADD_CONTACT_RESPONSE;
+      const addedContact = await this.post(
+        `v1/students/${studentId}/contacts`,
+        payload
+      );
+      return addedContact;
     } catch (error) {
       console.error('Error: cannot add student contact');
       throw this.handleError(error as ApolloError);
@@ -200,13 +198,11 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentEditContactArgs) {
     try {
-      // const editedContact = await this.patch(
-      //   `v1/students/contacts/${contactId}`,
-      //   payload
-      // );
-      console.log('params', contactId);
-      console.log('payload', payload);
-      return STUDENT_EDIT_CONTACT_RESPONSE;
+      const res = await this.patch(
+        `v1/students/contacts/${contactId}`,
+        payload
+      );
+      return res;
     } catch (error) {
       console.error('Error: cannot edit student contact');
       throw this.handleError(error as ApolloError);
@@ -217,11 +213,8 @@ class StudentAPI extends BaseDataSource {
     contactId,
   }: MutationStudentDeleteContactArgs) {
     try {
-      // const response = await this.delete(
-      //   `v1/students/contacts/${contactId}`
-      // );
-      console.log('params', contactId);
-      return { status: 200 };
+      const res = await this.delete(`v1/students/contacts/${contactId}`);
+      return res;
     } catch (error) {
       console.error('Error: cannot delete student contact');
       throw this.handleError(error as ApolloError);

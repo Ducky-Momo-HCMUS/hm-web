@@ -62,13 +62,16 @@ export const studentResolver: Resolvers<ResolverContext> = {
   },
   Mutation: {
     studentAddContact: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.addStudentContact(args)) || null;
+      const res = await dataSources.studentAPI.addStudentContact(args);
+      return res.data;
     },
     studentEditContact: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.editStudentContact(args)) || null;
+      const res = await dataSources.studentAPI.editStudentContact(args);
+      return res.data;
     },
     studentDeleteContact: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.deleteStudentContact(args)) || null;
+      const res = await dataSources.studentAPI.deleteStudentContact(args);
+      return res.data;
     },
     studentAddParentInfo: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.addStudentParentInfo(args)) || null;
