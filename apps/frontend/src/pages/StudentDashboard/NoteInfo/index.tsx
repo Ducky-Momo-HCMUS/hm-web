@@ -107,11 +107,11 @@ function NoteInfo() {
       setValues((v) => ({
         ...v,
         title: noteDetail.tieuDe,
+        tags: noteDetail.tag as string[],
       }));
       if (editorRef.current) {
         editorRef.current.setContent(noteDetail.noiDung);
       }
-      setValues((v) => ({ ...v, tags: noteDetail.tag as string[] }));
       setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
     }
   }, [noteDetail]);
@@ -149,7 +149,9 @@ function NoteInfo() {
     const payload = {
       tieuDe: values.title,
       noiDung: editorRef.current?.getContent() || '',
-      maTag: [1, 2],
+      maTag: values.tags.map(
+        (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
+      ),
       url: ['https://picsum.photos/200'],
     } as NoteEditInput;
 
