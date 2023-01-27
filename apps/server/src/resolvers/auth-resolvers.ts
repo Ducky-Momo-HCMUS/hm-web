@@ -25,5 +25,18 @@ export const authResolvers: Resolvers<ResolverContext> = {
       );
       return { status: res.data.status };
     },
+    editPassword: async (
+      _parent,
+      { email, password, newPassword, passwordConfirm },
+      { dataSources }
+    ) => {
+      const res = await dataSources.authAPI.editPassword({
+        email,
+        password,
+        newPassword,
+        passwordConfirm,
+      });
+      return { status: res.data.status };
+    },
   },
 };

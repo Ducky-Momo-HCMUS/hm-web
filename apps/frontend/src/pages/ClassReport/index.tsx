@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   InputLabel,
-  Link,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -12,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import {
@@ -57,12 +56,8 @@ function ClassReport() {
       <StyledContentWrapper>
         <StyledTitle variant="h1">Báo cáo lớp học</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Trang chủ
-          </Link>
-          <Link underline="hover" color="inherit" href={`/classes/${id}`}>
-            Tổng quan lớp học
-          </Link>
+          <Link to="/">Trang chủ</Link>
+          <Link to={`/classes/${id}`}>Tổng quan lớp học</Link>
           <Typography color="text.primary">Báo cáo lớp học</Typography>
         </StyledBreadCrumbs>
         <Box

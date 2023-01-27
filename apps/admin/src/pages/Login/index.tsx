@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import {
+  Backdrop,
   Box,
   Button,
-  Checkbox,
+  CircularProgress,
   Grid,
   IconButton,
   InputAdornment,
@@ -18,131 +20,160 @@ import {
   StyledTextField,
 } from '../../components/styles';
 import ErrorMessage from '../../components/ErrorMessage';
-
-import { StyledFormControlLabel } from './styles';
+import { useLoginMutation } from '../../generated-types';
 
 interface State {
-  username: string;
-  password: string;
   showPassword: boolean;
 }
 
+const errorMessages = [
+  {
+    id: 'account_not_found',
+    message: 'Tài khoản không tồn tại',
+  },
+  { id: 'invalid_password', message: 'Mật khẩu không hợp lệ' },
+];
+
 function Login() {
   const [values, setValues] = useState<State>({
-    username: '',
-    password: '',
     showPassword: false,
   });
 
-  const handleChange = useCallback(
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues((v) => ({ ...v, [prop]: event.target.value }));
-    },
-    []
-  );
-
   const handleClickShowPassword = useCallback(() => {
     setValues((v) => ({
-      ...v,
       showPassword: !v.showPassword,
     }));
   }, []);
 
   const [error, setError] = useState<string>('');
 
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (
-        !values.username.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)
-      ) {
-        setError('Email không hợp lệ');
-        return;
-      }
+  const navigate = useNavigate();
 
+  const [login, { loading: loginLoading, error: loginError }] =
+    useLoginMutation({
+      onCompleted: () => {
+        navigate('/');
+      },
+    });
+
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      const result = await login({
+        variables: {
+          email: data.get('email')?.toString() || '',
+          password: data.get('password')?.toString() || '',
+        },
+      });
+
+      localStorage.setItem('EMAIL', data.get('email')?.toString() || '');
+      localStorage.setItem('ACCESS_TOKEN', result.data?.login?.token || '');
       setError('');
     },
-    [values.username]
+    [login]
   );
 
+  useEffect(() => {
+    if (!loginError) {
+      setError('');
+      return;
+    }
+
+    const errorId =
+      loginError?.graphQLErrors[0].extensions.response?.body.errorId;
+    setError(errorMessages.find((err) => err.id === errorId)?.message || '');
+  }, [loginError]);
+
   return (
-    <StyledContainer>
-      <Header />
-      <StyledCard>
-        <StyledLogo
-          variant="square"
-          alt="HCMUS Logo"
-          src="/img/hcmus-logo.png"
-        />
-        {error && <ErrorMessage content={error} />}
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <StyledTextField
-            required
-            label="Tên đăng nhập"
-            name="username"
-            sx={{ margin: '0.5rem 0', width: '100%' }}
-            variant="filled"
-            onChange={handleChange('username')}
-            placeholder="Nhập email..."
-            InputLabelProps={{
-              shrink: true,
-            }}
+    <>
+      <StyledContainer>
+        <Header />
+        <StyledCard>
+          <StyledLogo
+            variant="square"
+            alt="HCMUS Logo"
+            src="/img/hcmus-logo.png"
           />
-          <StyledTextField
-            required
-            label="Mật khẩu"
-            name="password"
-            sx={{ margin: '0.5rem 0', width: '100%' }}
-            type={values.showPassword ? 'text' : 'password'}
-            placeholder="Nhập mật khẩu..."
-            value={values.password}
-            onChange={handleChange('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? (
-                      <Visibility sx={{ fontSize: '1.25rem' }} />
-                    ) : (
-                      <VisibilityOff sx={{ fontSize: '1.25rem' }} />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="filled"
-          />
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <StyledFormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Ghi nhớ đăng nhập"
-              />
+          {error && <ErrorMessage content={error} />}
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <StyledTextField
+              required
+              type="email"
+              label="Email"
+              name="email"
+              sx={{ margin: '0.5rem 0', width: '100%' }}
+              variant="filled"
+              placeholder="Nhập email..."
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <StyledTextField
+              required
+              label="Mật khẩu"
+              name="password"
+              sx={{ margin: '0.5rem 0', width: '100%' }}
+              type={values.showPassword ? 'text' : 'password'}
+              placeholder="Nhập mật khẩu..."
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? (
+                        <Visibility sx={{ fontSize: '1.25rem' }} />
+                      ) : (
+                        <VisibilityOff sx={{ fontSize: '1.25rem' }} />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="filled"
+            />
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <Link
+                  sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
+                  component={RouterLink}
+                  to="/register"
+                >
+                  Tạo tài khoản
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link
+                  sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
+                  component={RouterLink}
+                  to="/reset-password"
+                >
+                  Quên mật khẩu?
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="/reset-password" variant="body2">
-                Quên mật khẩu?
-              </Link>
-            </Grid>
-          </Grid>
-          <Box sx={{ textAlign: 'right' }}>
-            <Button href="/register" variant="text" sx={{ mt: 1, mr: 2 }}>
-              Tạo tài khoản
-            </Button>
-            <Button type="submit" variant="contained" sx={{ mt: 1 }}>
-              Đăng nhập
-            </Button>
+            <Box sx={{ textAlign: 'right' }}>
+              <Button type="submit" variant="contained" sx={{ mt: 1 }}>
+                Đăng nhập
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </StyledCard>
-    </StyledContainer>
+        </StyledCard>
+      </StyledContainer>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loginLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
 }
 

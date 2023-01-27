@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   Backdrop,
   Box,
   Button,
   CircularProgress,
   Grid,
-  Link,
   Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { format } from 'date-fns';
 
 import { StyledHeader } from '../NoteInfo/styles';
 import ClassInfo from '../../ClassDetail/ClassInfo';
@@ -27,6 +28,7 @@ import {
   useStudentDetailQuery,
   useStudentParentInfoListQuery,
 } from '../../../generated-types';
+import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -59,6 +61,10 @@ function StudentProfile() {
           studentId: id,
           payload,
         },
+        refetchQueries: [
+          { query: GET_STUDENT_DETAIL, variables: { studentId: id } },
+          'StudentDetail',
+        ],
       });
     },
     [addStudentContact, id]
@@ -126,12 +132,8 @@ function StudentProfile() {
         marginBottom="1.5rem"
       >
         <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/">
-            Trang chủ
-          </Link>
-          <Typography color="text.primary">
-            {id} - Nguyễn Ngọc Thanh Tâm
-          </Typography>
+          <Link to="/">Trang chủ</Link>
+          <Typography color="text.primary">{id}</Typography>
           <Typography color="text.primary">Thông tin sinh viên</Typography>
         </StyledBreadCrumbs>
         <Button sx={{ textTransform: 'uppercase' }} variant="contained">
@@ -173,7 +175,14 @@ function StudentProfile() {
               <ClassInfo title="MSSV" description={id} />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo title="Ngày sinh" description={studentDetails?.dob} />
+              <ClassInfo
+                title="Ngày sinh"
+                description={
+                  studentDetails?.dob && studentDetails?.dob.length > 0
+                    ? format(new Date(studentDetails?.dob || ''), 'dd/MM/yyyy')
+                    : ''
+                }
+              />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
@@ -265,17 +274,20 @@ function StudentProfile() {
             <Grid item xs={7}>
               <ClassInfo
                 title="Chuyên ngành"
-                description={studentDetails?.tenCN}
+                description={studentDetails?.tenCN || 'Chưa có'}
               />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
                 title="GPA"
-                description={studentDetails?.gpa_10.toString()}
+                description={studentDetails?.gpa_10?.toString() || 'Chưa có'}
               />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo title="Xếp loại học lực" description="Giỏi" />
+              <ClassInfo
+                title="Xếp loại học lực"
+                description={studentDetails?.xepLoai || 'Chưa có'}
+              />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo

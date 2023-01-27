@@ -6,14 +6,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import {
   Backdrop,
   Box,
   CircularProgress,
   Grid,
-  Link,
   List,
   SelectChangeEvent,
   TablePagination,
@@ -41,6 +40,7 @@ import {
   useNoteDetailLazyQuery,
   useStudentNoteListQuery,
   useNoteEditMutation,
+  useTagListQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
@@ -119,11 +119,19 @@ function NoteInfo() {
   const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
   const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
 
+  const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
+  const tagList = useMemo(
+    () => tagListData?.tagList.tags || [],
+    [tagListData?.tagList.tags]
+  );
+
   const handleClickSave = useCallback(async () => {
     if (values.isAdding) {
       const payload = {
         tieuDe: values.title,
-        tag: values.tags,
+        maTag: values.tags.map(
+          (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
+        ),
         noiDung: editorRef.current?.getContent() || '',
         maSV: id,
         url: ['https://picsum.photos/200'],
@@ -155,6 +163,7 @@ function NoteInfo() {
     addNote,
     editNote,
     id,
+    tagList,
     values.isAdding,
     values.selected,
     values.tags,
@@ -220,12 +229,8 @@ function NoteInfo() {
     <>
       <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
       <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          Trang chủ
-        </Link>
-        <Typography color="text.primary">
-          {id} - Nguyễn Ngọc Thanh Tâm
-        </Typography>
+        <Link to="/">Trang chủ</Link>
+        <Typography color="text.primary">{id}</Typography>
         <Typography color="text.primary">Ghi chú sinh viên</Typography>
       </StyledBreadCrumbs>
       <StyledGridContainer container spacing={3} columns={20}>
@@ -286,10 +291,14 @@ function NoteInfo() {
             </Box>
           </Item>
         </Grid>
-        <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
+        <AsyncDataRenderer
+          loading={noteDetailLoading || tagListLoading}
+          data={noteDetailData && tagListData}
+        >
           <Grid item xs={12}>
             <Item>
               <NoteEditor
+                tagList={tagList}
                 editorRef={editorRef}
                 initialValue={noteDetail?.noiDung || ''}
                 files={files}

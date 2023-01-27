@@ -11,10 +11,11 @@ interface StudentTableRowProps {
   index: number;
 }
 function StudentTableRow({ data, index }: StudentTableRowProps) {
-  const { maSV, tenSV, maCN, tinhTrang, gpa4, gpa10, contact } = data;
+  const { maSV, tenSV, maCN = '', tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
+
     switch (tinhTrang) {
       case 'Đang học': {
         color = theme.palette.text.primary;
@@ -33,6 +34,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
         break;
       }
       default:
+        color = theme.palette.text.primary;
         break;
     }
 
@@ -56,7 +58,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
       <TableCell>{gpa10}</TableCell>
       <TableCell>
         {contact.sdt}
-        {contact.lienHe.map((social) => (
+        {contact.lienHe?.map((social) => (
           <>
             ,{' '}
             <StyledMuiLink target="_blank" href={social.url}>

@@ -51,7 +51,7 @@ export type HomeroomFailListItem = {
 
 export type HomeroomList = {
   __typename?: 'HomeroomList';
-  lopSinhHoat: Array<HomeroomListItem>;
+  lopChuNhiem: Array<HomeroomListItem>;
 };
 
 export type HomeroomListItem = {
@@ -85,12 +85,17 @@ export type HomeroomPostponeExamListItem = {
   tenSV: Scalars['String'];
 };
 
+export type HomeroomStudentList = {
+  __typename?: 'HomeroomStudentList';
+  sinhVien: Array<HomeroomStudentListItem>;
+};
+
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
-  gpa4: Scalars['Float'];
-  gpa10: Scalars['Float'];
-  lienHe: Array<Contact>;
-  maCN: Scalars['String'];
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
+  lienHe?: Maybe<Array<Contact>>;
+  maCN?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
   sdt: Scalars['String'];
   tenSV: Scalars['String'];
@@ -116,6 +121,7 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
   noteAdd: NoteAddResponse;
@@ -128,6 +134,16 @@ export type Mutation = {
   studentDeleteParentInfo: StudentDeleteParentInfoResponse;
   studentEditContact: StudentContactResponse;
   studentEditParentInfo: StudentParentInfo;
+  tagAdd: Tag;
+  tagDelete: TagDeleteResponse;
+  tagEdit: Tag;
+};
+
+export type MutationEditPasswordArgs = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+  password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -187,6 +203,19 @@ export type MutationStudentEditParentInfoArgs = {
   payload: StudentEditParentInfoInput;
 };
 
+export type MutationTagAddArgs = {
+  payload: TagAddInput;
+};
+
+export type MutationTagDeleteArgs = {
+  tagId: Scalars['Int'];
+};
+
+export type MutationTagEditArgs = {
+  payload: TagEditInput;
+  tagId: Scalars['Int'];
+};
+
 export type MutationStatusReponse = {
   __typename?: 'MutationStatusReponse';
   status?: Maybe<Scalars['Int']>;
@@ -194,8 +223,8 @@ export type MutationStatusReponse = {
 
 export type NoteAddInput = {
   maSV: Scalars['String'];
+  maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
-  tag: Array<Scalars['String']>;
   tieuDe: Scalars['String'];
   url: Array<Scalars['String']>;
 };
@@ -249,7 +278,7 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomPostponeExamList: HomeroomPostponeExamList;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList?: Maybe<Array<HomeroomStudentListItem>>;
+  homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
   studentAllSubjects: StudentAllSubjects;
@@ -264,6 +293,7 @@ export type Query = {
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
+  tagList: TagList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -420,17 +450,17 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4: Scalars['Float'];
-  gpa_10: Scalars['Float'];
-  lienHeSV: Array<StudentContact>;
+  gpa_4?: Maybe<Scalars['Float']>;
+  gpa_10?: Maybe<Scalars['Float']>;
+  lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
   ngoaiNgu: Scalars['Boolean'];
   sdt: Scalars['String'];
-  tenCN: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
-  xepLoai: Scalars['String'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentDetailSubjectsResult = {
@@ -544,6 +574,30 @@ export type SubjectDetailResult = {
   namHoc: Scalars['Int'];
   soTC: Scalars['Int'];
   tenMH: Scalars['String'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type TagAddInput = {
+  tenTag: Scalars['String'];
+};
+
+export type TagDeleteResponse = {
+  __typename?: 'TagDeleteResponse';
+  status: Scalars['Int'];
+};
+
+export type TagEditInput = {
+  tenTag: Scalars['String'];
+};
+
+export type TagList = {
+  __typename?: 'TagList';
+  tags: Array<Tag>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -665,6 +719,7 @@ export type ResolversTypes = {
   HomeroomNotEnrolledListItem: ResolverTypeWrapper<HomeroomNotEnrolledListItem>;
   HomeroomPostponeExamList: ResolverTypeWrapper<HomeroomPostponeExamList>;
   HomeroomPostponeExamListItem: ResolverTypeWrapper<HomeroomPostponeExamListItem>;
+  HomeroomStudentList: ResolverTypeWrapper<HomeroomStudentList>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   HomeroomTermList: ResolverTypeWrapper<HomeroomTermList>;
   HomeroomTermListItem: ResolverTypeWrapper<HomeroomTermListItem>;
@@ -706,6 +761,11 @@ export type ResolversTypes = {
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
   SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
+  Tag: ResolverTypeWrapper<Tag>;
+  TagAddInput: TagAddInput;
+  TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
+  TagEditInput: TagEditInput;
+  TagList: ResolverTypeWrapper<TagList>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -722,6 +782,7 @@ export type ResolversParentTypes = {
   HomeroomNotEnrolledListItem: HomeroomNotEnrolledListItem;
   HomeroomPostponeExamList: HomeroomPostponeExamList;
   HomeroomPostponeExamListItem: HomeroomPostponeExamListItem;
+  HomeroomStudentList: HomeroomStudentList;
   HomeroomStudentListItem: HomeroomStudentListItem;
   HomeroomTermList: HomeroomTermList;
   HomeroomTermListItem: HomeroomTermListItem;
@@ -763,6 +824,11 @@ export type ResolversParentTypes = {
   StudentTerm: StudentTerm;
   StudentTrainingPoint: StudentTrainingPoint;
   SubjectDetailResult: SubjectDetailResult;
+  Tag: Tag;
+  TagAddInput: TagAddInput;
+  TagDeleteResponse: TagDeleteResponse;
+  TagEditInput: TagEditInput;
+  TagList: TagList;
 };
 
 export type ContactResolvers<
@@ -812,7 +878,7 @@ export type HomeroomListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomList'] = ResolversParentTypes['HomeroomList']
 > = {
-  lopSinhHoat?: Resolver<
+  lopChuNhiem?: Resolver<
     Array<ResolversTypes['HomeroomListItem']>,
     ParentType,
     ContextType
@@ -874,14 +940,30 @@ export type HomeroomPostponeExamListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HomeroomStudentListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomStudentList'] = ResolversParentTypes['HomeroomStudentList']
+> = {
+  sinhVien?: Resolver<
+    Array<ResolversTypes['HomeroomStudentListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HomeroomStudentListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomStudentListItem'] = ResolversParentTypes['HomeroomStudentListItem']
 > = {
-  gpa4?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  gpa10?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  lienHe?: Resolver<Array<ResolversTypes['Contact']>, ParentType, ContextType>;
-  maCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lienHe?: Resolver<
+    Maybe<Array<ResolversTypes['Contact']>>,
+    ParentType,
+    ContextType
+  >;
+  maCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -923,6 +1005,15 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  editPassword?: Resolver<
+    Maybe<ResolversTypes['MutationStatusReponse']>,
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationEditPasswordArgs,
+      'email' | 'newPassword' | 'password' | 'passwordConfirm'
+    >
+  >;
   forgotPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
@@ -997,6 +1088,24 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationStudentEditParentInfoArgs, 'parentId' | 'payload'>
+  >;
+  tagAdd?: Resolver<
+    ResolversTypes['Tag'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagAddArgs, 'payload'>
+  >;
+  tagDelete?: Resolver<
+    ResolversTypes['TagDeleteResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagDeleteArgs, 'tagId'>
+  >;
+  tagEdit?: Resolver<
+    ResolversTypes['Tag'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
   >;
 };
 
@@ -1118,7 +1227,7 @@ export type QueryResolvers<
     >
   >;
   homeroomStudentList?: Resolver<
-    Maybe<Array<ResolversTypes['HomeroomStudentListItem']>>,
+    ResolversTypes['HomeroomStudentList'],
     ParentType,
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
@@ -1207,6 +1316,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
+  tagList?: Resolver<ResolversTypes['TagList'], ParentType, ContextType>;
 };
 
 export type StudentAllSubjectsResolvers<
@@ -1287,10 +1397,10 @@ export type StudentDetailResolvers<
   emailCaNhan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gioiTinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  gpa_4?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  gpa_10?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  gpa_4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa_10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   lienHeSV?: Resolver<
-    Array<ResolversTypes['StudentContact']>,
+    Maybe<Array<ResolversTypes['StudentContact']>>,
     ParentType,
     ContextType
   >;
@@ -1298,10 +1408,10 @@ export type StudentDetailResolvers<
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ngoaiNgu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1460,6 +1570,31 @@ export type SubjectDetailResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']
+> = {
+  maTag?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenTag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TagDeleteResponse'] = ResolversParentTypes['TagDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TagListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList']
+> = {
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Contact?: ContactResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
@@ -1471,6 +1606,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomNotEnrolledListItem?: HomeroomNotEnrolledListItemResolvers<ContextType>;
   HomeroomPostponeExamList?: HomeroomPostponeExamListResolvers<ContextType>;
   HomeroomPostponeExamListItem?: HomeroomPostponeExamListItemResolvers<ContextType>;
+  HomeroomStudentList?: HomeroomStudentListResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   HomeroomTermList?: HomeroomTermListResolvers<ContextType>;
   HomeroomTermListItem?: HomeroomTermListItemResolvers<ContextType>;
@@ -1503,4 +1639,7 @@ export type Resolvers<ContextType = any> = {
   StudentTerm?: StudentTermResolvers<ContextType>;
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
   SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
+  TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
+  TagList?: TagListResolvers<ContextType>;
 };

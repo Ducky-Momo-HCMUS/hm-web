@@ -1,4 +1,4 @@
-import React, { SetStateAction, useCallback } from 'react';
+import React, { SetStateAction } from 'react';
 import {
   Box,
   Button,
@@ -16,13 +16,15 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-import { API_KEY, NOTE_EDITOR_CONFIG, TAGS_OPTIONS } from '../../../mocks';
+import { API_KEY, NOTE_EDITOR_CONFIG } from '../../../mocks';
 import { File } from '../../../types';
 import { StyledTextField } from '../../styles';
+import { Tag } from '../../../generated-types';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 interface NoteEditorProps {
+  tagList?: Tag[];
   editorRef: any;
   initialValue: string;
   files: File[] | undefined;
@@ -36,7 +38,18 @@ interface NoteEditorProps {
   isAdding?: boolean;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function NoteEditor({
+  tagList = [],
   editorRef,
   initialValue,
   files,
@@ -85,11 +98,12 @@ function NoteEditor({
             value={tags}
             label="Tag"
             onChange={handleSelectTags}
+            MenuProps={MenuProps}
           >
-            {TAGS_OPTIONS.map((item) => (
-              <MenuItem value={item}>
-                <Checkbox checked={tags.indexOf(item) > -1} />
-                <ListItemText primary={item} />
+            {tagList.map((item) => (
+              <MenuItem value={item.tenTag}>
+                <Checkbox checked={tags.indexOf(item.tenTag) > -1} />
+                <ListItemText primary={item.tenTag} />
               </MenuItem>
             ))}
           </Select>

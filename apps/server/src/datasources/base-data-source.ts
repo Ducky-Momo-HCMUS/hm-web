@@ -68,6 +68,7 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
    */
   protected handleError(error: unknown) {
     // ApolloError has been replaced with GraphQLError in v4
+    console.log('error', error);
     if (!(error instanceof ApolloError)) {
       // TODO add log
       return new ApolloError('Internal Server Error');

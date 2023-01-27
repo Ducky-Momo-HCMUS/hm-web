@@ -26,7 +26,6 @@ import {
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
   STUDENT_ADD_CONTACT_RESPONSE,
-  STUDENT_DETAIL,
   STUDENT_EDIT_CONTACT_RESPONSE,
   STUDENT_PARENT_INFO_LIST,
   STUDENT_PARENT_INFO_RESPONSE,
@@ -155,11 +154,8 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentDetail({ studentId }: QueryStudentDetailArgs) {
     try {
-      // const studentDetail = await this.get(
-      //   `v1/students/${studentId}`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_DETAIL;
+      const studentDetail = await this.get(`v1/students/${studentId}`);
+      return studentDetail;
     } catch (error) {
       console.error('Error: cannot fetch student detail');
       throw this.handleError(error as ApolloError);
@@ -186,13 +182,11 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentAddContactArgs) {
     try {
-      // const addedContact = await this.post(
-      //   `v1/students/${studentId}/contacts`,
-      //   payload
-      // );
-      console.log('params', studentId);
-      console.log('payload', payload);
-      return STUDENT_ADD_CONTACT_RESPONSE;
+      const addedContact = await this.post(
+        `v1/students/${studentId}/contacts`,
+        payload
+      );
+      return addedContact;
     } catch (error) {
       console.error('Error: cannot add student contact');
       throw this.handleError(error as ApolloError);
@@ -204,13 +198,11 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentEditContactArgs) {
     try {
-      // const editedContact = await this.patch(
-      //   `v1/students/contacts/${contactId}`,
-      //   payload
-      // );
-      console.log('params', contactId);
-      console.log('payload', payload);
-      return STUDENT_EDIT_CONTACT_RESPONSE;
+      const res = await this.patch(
+        `v1/students/contacts/${contactId}`,
+        payload
+      );
+      return res;
     } catch (error) {
       console.error('Error: cannot edit student contact');
       throw this.handleError(error as ApolloError);
@@ -221,11 +213,8 @@ class StudentAPI extends BaseDataSource {
     contactId,
   }: MutationStudentDeleteContactArgs) {
     try {
-      // const response = await this.delete(
-      //   `v1/students/contacts/${contactId}`
-      // );
-      console.log('params', contactId);
-      return { status: 200 };
+      const res = await this.delete(`v1/students/contacts/${contactId}`);
+      return res;
     } catch (error) {
       console.error('Error: cannot delete student contact');
       throw this.handleError(error as ApolloError);
