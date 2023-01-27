@@ -245,7 +245,7 @@ export type NoteDetail = {
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   tag: Array<Maybe<Scalars['String']>>;
-  thoiGianSua: Scalars['String'];
+  thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
 };
@@ -268,6 +268,22 @@ export type NoteImage = {
   url: Scalars['String'];
 };
 
+export type NoteList = {
+  __typename?: 'NoteList';
+  danhSachGhiChu: Array<NoteListItem>;
+};
+
+export type NoteListItem = {
+  __typename?: 'NoteListItem';
+  maGC: Scalars['Int'];
+  maSV?: Maybe<Scalars['String']>;
+  noiDung: Scalars['String'];
+  tag: Array<Maybe<Scalars['String']>>;
+  thoiGianSua?: Maybe<Scalars['String']>;
+  thoiGianTao: Scalars['String'];
+  tieuDe: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   homeroomDetail: HomeroomDetail;
@@ -281,6 +297,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
+  noteList: NoteList;
   studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
@@ -734,6 +751,8 @@ export type ResolversTypes = {
   NoteEditInput: NoteEditInput;
   NoteEditResponse: ResolverTypeWrapper<NoteEditResponse>;
   NoteImage: ResolverTypeWrapper<NoteImage>;
+  NoteList: ResolverTypeWrapper<NoteList>;
+  NoteListItem: ResolverTypeWrapper<NoteListItem>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAddContactInput: StudentAddContactInput;
@@ -797,6 +816,8 @@ export type ResolversParentTypes = {
   NoteEditInput: NoteEditInput;
   NoteEditResponse: NoteEditResponse;
   NoteImage: NoteImage;
+  NoteList: NoteList;
+  NoteListItem: NoteListItem;
   Query: {};
   String: Scalars['String'];
   StudentAddContactInput: StudentAddContactInput;
@@ -1149,7 +1170,11 @@ export type NoteDetailResolvers<
     ParentType,
     ContextType
   >;
-  thoiGianSua?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  thoiGianSua?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1169,6 +1194,40 @@ export type NoteImageResolvers<
 > = {
   stt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NoteListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteList'] = ResolversParentTypes['NoteList']
+> = {
+  danhSachGhiChu?: Resolver<
+    Array<ResolversTypes['NoteListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NoteListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteListItem'] = ResolversParentTypes['NoteListItem']
+> = {
+  maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maSV?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tag?: Resolver<
+    Array<Maybe<ResolversTypes['String']>>,
+    ParentType,
+    ContextType
+  >;
+  thoiGianSua?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1244,6 +1303,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryNoteDetailArgs, 'noteId'>
   >;
+  noteList?: Resolver<ResolversTypes['NoteList'], ParentType, ContextType>;
   studentAllSubjects?: Resolver<
     ResolversTypes['StudentAllSubjects'],
     ParentType,
@@ -1618,6 +1678,8 @@ export type Resolvers<ContextType = any> = {
   NoteDetail?: NoteDetailResolvers<ContextType>;
   NoteEditResponse?: NoteEditResponseResolvers<ContextType>;
   NoteImage?: NoteImageResolvers<ContextType>;
+  NoteList?: NoteListResolvers<ContextType>;
+  NoteListItem?: NoteListItemResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
   StudentAllTerms?: StudentAllTermsResolvers<ContextType>;

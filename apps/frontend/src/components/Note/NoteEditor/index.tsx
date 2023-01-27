@@ -24,7 +24,7 @@ import { Tag } from '../../../generated-types';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 interface NoteEditorProps {
-  tagList?: Tag[];
+  tagList: Tag[];
   editorRef: any;
   initialValue: string;
   files: File[] | undefined;
@@ -34,8 +34,8 @@ interface NoteEditorProps {
   tags: string[];
   handleChangeValue: any;
   handleSelectTags: any;
-  handleReset?: any;
-  isAdding?: boolean;
+  handleReset: any;
+  isAdding: boolean;
 }
 
 const ITEM_HEIGHT = 48;
@@ -49,7 +49,7 @@ const MenuProps = {
 };
 
 function NoteEditor({
-  tagList = [],
+  tagList,
   editorRef,
   initialValue,
   files,
