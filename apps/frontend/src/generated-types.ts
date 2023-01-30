@@ -305,7 +305,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: StudentNoteList;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: StudentParentInfoList;
+  studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -546,11 +546,6 @@ export type StudentParentInfo = {
   sdt: Scalars['String'];
   sua: Scalars['Boolean'];
   tenPH: Scalars['String'];
-};
-
-export type StudentParentInfoList = {
-  __typename?: 'StudentParentInfoList';
-  dsPhuHuynh: Array<StudentParentInfo>;
 };
 
 export type StudentSubject = {
@@ -1200,23 +1195,20 @@ export type StudentParentInfoListQueryVariables = Exact<{
 
 export type StudentParentInfoListQuery = {
   __typename?: 'Query';
-  studentParentInfoList: {
-    __typename?: 'StudentParentInfoList';
-    dsPhuHuynh: Array<{
-      __typename?: 'StudentParentInfo';
-      maPH: number;
-      tenPH: string;
-      quanHe: string;
-      sdt: string;
-      sua: boolean;
-      lienHePH: Array<{
-        __typename?: 'StudentParentContact';
-        maLHPH?: number | null | undefined;
-        mxh: string;
-        url: string;
-      }>;
+  studentParentInfoList: Array<{
+    __typename?: 'StudentParentInfo';
+    maPH: number;
+    tenPH: string;
+    quanHe: string;
+    sdt: string;
+    sua: boolean;
+    lienHePH: Array<{
+      __typename?: 'StudentParentContact';
+      maLHPH?: number | null | undefined;
+      mxh: string;
+      url: string;
     }>;
-  };
+  }>;
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -3342,17 +3334,15 @@ export type StudentOverviewResultQueryResult = Apollo.QueryResult<
 export const StudentParentInfoListDocument = gql`
   query StudentParentInfoList($studentId: String!) {
     studentParentInfoList(studentId: $studentId) {
-      dsPhuHuynh {
-        maPH
-        tenPH
-        quanHe
-        sdt
-        sua
-        lienHePH {
-          maLHPH
-          mxh
-          url
-        }
+      maPH
+      tenPH
+      quanHe
+      sdt
+      sua
+      lienHePH {
+        maLHPH
+        mxh
+        url
       }
     }
   }

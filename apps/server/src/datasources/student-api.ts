@@ -25,10 +25,6 @@ import {
   ALL_TERMS,
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
-  STUDENT_ADD_CONTACT_RESPONSE,
-  STUDENT_EDIT_CONTACT_RESPONSE,
-  STUDENT_PARENT_INFO_LIST,
-  STUDENT_PARENT_INFO_RESPONSE,
   STUDENT_NOTE_LIST,
   STUDENT_DETAIL_SUBJECTS_RESULT,
   STUDENT_OVERVIEW_RESULT,
@@ -166,11 +162,10 @@ class StudentAPI extends BaseDataSource {
     studentId,
   }: QueryStudentParentInfoListArgs) {
     try {
-      // const studentParentInfoList = await this.get(
-      //   `v1/students/${studentId}/parents`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_PARENT_INFO_LIST;
+      const studentParentInfoList = await this.get(
+        `v1/students/${studentId}/parents`
+      );
+      return studentParentInfoList;
     } catch (error) {
       console.error('Error: cannot fetch student parent info list');
       throw this.handleError(error as ApolloError);
@@ -241,13 +236,8 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentAddParentInfoArgs) {
     try {
-      // const addedParentInfo = await this.post(
-      //   `v1/students/${studentId}/parents`,
-      //   payload
-      // );
-      console.log('params', studentId);
-      console.log('payload', payload);
-      return STUDENT_PARENT_INFO_RESPONSE;
+      const res = await this.post(`v1/students/${studentId}/parents`, payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot add student parent info');
       throw this.handleError(error as ApolloError);
@@ -259,13 +249,8 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentEditParentInfoArgs) {
     try {
-      // const editedParentInfo = await this.post(
-      //   `v1/students/parents/${parentId}`,
-      //   payload
-      // );
-      console.log('params', parentId);
-      console.log('payload', payload);
-      return STUDENT_PARENT_INFO_RESPONSE;
+      const res = await this.patch(`v1/students/parents/${parentId}`, payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot edit student parent info');
       throw this.handleError(error as ApolloError);
@@ -276,11 +261,8 @@ class StudentAPI extends BaseDataSource {
     parentId,
   }: MutationStudentDeleteParentInfoArgs) {
     try {
-      // const response = await this.delete(
-      //   `v1/students/parents/${parentId}`
-      // );
-      console.log('params', parentId);
-      return { status: 200 };
+      const res = await this.delete(`v1/students/parents/${parentId}`);
+      return res;
     } catch (error) {
       console.error('Error: cannot delete student parent info');
       throw this.handleError(error as ApolloError);

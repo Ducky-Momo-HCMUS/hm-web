@@ -306,7 +306,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: StudentNoteList;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: StudentParentInfoList;
+  studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -549,11 +549,6 @@ export type StudentParentInfo = {
   tenPH: Scalars['String'];
 };
 
-export type StudentParentInfoList = {
-  __typename?: 'StudentParentInfoList';
-  dsPhuHuynh: Array<StudentParentInfo>;
-};
-
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   dtb?: Maybe<Scalars['Float']>;
@@ -774,7 +769,6 @@ export type ResolversTypes = {
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
-  StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
@@ -839,7 +833,6 @@ export type ResolversParentTypes = {
   StudentParentContact: StudentParentContact;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: StudentParentInfo;
-  StudentParentInfoList: StudentParentInfoList;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTerm: StudentTerm;
@@ -1353,7 +1346,7 @@ export type QueryResolvers<
     RequireFields<QueryStudentOverviewResultArgs, 'studentId'>
   >;
   studentParentInfoList?: Resolver<
-    ResolversTypes['StudentParentInfoList'],
+    Array<ResolversTypes['StudentParentInfo']>,
     ParentType,
     ContextType,
     RequireFields<QueryStudentParentInfoListArgs, 'studentId'>
@@ -1560,18 +1553,6 @@ export type StudentParentInfoResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type StudentParentInfoListResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentParentInfoList'] = ResolversParentTypes['StudentParentInfoList']
-> = {
-  dsPhuHuynh?: Resolver<
-    Array<ResolversTypes['StudentParentInfo']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type StudentSubjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
@@ -1695,7 +1676,6 @@ export type Resolvers<ContextType = any> = {
   StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;
-  StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;

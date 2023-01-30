@@ -4,7 +4,6 @@ import {
   StudentAveragePoint,
   StudentContactResponse,
   StudentParentInfo,
-  StudentParentInfoList,
   StudentNoteList,
   StudentDetailSubjectsResult,
   StudentOverviewResult,
@@ -107,39 +106,6 @@ export const AVERAGE_POINT = {
   dtbTong: 8.5,
   xepLoai: 'Giỏi',
 } as StudentAveragePoint;
-
-export const STUDENT_PARENT_INFO_LIST = {
-  dsPhuHuynh: [
-    {
-      maPH: 1,
-      tenPH: 'Nguyễn Văn B',
-      quanHe: 'Cha',
-      sdt: '0123456789',
-      sua: true,
-      lienHePH: [
-        {
-          maLHPH: 1,
-          mxh: 'Facebook',
-          url: 'abc',
-        },
-      ],
-    },
-    {
-      maPH: 2,
-      tenPH: 'Nguyễn Thị C',
-      quanHe: 'Mẹ',
-      sdt: '0123456789',
-      sua: true,
-      lienHePH: [
-        {
-          maLHPH: 1,
-          mxh: 'Facebook',
-          url: 'abc',
-        },
-      ],
-    },
-  ],
-} as StudentParentInfoList;
 
 export const STUDENT_ADD_CONTACT_RESPONSE = {
   maLHSV: 1,
