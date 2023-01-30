@@ -61,6 +61,7 @@ importers:
       '@mui/icons-material': ^5.10.9
       '@mui/material': ^5.10.8
       '@mui/system': ^5.10.16
+      '@mui/x-data-grid': ^5.17.21
       '@reduxjs/toolkit': ^1.9.1
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
@@ -78,7 +79,6 @@ importers:
       postcss: ^8.1.0
       react: ^17.0.2
       react-admin: ^4.6.2
-      react-data-grid: 7.0.0-beta.15
       react-dom: ^17.0.2
       react-filepond: ^7.1.2
       react-redux: ^8.0.5
@@ -93,6 +93,7 @@ importers:
       '@emotion/styled': 11.10.4_ppf2weyoyak2rmaqbqjmaosseu
       '@mui/icons-material': 5.10.9_hxwoburrgref6nj552adkl5pte
       '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
+      '@mui/x-data-grid': 5.17.21_ka5ewhjdtr54zpqsubcgbbcuc4
       '@reduxjs/toolkit': 1.9.1_3m5k4ry2nwm36zz5ojtujpfkvq
       '@testing-library/dom': 8.19.0
       '@testing-library/jest-dom': 5.16.5
@@ -102,7 +103,6 @@ importers:
       filepond-plugin-file-validate-type: 1.2.8_filepond@4.30.4
       react: 17.0.2
       react-admin: 4.6.2_5vlckyktntgwvvslyodwngbpz4
-      react-data-grid: 7.0.0-beta.15_sfoxds7t5ydpegc3knd667wn6m
       react-dom: 17.0.2_react@17.0.2
       react-filepond: 7.1.2_dwijown5ej3nw7ufgjn6wrpcsa
       react-redux: 8.0.5_hydbvi6z6hlt2ijelr7vw43eem
@@ -3545,6 +3545,26 @@ packages:
       react-is: 18.2.0
     dev: false
 
+  /@mui/x-data-grid/5.17.21_ka5ewhjdtr54zpqsubcgbbcuc4:
+    resolution: {integrity: sha512-dgYYk1H3BEyGg7/RDet+ZBiTZQ9ZEIHE5QhVZ1glopVDRgWJmtcqPUQakkHQzxerEsKVwZ5QEEfueKuoX8oebg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@mui/material': ^5.4.1
+      '@mui/system': ^5.4.1
+      react: ^17.0.2 || ^18.0.0
+      react-dom: ^17.0.2 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.20.6
+      '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
+      '@mui/system': 5.10.16_ci3r3mshc3mjxsfpivcog4cdnq
+      '@mui/utils': 5.10.16_react@17.0.2
+      clsx: 1.2.1
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      reselect: 4.1.7
+    dev: false
+
   /@mui/x-date-pickers/5.0.9_trggiazjizu7dgvlmeoubzwi3e:
     resolution: {integrity: sha512-PM3RU8MiwDVi+dSDGJ7ylI0hCe79wSCDfrjghS8ApGGFn/n87S8pUZxsZ5czw3mVRN6VfS2C19peo4nM1Tx+nA==}
     engines: {node: '>=12.0.0'}
@@ -4564,6 +4584,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/scope-manager/5.40.1:
     resolution: {integrity: sha512-jkn4xsJiUQucI16OLCXrLRXDZ3afKhOIqXs4R3O+M00hdQLKR58WuyXPZZjhKLFCEP2g+TXdBRtLQ33UfAdRUg==}
@@ -4634,6 +4655,7 @@ packages:
       typescript: 4.8.4
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@typescript-eslint/typescript-estree/5.40.1_typescript@4.9.4:
     resolution: {integrity: sha512-5QTP/nW5+60jBcEPfXy/EZL01qrl9GZtbgDZtDPlfW5zj/zjNrdI2B5zMUHmOsfvOr2cWqwVdWjobCiHcedmQA==}
@@ -7355,7 +7377,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.40.1_oy7hgmlo6357d5kkcjbkfgtg4q
+      '@typescript-eslint/parser': 5.40.1_7xejdone6kwdndpjp5nwx3ofcu
       debug: 3.2.7
       eslint: 8.15.0
       eslint-import-resolver-node: 0.3.6
@@ -7386,7 +7408,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.40.1_oy7hgmlo6357d5kkcjbkfgtg4q
+      '@typescript-eslint/parser': 5.40.1_7xejdone6kwdndpjp5nwx3ofcu
       array-includes: 3.1.5
       array.prototype.flat: 1.3.0
       debug: 2.6.9
@@ -12354,17 +12376,6 @@ packages:
       regenerator-runtime: 0.13.11
       whatwg-fetch: 3.6.2
 
-  /react-data-grid/7.0.0-beta.15_sfoxds7t5ydpegc3knd667wn6m:
-    resolution: {integrity: sha512-VeWEQqtOyfXnrzXGWuUpI3/K717TSRRdF29nvYxlfZ9YjEP7V6nrG3VGGpN6Lzyi/9Q+EksogUvDsvJfPzQamQ==}
-    peerDependencies:
-      react: ^16.14 || ^17.0 || ^18.0
-      react-dom: ^16.14 || ^17.0 || ^18.0
-    dependencies:
-      clsx: 1.2.1
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-    dev: false
-
   /react-dev-utils/12.0.1_dvciaza7u42czztutsjd2bzwea:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
@@ -14267,6 +14278,7 @@ packages:
     dependencies:
       tslib: 1.14.1
       typescript: 4.8.4
+    dev: false
 
   /tsutils/3.21.0_typescript@4.9.4:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

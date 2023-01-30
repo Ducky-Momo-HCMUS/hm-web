@@ -1,31 +1,37 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
 import {
   Box,
+  Button,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState, ChangeEvent, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import DataGrid, { textEditor, Column } from 'react-data-grid';
-import { read, utils, WorkSheet, writeFile } from 'xlsx';
+import { FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { read, utils, WorkSheet } from 'xlsx';
 
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 import { StyledFormControl } from './styles';
 
 const YEARS = [2017, 2018, 2019];
 const TYPES = [
   'Danh sách giáo viên chủ nhiệm',
-  'Hồ sơ sinh viên',
+  'Danh sách thông tin sinh viên',
   'Danh sách môn học',
   'Danh sách chuyên ngành và kết quả',
   'Thời khoá biểu',
   'Danh sách đăng ký học phần',
   'Điểm số',
-  'Danh sách hoãn/vắng thi',
+  'Danh sách hoãn thi',
+  'Danh sách vắng thi',
 ];
 
 interface State {
@@ -35,8 +41,7 @@ interface State {
 
 type DataSet = { [index: string]: WorkSheet };
 type Row = any[];
-type AOAColumn = Column<Row>;
-type RowCol = { rows: Row[]; columns: AOAColumn[] };
+type RowCol = { rows: Row[]; columns: GridColDef[] };
 
 function arrayify(rows: any[]): Row[] {
   return rows.map((row) => {
@@ -48,19 +53,29 @@ function arrayify(rows: any[]): Row[] {
 }
 
 /* this method returns `rows` and `columns` data for sheet change */
-const getRowsCols = (data: DataSet, sheetName: string): RowCol => ({
-  rows: utils.sheet_to_json<Row>(data[sheetName], { header: 1 }),
-  columns: Array.from(
-    {
-      length: utils.decode_range(data[sheetName]['!ref'] || 'A1').e.c + 1,
-    },
-    (_, i) => ({
-      key: String(i),
-      name: utils.encode_col(i),
-      editor: textEditor,
-    })
-  ),
-});
+const getRowsCols = (data: DataSet, sheetName: string): RowCol => {
+  const sheet = data[sheetName];
+  const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
+
+  return {
+    rows: utils
+      .sheet_to_json<Row>(data[sheetName], { header: 1 })
+      .filter((row) => row.length > 0)
+      .map((r, id) => ({ ...r, id })),
+    columns: Array.from(
+      {
+        length: utils.decode_range(`A1:${endCell}`).e.c + 1,
+      },
+      (_, i) => ({
+        field: String(i),
+        headerName: utils.encode_col(i),
+        editable: false,
+        minWidth: 200,
+        maxWidth: 400,
+      })
+    ),
+  };
+};
 
 function ImportFile() {
   const [values, setValues] = useState<State>({
@@ -68,18 +83,25 @@ function ImportFile() {
     type: '',
   });
 
+  const [error, setError] = useState<string>('');
+
+  const [rows, setRows] = useState<Row[]>([]); // data rows
+  const [columns, setColumns] = useState<GridColDef[]>([]); // columns
+  const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
+  const [sheets, setSheets] = useState<string[]>([]); // list of sheet names
+  const [current, setCurrent] = useState<string>(''); // selected sheet
+
+  const filePondRef = useRef<FilePond | null>(null);
+
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
+      if (filePondRef.current) {
+        filePondRef.current.removeFile();
+      }
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
   );
-
-  const [rows, setRows] = useState<Row[]>([]); // data rows
-  const [columns, setColumns] = useState<AOAColumn[]>([]); // columns
-  const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
-  const [sheets, setSheets] = useState<string[]>([]); // list of sheet names
-  const [current, setCurrent] = useState<string>(''); // selected sheet
 
   /* called when sheet dropdown is changed */
   function selectSheet(name: string) {
@@ -114,18 +136,9 @@ function ImportFile() {
   }
 
   /* called when file input element is used to select a new file */
-  async function handleFile(ev: ChangeEvent<HTMLInputElement>): Promise<void> {
-    const file = await ev.target.files?.[0]?.arrayBuffer();
+  async function handleFile(file: ArrayBuffer): Promise<void> {
     if (file) await handleAB(file);
   }
-
-  /* when page is loaded, fetch and processs worksheet */
-  useEffect(() => {
-    (async () => {
-      const f = await fetch('https://sheetjs.com/pres.numbers');
-      await handleAB(await f.arrayBuffer());
-    })();
-  }, []);
 
   /* method is called when one of the save buttons is clicked */
   // function saveFile(ext: string): void {
@@ -150,7 +163,7 @@ function ImportFile() {
         <Link to="/">Trang chủ</Link>
         <Typography color="text.primary">Nhập thông tin</Typography>
       </StyledBreadCrumbs>
-      <Box>
+      <Box component="form">
         <StyledFormControl>
           <InputLabel id="year-select-label">Năm học</InputLabel>
           <Select
@@ -161,7 +174,7 @@ function ImportFile() {
             onChange={handleChange('year')}
           >
             {YEARS.map((item) => (
-              <MenuItem value={item}>
+              <MenuItem value={item.toString()}>
                 {item} - {item + 1}
               </MenuItem>
             ))}
@@ -181,26 +194,83 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        <input type="file" onChange={handleFile} />
+        {values.year.length > 0 && values.type.length > 0 && (
+          <>
+            <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
+              Cập nhật lần cuối bởi <b>Hoàng Thanh Tú</b> vào 12/12/2021
+              00:00:00 am
+            </Typography>
+            <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
+              Cập nhật{' '}
+              {TYPES.find((item) => item === values.type)?.toLowerCase()}
+            </Typography>
+            <Box mt={3}>
+              <FilePond
+                ref={filePondRef}
+                onupdatefiles={async (files) => {
+                  if (files.length > 0) {
+                    await handleFile(await files[0].file?.arrayBuffer());
+                  }
+                }}
+                onremovefile={(err, file) => {
+                  setSheets([]);
+                  setCurrent('');
+                }}
+                // server={{
+                //   load: (source, load) => {
+                //     const myRequest = new Request(source);
+                //     fetch(myRequest).then((response) => {
+                //       response.blob().then((myBlob) => {
+                //         load(myBlob);
+                //       });
+                //     });
+                //   },
+                // }}
+                name="file"
+                labelIdle="Kéo thả hoặc đính kèm file tại đây"
+              />
+            </Box>
+          </>
+        )}
         {sheets.length > 0 && (
           <>
-            <p>
-              Use the dropdown to switch to a worksheet:&nbsp;
-              <select
-                onChange={async (e) => selectSheet(sheets[+e.target.value])}
+            <StyledFormControl sx={{ marginBottom: '1rem' }}>
+              <InputLabel id="year-select-label">Chọn sheet</InputLabel>
+              <Select
+                labelId="sheet-select-label"
+                id="sheet-select"
+                label="Chọn sheet"
+                value={current}
+                onChange={async (e) => {
+                  selectSheet(sheets[+(e.target.value as string)]);
+                }}
               >
-                {sheets.map((sheet, idx) => (
-                  <option key={sheet} value={idx}>
-                    {sheet}
-                  </option>
+                {sheets.map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
                 ))}
-              </select>
-            </p>
-            <div className="flex-cont">
-              <b>Current Sheet: {current}</b>
-            </div>
-            <DataGrid columns={columns} rows={rows} onRowsChange={setRows} />
+              </Select>
+            </StyledFormControl>
+            <Box>
+              <Typography variant="h6">Xem trước</Typography>
+              <Box
+                sx={{ width: '100%', height: 600, backgroundColor: 'white' }}
+              >
+                <DataGrid columns={columns} rows={rows} />
+              </Box>
+            </Box>
           </>
+        )}
+        {current.length > 0 && (
+          <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{ width: '85%!important' }}>
+              {error.length > 0 && <ErrorMessage content={error} />}
+            </Box>
+            <Button type="submit" variant="contained">
+              Xác nhận
+            </Button>
+          </Box>
         )}
       </Box>
     </>
