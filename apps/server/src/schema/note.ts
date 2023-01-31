@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 const noteTypeDefs = gql`
   extend type Query {
     noteDetail(noteId: Int!): NoteDetail!
-    noteList: NoteList!
+    noteList: [NoteListItem!]!
   }
 
   extend type Mutation {
@@ -14,12 +14,17 @@ const noteTypeDefs = gql`
 
   type NoteDetail {
     maGC: Int!
-    tag: [String]!
+    ghiChuTag: [NoteTag!]!
     tieuDe: String!
     noiDung: String!
     thoiGianTao: String!
     thoiGianSua: String
-    hinhAnh: [NoteImage!]!
+    ghiChuHinhAnh: [NoteImage!]!
+  }
+
+  type NoteTag {
+    maTag: Int!
+    tenTag: String!
   }
 
   type NoteImage {
@@ -27,13 +32,8 @@ const noteTypeDefs = gql`
     url: String!
   }
 
-  type NoteList {
-    danhSachGhiChu: [NoteListItem!]!
-  }
-
   type NoteListItem {
     maGC: Int!
-    tag: [String]!
     tieuDe: String!
     noiDung: String!
     thoiGianTao: String!
@@ -57,11 +57,13 @@ const noteTypeDefs = gql`
   }
 
   type NoteAddResponse {
-    status: Int!
+    tieuDe: String!
+    noiDung: String!
   }
 
   type NoteEditResponse {
-    status: Int!
+    tieuDe: String!
+    noiDung: String!
   }
 
   type NoteDeleteResponse {

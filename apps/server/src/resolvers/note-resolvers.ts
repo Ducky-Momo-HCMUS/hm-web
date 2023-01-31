@@ -5,21 +5,28 @@ import { ResolverContext } from './types';
 export const noteResolver: Resolvers<ResolverContext> = {
   Query: {
     noteDetail: async (_, args, { dataSources }) => {
-      return (await dataSources.noteAPI.getNoteDetail(args)) || null;
+      const res = await dataSources.noteAPI.getNoteDetail(args);
+      console.log('data', res.data.note);
+      return res.data.note;
     },
     noteList: async (_, __, { dataSources }) => {
-      return (await dataSources.noteAPI.getNoteList()) || null;
+      const res = await dataSources.noteAPI.getNoteList();
+      return res.data;
     },
   },
   Mutation: {
     noteAdd: async (_, args, { dataSources }) => {
-      return (await dataSources.noteAPI.addNote(args)) || null;
+      const res = await dataSources.noteAPI.addNote(args);
+      return res.data.note;
     },
     noteEdit: async (_, args, { dataSources }) => {
-      return (await dataSources.noteAPI.editNote(args)) || null;
+      const res = await dataSources.noteAPI.editNote(args);
+      console.log('data', res.data.note);
+      return res.data.note;
     },
     noteDelete: async (_, args, { dataSources }) => {
-      return (await dataSources.noteAPI.deleteNote(args)) || null;
+      const res = await dataSources.noteAPI.deleteNote(args);
+      return res.data;
     },
   },
 };

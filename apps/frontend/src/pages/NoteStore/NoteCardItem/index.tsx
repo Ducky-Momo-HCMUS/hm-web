@@ -2,6 +2,7 @@ import React from 'react';
 import ShowMoreText from 'react-show-more-text';
 import { Grid, IconButton, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { format } from 'date-fns';
 
 import { NoteListItem } from '../../../generated-types';
 import { extractContent } from '../../../utils';
@@ -21,13 +22,15 @@ function NoteCardItem({
   onClickDelete,
   onClickExpand,
 }: NoteCardItemProps) {
-  const { tieuDe, thoiGianTao, thoiGianSua, noiDung, maSV } = data;
+  const { tieuDe, thoiGianTao = '', thoiGianSua = '', noiDung, maSV } = data;
 
   return (
     <Grid item xs={3}>
       <StyledCard onClick={onClick}>
         <Typography color="text.secondary" variant="body2">
-          {thoiGianSua || thoiGianTao}
+          {thoiGianSua
+            ? format(new Date(thoiGianSua), 'dd/MM/yyyy HH:mm:ss')
+            : format(new Date(thoiGianTao), 'dd/MM/yyyy HH:mm:ss')}
         </Typography>
         <StyledTitle>{tieuDe}</StyledTitle>
         <ShowMoreText

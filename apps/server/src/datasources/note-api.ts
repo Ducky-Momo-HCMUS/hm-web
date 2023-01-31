@@ -6,7 +6,6 @@ import {
   MutationNoteEditArgs,
   QueryNoteDetailArgs,
 } from '../generated-types';
-import { NOTE_DETAIL, NOTE_LIST } from '../mocks/note';
 import { CORE_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -19,14 +18,8 @@ class NoteAPI extends BaseDataSource {
 
   public async getNoteDetail({ noteId }: QueryNoteDetailArgs) {
     try {
-      // const noteDetail = await this.get(
-      //   `v1/notes/:id`,
-      //   {
-      //     id: noteId,
-      //   },
-      // );
-      console.log('params', noteId);
-      return NOTE_DETAIL;
+      const res = await this.get(`v1/notes/${noteId}`);
+      return res;
     } catch (error) {
       console.error('Error: cannot fetch note detail');
       throw this.handleError(error as ApolloError);
@@ -35,11 +28,8 @@ class NoteAPI extends BaseDataSource {
 
   public async getNoteList() {
     try {
-      // const noteList = await this.get(
-      //   'v1/notes',
-      // );
-
-      return NOTE_LIST;
+      const res = await this.get('v1/notes');
+      return res;
     } catch (error) {
       console.error('Error: cannot fetch note list');
       throw this.handleError(error as ApolloError);
@@ -48,9 +38,8 @@ class NoteAPI extends BaseDataSource {
 
   public async addNote({ payload }: MutationNoteAddArgs) {
     try {
-      // const res = await this.post(`v1/notes`, payload);
-      console.log('payload', payload);
-      return { status: 200 };
+      const res = await this.post(`v1/notes`, payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot add new note');
       throw this.handleError(error as ApolloError);
@@ -59,14 +48,8 @@ class NoteAPI extends BaseDataSource {
 
   public async editNote({ noteId, payload }: MutationNoteEditArgs) {
     try {
-      // const response = await this.put(
-      //   `v1/notes/${noteId}`,
-      //   {
-      //     payload
-      //   },
-      // );
-      console.log('params', noteId, payload);
-      return { status: 200 };
+      const res = await this.put(`v1/notes/${noteId}`, payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot edit note');
       throw this.handleError(error as ApolloError);
@@ -75,11 +58,8 @@ class NoteAPI extends BaseDataSource {
 
   public async deleteNote({ noteId }: MutationNoteDeleteArgs) {
     try {
-      // const response = await this.delete(
-      //   `v1/notes/${noteId}`,
-      // );
-      console.log('params', noteId);
-      return { status: 200 };
+      const res = await this.delete(`v1/notes/${noteId}`);
+      return res;
     } catch (error) {
       console.error('Error: cannot delete note');
       throw this.handleError(error as ApolloError);

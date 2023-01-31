@@ -43,6 +43,7 @@ import {
   useTagListQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import { GET_STUDENT_NOTE_LIST } from '../../../data/queries/student/get-student-note-list';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
@@ -107,12 +108,14 @@ function NoteInfo() {
       setValues((v) => ({
         ...v,
         title: noteDetail.tieuDe,
-        tags: noteDetail.tag as string[],
+        tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
       }));
       if (editorRef.current) {
         editorRef.current.setContent(noteDetail.noiDung);
       }
-      setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
+      setFiles(
+        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
+      );
     }
   }, [noteDetail]);
 
@@ -141,6 +144,15 @@ function NoteInfo() {
         variables: {
           payload,
         },
+        refetchQueries: [
+          {
+            query: GET_STUDENT_NOTE_LIST,
+            variables: {
+              studentId: id,
+            },
+          },
+          'StudentNoteList',
+        ],
       });
 
       return;
