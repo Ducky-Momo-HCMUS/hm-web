@@ -222,7 +222,7 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
-  maSV: Scalars['String'];
+  maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -306,7 +306,7 @@ export type Query = {
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
-  studentNoteList: StudentNoteList;
+  studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
@@ -502,17 +502,12 @@ export type StudentEditParentInfoInput = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
+  ghiChuTag: Array<StudentTagListItem>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
-  tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
-};
-
-export type StudentNoteList = {
-  __typename?: 'StudentNoteList';
-  danhSachGhiChu: Array<StudentNote>;
 };
 
 export type StudentOverviewResult = {
@@ -565,6 +560,17 @@ export type StudentSubject = {
 export type StudentSubjectsByTerm = {
   __typename?: 'StudentSubjectsByTerm';
   monhoc: Array<StudentSubject>;
+};
+
+export type StudentTag = {
+  __typename?: 'StudentTag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type StudentTagListItem = {
+  __typename?: 'StudentTagListItem';
+  tag?: Maybe<StudentTag>;
 };
 
 export type StudentTerm = {
@@ -766,13 +772,14 @@ export type ResolversTypes = {
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentNote: ResolverTypeWrapper<StudentNote>;
-  StudentNoteList: ResolverTypeWrapper<StudentNoteList>;
   StudentOverviewResult: ResolverTypeWrapper<StudentOverviewResult>;
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
+  StudentTag: ResolverTypeWrapper<StudentTag>;
+  StudentTagListItem: ResolverTypeWrapper<StudentTagListItem>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
   SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
@@ -830,13 +837,14 @@ export type ResolversParentTypes = {
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentNote: StudentNote;
-  StudentNoteList: StudentNoteList;
   StudentOverviewResult: StudentOverviewResult;
   StudentParentContact: StudentParentContact;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: StudentParentInfo;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
+  StudentTag: StudentTag;
+  StudentTagListItem: StudentTagListItem;
   StudentTerm: StudentTerm;
   StudentTrainingPoint: StudentTrainingPoint;
   SubjectDetailResult: SubjectDetailResult;
@@ -1334,7 +1342,7 @@ export type QueryResolvers<
     RequireFields<QueryStudentDetailSubjectsResultArgs, 'studentId' | 'subject'>
   >;
   studentNoteList?: Resolver<
-    ResolversTypes['StudentNoteList'],
+    Array<ResolversTypes['StudentNote']>,
     ParentType,
     ContextType,
     RequireFields<QueryStudentNoteListArgs, 'studentId'>
@@ -1485,28 +1493,16 @@ export type StudentNoteResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentNote'] = ResolversParentTypes['StudentNote']
 > = {
-  maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tag?: Resolver<
-    Array<Maybe<ResolversTypes['String']>>,
+  ghiChuTag?: Resolver<
+    Array<ResolversTypes['StudentTagListItem']>,
     ParentType,
     ContextType
   >;
+  maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thoiGianSua?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type StudentNoteListResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentNoteList'] = ResolversParentTypes['StudentNoteList']
-> = {
-  danhSachGhiChu?: Resolver<
-    Array<ResolversTypes['StudentNote']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1576,6 +1572,23 @@ export type StudentSubjectsByTermResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentTagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentTag'] = ResolversParentTypes['StudentTag']
+> = {
+  maTag?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenTag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentTagListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentTagListItem'] = ResolversParentTypes['StudentTagListItem']
+> = {
+  tag?: Resolver<Maybe<ResolversTypes['StudentTag']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1672,12 +1685,13 @@ export type Resolvers<ContextType = any> = {
   StudentDetail?: StudentDetailResolvers<ContextType>;
   StudentDetailSubjectsResult?: StudentDetailSubjectsResultResolvers<ContextType>;
   StudentNote?: StudentNoteResolvers<ContextType>;
-  StudentNoteList?: StudentNoteListResolvers<ContextType>;
   StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
+  StudentTag?: StudentTagResolvers<ContextType>;
+  StudentTagListItem?: StudentTagListItemResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
   SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;

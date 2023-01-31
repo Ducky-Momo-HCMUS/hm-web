@@ -131,13 +131,26 @@ function NoteStore() {
     []
   );
 
+  const handleSelectFilterTags = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
+      const {
+        target: { value },
+      } = event;
+      setValues((v) => ({
+        ...v,
+        filterTags: typeof value === 'string' ? value.split(',') : value,
+      }));
+    },
+    []
+  );
+
   const handleSelectTags = useCallback((event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event;
     setValues((v) => ({
       ...v,
-      filterTags: typeof value === 'string' ? value.split(',') : value,
+      tags: typeof value === 'string' ? value.split(',') : value,
     }));
   }, []);
 
@@ -194,7 +207,6 @@ function NoteStore() {
           (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
         ),
         noiDung: editorRef.current?.getContent() || '',
-        maSV: '',
         url: ['https://picsum.photos/200'],
       } as NoteAddInput;
 
@@ -390,7 +402,7 @@ function NoteStore() {
                   value={values.filterTags}
                   MenuProps={MenuProps}
                   label="Tag"
-                  onChange={handleSelectTags}
+                  onChange={handleSelectFilterTags}
                 >
                   {tagList.map((item) => (
                     <MenuItem value={item.tenTag}>

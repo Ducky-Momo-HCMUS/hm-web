@@ -68,8 +68,8 @@ function NoteInfo() {
     });
 
   const studentNoteList = useMemo(
-    () => studentNoteListData?.studentNoteList?.danhSachGhiChu || [],
-    [studentNoteListData?.studentNoteList?.danhSachGhiChu]
+    () => studentNoteListData?.studentNoteList || [],
+    [studentNoteListData?.studentNoteList]
   );
 
   const [getNoteDetail, { loading: noteDetailLoading, data: noteDetailData }] =
@@ -97,6 +97,7 @@ function NoteInfo() {
         variables: {
           noteId: values.selected,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [getNoteDetail, values.selected]);
@@ -172,6 +173,15 @@ function NoteInfo() {
         noteId: values.selected,
         payload,
       },
+      refetchQueries: [
+        {
+          query: GET_STUDENT_NOTE_LIST,
+          variables: {
+            studentId: id,
+          },
+        },
+        'StudentNoteList',
+      ],
     });
   }, [
     addNote,
@@ -199,18 +209,15 @@ function NoteInfo() {
     []
   );
 
-  const handleSelectTags = useCallback(
-    (event: SelectChangeEvent<typeof values.tags>) => {
-      const {
-        target: { value },
-      } = event;
-      setValues((v) => ({
-        ...v,
-        tags: typeof value === 'string' ? value.split(',') : value,
-      }));
-    },
-    []
-  );
+  const handleSelectTags = useCallback((event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    setValues((v) => ({
+      ...v,
+      tags: typeof value === 'string' ? value.split(',') : value,
+    }));
+  }, []);
 
   const handleSelectValue = useCallback((prop: keyof State, value: any) => {
     setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
@@ -228,8 +235,17 @@ function NoteInfo() {
       variables: {
         noteId: values.deleteIndex,
       },
+      refetchQueries: [
+        {
+          query: GET_STUDENT_NOTE_LIST,
+          variables: {
+            studentId: id,
+          },
+        },
+        'StudentNoteList',
+      ],
     });
-  }, [deleteNote, values]);
+  }, [deleteNote, id, values]);
 
   const handleReset = useCallback(() => {
     setValues((v) => ({ ...v, selected: -1, title: '', tags: [] }));
@@ -289,7 +305,7 @@ function NoteInfo() {
                         selected={values.selected}
                         data={item}
                         onClick={() => handleSelectValue('selected', item.maGC)}
-                        onClickDelete={() => handleClickDelete(index)}
+                        onClickDelete={() => handleClickDelete(item.maGC)}
                       />
                     ))}
                 </AsyncDataRenderer>
@@ -334,7 +350,10 @@ function NoteInfo() {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá ghi chú"
-          boldText={studentNoteList[values.deleteIndex].tieuDe}
+          boldText={
+            studentNoteList.find((item) => item.maGC === values.deleteIndex)
+              ?.tieuDe || ''
+          }
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={handleDeleteNote}
         />

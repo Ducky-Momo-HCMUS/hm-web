@@ -45,7 +45,7 @@ const noteTypeDefs = gql`
     tieuDe: String!
     maTag: [Int!]!
     noiDung: String!
-    maSV: String!
+    maSV: String
     url: [String!]!
   }
 

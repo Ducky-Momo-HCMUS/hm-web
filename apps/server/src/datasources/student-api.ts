@@ -25,7 +25,6 @@ import {
   ALL_TERMS,
   AVERAGE_POINT,
   AVERAGE_POINT_BY_TERM,
-  STUDENT_NOTE_LIST,
   STUDENT_DETAIL_SUBJECTS_RESULT,
   STUDENT_OVERVIEW_RESULT,
   SUBJECTS_BY_TERM,
@@ -271,11 +270,8 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
     try {
-      // const noteList = await this.get(
-      //   `v1/students/${studentId}/notes`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_NOTE_LIST;
+      const res = await this.get('v1/notes', studentId);
+      return res;
     } catch (error) {
       console.error('Error: cannot fetch student note list');
       throw this.handleError(error as ApolloError);

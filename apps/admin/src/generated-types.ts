@@ -221,7 +221,7 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
-  maSV: Scalars['String'];
+  maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -305,7 +305,7 @@ export type Query = {
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
-  studentNoteList: StudentNoteList;
+  studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
@@ -501,17 +501,12 @@ export type StudentEditParentInfoInput = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
+  ghiChuTag: Array<StudentTagListItem>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
-  tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
-};
-
-export type StudentNoteList = {
-  __typename?: 'StudentNoteList';
-  danhSachGhiChu: Array<StudentNote>;
 };
 
 export type StudentOverviewResult = {
@@ -564,6 +559,17 @@ export type StudentSubject = {
 export type StudentSubjectsByTerm = {
   __typename?: 'StudentSubjectsByTerm';
   monhoc: Array<StudentSubject>;
+};
+
+export type StudentTag = {
+  __typename?: 'StudentTag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type StudentTagListItem = {
+  __typename?: 'StudentTagListItem';
+  tag?: Maybe<StudentTag>;
 };
 
 export type StudentTerm = {
@@ -1161,18 +1167,21 @@ export type StudentNoteListQueryVariables = Exact<{
 
 export type StudentNoteListQuery = {
   __typename?: 'Query';
-  studentNoteList: {
-    __typename?: 'StudentNoteList';
-    danhSachGhiChu: Array<{
-      __typename?: 'StudentNote';
-      maGC: number;
-      tag: Array<string | null | undefined>;
-      tieuDe: string;
-      noiDung: string;
-      thoiGianTao: string;
-      thoiGianSua: string;
+  studentNoteList: Array<{
+    __typename?: 'StudentNote';
+    maGC: number;
+    tieuDe: string;
+    noiDung: string;
+    thoiGianTao: string;
+    thoiGianSua: string;
+    ghiChuTag: Array<{
+      __typename?: 'StudentTagListItem';
+      tag?:
+        | { __typename?: 'StudentTag'; maTag: number; tenTag: string }
+        | null
+        | undefined;
     }>;
-  };
+  }>;
 };
 
 export type StudentOverviewResultQueryVariables = Exact<{
@@ -3211,14 +3220,17 @@ export type StudentDetailQueryResult = Apollo.QueryResult<
 export const StudentNoteListDocument = gql`
   query StudentNoteList($studentId: String!) {
     studentNoteList(studentId: $studentId) {
-      danhSachGhiChu {
-        maGC
-        tag
-        tieuDe
-        noiDung
-        thoiGianTao
-        thoiGianSua
+      maGC
+      ghiChuTag {
+        tag {
+          maTag
+          tenTag
+        }
       }
+      tieuDe
+      noiDung
+      thoiGianTao
+      thoiGianSua
     }
   }
 `;

@@ -4,7 +4,6 @@ import {
   StudentAveragePoint,
   StudentContactResponse,
   StudentParentInfo,
-  StudentNoteList,
   StudentDetailSubjectsResult,
   StudentOverviewResult,
   StudentSubject,
@@ -135,42 +134,7 @@ export const STUDENT_PARENT_INFO_RESPONSE = {
     },
   ],
 } as StudentParentInfo;
-export const STUDENT_NOTE_LIST = {
-  danhSachGhiChu: [
-    {
-      maGC: 1,
-      tag: ['Học tập'],
-      tieuDe: 'Ghi chú ngày 31/12/2022',
-      noiDung: 'Cần cải thiện điểm số',
-      thoiGianTao: '31/12/2022 15:11',
-      thoiGianSua: '31/12/2022 15:11',
-    },
-    {
-      maGC: 2,
-      tag: ['Học tập', 'Chuyên cần'],
-      tieuDe: 'Ghi chú ngày 31/12/2022',
-      noiDung: 'Cần đi học nhiều hơn',
-      thoiGianTao: '31/12/2022 15:11',
-      thoiGianSua: '31/12/2022 15:11',
-    },
-    {
-      maGC: 3,
-      tag: ['Học tập'],
-      tieuDe: 'Ghi chú ngày 31/12/2022',
-      noiDung: 'Áp lực học tập',
-      thoiGianTao: '31/12/2022 15:11',
-      thoiGianSua: '31/12/2022 15:11',
-    },
-    {
-      maGC: 4,
-      tag: ['Phụ huynh'],
-      tieuDe: 'Ghi chú ngày 31/12/2022',
-      noiDung: 'Cần liên hệ phụ huynh',
-      thoiGianTao: '31/12/2022 15:11',
-      thoiGianSua: '31/12/2022 15:11',
-    },
-  ],
-} as StudentNoteList;
+
 export const STUDENT_OVERVIEW_RESULT = {
   tenCN: 'Kỹ thuật phần mềm',
   daiCuong: 56,

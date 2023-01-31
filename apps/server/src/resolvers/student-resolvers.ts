@@ -45,7 +45,9 @@ export const studentResolver: Resolvers<ResolverContext> = {
       return res.data.data;
     },
     studentNoteList: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.getStudentNoteList(args)) || null;
+      const res = await dataSources.studentAPI.getStudentNoteList(args);
+      console.log('data', res.data);
+      return res.data;
     },
     studentOverviewResult: async (_, args, { dataSources }) => {
       return (

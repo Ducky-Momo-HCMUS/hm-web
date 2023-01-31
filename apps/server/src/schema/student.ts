@@ -20,7 +20,7 @@ const studentTypeDefs = gql`
     studentAllTerms(studentId: String!): StudentAllTerms!
     studentDetail(studentId: String!): StudentDetail!
     studentParentInfoList(studentId: String!): [StudentParentInfo!]!
-    studentNoteList(studentId: String!): StudentNoteList!
+    studentNoteList(studentId: String!): [StudentNote!]!
     studentOverviewResult(studentId: String!): StudentOverviewResult!
     studentDetailSubjectsResult(
       studentId: String!
@@ -171,17 +171,22 @@ const studentTypeDefs = gql`
     status: Int!
   }
 
-  type StudentNoteList {
-    danhSachGhiChu: [StudentNote!]!
-  }
-
   type StudentNote {
     maGC: Int!
-    tag: [String]!
     tieuDe: String!
     noiDung: String!
     thoiGianTao: String!
     thoiGianSua: String!
+    ghiChuTag: [StudentTagListItem!]!
+  }
+
+  type StudentTagListItem {
+    tag: StudentTag
+  }
+
+  type StudentTag {
+    maTag: Int!
+    tenTag: String!
   }
 
   type StudentOverviewResult {
