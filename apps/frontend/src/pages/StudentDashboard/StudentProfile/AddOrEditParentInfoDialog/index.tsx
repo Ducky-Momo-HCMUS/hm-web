@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -62,6 +62,18 @@ function AddOrEditParentInfoDialog({
     url: '',
   });
 
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      tenPH: '',
+      quanHe: '',
+      sdt: '',
+      lienHePH: [],
+      mxh: '',
+      url: '',
+    }));
+  }, []);
+
   const handleChange = useCallback(
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
@@ -84,7 +96,7 @@ function AddOrEditParentInfoDialog({
     // TODO: call api
     setValues((v) => ({
       ...v,
-      lienHe: [...values.lienHePH, { mxh: values.mxh, url: values.url }],
+      lienHePH: [...values.lienHePH, { mxh: values.mxh, url: values.url }],
     }));
 
     setValues((v) => ({
@@ -99,7 +111,7 @@ function AddOrEditParentInfoDialog({
       setValues((v) => ({
         ...v,
         lienHePH: [
-          ...values.lienHePH.filter((item) => item.url !== contact.url),
+          ...values.lienHePH.filter((item) => item.mxh !== contact.mxh),
         ],
       }));
     },
@@ -107,7 +119,13 @@ function AddOrEditParentInfoDialog({
   );
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        onClose();
+        handleReset();
+      }}
+    >
       <DialogTitle>
         {data ? 'Chỉnh sửa thông tin phụ huynh' : 'Thêm thông tin phụ huynh'}
       </DialogTitle>
@@ -158,6 +176,7 @@ function AddOrEditParentInfoDialog({
             </Select>
           </FormControl>
           <StyledTextField
+            type="number"
             label="Số điện thoại"
             name="phoneNumber"
             value={values.sdt}
@@ -222,6 +241,7 @@ function AddOrEditParentInfoDialog({
                 sdt: values.sdt,
                 lienHePH: values.lienHePH,
               });
+              handleReset();
             }}
           >
             {data ? 'Lưu' : 'Thêm'}

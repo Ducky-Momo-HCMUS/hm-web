@@ -29,6 +29,7 @@ import {
   useStudentParentInfoListQuery,
 } from '../../../generated-types';
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
+import { GET_STUDENT_PARENT_INFO_LIST } from '../../../data/queries/student/get-student-parent-info';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -91,6 +92,10 @@ function StudentProfile() {
           studentId: id,
           payload: studentInfo,
         },
+        refetchQueries: [
+          { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+          'StudentParentInfoList',
+        ],
       });
     },
     [addStudentParentInfo, id]
@@ -118,8 +123,8 @@ function StudentProfile() {
   });
 
   const studentParentInfoList = useMemo(
-    () => studentParentInfoListData?.studentParentInfoList.dsPhuHuynh || [],
-    [studentParentInfoListData?.studentParentInfoList.dsPhuHuynh]
+    () => studentParentInfoListData?.studentParentInfoList || [],
+    [studentParentInfoListData?.studentParentInfoList]
   );
 
   return (

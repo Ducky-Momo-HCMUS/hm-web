@@ -41,12 +41,13 @@ export const studentResolver: Resolvers<ResolverContext> = {
       return (await dataSources.studentAPI.getStudentDetail(args)) || null;
     },
     studentParentInfoList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentParentInfoList(args)) || null
-      );
+      const res = await dataSources.studentAPI.getStudentParentInfoList(args);
+      return res.data.data;
     },
     studentNoteList: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.getStudentNoteList(args)) || null;
+      const res = await dataSources.studentAPI.getStudentNoteList(args);
+      console.log('data', res.data);
+      return res.data;
     },
     studentOverviewResult: async (_, args, { dataSources }) => {
       return (
@@ -74,15 +75,16 @@ export const studentResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     studentAddParentInfo: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.addStudentParentInfo(args)) || null;
+      const res = await dataSources.studentAPI.addStudentParentInfo(args);
+      return res.data;
     },
     studentEditParentInfo: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.editStudentParentInfo(args)) || null;
+      const res = await dataSources.studentAPI.editStudentParentInfo(args);
+      return res.data;
     },
     studentDeleteParentInfo: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.deleteStudentParentInfo(args)) || null
-      );
+      const res = await dataSources.studentAPI.deleteStudentParentInfo(args);
+      return res.data;
     },
   },
 };

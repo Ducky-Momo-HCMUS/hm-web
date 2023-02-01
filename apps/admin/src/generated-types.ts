@@ -221,7 +221,7 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
-  maSV: Scalars['String'];
+  maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -230,7 +230,8 @@ export type NoteAddInput = {
 
 export type NoteAddResponse = {
   __typename?: 'NoteAddResponse';
-  status: Scalars['Int'];
+  noiDung: Scalars['String'];
+  tieuDe: Scalars['String'];
 };
 
 export type NoteDeleteResponse = {
@@ -240,10 +241,10 @@ export type NoteDeleteResponse = {
 
 export type NoteDetail = {
   __typename?: 'NoteDetail';
-  hinhAnh: Array<NoteImage>;
+  ghiChuHinhAnh: Array<NoteImage>;
+  ghiChuTag: Array<NoteTag>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
-  tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -258,7 +259,8 @@ export type NoteEditInput = {
 
 export type NoteEditResponse = {
   __typename?: 'NoteEditResponse';
-  status: Scalars['Int'];
+  noiDung: Scalars['String'];
+  tieuDe: Scalars['String'];
 };
 
 export type NoteImage = {
@@ -267,20 +269,20 @@ export type NoteImage = {
   url: Scalars['String'];
 };
 
-export type NoteList = {
-  __typename?: 'NoteList';
-  danhSachGhiChu: Array<NoteListItem>;
-};
-
 export type NoteListItem = {
   __typename?: 'NoteListItem';
   maGC: Scalars['Int'];
   maSV?: Maybe<Scalars['String']>;
   noiDung: Scalars['String'];
-  tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type NoteTag = {
+  __typename?: 'NoteTag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
 };
 
 export type Query = {
@@ -296,16 +298,16 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
-  noteList: NoteList;
+  noteList: Array<NoteListItem>;
   studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
   studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
-  studentNoteList: StudentNoteList;
+  studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: StudentParentInfoList;
+  studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -499,17 +501,12 @@ export type StudentEditParentInfoInput = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
+  ghiChuTag: Array<StudentTagListItem>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
-  tag: Array<Maybe<Scalars['String']>>;
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
-};
-
-export type StudentNoteList = {
-  __typename?: 'StudentNoteList';
-  danhSachGhiChu: Array<StudentNote>;
 };
 
 export type StudentOverviewResult = {
@@ -548,11 +545,6 @@ export type StudentParentInfo = {
   tenPH: Scalars['String'];
 };
 
-export type StudentParentInfoList = {
-  __typename?: 'StudentParentInfoList';
-  dsPhuHuynh: Array<StudentParentInfo>;
-};
-
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   dtb?: Maybe<Scalars['Float']>;
@@ -567,6 +559,17 @@ export type StudentSubject = {
 export type StudentSubjectsByTerm = {
   __typename?: 'StudentSubjectsByTerm';
   monhoc: Array<StudentSubject>;
+};
+
+export type StudentTag = {
+  __typename?: 'StudentTag';
+  maTag: Scalars['Int'];
+  tenTag: Scalars['String'];
+};
+
+export type StudentTagListItem = {
+  __typename?: 'StudentTagListItem';
+  tag?: Maybe<StudentTag>;
 };
 
 export type StudentTerm = {
@@ -691,7 +694,7 @@ export type NoteAddMutationVariables = Exact<{
 
 export type NoteAddMutation = {
   __typename?: 'Mutation';
-  noteAdd: { __typename?: 'NoteAddResponse'; status: number };
+  noteAdd: { __typename?: 'NoteAddResponse'; tieuDe: string; noiDung: string };
 };
 
 export type NoteDeleteMutationVariables = Exact<{
@@ -710,7 +713,11 @@ export type NoteEditMutationVariables = Exact<{
 
 export type NoteEditMutation = {
   __typename?: 'Mutation';
-  noteEdit: { __typename?: 'NoteEditResponse'; status: number };
+  noteEdit: {
+    __typename?: 'NoteEditResponse';
+    tieuDe: string;
+    noiDung: string;
+  };
 };
 
 export type StudentAddContactMutationVariables = Exact<{
@@ -1005,12 +1012,16 @@ export type NoteDetailQuery = {
   noteDetail: {
     __typename?: 'NoteDetail';
     maGC: number;
-    tag: Array<string | null | undefined>;
     tieuDe: string;
     noiDung: string;
     thoiGianTao: string;
     thoiGianSua?: string | null | undefined;
-    hinhAnh: Array<{ __typename?: 'NoteImage'; stt: number; url: string }>;
+    ghiChuTag: Array<{ __typename?: 'NoteTag'; maTag: number; tenTag: string }>;
+    ghiChuHinhAnh: Array<{
+      __typename?: 'NoteImage';
+      stt: number;
+      url: string;
+    }>;
   };
 };
 
@@ -1018,19 +1029,15 @@ export type NoteListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type NoteListQuery = {
   __typename?: 'Query';
-  noteList: {
-    __typename?: 'NoteList';
-    danhSachGhiChu: Array<{
-      __typename?: 'NoteListItem';
-      maGC: number;
-      tag: Array<string | null | undefined>;
-      tieuDe: string;
-      noiDung: string;
-      thoiGianTao: string;
-      thoiGianSua?: string | null | undefined;
-      maSV?: string | null | undefined;
-    }>;
-  };
+  noteList: Array<{
+    __typename?: 'NoteListItem';
+    maGC: number;
+    tieuDe: string;
+    noiDung: string;
+    thoiGianTao: string;
+    thoiGianSua?: string | null | undefined;
+    maSV?: string | null | undefined;
+  }>;
 };
 
 export type StudentAllSubjectsQueryVariables = Exact<{
@@ -1160,18 +1167,21 @@ export type StudentNoteListQueryVariables = Exact<{
 
 export type StudentNoteListQuery = {
   __typename?: 'Query';
-  studentNoteList: {
-    __typename?: 'StudentNoteList';
-    danhSachGhiChu: Array<{
-      __typename?: 'StudentNote';
-      maGC: number;
-      tag: Array<string | null | undefined>;
-      tieuDe: string;
-      noiDung: string;
-      thoiGianTao: string;
-      thoiGianSua: string;
+  studentNoteList: Array<{
+    __typename?: 'StudentNote';
+    maGC: number;
+    tieuDe: string;
+    noiDung: string;
+    thoiGianTao: string;
+    thoiGianSua: string;
+    ghiChuTag: Array<{
+      __typename?: 'StudentTagListItem';
+      tag?:
+        | { __typename?: 'StudentTag'; maTag: number; tenTag: string }
+        | null
+        | undefined;
     }>;
-  };
+  }>;
 };
 
 export type StudentOverviewResultQueryVariables = Exact<{
@@ -1200,23 +1210,20 @@ export type StudentParentInfoListQueryVariables = Exact<{
 
 export type StudentParentInfoListQuery = {
   __typename?: 'Query';
-  studentParentInfoList: {
-    __typename?: 'StudentParentInfoList';
-    dsPhuHuynh: Array<{
-      __typename?: 'StudentParentInfo';
-      maPH: number;
-      tenPH: string;
-      quanHe: string;
-      sdt: string;
-      sua: boolean;
-      lienHePH: Array<{
-        __typename?: 'StudentParentContact';
-        maLHPH?: number | null | undefined;
-        mxh: string;
-        url: string;
-      }>;
+  studentParentInfoList: Array<{
+    __typename?: 'StudentParentInfo';
+    maPH: number;
+    tenPH: string;
+    quanHe: string;
+    sdt: string;
+    sua: boolean;
+    lienHePH: Array<{
+      __typename?: 'StudentParentContact';
+      maLHPH?: number | null | undefined;
+      mxh: string;
+      url: string;
     }>;
-  };
+  }>;
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -1578,7 +1585,8 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<
 export const NoteAddDocument = gql`
   mutation NoteAdd($payload: NoteAddInput!) {
     noteAdd(payload: $payload) {
-      status
+      tieuDe
+      noiDung
     }
   }
 `;
@@ -1675,7 +1683,8 @@ export type NoteDeleteMutationOptions = Apollo.BaseMutationOptions<
 export const NoteEditDocument = gql`
   mutation NoteEdit($noteId: Int!, $payload: NoteEditInput!) {
     noteEdit(noteId: $noteId, payload: $payload) {
-      status
+      tieuDe
+      noiDung
     }
   }
 `;
@@ -2697,12 +2706,15 @@ export const NoteDetailDocument = gql`
   query NoteDetail($noteId: Int!) {
     noteDetail(noteId: $noteId) {
       maGC
-      tag
+      ghiChuTag {
+        maTag
+        tenTag
+      }
       tieuDe
       noiDung
       thoiGianTao
       thoiGianSua
-      hinhAnh {
+      ghiChuHinhAnh {
         stt
         url
       }
@@ -2761,15 +2773,12 @@ export type NoteDetailQueryResult = Apollo.QueryResult<
 export const NoteListDocument = gql`
   query NoteList {
     noteList {
-      danhSachGhiChu {
-        maGC
-        tag
-        tieuDe
-        noiDung
-        thoiGianTao
-        thoiGianSua
-        maSV
-      }
+      maGC
+      tieuDe
+      noiDung
+      thoiGianTao
+      thoiGianSua
+      maSV
     }
   }
 `;
@@ -3211,14 +3220,17 @@ export type StudentDetailQueryResult = Apollo.QueryResult<
 export const StudentNoteListDocument = gql`
   query StudentNoteList($studentId: String!) {
     studentNoteList(studentId: $studentId) {
-      danhSachGhiChu {
-        maGC
-        tag
-        tieuDe
-        noiDung
-        thoiGianTao
-        thoiGianSua
+      maGC
+      ghiChuTag {
+        tag {
+          maTag
+          tenTag
+        }
       }
+      tieuDe
+      noiDung
+      thoiGianTao
+      thoiGianSua
     }
   }
 `;
@@ -3342,17 +3354,15 @@ export type StudentOverviewResultQueryResult = Apollo.QueryResult<
 export const StudentParentInfoListDocument = gql`
   query StudentParentInfoList($studentId: String!) {
     studentParentInfoList(studentId: $studentId) {
-      dsPhuHuynh {
-        maPH
-        tenPH
-        quanHe
-        sdt
-        sua
-        lienHePH {
-          maLHPH
-          mxh
-          url
-        }
+      maPH
+      tenPH
+      quanHe
+      sdt
+      sua
+      lienHePH {
+        maLHPH
+        mxh
+        url
       }
     }
   }
