@@ -27,6 +27,7 @@
     ]
   },
   "dependencies": {
+    "@apollo/client": "^3.7.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.9",
@@ -37,8 +38,10 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
+    "apollo-upload-client": "^17.0.0",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.8",
+    "graphql": "^15.3.0",
     "react": "^17.0.2",
     "react-admin": "^4.6.2",
     "react-dom": "^17.0.2",
@@ -57,6 +60,7 @@
     "@craco/craco": "^7.0.0",
     "@hm/eslint-config": "workspace:*",
     "@mui/system": "^5.10.16",
+    "@types/apollo-upload-client": "^17.0.2",
     "@types/jest": "^29.2.0",
     "@types/lodash": "^4.14.191",
     "@types/node": "^16.11.64",

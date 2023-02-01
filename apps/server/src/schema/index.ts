@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 
 import authTypeDefs from './auth';
+import fileTypeDefs from './file';
 import homeroomTypeDefs from './homeroom';
 import noteTypeDefs from './note';
 import studentTypeDefs from './student';
@@ -31,4 +32,5 @@ export default [
   noteTypeDefs,
   tagTypeDefs,
   accountTypeDefs,
+  fileTypeDefs,
 ];

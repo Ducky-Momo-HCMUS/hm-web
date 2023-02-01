@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   InputLabel,
   MenuItem,
   Select,
@@ -18,6 +20,8 @@ import { read, utils, WorkSheet } from 'xlsx';
 
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
+import useBulkUploadDocumentsMutation from '../../../hooks/useBulkUploadDocumentsMutation';
+import { useUploadDocumentMutation } from '../../../generated-types';
 
 import { StyledFormControl } from './styles';
 
@@ -92,6 +96,7 @@ function ImportFile() {
   const [current, setCurrent] = useState<string>(''); // selected sheet
 
   const filePondRef = useRef<FilePond | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
@@ -156,6 +161,39 @@ function ImportFile() {
   //   writeFile(wb, `SheetJSRDG.${ext}`);
   // }
 
+  const onUploadCompleted = useCallback((successDocuments: File[]) => {
+    console.log('completed', successDocuments);
+  }, []);
+
+  const onUploadFailed = useCallback((failedDocuments: File[]) => {
+    console.log('failed', failedDocuments);
+  }, []);
+
+  const { bulkUploadDocuments } = useBulkUploadDocumentsMutation({
+    onUploadCompleted,
+    onUploadFailed,
+  });
+
+  const [uploadDocument, { loading: uploadDocumentLoading }] =
+    useUploadDocumentMutation();
+
+  const handleUploadDocument = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input: {
+              name: 'example.xlsx',
+            },
+          },
+        });
+      }
+    },
+    [file, uploadDocument]
+  );
+
   return (
     <>
       <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
@@ -210,11 +248,13 @@ function ImportFile() {
                 onupdatefiles={async (files) => {
                   if (files.length > 0) {
                     await handleFile(await files[0].file?.arrayBuffer());
+                    setFile(files[0].file as File);
                   }
                 }}
                 onremovefile={(err, file) => {
                   setSheets([]);
                   setCurrent('');
+                  setFile(null);
                 }}
                 // server={{
                 //   load: (source, load) => {
@@ -267,12 +307,22 @@ function ImportFile() {
             <Box sx={{ width: '85%!important' }}>
               {error.length > 0 && <ErrorMessage content={error} />}
             </Box>
-            <Button type="submit" variant="contained">
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={handleUploadDocument}
+            >
               Xác nhận
             </Button>
           </Box>
         )}
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={uploadDocumentLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }
