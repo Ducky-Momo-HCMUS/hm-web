@@ -16,75 +16,43 @@ import { Link } from 'react-router-dom';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { read, utils, WorkSheet } from 'xlsx';
+import { read, utils } from 'xlsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
-import useBulkUploadDocumentsMutation from '../../../hooks/useBulkUploadDocumentsMutation';
 import { useUploadDocumentMutation } from '../../../generated-types';
 
 import { StyledFormControl } from './styles';
-
-const YEARS = [2017, 2018, 2019];
-const TYPES = [
-  'Danh sách giáo viên chủ nhiệm',
-  'Danh sách thông tin sinh viên',
-  'Danh sách môn học',
-  'Danh sách chuyên ngành và kết quả',
-  'Thời khoá biểu',
-  'Danh sách đăng ký học phần',
-  'Điểm số',
-  'Danh sách hoãn thi',
-  'Danh sách vắng thi',
-];
+import {
+  arrayify,
+  CLASSES,
+  DataSet,
+  getRowsCols,
+  MenuProps,
+  Row,
+  SUBJECTS,
+  TERMS,
+  TYPES,
+  YEARS,
+} from './utils';
 
 interface State {
   year: string;
   type: string;
+  term: string;
+  subject: string;
+  class: string;
 }
-
-type DataSet = { [index: string]: WorkSheet };
-type Row = any[];
-type RowCol = { rows: Row[]; columns: GridColDef[] };
-
-function arrayify(rows: any[]): Row[] {
-  return rows.map((row) => {
-    if (Array.isArray(row)) return row;
-    let { length } = Object.keys(row);
-    for (; length > 0; --length) if (row[length - 1] != null) break;
-    return Array.from({ length, ...row });
-  });
-}
-
-/* this method returns `rows` and `columns` data for sheet change */
-const getRowsCols = (data: DataSet, sheetName: string): RowCol => {
-  const sheet = data[sheetName];
-  const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
-
-  return {
-    rows: utils
-      .sheet_to_json<Row>(data[sheetName], { header: 1 })
-      .filter((row) => row.length > 0)
-      .map((r, id) => ({ ...r, id })),
-    columns: Array.from(
-      {
-        length: utils.decode_range(`A1:${endCell}`).e.c + 1,
-      },
-      (_, i) => ({
-        field: String(i),
-        headerName: utils.encode_col(i),
-        editable: false,
-        minWidth: 200,
-        maxWidth: 400,
-      })
-    ),
-  };
-};
 
 function ImportFile() {
   const [values, setValues] = useState<State>({
-    year: '',
     type: '',
+    year: '',
+    term: '',
+    subject: '',
+    class: '',
   });
 
   const [error, setError] = useState<string>('');
@@ -100,7 +68,7 @@ function ImportFile() {
 
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
-      if (filePondRef.current) {
+      if (prop === 'type' && filePondRef.current) {
         filePondRef.current.removeFile();
       }
       setValues((v) => ({ ...v, [prop]: event.target.value }));
@@ -161,21 +129,13 @@ function ImportFile() {
   //   writeFile(wb, `SheetJSRDG.${ext}`);
   // }
 
-  const onUploadCompleted = useCallback((successDocuments: File[]) => {
-    console.log('completed', successDocuments);
-  }, []);
-
-  const onUploadFailed = useCallback((failedDocuments: File[]) => {
-    console.log('failed', failedDocuments);
-  }, []);
-
-  const { bulkUploadDocuments } = useBulkUploadDocumentsMutation({
-    onUploadCompleted,
-    onUploadFailed,
-  });
-
   const [uploadDocument, { loading: uploadDocumentLoading }] =
-    useUploadDocumentMutation();
+    useUploadDocumentMutation({
+      onError: (error) => {
+        // TODO: lấy error từ BE
+        toast.error('Đã có  lỗi xảy ra');
+      },
+    });
 
   const handleUploadDocument = useCallback(
     async (event) => {
@@ -196,28 +156,13 @@ function ImportFile() {
 
   return (
     <>
+      <ToastContainer />
       <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
       <StyledBreadCrumbs aria-label="breadcrumb">
         <Link to="/">Trang chủ</Link>
         <Typography color="text.primary">Nhập thông tin</Typography>
       </StyledBreadCrumbs>
       <Box component="form">
-        <StyledFormControl>
-          <InputLabel id="year-select-label">Năm học</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.year}
-            label="Năm học"
-            onChange={handleChange('year')}
-          >
-            {YEARS.map((item) => (
-              <MenuItem value={item.toString()}>
-                {item} - {item + 1}
-              </MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
         <StyledFormControl sx={{ minWidth: '18.5rem' }}>
           <InputLabel id="type-select-label">Loại thông tin</InputLabel>
           <Select
@@ -226,13 +171,85 @@ function ImportFile() {
             value={values.type}
             label="Loại thông tin"
             onChange={handleChange('type')}
+            MenuProps={MenuProps}
           >
             {TYPES.map((item) => (
               <MenuItem value={item}>{item}</MenuItem>
             ))}
           </Select>
         </StyledFormControl>
-        {values.year.length > 0 && values.type.length > 0 && (
+        {values.type && (
+          <StyledFormControl>
+            <InputLabel id="year-select-label">Năm học</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={values.year}
+              label="Năm học"
+              onChange={handleChange('year')}
+              MenuProps={MenuProps}
+            >
+              {YEARS.map((item) => (
+                <MenuItem value={item.toString()}>
+                  {item} - {item + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        )}
+
+        {TYPES.findIndex((item) => item === values.type) > 4 && (
+          <StyledFormControl>
+            <InputLabel id="term-select-label">Học kỳ</InputLabel>
+            <Select
+              labelId="term-select-label"
+              id="term-select"
+              value={values.term}
+              label="Học kỳ"
+              onChange={handleChange('term')}
+              MenuProps={MenuProps}
+            >
+              {TERMS.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        )}
+        {values.type === 'Bảng điểm lớp học phần' && (
+          <>
+            <StyledFormControl sx={{ minWidth: '13rem' }}>
+              <InputLabel id="subject-select-label">Môn học</InputLabel>
+              <Select
+                labelId="subject-select-label"
+                id="subject-select"
+                value={values.subject}
+                label="Môn học"
+                onChange={handleChange('subject')}
+                MenuProps={MenuProps}
+              >
+                {SUBJECTS.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+            <StyledFormControl sx={{ minWidth: '9rem' }}>
+              <InputLabel id="class-select-label">Lớp học phần</InputLabel>
+              <Select
+                labelId="class-select-label"
+                id="class-select"
+                value={values.class}
+                label="Lớp học phần"
+                onChange={handleChange('class')}
+                MenuProps={MenuProps}
+              >
+                {CLASSES.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+          </>
+        )}
+        {values.type.length > 0 && (
           <>
             <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
               Cập nhật lần cuối bởi <b>Hoàng Thanh Tú</b> vào 12/12/2021
@@ -251,21 +268,11 @@ function ImportFile() {
                     setFile(files[0].file as File);
                   }
                 }}
-                onremovefile={(err, file) => {
+                onremovefile={() => {
                   setSheets([]);
                   setCurrent('');
                   setFile(null);
                 }}
-                // server={{
-                //   load: (source, load) => {
-                //     const myRequest = new Request(source);
-                //     fetch(myRequest).then((response) => {
-                //       response.blob().then((myBlob) => {
-                //         load(myBlob);
-                //       });
-                //     });
-                //   },
-                // }}
                 name="file"
                 labelIdle="Kéo thả hoặc đính kèm file tại đây"
               />
