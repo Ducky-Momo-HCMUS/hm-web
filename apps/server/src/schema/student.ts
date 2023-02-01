@@ -19,8 +19,8 @@ const studentTypeDefs = gql`
     studentAveragePoint(studentId: String!): StudentAveragePoint!
     studentAllTerms(studentId: String!): StudentAllTerms!
     studentDetail(studentId: String!): StudentDetail!
-    studentParentInfoList(studentId: String!): StudentParentInfoList!
-    studentNoteList(studentId: String!): StudentNoteList!
+    studentParentInfoList(studentId: String!): [StudentParentInfo!]!
+    studentNoteList(studentId: String!): [StudentNote!]!
     studentOverviewResult(studentId: String!): StudentOverviewResult!
     studentDetailSubjectsResult(
       studentId: String!
@@ -111,10 +111,6 @@ const studentTypeDefs = gql`
     lienHeSV: [StudentContact!]
   }
 
-  type StudentParentInfoList {
-    dsPhuHuynh: [StudentParentInfo!]!
-  }
-
   type StudentParentInfo {
     maPH: Int!
     tenPH: String!
@@ -175,17 +171,22 @@ const studentTypeDefs = gql`
     status: Int!
   }
 
-  type StudentNoteList {
-    danhSachGhiChu: [StudentNote!]!
-  }
-
   type StudentNote {
     maGC: Int!
-    tag: [String]!
     tieuDe: String!
     noiDung: String!
     thoiGianTao: String!
     thoiGianSua: String!
+    ghiChuTag: [StudentTagListItem!]!
+  }
+
+  type StudentTagListItem {
+    tag: StudentTag
+  }
+
+  type StudentTag {
+    maTag: Int!
+    tenTag: String!
   }
 
   type StudentNoteList {

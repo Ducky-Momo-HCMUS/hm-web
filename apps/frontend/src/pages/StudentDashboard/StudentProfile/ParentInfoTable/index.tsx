@@ -9,6 +9,7 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 import {
   StudentEditParentInfoInput,
@@ -16,6 +17,7 @@ import {
   useStudentDeleteParentInfoMutation,
   useStudentEditParentInfoMutation,
 } from '../../../../generated-types';
+import { GET_STUDENT_PARENT_INFO_LIST } from '../../../../data/queries/student/get-student-parent-info';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditParentInfoDialog from '../AddOrEditParentInfoDialog';
 
@@ -31,6 +33,7 @@ interface ParentInfoTableProps {
 }
 
 function ParentInfoTable({ data }: ParentInfoTableProps) {
+  const { id = '' } = useParams();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(2);
 
@@ -67,12 +70,16 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
       setValues((v) => ({ ...v, editIndex: -1 }));
       await editStudentParentInfo({
         variables: {
-          parentId: data[values.editIndex].maPH,
+          parentId: values.editIndex,
           payload,
         },
+        refetchQueries: [
+          { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+          'StudentParentInfoList',
+        ],
       });
     },
-    [data, editStudentParentInfo, values.editIndex]
+    [editStudentParentInfo, id, values.editIndex]
   );
 
   const [deleteStudentParentInfo, { loading: deleteStudentParentInfoLoading }] =
@@ -82,10 +89,14 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
     setValues((v) => ({ ...v, deleteIndex: -1 }));
     await deleteStudentParentInfo({
       variables: {
-        parentId: data[values.deleteIndex].maPH,
+        parentId: values.deleteIndex,
       },
+      refetchQueries: [
+        { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+        'StudentParentInfoList',
+      ],
     });
-  }, [data, deleteStudentParentInfo, values.deleteIndex]);
+  }, [deleteStudentParentInfo, id, values.deleteIndex]);
 
   return (
     <>
@@ -107,8 +118,8 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
                 index={index}
                 key={row.maPH}
                 data={row}
-                onClickDelete={() => handleClickDelete(index)}
-                onClickEdit={() => handleClickEdit(index)}
+                onClickDelete={() => handleClickDelete(row.maPH)}
+                onClickEdit={() => handleClickEdit(row.maPH)}
               />
             ))}
         </TableBody>
@@ -128,7 +139,9 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá thông tin phụ huynh"
-          boldText={data[values.deleteIndex].tenPH}
+          boldText={
+            data.find((item) => item.maPH === values.deleteIndex)?.tenPH || ''
+          }
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={handleDeleteStudentParentInfo}
         />
@@ -140,7 +153,7 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
           onClose={() => setValues({ ...values, editIndex: -1 })}
           onClickCancel={() => setValues({ ...values, editIndex: -1 })}
           onClickConfirm={handleEditStudentParentInfo}
-          data={data[values.editIndex]}
+          data={data.find((item) => item.maPH === values.editIndex)}
         />
       )}
 

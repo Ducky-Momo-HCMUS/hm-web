@@ -4,12 +4,15 @@ export const GET_NOTE_DETAIL = gql`
   query NoteDetail($noteId: Int!) {
     noteDetail(noteId: $noteId) {
       maGC
-      tag
+      ghiChuTag {
+        maTag
+        tenTag
+      }
       tieuDe
       noiDung
       thoiGianTao
       thoiGianSua
-      hinhAnh {
+      ghiChuHinhAnh {
         stt
         url
       }

@@ -68,6 +68,7 @@ interface State {
   endDate: Dayjs | null;
   title: string;
   tags: string[];
+  filterTags: string[];
   isAdding: boolean;
 }
 
@@ -90,6 +91,7 @@ function NoteStore() {
     endDate: null,
     title: '',
     tags: [],
+    filterTags: [],
     isAdding: false,
   });
 
@@ -101,12 +103,12 @@ function NoteStore() {
 
   const { data: noteListData, loading: noteListLoading } = useNoteListQuery({});
   const noteList = useMemo(
-    () => noteListData?.noteList.danhSachGhiChu || [],
-    [noteListData?.noteList.danhSachGhiChu]
+    () => noteListData?.noteList || [],
+    [noteListData?.noteList]
   );
 
   const handleSelectClasses = useCallback(
-    (event: SelectChangeEvent<typeof values.classes>) => {
+    (event: SelectChangeEvent<string[]>) => {
       const {
         target: { value },
       } = event;
@@ -117,11 +119,6 @@ function NoteStore() {
     },
     []
   );
-
-  // const initialValue = useMemo(
-  //   () => (values.selected >= 0 ? noteList[values.selected].noiDung : ''),
-  //   [noteList, values.selected]
-  // );
 
   const [files, setFiles] = useState<File[]>();
 
@@ -134,18 +131,28 @@ function NoteStore() {
     []
   );
 
-  const handleSelectTags = useCallback(
-    (event: SelectChangeEvent<typeof values.tags>) => {
+  const handleSelectFilterTags = useCallback(
+    (event: SelectChangeEvent<string[]>) => {
       const {
         target: { value },
       } = event;
       setValues((v) => ({
         ...v,
-        tags: typeof value === 'string' ? value.split(',') : value,
+        filterTags: typeof value === 'string' ? value.split(',') : value,
       }));
     },
     []
   );
+
+  const handleSelectTags = useCallback((event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    setValues((v) => ({
+      ...v,
+      tags: typeof value === 'string' ? value.split(',') : value,
+    }));
+  }, []);
 
   const [getNoteDetail, { data: noteDetailData, loading: noteDetailLoading }] =
     useNoteDetailLazyQuery();
@@ -170,9 +177,11 @@ function NoteStore() {
       setValues((v) => ({
         ...v,
         title: noteDetail.tieuDe,
-        tags: noteDetail.tag as string[],
+        tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
       }));
-      setFiles(mapImageUrlToFile(noteDetail.hinhAnh.map((item) => item.url)));
+      setFiles(
+        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
+      );
     }
   }, [noteDetail, values.isAdding, values.selected]);
 
@@ -198,7 +207,6 @@ function NoteStore() {
           (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
         ),
         noiDung: editorRef.current?.getContent() || '',
-        maSV: '',
         url: ['https://picsum.photos/200'],
       } as NoteAddInput;
 
@@ -380,7 +388,7 @@ function NoteStore() {
                 <Select
                   sx={{
                     '& .MuiSelect-select .notranslate::after':
-                      values.tags.length === 0
+                      values.filterTags.length === 0
                         ? {
                             content: `"Chọn tag..."`,
                             opacity: 0.42,
@@ -391,10 +399,10 @@ function NoteStore() {
                   renderValue={(selected) => selected.join(', ')}
                   labelId="tag-select-label"
                   id="tag-select"
-                  value={values.tags}
+                  value={values.filterTags}
                   MenuProps={MenuProps}
                   label="Tag"
-                  onChange={handleSelectTags}
+                  onChange={handleSelectFilterTags}
                 >
                   {tagList.map((item) => (
                     <MenuItem value={item.tenTag}>
