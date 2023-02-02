@@ -23,19 +23,11 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         (await dataSources.homeroomAPI.getHomeroomFailListByTerm(args)) || null
       );
     },
-    homeroomFailList: async (_, args, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomFailList(args)) || null;
-    },
     homeroomNotEnrolledListByTerm: async (_, args, { dataSources }) => {
       return (
         (await dataSources.homeroomAPI.getHomeroomNotEnrolledListByTerm(
           args
         )) || null
-      );
-    },
-    homeroomNotEnrolledList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(args)) || null
       );
     },
     homeroomPostponeExamListByTerm: async (_, args, { dataSources }) => {
@@ -45,10 +37,30 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         )) || null
       );
     },
-    homeroomPostponeExamList: async (_, args, { dataSources }) => {
+    homeroomOverviewReportByTerm: async (_, args, { dataSources }) => {
       return (
-        (await dataSources.homeroomAPI.getHomeroomPostponeExamList(args)) ||
+        (await dataSources.homeroomAPI.getHomeroomOverviewReportByTerm(args)) ||
         null
+      );
+    },
+    homeroomFinalResultListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomFinalResultListByTerm(
+          args
+        )) || null
+      );
+    },
+    homeroomExamAbsentListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomExamAbsentListByTerm(args)) ||
+        null
+      );
+    },
+    homeroomExamPostponedListByTerm: async (_, args, { dataSources }) => {
+      return (
+        (await dataSources.homeroomAPI.getHomeroomExamPostponedListByTerm(
+          args
+        )) || null
       );
     },
   },

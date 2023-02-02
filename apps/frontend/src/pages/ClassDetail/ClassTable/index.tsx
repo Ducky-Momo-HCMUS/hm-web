@@ -29,9 +29,12 @@ interface ClassTableProps {
   termList?: HomeroomTermListItem[];
   termListLoading?: boolean;
   term?: string;
+  year?: string;
+  yearList?: string[];
   rowsPerPage: number;
   handleChangePage: any;
   handleChangeTerm?: any;
+  handleChangeYear?: any;
   hasFilter: boolean;
 }
 
@@ -41,12 +44,15 @@ function ClassTable({
   data,
   loading = false,
   page,
-  termList,
+  termList = [],
   termListLoading = false,
   term,
+  year,
+  yearList = [],
   rowsPerPage,
   handleChangePage,
   handleChangeTerm,
+  handleChangeYear,
   hasFilter,
 }: ClassTableProps) {
   return (
@@ -59,19 +65,34 @@ function ClassTable({
       </Box>
       {hasFilter && (
         <AsyncDataRenderer loading={termListLoading} data={termList}>
-          <StyledFormControl>
-            <InputLabel id="term-select-label">Học kỳ - năm học</InputLabel>
+          <StyledFormControl sx={{ marginRight: '1rem' }}>
+            <InputLabel id="year-select-label">Năm học</InputLabel>
             <Select
               labelId="year-select-label"
               id="year-select"
+              value={year}
+              label="Năm học"
+              onChange={handleChangeYear}
+            >
+              {yearList.map((item) => (
+                <MenuItem value={item}>
+                  {item} - {Number(item) + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+          <StyledFormControl>
+            <InputLabel id="term-select-label">Học kỳ</InputLabel>
+            <Select
+              labelId="term-select-label"
+              id="term-select"
               value={term}
-              label="Học kỳ - năm học"
+              label="Học kỳ"
               onChange={handleChangeTerm}
             >
-              <MenuItem value="all">Tất cả</MenuItem>
-              {termList?.map((item) => (
+              {termList.map((item) => (
                 <MenuItem key={item.maHK} value={item.maHK.toString()}>
-                  HK{item.hocKy} {item.namHocBD}-{item.namHocBD + 1}
+                  {item.hocKy}
                 </MenuItem>
               ))}
             </Select>
