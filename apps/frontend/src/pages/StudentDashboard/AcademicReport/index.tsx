@@ -20,28 +20,28 @@ import {
   StyledHeader,
 } from '../../../components/styles';
 import {
-  useStudentAllSubjectsQuery,
   useStudentAllTermsQuery,
   useStudentAveragePointByTermQuery,
-  useStudentAveragePointQuery,
   useStudentSubjectsByTermQuery,
   useStudentTrainingPointByTermQuery,
-  useStudentTrainingPointQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import { groupTermsByYear } from '../../../utils';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
 import AcademicTableRow from './AcademicTableRow';
 
 interface State {
+  year: string;
   term: string;
 }
 
 function AcademicReport() {
   const { id = '' } = useParams();
   const [values, setValues] = useState<State>({
-    term: 'all',
+    year: '',
+    term: '',
   });
 
   const handleChange = useCallback(
@@ -63,121 +63,77 @@ function AcademicReport() {
     [allTermsData?.studentAllTerms?.hocKyNamHoc]
   );
 
+  const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { terms } = useMemo(() => {
+    const termsByYear = mappedData[values.year || years[years.length - 1]]?.map(
+      (data) => ({
+        maHK: data.maHK,
+        hocKy: data.hocKy,
+      })
+    );
+    return {
+      terms: termsByYear || [],
+    };
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
   const { loading: trainingPointByTermLoading, data: trainingPointByTermData } =
     useStudentTrainingPointByTermQuery({
       variables: {
         studentId: id,
-        term: Number(values.term),
+        term: values.term ? Number(values.term) : Number(initialTerm),
       },
-      skip: values.term === 'all',
+      skip: allTermsLoading,
     });
 
-  const {
-    loading: trainingPointOverallLoading,
-    data: trainingPointOverallData,
-  } = useStudentTrainingPointQuery({
-    variables: {
-      studentId: id,
-    },
-  });
-
   const trainingPoint = useMemo(() => {
-    if (values.term === 'all') {
-      return trainingPointOverallData?.studentTrainingPoint;
-    }
-
     return trainingPointByTermData?.studentTrainingPointByTerm;
-  }, [
-    trainingPointByTermData?.studentTrainingPointByTerm,
-    trainingPointOverallData?.studentTrainingPoint,
-    values.term,
-  ]);
-
-  const trainingPointLoading = useMemo(
-    () =>
-      values.term === 'all'
-        ? trainingPointOverallLoading
-        : trainingPointByTermLoading,
-    [values.term, trainingPointOverallLoading, trainingPointByTermLoading]
-  );
+  }, [trainingPointByTermData?.studentTrainingPointByTerm]);
 
   const { loading: averagePointByTermLoading, data: averagePointByTermData } =
     useStudentAveragePointByTermQuery({
       variables: {
         studentId: id,
-        term: Number(values.term),
+        term: values.term ? Number(values.term) : Number(initialTerm),
       },
-      skip: values.term === 'all',
-    });
-
-  const { loading: averagePointOverallLoading, data: averagePointOverallData } =
-    useStudentAveragePointQuery({
-      variables: {
-        studentId: id,
-      },
+      skip: allTermsLoading,
     });
 
   const averagePoint = useMemo(() => {
-    if (values.term === 'all') {
-      return averagePointOverallData?.studentAveragePoint;
-    }
-
     return averagePointByTermData?.studentAveragePointByTerm;
-  }, [
-    averagePointByTermData?.studentAveragePointByTerm,
-    averagePointOverallData?.studentAveragePoint,
-    values.term,
-  ]);
-
-  const averagePointLoading = useMemo(
-    () =>
-      values.term === 'all'
-        ? averagePointOverallLoading
-        : averagePointByTermLoading,
-    [values.term, averagePointOverallLoading, averagePointByTermLoading]
-  );
-
-  const { loading: allSubjectsLoading, data: allSubjectsData } =
-    useStudentAllSubjectsQuery({
-      variables: {
-        studentId: id,
-      },
-    });
+  }, [averagePointByTermData?.studentAveragePointByTerm]);
 
   const { loading: subjectsByTermLoading, data: subjectsByTermData } =
     useStudentSubjectsByTermQuery({
       variables: {
         studentId: id,
-        term: Number(values.term),
+        term: values.term ? Number(values.term) : Number(initialTerm),
       },
-      skip: values.term === 'all',
+      skip: allTermsLoading,
     });
 
   const subjectsData = useMemo(() => {
-    if (values.term === 'all') {
-      return allSubjectsData?.studentAllSubjects?.monhoc || [];
-    }
-
     return subjectsByTermData?.studentSubjectsByTerm?.monhoc || [];
-  }, [
-    allSubjectsData?.studentAllSubjects?.monhoc,
-    subjectsByTermData?.studentSubjectsByTerm?.monhoc,
-    values.term,
-  ]);
-
-  const subjectsLoading = useMemo(
-    () => (values.term === 'all' ? allSubjectsLoading : subjectsByTermLoading),
-    [values.term, allSubjectsLoading, subjectsByTermLoading]
-  );
+  }, [subjectsByTermData?.studentSubjectsByTerm?.monhoc]);
 
   return (
     <>
       <StyledTitle variant="h1">Tình hình học tập</StyledTitle>
       <StyledBreadCrumbs aria-label="breadcrumb">
         <Link to="/">Trang chủ</Link>
-        <Typography color="text.primary">
-          {id} - Nguyễn Ngọc Thanh Tâm
-        </Typography>
+        <Typography color="text.primary">{id}</Typography>
         <Typography color="text.primary">Tình hình học tập</Typography>
       </StyledBreadCrumbs>
       <Box
@@ -187,38 +143,55 @@ function AcademicReport() {
           alignItems: 'center',
         }}
       >
-        <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
-          <StyledFormControl>
-            <InputLabel id="semester-select-label">Học kỳ - năm học</InputLabel>
-            <Select
-              labelId="year-select-label"
-              id="year-select"
-              value={values.term}
-              label="Học kỳ - năm học"
-              onChange={handleChange('term')}
-            >
-              <MenuItem key="all" value="all">
-                Tất cả
-              </MenuItem>
-              {termsData.map((item) => (
-                <MenuItem key={item.maHK} value={item.maHK.toString()}>
-                  HK{item.hocKy} {item.namHocBD}-{item.namHocBD + 1}
-                </MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
-        </AsyncDataRenderer>
-
+        <Box>
+          <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+            <StyledFormControl sx={{ marginRight: '1rem' }}>
+              <InputLabel id="year-select-label">Năm học</InputLabel>
+              <Select
+                labelId="year-select-label"
+                id="year-select"
+                value={values.year || initialYear}
+                label="Năm học"
+                onChange={handleChange('year')}
+              >
+                {years.map((item) => (
+                  <MenuItem value={item}>
+                    {item} - {Number(item) + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel id="term-select-label">Học kỳ</InputLabel>
+              <Select
+                labelId="term-select-label"
+                id="term-select"
+                value={values.term || initialTerm}
+                label="Học kỳ"
+                onChange={handleChange('term')}
+              >
+                {terms.map((item) => (
+                  <MenuItem key={item.maHK} value={item.maHK.toString()}>
+                    {item.hocKy}
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+          </AsyncDataRenderer>
+        </Box>
         <StyledStatusBox>
           <AsyncDataRenderer
-            loading={trainingPointLoading}
+            loading={trainingPointByTermLoading}
             data={trainingPoint}
           >
             <Button disabled sx={{ color: '#fff!important' }}>
               ĐRL: {trainingPoint?.drl} | {trainingPoint?.xepLoai}
             </Button>
           </AsyncDataRenderer>
-          <AsyncDataRenderer loading={averagePointLoading} data={averagePoint}>
+          <AsyncDataRenderer
+            loading={averagePointByTermLoading}
+            data={averagePoint}
+          >
             <Button disabled sx={{ color: '#fff!important' }}>
               ĐTB: {averagePoint?.dtbTong} | {averagePoint?.xepLoai}
             </Button>
@@ -226,7 +199,7 @@ function AcademicReport() {
         </StyledStatusBox>
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
-      <AsyncDataRenderer loading={subjectsLoading} data={subjectsData}>
+      <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <StyledHeader>Các môn đã đăng ký</StyledHeader>
           <TableContainer sx={{ maxHeight: 440 }}>

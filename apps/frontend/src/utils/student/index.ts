@@ -3,6 +3,8 @@ import _groupBy from 'lodash/groupBy';
 import {
   HomeroomListItem,
   HomeroomStudentListItem,
+  HomeroomTermListItem,
+  StudentTerm,
 } from '../../generated-types';
 import { HomeroomStudentListData } from '../../types';
 
@@ -35,4 +37,8 @@ export const mapMajorIdToName = (maCN: string) => {
 
 export const groupClassesByYear = (homeroomList: HomeroomListItem[]) => {
   return _groupBy(homeroomList, (homeroom) => homeroom.khoa);
+};
+
+export const groupTermsByYear = (termList: StudentTerm[]) => {
+  return _groupBy(termList, (term) => term.namHocBD);
 };

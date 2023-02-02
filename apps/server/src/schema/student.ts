@@ -6,17 +6,14 @@ const studentTypeDefs = gql`
       studentId: String!
       term: Int!
     ): StudentSubjectsByTerm!
-    studentAllSubjects(studentId: String!): StudentAllSubjects!
     studentTrainingPointByTerm(
       studentId: String!
       term: Int!
     ): StudentTrainingPoint!
-    studentTrainingPoint(studentId: String!): StudentTrainingPoint!
     studentAveragePointByTerm(
       studentId: String!
       term: Int!
     ): StudentAveragePoint!
-    studentAveragePoint(studentId: String!): StudentAveragePoint!
     studentAllTerms(studentId: String!): StudentAllTerms!
     studentDetail(studentId: String!): StudentDetail!
     studentParentInfoList(studentId: String!): [StudentParentInfo!]!
@@ -50,10 +47,6 @@ const studentTypeDefs = gql`
   }
 
   type StudentSubjectsByTerm {
-    monhoc: [StudentSubject!]!
-  }
-
-  type StudentAllSubjects {
     monhoc: [StudentSubject!]!
   }
 
