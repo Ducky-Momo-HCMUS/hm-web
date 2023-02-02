@@ -1,3 +1,4 @@
+import AccountAPI from './account-api';
 import AuthAPI from './auth-api';
 import HomeroomAPI from './homeroom-api';
 import NoteAPI from './note-api';
@@ -10,6 +11,7 @@ export interface DataSources {
   authAPI: AuthAPI;
   noteAPI: NoteAPI;
   tagAPI: TagAPI;
+  accountAPI: AccountAPI;
 }
 
 function dataSources() {
@@ -19,6 +21,7 @@ function dataSources() {
     studentAPI: new StudentAPI(),
     noteAPI: new NoteAPI(),
     tagAPI: new TagAPI(),
+    accountAPI: new AccountAPI(),
   };
 }
 

@@ -21,6 +21,52 @@ export type Scalars = {
   Float: number;
 };
 
+export type AccountAddInput = {
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  tenGV: Scalars['String'];
+};
+
+export type AccountAddResponse = {
+  __typename?: 'AccountAddResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountDeleteResponse = {
+  __typename?: 'AccountDeleteResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountEditInput = {
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  tenGV: Scalars['String'];
+};
+
+export type AccountEditResponse = {
+  __typename?: 'AccountEditResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountList = {
+  __typename?: 'AccountList';
+  danhSachTaiKhoan: Array<AccountListItem>;
+};
+
+export type AccountListItem = {
+  __typename?: 'AccountListItem';
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  maTK: Scalars['Int'];
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -194,6 +240,9 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  accountAdd: AccountAddResponse;
+  accountDelete: AccountDeleteResponse;
+  accountEdit: AccountEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
@@ -210,6 +259,19 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+};
+
+export type MutationAccountAddArgs = {
+  payload: AccountAddInput;
+};
+
+export type MutationAccountDeleteArgs = {
+  accountId: Scalars['Int'];
+};
+
+export type MutationAccountEditArgs = {
+  accountId: Scalars['Int'];
+  payload: AccountEditInput;
 };
 
 export type MutationEditPasswordArgs = {
@@ -361,6 +423,7 @@ export type NoteTag = {
 
 export type Query = {
   __typename?: 'Query';
+  accountList: AccountList;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
@@ -682,6 +745,34 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type AccountAddMutationVariables = Exact<{
+  payload: AccountAddInput;
+}>;
+
+export type AccountAddMutation = {
+  __typename?: 'Mutation';
+  accountAdd: { __typename?: 'AccountAddResponse'; status: number };
+};
+
+export type AccountDeleteMutationVariables = Exact<{
+  accountId: Scalars['Int'];
+}>;
+
+export type AccountDeleteMutation = {
+  __typename?: 'Mutation';
+  accountDelete: { __typename?: 'AccountDeleteResponse'; status: number };
+};
+
+export type AccountEditMutationVariables = Exact<{
+  accountId: Scalars['Int'];
+  payload: AccountEditInput;
+}>;
+
+export type AccountEditMutation = {
+  __typename?: 'Mutation';
+  accountEdit: { __typename?: 'AccountEditResponse'; status: number };
+};
+
 export type TagAddMutationVariables = Exact<{
   payload: TagAddInput;
 }>;
@@ -708,6 +799,24 @@ export type TagEditMutationVariables = Exact<{
 export type TagEditMutation = {
   __typename?: 'Mutation';
   tagEdit: { __typename?: 'Tag'; maTag: number; tenTag: string };
+};
+
+export type AccountListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AccountListQuery = {
+  __typename?: 'Query';
+  accountList: {
+    __typename?: 'AccountList';
+    danhSachTaiKhoan: Array<{
+      __typename?: 'AccountListItem';
+      maTK: number;
+      email: string;
+      tenGV: string;
+      hoatDong: boolean;
+      gvcn: boolean;
+      gvu: boolean;
+    }>;
+  };
 };
 
 export type TagListQueryVariables = Exact<{ [key: string]: never }>;
@@ -1331,6 +1440,157 @@ export type StudentTrainingPointByTermQuery = {
   };
 };
 
+export const AccountAddDocument = gql`
+  mutation AccountAdd($payload: AccountAddInput!) {
+    accountAdd(payload: $payload) {
+      status
+    }
+  }
+`;
+export type AccountAddMutationFn = Apollo.MutationFunction<
+  AccountAddMutation,
+  AccountAddMutationVariables
+>;
+
+/**
+ * __useAccountAddMutation__
+ *
+ * To run a mutation, you first call `useAccountAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccountAddMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accountAddMutation, { data, loading, error }] = useAccountAddMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useAccountAddMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AccountAddMutation,
+    AccountAddMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AccountAddMutation, AccountAddMutationVariables>(
+    AccountAddDocument,
+    options
+  );
+}
+export type AccountAddMutationHookResult = ReturnType<
+  typeof useAccountAddMutation
+>;
+export type AccountAddMutationResult =
+  Apollo.MutationResult<AccountAddMutation>;
+export type AccountAddMutationOptions = Apollo.BaseMutationOptions<
+  AccountAddMutation,
+  AccountAddMutationVariables
+>;
+export const AccountDeleteDocument = gql`
+  mutation AccountDelete($accountId: Int!) {
+    accountDelete(accountId: $accountId) {
+      status
+    }
+  }
+`;
+export type AccountDeleteMutationFn = Apollo.MutationFunction<
+  AccountDeleteMutation,
+  AccountDeleteMutationVariables
+>;
+
+/**
+ * __useAccountDeleteMutation__
+ *
+ * To run a mutation, you first call `useAccountDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccountDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accountDeleteMutation, { data, loading, error }] = useAccountDeleteMutation({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useAccountDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AccountDeleteMutation,
+    AccountDeleteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AccountDeleteMutation,
+    AccountDeleteMutationVariables
+  >(AccountDeleteDocument, options);
+}
+export type AccountDeleteMutationHookResult = ReturnType<
+  typeof useAccountDeleteMutation
+>;
+export type AccountDeleteMutationResult =
+  Apollo.MutationResult<AccountDeleteMutation>;
+export type AccountDeleteMutationOptions = Apollo.BaseMutationOptions<
+  AccountDeleteMutation,
+  AccountDeleteMutationVariables
+>;
+export const AccountEditDocument = gql`
+  mutation AccountEdit($accountId: Int!, $payload: AccountEditInput!) {
+    accountEdit(accountId: $accountId, payload: $payload) {
+      status
+    }
+  }
+`;
+export type AccountEditMutationFn = Apollo.MutationFunction<
+  AccountEditMutation,
+  AccountEditMutationVariables
+>;
+
+/**
+ * __useAccountEditMutation__
+ *
+ * To run a mutation, you first call `useAccountEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccountEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accountEditMutation, { data, loading, error }] = useAccountEditMutation({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useAccountEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AccountEditMutation,
+    AccountEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AccountEditMutation, AccountEditMutationVariables>(
+    AccountEditDocument,
+    options
+  );
+}
+export type AccountEditMutationHookResult = ReturnType<
+  typeof useAccountEditMutation
+>;
+export type AccountEditMutationResult =
+  Apollo.MutationResult<AccountEditMutation>;
+export type AccountEditMutationOptions = Apollo.BaseMutationOptions<
+  AccountEditMutation,
+  AccountEditMutationVariables
+>;
 export const TagAddDocument = gql`
   mutation TagAdd($payload: TagAddInput!) {
     tagAdd(payload: $payload) {
@@ -1476,6 +1736,68 @@ export type TagEditMutationResult = Apollo.MutationResult<TagEditMutation>;
 export type TagEditMutationOptions = Apollo.BaseMutationOptions<
   TagEditMutation,
   TagEditMutationVariables
+>;
+export const AccountListDocument = gql`
+  query AccountList {
+    accountList {
+      danhSachTaiKhoan {
+        maTK
+        email
+        tenGV
+        hoatDong
+        gvcn
+        gvu
+      }
+    }
+  }
+`;
+
+/**
+ * __useAccountListQuery__
+ *
+ * To run a query within a React component, call `useAccountListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccountListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AccountListQuery,
+    AccountListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AccountListQuery, AccountListQueryVariables>(
+    AccountListDocument,
+    options
+  );
+}
+export function useAccountListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AccountListQuery,
+    AccountListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AccountListQuery, AccountListQueryVariables>(
+    AccountListDocument,
+    options
+  );
+}
+export type AccountListQueryHookResult = ReturnType<typeof useAccountListQuery>;
+export type AccountListLazyQueryHookResult = ReturnType<
+  typeof useAccountListLazyQuery
+>;
+export type AccountListQueryResult = Apollo.QueryResult<
+  AccountListQuery,
+  AccountListQueryVariables
 >;
 export const TagListDocument = gql`
   query TagList {
