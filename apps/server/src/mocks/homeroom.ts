@@ -32,6 +32,16 @@ export const HOMEROOM_TERM_LIST = {
       hocKy: 3,
       namHocBD: 2019,
     },
+    {
+      maHK: 4,
+      hocKy: 1,
+      namHocBD: 2020,
+    },
+    {
+      maHK: 5,
+      hocKy: 2,
+      namHocBD: 2020,
+    },
   ] as HomeroomTermListItem[],
 } as HomeroomTermList;
 

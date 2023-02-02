@@ -7,17 +7,14 @@ const homeroomTypeDefs = gql`
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): HomeroomTermList!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
-    homeroomFailList(homeroomId: String!): HomeroomFailList!
     homeroomNotEnrolledListByTerm(
       homeroomId: String!
       term: Int!
     ): HomeroomNotEnrolledList!
-    homeroomNotEnrolledList(homeroomId: String!): HomeroomNotEnrolledList!
     homeroomPostponeExamListByTerm(
       homeroomId: String!
       term: Int!
     ): HomeroomPostponeExamList!
-    homeroomPostponeExamList(homeroomId: String!): HomeroomPostponeExamList!
   }
 
   type HomeroomList {

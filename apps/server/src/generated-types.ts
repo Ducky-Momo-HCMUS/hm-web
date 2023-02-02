@@ -289,20 +289,15 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   homeroomDetail: HomeroomDetail;
-  homeroomFailList: HomeroomFailList;
   homeroomFailListByTerm: HomeroomFailList;
   homeroomList: HomeroomList;
-  homeroomNotEnrolledList: HomeroomNotEnrolledList;
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
-  homeroomPostponeExamList: HomeroomPostponeExamList;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
-  studentAllSubjects: StudentAllSubjects;
   studentAllTerms: StudentAllTerms;
-  studentAveragePoint: StudentAveragePoint;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
@@ -310,7 +305,6 @@ export type Query = {
   studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: Array<StudentParentInfo>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
-  studentTrainingPoint: StudentTrainingPoint;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
 };
@@ -319,26 +313,14 @@ export type QueryHomeroomDetailArgs = {
   homeroomId: Scalars['String'];
 };
 
-export type QueryHomeroomFailListArgs = {
-  homeroomId: Scalars['String'];
-};
-
 export type QueryHomeroomFailListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
 
-export type QueryHomeroomNotEnrolledListArgs = {
-  homeroomId: Scalars['String'];
-};
-
 export type QueryHomeroomNotEnrolledListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
-};
-
-export type QueryHomeroomPostponeExamListArgs = {
-  homeroomId: Scalars['String'];
 };
 
 export type QueryHomeroomPostponeExamListByTermArgs = {
@@ -358,15 +340,7 @@ export type QueryNoteDetailArgs = {
   noteId: Scalars['Int'];
 };
 
-export type QueryStudentAllSubjectsArgs = {
-  studentId: Scalars['String'];
-};
-
 export type QueryStudentAllTermsArgs = {
-  studentId: Scalars['String'];
-};
-
-export type QueryStudentAveragePointArgs = {
   studentId: Scalars['String'];
 };
 
@@ -401,10 +375,6 @@ export type QueryStudentSubjectsByTermArgs = {
   term: Scalars['Int'];
 };
 
-export type QueryStudentTrainingPointArgs = {
-  studentId: Scalars['String'];
-};
-
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
@@ -420,11 +390,6 @@ export type StudentAddParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
-};
-
-export type StudentAllSubjects = {
-  __typename?: 'StudentAllSubjects';
-  monhoc: Array<StudentSubject>;
 };
 
 export type StudentAllTerms = {
@@ -760,7 +725,6 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAddContactInput: StudentAddContactInput;
   StudentAddParentInfoInput: StudentAddParentInfoInput;
-  StudentAllSubjects: ResolverTypeWrapper<StudentAllSubjects>;
   StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
@@ -825,7 +789,6 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   StudentAddContactInput: StudentAddContactInput;
   StudentAddParentInfoInput: StudentAddParentInfoInput;
-  StudentAllSubjects: StudentAllSubjects;
   StudentAllTerms: StudentAllTerms;
   StudentAveragePoint: StudentAveragePoint;
   StudentContact: StudentContact;
@@ -1238,12 +1201,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryHomeroomDetailArgs, 'homeroomId'>
   >;
-  homeroomFailList?: Resolver<
-    ResolversTypes['HomeroomFailList'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryHomeroomFailListArgs, 'homeroomId'>
-  >;
   homeroomFailListByTerm?: Resolver<
     ResolversTypes['HomeroomFailList'],
     ParentType,
@@ -1255,23 +1212,11 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
-  homeroomNotEnrolledList?: Resolver<
-    ResolversTypes['HomeroomNotEnrolledList'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryHomeroomNotEnrolledListArgs, 'homeroomId'>
-  >;
   homeroomNotEnrolledListByTerm?: Resolver<
     ResolversTypes['HomeroomNotEnrolledList'],
     ParentType,
     ContextType,
     RequireFields<QueryHomeroomNotEnrolledListByTermArgs, 'homeroomId' | 'term'>
-  >;
-  homeroomPostponeExamList?: Resolver<
-    ResolversTypes['HomeroomPostponeExamList'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryHomeroomPostponeExamListArgs, 'homeroomId'>
   >;
   homeroomPostponeExamListByTerm?: Resolver<
     ResolversTypes['HomeroomPostponeExamList'],
@@ -1305,23 +1250,11 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
-  studentAllSubjects?: Resolver<
-    ResolversTypes['StudentAllSubjects'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryStudentAllSubjectsArgs, 'studentId'>
-  >;
   studentAllTerms?: Resolver<
     ResolversTypes['StudentAllTerms'],
     ParentType,
     ContextType,
     RequireFields<QueryStudentAllTermsArgs, 'studentId'>
-  >;
-  studentAveragePoint?: Resolver<
-    ResolversTypes['StudentAveragePoint'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryStudentAveragePointArgs, 'studentId'>
   >;
   studentAveragePointByTerm?: Resolver<
     ResolversTypes['StudentAveragePoint'],
@@ -1365,12 +1298,6 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentSubjectsByTermArgs, 'studentId' | 'term'>
   >;
-  studentTrainingPoint?: Resolver<
-    ResolversTypes['StudentTrainingPoint'],
-    ParentType,
-    ContextType,
-    RequireFields<QueryStudentTrainingPointArgs, 'studentId'>
-  >;
   studentTrainingPointByTerm?: Resolver<
     ResolversTypes['StudentTrainingPoint'],
     ParentType,
@@ -1378,18 +1305,6 @@ export type QueryResolvers<
     RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
   tagList?: Resolver<ResolversTypes['TagList'], ParentType, ContextType>;
-};
-
-export type StudentAllSubjectsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentAllSubjects'] = ResolversParentTypes['StudentAllSubjects']
-> = {
-  monhoc?: Resolver<
-    Array<ResolversTypes['StudentSubject']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StudentAllTermsResolvers<
@@ -1675,7 +1590,6 @@ export type Resolvers<ContextType = any> = {
   NoteListItem?: NoteListItemResolvers<ContextType>;
   NoteTag?: NoteTagResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  StudentAllSubjects?: StudentAllSubjectsResolvers<ContextType>;
   StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;

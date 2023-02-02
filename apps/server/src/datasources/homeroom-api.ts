@@ -2,21 +2,15 @@ import { ApolloError } from 'apollo-server-express';
 
 import {
   HOMEROOM_DETAIL,
-  HOMEROOM_FAIL_LIST,
   HOMEROOM_FAIL_LIST_BY_TERM,
-  HOMEROOM_NOT_ENROLLED_LIST,
   HOMEROOM_NOT_ENROLLED_LIST_BY_TERM,
-  HOMEROOM_POSTPONE_EXAM_LIST,
   HOMEROOM_POSTPONE_EXAM_LIST_BY_TERM,
   HOMEROOM_TERM_LIST,
 } from '../mocks/homeroom';
 import {
   QueryHomeroomDetailArgs,
-  QueryHomeroomFailListArgs,
   QueryHomeroomFailListByTermArgs,
-  QueryHomeroomNotEnrolledListArgs,
   QueryHomeroomNotEnrolledListByTermArgs,
-  QueryHomeroomPostponeExamListArgs,
   QueryHomeroomPostponeExamListByTermArgs,
   QueryHomeroomStudentListArgs,
   QueryHomeroomTermListArgs,
@@ -106,22 +100,6 @@ class HomeroomAPI extends BaseDataSource {
     }
   }
 
-  public async getHomeroomFailList({ homeroomId }: QueryHomeroomFailListArgs) {
-    try {
-      // const homeroomFailList = await this.get(
-      //   `v1/homerooms/:id/fail`,
-      //   {
-      //     id: homeroomId,
-      //   },
-      // );
-      console.log('params', homeroomId);
-      return HOMEROOM_FAIL_LIST;
-    } catch (error) {
-      console.error('Error: cannot fetch homeroom fail list');
-      throw this.handleError(error as ApolloError);
-    }
-  }
-
   public async getHomeroomNotEnrolledListByTerm({
     homeroomId,
     term,
@@ -134,21 +112,6 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_NOT_ENROLLED_LIST_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch homeroom not enrolled list by term');
-      throw this.handleError(error as ApolloError);
-    }
-  }
-
-  public async getHomeroomNotEnrolledList({
-    homeroomId,
-  }: QueryHomeroomNotEnrolledListArgs) {
-    try {
-      // const homeroomNotEnrolledList = await this.get(
-      //   `/v1/homerooms/:id/not-enrolled`,
-      // );
-      console.log('params', homeroomId);
-      return HOMEROOM_NOT_ENROLLED_LIST;
-    } catch (error) {
-      console.error('Error: cannot fetch homeroom not enrolled list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -168,24 +131,6 @@ class HomeroomAPI extends BaseDataSource {
       return HOMEROOM_POSTPONE_EXAM_LIST_BY_TERM;
     } catch (error) {
       console.error('Error: cannot fetch homeroom postpone exam list by term');
-      throw this.handleError(error as ApolloError);
-    }
-  }
-
-  public async getHomeroomPostponeExamList({
-    homeroomId,
-  }: QueryHomeroomPostponeExamListArgs) {
-    try {
-      // const homeroomPostponeExamList = await this.get(
-      //   `v1/homerooms/:id/postpone-exam`,
-      //   {
-      //     id: homeroomId,
-      //   },
-      // );
-      console.log('params', homeroomId);
-      return HOMEROOM_POSTPONE_EXAM_LIST;
-    } catch (error) {
-      console.error('Error: cannot fetch homeroom postpone exam list');
       throw this.handleError(error as ApolloError);
     }
   }

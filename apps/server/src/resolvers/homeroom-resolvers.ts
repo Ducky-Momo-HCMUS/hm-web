@@ -23,9 +23,6 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         (await dataSources.homeroomAPI.getHomeroomFailListByTerm(args)) || null
       );
     },
-    homeroomFailList: async (_, args, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomFailList(args)) || null;
-    },
     homeroomNotEnrolledListByTerm: async (_, args, { dataSources }) => {
       return (
         (await dataSources.homeroomAPI.getHomeroomNotEnrolledListByTerm(
@@ -33,22 +30,11 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         )) || null
       );
     },
-    homeroomNotEnrolledList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomNotEnrolledList(args)) || null
-      );
-    },
     homeroomPostponeExamListByTerm: async (_, args, { dataSources }) => {
       return (
         (await dataSources.homeroomAPI.getHomeroomPostponeExamListByTerm(
           args
         )) || null
-      );
-    },
-    homeroomPostponeExamList: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomPostponeExamList(args)) ||
-        null
       );
     },
   },

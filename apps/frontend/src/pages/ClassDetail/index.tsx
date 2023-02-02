@@ -16,16 +16,16 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import {
+  HomeroomTermListItem,
+  StudentTerm,
   useHomeroomDetailQuery,
   useHomeroomFailListByTermQuery,
-  useHomeroomFailListQuery,
   useHomeroomNotEnrolledListByTermQuery,
-  useHomeroomNotEnrolledListQuery,
   useHomeroomPostponeExamListByTermQuery,
-  useHomeroomPostponeExamListQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
+import { groupTermsByYear } from '../../utils';
 
 import ClassInfo from './ClassInfo';
 import ClassTable from './ClassTable';
@@ -53,8 +53,11 @@ const postponeExamColumns = [
 
 interface Selection {
   termFailList: string;
+  yearFailList: string;
   termNotRegistered: string;
+  yearNotRegistered: string;
   termPostponeExam: string;
+  yearPostponeExam: string;
 }
 
 interface Page {
@@ -73,9 +76,12 @@ function ClassDetail() {
     postponeExam: 0,
   });
   const [values, setValues] = useState<Selection>({
-    termFailList: 'all',
-    termNotRegistered: 'all',
-    termPostponeExam: 'all',
+    termFailList: '',
+    yearFailList: '',
+    termNotRegistered: '',
+    yearNotRegistered: '',
+    termPostponeExam: '',
+    yearPostponeExam: '',
   });
 
   const handleChange = useCallback(
@@ -134,53 +140,68 @@ function ClassDetail() {
     [homeroomTermListData?.homeroomTermList]
   );
 
+  const mappedData = useMemo(
+    () => groupTermsByYear(termList as StudentTerm[]),
+    [termList]
+  );
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { termFailList, termNotRegistered, termPostponeExam } = useMemo(() => {
+    const termFailListByYear =
+      mappedData[values.yearFailList || years[years.length - 1]];
+
+    const termNotRegisterdByYear =
+      mappedData[values.yearNotRegistered || years[years.length - 1]];
+
+    const termPostponeExamByYear =
+      mappedData[values.yearPostponeExam || years[years.length - 1]];
+
+    return {
+      termFailList: termFailListByYear || [],
+      termNotRegistered: termNotRegisterdByYear || [],
+      termPostponeExam: termPostponeExamByYear || [],
+    };
+  }, [
+    mappedData,
+    values.yearFailList,
+    values.yearNotRegistered,
+    values.yearPostponeExam,
+    years,
+  ]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
   const {
     loading: homeroomFailListByTermLoading,
     data: homeroomFailListByTermData,
   } = useHomeroomFailListByTermQuery({
     variables: {
       homeroomId: id,
-      term: Number(values.termFailList),
+      term: values.termFailList
+        ? Number(values.termFailList)
+        : Number(initialTerm),
     },
-    skip: values.termFailList === 'all',
-  });
-
-  const {
-    loading: homeroomFailListOverallLoading,
-    data: homeroomFailListOverallData,
-  } = useHomeroomFailListQuery({
-    variables: {
-      homeroomId: id,
-    },
+    skip: homeroomTermListLoading,
   });
 
   const failList = useMemo(() => {
     const failListData =
-      values.termFailList === 'all'
-        ? homeroomFailListOverallData?.homeroomFailList?.dsRotMon || []
-        : homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon || [];
+      homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon || [];
     return failListData.map((item) => ({
       ..._omit(item, 'vang'),
       tenLopHP: item.tenLopHP.toUpperCase(),
       ghiChu: item.vang ? 'Vắng' : '',
     }));
-  }, [
-    homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon,
-    homeroomFailListOverallData?.homeroomFailList?.dsRotMon,
-    values.termFailList,
-  ]);
-
-  const failListLoading = useMemo(
-    () =>
-      values.termFailList === 'all'
-        ? homeroomFailListOverallLoading
-        : homeroomFailListByTermLoading,
-    [
-      values.termFailList,
-      homeroomFailListOverallLoading,
-      homeroomFailListByTermLoading,
-    ]
-  );
+  }, [homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon]);
 
   const {
     loading: homeroomNotEnrolledListByTermLoading,
@@ -188,50 +209,22 @@ function ClassDetail() {
   } = useHomeroomNotEnrolledListByTermQuery({
     variables: {
       homeroomId: id,
-      term: Number(values.termNotRegistered),
+      term: values.termNotRegistered
+        ? Number(values.termNotRegistered)
+        : Number(initialTerm),
     },
-    skip: values.termNotRegistered === 'all',
-  });
-
-  const {
-    loading: homeroomNotEnrolledListOverallLoading,
-    data: homeroomNotEnrolledListOverallData,
-  } = useHomeroomNotEnrolledListQuery({
-    variables: {
-      homeroomId: id,
-    },
+    skip: homeroomTermListLoading,
   });
 
   const notEnrolledList = useMemo(() => {
-    if (values.termNotRegistered === 'all') {
-      return (
-        homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList
-          ?.khongDangKy || []
-      );
-    }
-
     return (
       homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
         ?.khongDangKy || []
     );
   }, [
-    values.termNotRegistered,
     homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
       ?.khongDangKy,
-    homeroomNotEnrolledListOverallData?.homeroomNotEnrolledList?.khongDangKy,
   ]);
-
-  const notEnrolledListLoading = useMemo(
-    () =>
-      values.termNotRegistered === 'all'
-        ? homeroomNotEnrolledListOverallLoading
-        : homeroomNotEnrolledListByTermLoading,
-    [
-      values.termNotRegistered,
-      homeroomNotEnrolledListOverallLoading,
-      homeroomNotEnrolledListByTermLoading,
-    ]
-  );
 
   const {
     loading: homeroomPostponeExamListByTermLoading,
@@ -239,48 +232,21 @@ function ClassDetail() {
   } = useHomeroomPostponeExamListByTermQuery({
     variables: {
       homeroomId: id,
-      term: Number(values.termPostponeExam),
+      term: values.termPostponeExam
+        ? Number(values.termPostponeExam)
+        : Number(initialTerm),
     },
-    skip: values.termPostponeExam === 'all',
-  });
-
-  const {
-    loading: homeroomPostponeExamListOverallLoading,
-    data: homeroomPostponeExamListOverallData,
-  } = useHomeroomPostponeExamListQuery({
-    variables: {
-      homeroomId: id,
-    },
+    skip: homeroomTermListLoading,
   });
 
   const postponeExamList = useMemo(() => {
-    if (values.termPostponeExam === 'all') {
-      return (
-        homeroomPostponeExamListOverallData?.homeroomPostponeExamList
-          ?.hoanThi || []
-      );
-    }
     return (
       homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
         ?.hoanThi || []
     );
   }, [
     homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.hoanThi,
-    homeroomPostponeExamListOverallData?.homeroomPostponeExamList?.hoanThi,
-    values.termPostponeExam,
   ]);
-
-  const postponeExamListLoading = useMemo(
-    () =>
-      values.termPostponeExam === 'all'
-        ? homeroomPostponeExamListOverallLoading
-        : homeroomPostponeExamListByTermLoading,
-    [
-      values.termPostponeExam,
-      homeroomPostponeExamListOverallLoading,
-      homeroomPostponeExamListByTermLoading,
-    ]
-  );
 
   return (
     <>
@@ -334,14 +300,17 @@ function ClassDetail() {
           title="Tình hình rớt môn"
           columns={failedColumns}
           data={failList}
-          loading={failListLoading}
+          loading={homeroomFailListByTermLoading}
           page={page.subjectStatus}
-          termList={termList}
+          termList={termFailList as HomeroomTermListItem[]}
           termListLoading={homeroomTermListLoading}
-          term={values.termFailList}
+          term={values.termFailList || initialTerm}
+          year={values.yearFailList || initialYear}
+          yearList={years}
           rowsPerPage={ROWS_PER_PAGE}
           handleChangePage={handleChangeSubjectStatusPage}
           handleChangeTerm={handleChange('termFailList')}
+          handleChangeYear={handleChange('yearFailList')}
           hasFilter
         />
         <Grid style={{ marginTop: '0.25rem' }} container spacing={3}>
@@ -350,14 +319,17 @@ function ClassDetail() {
               title="Danh sách không đăng ký học phần"
               columns={notRegisteredSubjectColumns}
               data={notEnrolledList}
-              loading={notEnrolledListLoading}
+              loading={homeroomNotEnrolledListByTermLoading}
               page={page.notRegistered}
-              termList={termList}
+              termList={termNotRegistered as HomeroomTermListItem[]}
               termListLoading={homeroomTermListLoading}
-              term={values.termNotRegistered}
+              term={values.termNotRegistered || initialTerm}
+              year={values.yearNotRegistered || initialYear}
+              yearList={years}
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangeNotRegisteredPage}
               handleChangeTerm={handleChange('termNotRegistered')}
+              handleChangeYear={handleChange('yearNotRegistered')}
               hasFilter
             />
           </Grid>
@@ -366,14 +338,17 @@ function ClassDetail() {
               title="Danh sách hoãn thi"
               columns={postponeExamColumns}
               data={postponeExamList}
-              loading={postponeExamListLoading}
+              loading={homeroomPostponeExamListByTermLoading}
               page={page.postponeExam}
-              termList={termList}
+              termList={termPostponeExam as HomeroomTermListItem[]}
               termListLoading={homeroomTermListLoading}
-              term={values.termPostponeExam}
+              term={values.termPostponeExam || initialTerm}
+              year={values.yearPostponeExam || initialYear}
+              yearList={years}
               rowsPerPage={ROWS_PER_PAGE}
               handleChangePage={handleChangePostponeExamPage}
               handleChangeTerm={handleChange('termPostponeExam')}
+              handleChangeYear={handleChange('yearPostponeExam')}
               hasFilter
             />
           </Grid>

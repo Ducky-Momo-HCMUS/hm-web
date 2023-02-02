@@ -9,29 +9,16 @@ export const studentResolver: Resolvers<ResolverContext> = {
         (await dataSources.studentAPI.getStudentSubjectsByTerm(args)) || null
       );
     },
-    studentAllSubjects: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.getStudentAllSubjects(args)) || null;
-    },
     studentTrainingPointByTerm: async (_, args, { dataSources }) => {
       return (
         (await dataSources.studentAPI.getStudentTrainingPointByTerm(args)) ||
         null
       );
     },
-    studentTrainingPoint: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentTrainingPoint(args)) || null
-      );
-    },
     studentAveragePointByTerm: async (_, args, { dataSources }) => {
       return (
         (await dataSources.studentAPI.getStudentAveragePointByTerm(args)) ||
         null
-      );
-    },
-    studentAveragePoint: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentAveragePoint(args)) || null
       );
     },
     studentAllTerms: async (_, args, { dataSources }) => {
