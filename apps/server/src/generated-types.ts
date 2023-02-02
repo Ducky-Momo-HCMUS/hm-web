@@ -22,6 +22,52 @@ export type Scalars = {
   Float: number;
 };
 
+export type AccountAddInput = {
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  tenGV: Scalars['String'];
+};
+
+export type AccountAddResponse = {
+  __typename?: 'AccountAddResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountDeleteResponse = {
+  __typename?: 'AccountDeleteResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountEditInput = {
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  tenGV: Scalars['String'];
+};
+
+export type AccountEditResponse = {
+  __typename?: 'AccountEditResponse';
+  status: Scalars['Int'];
+};
+
+export type AccountList = {
+  __typename?: 'AccountList';
+  danhSachTaiKhoan: Array<AccountListItem>;
+};
+
+export type AccountListItem = {
+  __typename?: 'AccountListItem';
+  email: Scalars['String'];
+  gvcn: Scalars['Boolean'];
+  gvu: Scalars['Boolean'];
+  hoatDong: Scalars['Boolean'];
+  maTK: Scalars['Int'];
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -195,6 +241,9 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  accountAdd: AccountAddResponse;
+  accountDelete: AccountDeleteResponse;
+  accountEdit: AccountEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   login?: Maybe<LoginResponse>;
@@ -211,6 +260,19 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+};
+
+export type MutationAccountAddArgs = {
+  payload: AccountAddInput;
+};
+
+export type MutationAccountDeleteArgs = {
+  accountId: Scalars['Int'];
+};
+
+export type MutationAccountEditArgs = {
+  accountId: Scalars['Int'];
+  payload: AccountEditInput;
 };
 
 export type MutationEditPasswordArgs = {
@@ -362,6 +424,7 @@ export type NoteTag = {
 
 export type Query = {
   __typename?: 'Query';
+  accountList: AccountList;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
@@ -790,6 +853,13 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AccountAddInput: AccountAddInput;
+  AccountAddResponse: ResolverTypeWrapper<AccountAddResponse>;
+  AccountDeleteResponse: ResolverTypeWrapper<AccountDeleteResponse>;
+  AccountEditInput: AccountEditInput;
+  AccountEditResponse: ResolverTypeWrapper<AccountEditResponse>;
+  AccountList: ResolverTypeWrapper<AccountList>;
+  AccountListItem: ResolverTypeWrapper<AccountListItem>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -864,6 +934,13 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AccountAddInput: AccountAddInput;
+  AccountAddResponse: AccountAddResponse;
+  AccountDeleteResponse: AccountDeleteResponse;
+  AccountEditInput: AccountEditInput;
+  AccountEditResponse: AccountEditResponse;
+  AccountList: AccountList;
+  AccountListItem: AccountListItem;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Float: Scalars['Float'];
@@ -934,6 +1011,55 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+};
+
+export type AccountAddResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountAddResponse'] = ResolversParentTypes['AccountAddResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AccountDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountDeleteResponse'] = ResolversParentTypes['AccountDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AccountEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountEditResponse'] = ResolversParentTypes['AccountEditResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AccountListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountList'] = ResolversParentTypes['AccountList']
+> = {
+  danhSachTaiKhoan?: Resolver<
+    Array<ResolversTypes['AccountListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AccountListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountListItem'] = ResolversParentTypes['AccountListItem']
+> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  gvcn?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  gvu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  hoatDong?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContactResolvers<
@@ -1250,6 +1376,24 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  accountAdd?: Resolver<
+    ResolversTypes['AccountAddResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAccountAddArgs, 'payload'>
+  >;
+  accountDelete?: Resolver<
+    ResolversTypes['AccountDeleteResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAccountDeleteArgs, 'accountId'>
+  >;
+  accountEdit?: Resolver<
+    ResolversTypes['AccountEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAccountEditArgs, 'accountId' | 'payload'>
+  >;
   editPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
@@ -1453,6 +1597,11 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
 > = {
+  accountList?: Resolver<
+    ResolversTypes['AccountList'],
+    ParentType,
+    ContextType
+  >;
   homeroomDetail?: Resolver<
     ResolversTypes['HomeroomDetail'],
     ParentType,
@@ -1850,6 +1999,11 @@ export type TagListResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  AccountAddResponse?: AccountAddResponseResolvers<ContextType>;
+  AccountDeleteResponse?: AccountDeleteResponseResolvers<ContextType>;
+  AccountEditResponse?: AccountEditResponseResolvers<ContextType>;
+  AccountList?: AccountListResolvers<ContextType>;
+  AccountListItem?: AccountListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
   HomeroomExamAbsentList?: HomeroomExamAbsentListResolvers<ContextType>;

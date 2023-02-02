@@ -12,11 +12,15 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { ACCOUNT_STATUSES, ACCOUNT_TYPES } from '../../../mocks/account';
 import { StyledTextField } from '../../../components/styles';
-import { AccountInfo } from '../../../types';
+import {
+  AccountAddInput,
+  AccountEditInput,
+  AccountListItem,
+} from '../../../generated-types';
 
 interface State {
   email: string;
@@ -29,8 +33,8 @@ interface AddOrEditAccountInfoDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
-  data?: AccountInfo;
+  onClickConfirm: (payload: AccountAddInput | AccountEditInput) => void;
+  data?: AccountListItem;
 }
 
 function AddOrEditAccountInfoDialog({
@@ -38,13 +42,43 @@ function AddOrEditAccountInfoDialog({
   onClose,
   onClickCancel,
   onClickConfirm,
-  data,
+  data = {
+    maTK: 0,
+    email: '',
+    tenGV: '',
+    gvcn: true,
+    gvu: false,
+    hoatDong: true,
+  },
 }: AddOrEditAccountInfoDialogProps) {
+  const { type, status } = useMemo(() => {
+    const { gvcn, gvu, hoatDong } = data as AccountListItem;
+    const getType = () => {
+      if (gvcn && gvu) {
+        return 'Giáo vụ, Giáo viên chủ nhiệm';
+      }
+
+      if (gvcn) {
+        return 'Giáo viên chủ nhiệm';
+      }
+
+      if (gvu) {
+        return 'Giáo vụ';
+      }
+
+      return '';
+    };
+    return {
+      type: getType(),
+      status: hoatDong ? 'Hoạt động' : 'Không hoạt động',
+    };
+  }, [data]);
+
   const [values, setValues] = useState<State>({
     email: data ? data.email : '',
-    fullName: data ? data.fullName : '',
-    type: data ? data.type : '',
-    status: data ? data.status : '',
+    fullName: data ? data.tenGV : '',
+    type: data ? type : '',
+    status: data ? status : '',
   });
 
   const handleChange = useCallback(
@@ -55,7 +89,7 @@ function AddOrEditAccountInfoDialog({
   );
 
   const handleSelectAccountType = useCallback(
-    (event: SelectChangeEvent<typeof values.type>) => {
+    (event: SelectChangeEvent<string>) => {
       setValues((v) => ({
         ...v,
         type: event.target.value,
@@ -65,7 +99,7 @@ function AddOrEditAccountInfoDialog({
   );
 
   const handleSelectAccountStatus = useCallback(
-    (event: SelectChangeEvent<typeof values.status>) => {
+    (event: SelectChangeEvent<string>) => {
       setValues((v) => ({
         ...v,
         status: event.target.value,
@@ -77,7 +111,7 @@ function AddOrEditAccountInfoDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? <>Chỉnh sửa tài khoản</> : <>Thêm tài khoản</>}
+        {data ? 'Chỉnh sửa tài khoản' : 'Thêm tài khoản'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">
@@ -131,9 +165,9 @@ function AddOrEditAccountInfoDialog({
               value={values.type}
               onChange={handleSelectAccountType}
             >
-              {ACCOUNT_TYPES.map((type) => (
-                <MenuItem key={type} value={type}>
-                  <ListItemText primary={type} />
+              {ACCOUNT_TYPES.map((item) => (
+                <MenuItem key={item} value={item}>
+                  <ListItemText primary={item} />
                 </MenuItem>
               ))}
             </Select>
@@ -162,9 +196,9 @@ function AddOrEditAccountInfoDialog({
               value={values.status}
               onChange={handleSelectAccountStatus}
             >
-              {ACCOUNT_STATUSES.map((type) => (
-                <MenuItem key={type} value={type}>
-                  <ListItemText primary={type} />
+              {ACCOUNT_STATUSES.map((item) => (
+                <MenuItem key={item} value={item}>
+                  <ListItemText primary={item} />
                 </MenuItem>
               ))}
             </Select>
@@ -172,8 +206,20 @@ function AddOrEditAccountInfoDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
-            {data ? <>Lưu</> : <>Thêm</>}
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              onClickConfirm({
+                email: values.email,
+                tenGV: values.fullName,
+                hoatDong: values.status === 'Hoạt động',
+                gvu: values.type.includes('Giáo vụ'),
+                gvcn: values.type.includes('Giáo viên chủ nhiệm'),
+              });
+            }}
+          >
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>
