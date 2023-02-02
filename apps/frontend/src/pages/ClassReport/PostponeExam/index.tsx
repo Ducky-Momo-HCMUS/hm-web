@@ -2,13 +2,16 @@ import React, { useCallback, useState } from 'react';
 import { Box } from '@mui/material';
 
 import ClassTable from '../../ClassDetail/ClassTable';
-import { MISS_EXAM_LIST, POSTPONE_EXAM_LIST } from '../../../mocks';
+import {
+  HomeroomExamAbsentListItem,
+  HomeroomExamPostponedListItem,
+} from '../../../generated-types';
 
 const missExamColumns = [
   { id: 'maSV', label: 'MSSV' },
-  { id: 'tenSV', label: 'Họ và tên' },
-  { id: 'tenMH', label: 'Môn học' },
-  { id: 'maLopHP', label: 'Lớp HP' },
+  { id: 'hoTen', label: 'Họ và tên' },
+  { id: 'monHoc', label: 'Môn học' },
+  { id: 'lopHP', label: 'Lớp học phần' },
 ];
 
 const ROWS_PER_PAGE = 5;
@@ -18,7 +21,15 @@ interface Page {
   postponeExam: number;
 }
 
-function PostponeExam() {
+interface PostponeExamProps {
+  homeroomExamAbsentList: HomeroomExamAbsentListItem[];
+  homeroomExamPostponedList: HomeroomExamPostponedListItem[];
+}
+
+function PostponeExam({
+  homeroomExamAbsentList,
+  homeroomExamPostponedList,
+}: PostponeExamProps) {
   const [page, setPage] = useState<Page>({
     missExam: 0,
     postponeExam: 0,
@@ -43,7 +54,7 @@ function PostponeExam() {
       <ClassTable
         title="Danh sách vắng thi"
         columns={missExamColumns}
-        data={MISS_EXAM_LIST}
+        data={homeroomExamAbsentList}
         page={page.missExam}
         rowsPerPage={ROWS_PER_PAGE}
         handleChangePage={handleChangeMissExamPage}
@@ -53,7 +64,7 @@ function PostponeExam() {
       <ClassTable
         title="Danh sách hoãn thi"
         columns={missExamColumns}
-        data={POSTPONE_EXAM_LIST}
+        data={homeroomExamPostponedList}
         page={page.postponeExam}
         rowsPerPage={ROWS_PER_PAGE}
         handleChangePage={handleChangePostponeExamPage}

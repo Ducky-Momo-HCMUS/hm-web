@@ -1,9 +1,13 @@
 import {
   HomeroomDetail,
+  HomeroomExamAbsentList,
+  HomeroomExamPostponedList,
   HomeroomFailList,
   HomeroomFailListItem,
+  HomeroomFinalResultList,
   HomeroomNotEnrolledList,
   HomeroomNotEnrolledListItem,
+  HomeroomOverviewReport,
   HomeroomPostponeExamList,
   HomeroomPostponeExamListItem,
   HomeroomTermList,
@@ -180,3 +184,115 @@ export const HOMEROOM_POSTPONE_EXAM_LIST = {
     },
   ] as HomeroomPostponeExamListItem[],
 } as HomeroomPostponeExamList;
+
+export const HOMEROOM_OVERVIEW_REPORT_BY_TERM = {
+  siSo: {
+    tong: 46,
+    nam: 23,
+    nu: 23,
+  },
+  hocTap: {
+    xuatSac: 5,
+    gioi: 25,
+    kha: 10,
+    trungBinhKha: 4,
+    trungBinh: 1,
+    yeu: 1,
+    chungChiNgoaiNgu: 12,
+  },
+  drl: {
+    xuatSac: 5,
+    gioi: 25,
+    kha: 10,
+    trungBinhKha: 4,
+    trungBinh: 1,
+    yeu: 1,
+  },
+} as HomeroomOverviewReport;
+
+export const HOMEROOM_FINAL_RESULT_LIST_BY_TERM = {
+  danhSachKetQua: [
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      dtb: 7.1,
+      xepLoai: 'Khá',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      dtb: 7.1,
+      xepLoai: 'Khá',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      dtb: 7.1,
+      xepLoai: 'Khá',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      dtb: 7.1,
+      xepLoai: 'Khá',
+    },
+  ],
+} as HomeroomFinalResultList;
+
+export const HOMEROOM_EXAM_ABSENT_LIST_BY_TERM = {
+  danhSachVangThi: [
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+  ],
+} as HomeroomExamAbsentList;
+
+export const HOMEROOM_EXAM_POSTPONED_LIST_BY_TERM = {
+  danhSachHoanThi: [
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+    {
+      maSV: '19127001',
+      hoTen: 'Nguyễn Văn A',
+      monHoc: 'Kỹ năng mềm',
+      lopHP: '19CLC1',
+    },
+  ],
+} as HomeroomExamPostponedList;

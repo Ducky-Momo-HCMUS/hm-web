@@ -64,7 +64,7 @@ function AcademicResult() {
         },
       });
     },
-    []
+    [getStudentDetailSubjectsResult, id]
   );
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function AcademicResult() {
         subject: 'dai-cuong',
       },
     });
-  }, [getStudentDetailSubjectsResult]);
+  }, [getStudentDetailSubjectsResult, id]);
 
   return (
     <Box mt={3}>

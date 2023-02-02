@@ -15,6 +15,22 @@ const homeroomTypeDefs = gql`
       homeroomId: String!
       term: Int!
     ): HomeroomPostponeExamList!
+    homeroomOverviewReportByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomOverviewReport!
+    homeroomFinalResultListByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomFinalResultList!
+    homeroomExamAbsentListByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomExamAbsentList!
+    homeroomExamPostponedListByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomExamPostponedList!
   }
 
   type HomeroomList {
@@ -93,6 +109,70 @@ const homeroomTypeDefs = gql`
     tenSV: String!
     tenMH: String!
     tenLopHP: String!
+  }
+
+  type HomeroomOverviewReport {
+    siSo: HomeroomNumberOverview!
+    hocTap: HomeroomLearnOverview!
+    drl: HomeroomTrainingPointOverview!
+  }
+
+  type HomeroomNumberOverview {
+    tong: Int!
+    nam: Int!
+    nu: Int!
+  }
+
+  type HomeroomLearnOverview {
+    xuatSac: Int
+    gioi: Int
+    kha: Int
+    trungBinhKha: Int
+    trungBinh: Int
+    yeu: Int
+    chungChiNgoaiNgu: Int
+  }
+
+  type HomeroomTrainingPointOverview {
+    xuatSac: Int
+    gioi: Int
+    kha: Int
+    trungBinhKha: Int
+    trungBinh: Int
+    yeu: Int
+  }
+
+  type HomeroomFinalResultList {
+    danhSachKetQua: [HomeroomFinalResultListItem!]!
+  }
+
+  type HomeroomFinalResultListItem {
+    maSV: String!
+    hoTen: String!
+    dtb: Float
+    xepLoai: String
+  }
+
+  type HomeroomExamAbsentList {
+    danhSachVangThi: [HomeroomExamAbsentListItem!]!
+  }
+
+  type HomeroomExamAbsentListItem {
+    maSV: String!
+    hoTen: String!
+    monHoc: String
+    lopHP: String
+  }
+
+  type HomeroomExamPostponedList {
+    danhSachHoanThi: [HomeroomExamPostponedListItem!]!
+  }
+
+  type HomeroomExamPostponedListItem {
+    maSV: String!
+    hoTen: String!
+    monHoc: String
+    lopHP: String
   }
 `;
 
