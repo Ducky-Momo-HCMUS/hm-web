@@ -182,19 +182,6 @@ const studentTypeDefs = gql`
     tenTag: String!
   }
 
-  type StudentNoteList {
-    danhSachGhiChu: [StudentNote!]!
-  }
-
-  type StudentNote {
-    maGC: Int!
-    tag: [String]!
-    tieuDe: String!
-    noiDung: String!
-    thoiGianTao: String!
-    thoiGianSua: String!
-  }
-
   type StudentOverviewResult {
     tenCN: String!
     daiCuong: Int!

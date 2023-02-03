@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { ThemeProvider } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  from,
+} from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 
 import { theme } from './theme';
 import App from './App';
@@ -26,8 +32,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message }) => {
+      if (message === 'Invalid JWT token') {
+        localStorage.removeItem('ACCESS_TOKEN');
+        (
+          window as Window
+        ).location = `${window.location.protocol}//${window.location.host}/login`;
+      }
+    });
+  }
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([authLink, errorLink, httpLink]),
   cache: new InMemoryCache({
     addTypename: false,
   }),

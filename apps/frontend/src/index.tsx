@@ -8,8 +8,10 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  from,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 
 import App from './App';
 import { theme } from './theme';
@@ -30,8 +32,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message }) => {
+      if (message === 'Invalid JWT token') {
+        localStorage.removeItem('ACCESS_TOKEN');
+        (
+          window as Window
+        ).location = `${window.location.protocol}//${window.location.host}/login`;
+      }
+    });
+  }
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([authLink, errorLink, httpLink]),
   cache: new InMemoryCache({
     addTypename: false,
   }),
