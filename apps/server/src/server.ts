@@ -1,8 +1,6 @@
-import { readFile } from 'fs/promises';
-
 import express from 'express';
 import { ApolloServer, IResolvers } from 'apollo-server-express';
-import { expressjwt } from 'express-jwt';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 import typeDefs from './schema';
 import resolvers from './resolvers';
@@ -14,20 +12,15 @@ startServer();
 export async function startServer() {
   const app = express();
 
-  // app.use(
-  //   expressjwt({
-  //     algorithms: ['ES256'],
-  //     credentialsRequired: false,
-  //     secret: await readFile('public.pem'),
-  //   })
-  // );
-
   const server = new ApolloServer({
+    uploads: false,
     typeDefs,
     resolvers: resolvers as IResolvers,
     dataSources,
     context,
   });
+
+  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
 
   server.applyMiddleware({ app, path: '/graphql' });
   app.listen({ host: '0.0.0.0', port: '5000' }, () => {

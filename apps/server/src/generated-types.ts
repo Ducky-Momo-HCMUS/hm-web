@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -20,6 +24,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  UploadFile: any;
 };
 
 export type AccountAddInput = {
@@ -71,6 +76,13 @@ export type AccountListItem = {
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Document = {
+  __typename?: 'Document';
+  id: Scalars['ID'];
+  name: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -260,6 +272,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+  uploadDocument: UploadDocumentResponse;
 };
 
 export type MutationAccountAddArgs = {
@@ -352,6 +365,11 @@ export type MutationTagEditArgs = {
   tagId: Scalars['Int'];
 };
 
+export type MutationUploadDocumentArgs = {
+  file: Scalars['UploadFile'];
+  input: UploadDocumentInput;
+};
+
 export type MutationStatusReponse = {
   __typename?: 'MutationStatusReponse';
   status?: Maybe<Scalars['Int']>;
@@ -425,6 +443,7 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
+  documents: Array<Document>;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
@@ -746,6 +765,18 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type UploadDocumentInput = {
+  name: Scalars['String'];
+};
+
+export type UploadDocumentResponse = {
+  __typename?: 'UploadDocumentResponse';
+  code: Scalars['String'];
+  documentUniqueId: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
@@ -862,6 +893,7 @@ export type ResolversTypes = {
   AccountListItem: ResolverTypeWrapper<AccountListItem>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
+  Document: ResolverTypeWrapper<Document>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomDetail: ResolverTypeWrapper<HomeroomDetail>;
   HomeroomExamAbsentList: ResolverTypeWrapper<HomeroomExamAbsentList>;
@@ -886,6 +918,7 @@ export type ResolversTypes = {
   HomeroomTermList: ResolverTypeWrapper<HomeroomTermList>;
   HomeroomTermListItem: ResolverTypeWrapper<HomeroomTermListItem>;
   HomeroomTrainingPointOverview: ResolverTypeWrapper<HomeroomTrainingPointOverview>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -930,6 +963,9 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  UploadDocumentInput: UploadDocumentInput;
+  UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
+  UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -943,6 +979,7 @@ export type ResolversParentTypes = {
   AccountListItem: AccountListItem;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
+  Document: Document;
   Float: Scalars['Float'];
   HomeroomDetail: HomeroomDetail;
   HomeroomExamAbsentList: HomeroomExamAbsentList;
@@ -967,6 +1004,7 @@ export type ResolversParentTypes = {
   HomeroomTermList: HomeroomTermList;
   HomeroomTermListItem: HomeroomTermListItem;
   HomeroomTrainingPointOverview: HomeroomTrainingPointOverview;
+  ID: Scalars['ID'];
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
   Mutation: {};
@@ -1011,6 +1049,9 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  UploadDocumentInput: UploadDocumentInput;
+  UploadDocumentResponse: UploadDocumentResponse;
+  UploadFile: Scalars['UploadFile'];
 };
 
 export type AccountAddResponseResolvers<
@@ -1067,6 +1108,16 @@ export type ContactResolvers<
   ParentType extends ResolversParentTypes['Contact'] = ResolversParentTypes['Contact']
 > = {
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DocumentResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Document'] = ResolversParentTypes['Document']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1496,6 +1547,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
   >;
+  uploadDocument?: Resolver<
+    ResolversTypes['UploadDocumentResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUploadDocumentArgs, 'file' | 'input'>
+  >;
 };
 
 export type MutationStatusReponseResolvers<
@@ -1599,6 +1656,11 @@ export type QueryResolvers<
 > = {
   accountList?: Resolver<
     ResolversTypes['AccountList'],
+    ParentType,
+    ContextType
+  >;
+  documents?: Resolver<
+    Array<ResolversTypes['Document']>,
     ParentType,
     ContextType
   >;
@@ -1998,6 +2060,26 @@ export type TagListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UploadDocumentResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['UploadDocumentResponse'] = ResolversParentTypes['UploadDocumentResponse']
+> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  documentUniqueId?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType
+  >;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export interface UploadFileScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['UploadFile'], any> {
+  name: 'UploadFile';
+}
+
 export type Resolvers<ContextType = any> = {
   AccountAddResponse?: AccountAddResponseResolvers<ContextType>;
   AccountDeleteResponse?: AccountDeleteResponseResolvers<ContextType>;
@@ -2005,6 +2087,7 @@ export type Resolvers<ContextType = any> = {
   AccountList?: AccountListResolvers<ContextType>;
   AccountListItem?: AccountListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
+  Document?: DocumentResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
   HomeroomExamAbsentList?: HomeroomExamAbsentListResolvers<ContextType>;
   HomeroomExamAbsentListItem?: HomeroomExamAbsentListItemResolvers<ContextType>;
@@ -2061,4 +2144,6 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
+  UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;
+  UploadFile?: GraphQLScalarType;
 };
