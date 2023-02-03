@@ -214,6 +214,7 @@ export type HomeroomStudentList = {
 
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
+  emailSV: Scalars['String'];
   gpa4?: Maybe<Scalars['Float']>;
   gpa10?: Maybe<Scalars['Float']>;
   lienHe?: Maybe<Array<Contact>>;
@@ -1382,6 +1383,7 @@ export type HomeroomStudentListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomStudentListItem'] = ResolversParentTypes['HomeroomStudentListItem']
 > = {
+  emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   lienHe?: Resolver<

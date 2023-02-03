@@ -8,19 +8,19 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 
-import { Order, TeacherProperty } from '../../../../types';
+import { Order, StudentProperty } from '../../../../types';
 
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: TeacherProperty
+    property: StudentProperty
   ) => void;
   order: Order;
   orderBy: string;
 }
 
 interface Column {
-  id: 'maSH' | 'tenGVCN' | 'email';
+  id: 'maSV' | 'tenSV' | 'maCN' | 'tinhTrang' | 'sdt' | 'emailSV';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -28,24 +28,31 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'tenGVCN', label: 'Họ và tên' },
+  { id: 'maSV', label: 'MSSV' },
   {
-    id: 'maSH',
-    label: 'Lớp chủ nhiệm',
+    id: 'tenSV',
+    label: 'Họ tên',
     minWidth: 200,
   },
   {
-    id: 'email',
-    label: 'Email',
+    id: 'maCN',
+    label: 'Chuyên ngành',
     minWidth: 120,
   },
+  {
+    id: 'tinhTrang',
+    label: 'Tình trạng',
+    minWidth: 120,
+  },
+  { id: 'sdt', label: 'Số điện thoại', minWidth: 120 },
+  { id: 'emailSV', label: 'Email sinh viên', minWidth: 120 },
 ];
 
-function HomeroomTeacherTableHead(props: EnhancedTableProps) {
+function StudentTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
   const createSortHandler =
-    (property: TeacherProperty) => (event: React.MouseEvent<unknown>) => {
+    (property: StudentProperty) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -76,4 +83,4 @@ function HomeroomTeacherTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default HomeroomTeacherTableHead;
+export default StudentTableHead;

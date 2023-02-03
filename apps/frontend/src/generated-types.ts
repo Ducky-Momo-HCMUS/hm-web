@@ -209,6 +209,7 @@ export type HomeroomStudentList = {
 
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
+  emailSV: Scalars['String'];
   gpa4?: Maybe<Scalars['Float']>;
   gpa10?: Maybe<Scalars['Float']>;
   lienHe?: Maybe<Array<Contact>>;
@@ -1267,6 +1268,7 @@ export type HomeroomStudentListQuery = {
       gpa4?: number | null | undefined;
       gpa10?: number | null | undefined;
       sdt: string;
+      emailSV: string;
       lienHe?:
         | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
         | null
@@ -3233,6 +3235,7 @@ export const HomeroomStudentListDocument = gql`
         gpa4
         gpa10
         sdt
+        emailSV
         lienHe {
           mxh
           url

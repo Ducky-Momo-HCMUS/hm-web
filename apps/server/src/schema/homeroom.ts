@@ -55,6 +55,7 @@ const homeroomTypeDefs = gql`
     gpa4: Float
     gpa10: Float
     sdt: String!
+    emailSV: String!
     lienHe: [Contact!]
   }
 

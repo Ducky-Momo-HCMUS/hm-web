@@ -14,6 +14,7 @@ import {
   StyledContainer,
 } from './styles';
 import HomeroomTeacherList from './HomeroomTeacherList';
+import StudentList from './StudentList';
 
 function Home() {
   const [selected, setSelected] = useState(0);
@@ -38,11 +39,19 @@ function Home() {
               <ListAltIcon color="action" />
               <StyledListItemText primary="Danh sách GVCN" />
             </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 2}
+              onClick={() => setSelected(2)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Danh sách sinh viên" />
+            </StyledListItemButton>
           </List>
         </Drawer>
         <StyledContent component="main">
           {selected === 0 && <ImportFile />}
           {selected === 1 && <HomeroomTeacherList />}
+          {selected === 2 && <StudentList />}
         </StyledContent>
       </StyledContainer>
     </>

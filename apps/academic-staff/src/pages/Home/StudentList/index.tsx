@@ -14,29 +14,29 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { useTeacherListQuery } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import { Order, StudentProperty } from '../../../types';
 import { StyledTitle } from '../../../components/styles';
-import { Order, TeacherProperty } from '../../../types';
+import { StyledFormControl } from '../styles';
+import { useHomeroomStudentListQuery } from '../../../generated-types';
 
-import { StyledFormControl } from './styles';
-import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
+import StudentTableHead from './StudentTableHead';
 
-const YEARS = ['19', '20', '21'];
+const CLASSES = ['19CLC1', '19CLC2', '19CLC3'];
 
 interface State {
-  year: string;
+  class: string;
 }
 
-function HomeroomTeacherList() {
+function StudentList() {
   const [values, setValues] = useState<State>({
-    year: '',
+    class: '',
   });
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<TeacherProperty>('maSH');
+  const [orderBy, setOrderBy] = useState<StudentProperty>('maSV');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,7 +58,7 @@ function HomeroomTeacherList() {
   );
 
   const handleRequestSort = useCallback(
-    (event: React.MouseEvent<unknown>, property: TeacherProperty) => {
+    (event: React.MouseEvent<unknown>, property: StudentProperty) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
@@ -66,54 +66,60 @@ function HomeroomTeacherList() {
     [orderBy, order]
   );
 
-  const { loading: teacherListLoading, data: teacherListData } =
-    useTeacherListQuery({
+  const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
+    useHomeroomStudentListQuery({
       variables: {
-        year: values.year || YEARS[0],
+        homeroomId: values.class || CLASSES[0],
       },
     });
 
-  const teacherList = useMemo(
-    () => teacherListData?.teacherList.danhSachGVCN || [],
-    [teacherListData?.teacherList.danhSachGVCN]
+  const homeroomStudentList = useMemo(
+    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
+    [homeroomStudentListData?.homeroomStudentList]
   );
 
   return (
     <Box>
-      <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
+      <StyledTitle>Danh sách sinh viên</StyledTitle>
       <StyledFormControl>
-        <InputLabel id="year-select-label">Khoá</InputLabel>
+        <InputLabel id="class-select-label">Lớp</InputLabel>
         <Select
-          labelId="year-select-label"
-          id="year-select"
-          value={values.year || YEARS[0]}
-          label="Khoá"
-          onChange={handleChange('year')}
+          labelId="class-select-label"
+          id="class-select"
+          value={values.class || CLASSES[0]}
+          label="Lớp"
+          onChange={handleChange('class')}
         >
-          {YEARS.map((item) => (
+          {CLASSES.map((item) => (
             <MenuItem value={item}>{item}</MenuItem>
           ))}
         </Select>
       </StyledFormControl>
-      <AsyncDataRenderer loading={teacherListLoading} data={teacherListData}>
+      <AsyncDataRenderer
+        loading={homeroomStudentListLoading}
+        data={homeroomStudentListData}
+      >
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
-              <HomeroomTeacherTableHead
+              <StudentTableHead
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
               />
               <TableBody>
-                {[...teacherList]
+                {[...homeroomStudentList]
                   // ?.sort(getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
-                    <TableRow hover tabIndex={-1} key={row.email}>
+                    <TableRow hover tabIndex={-1} key={row.maSV}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row.tenGVCN}</TableCell>
-                      <TableCell>{row.maSH}</TableCell>
-                      <TableCell>{row.email}</TableCell>
+                      <TableCell>{row.maSV}</TableCell>
+                      <TableCell>{row.tenSV}</TableCell>
+                      <TableCell>{row.maCN || 'Chưa có'}</TableCell>
+                      <TableCell>{row.tinhTrang}</TableCell>
+                      <TableCell>{row.sdt}</TableCell>
+                      <TableCell>{row.emailSV}</TableCell>
                     </TableRow>
                   ))}
               </TableBody>
@@ -122,7 +128,7 @@ function HomeroomTeacherList() {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={teacherList.length}
+            count={homeroomStudentList.length}
             rowsPerPage={rowsPerPage}
             labelRowsPerPage="Số dòng trên trang"
             page={page}
@@ -135,4 +141,4 @@ function HomeroomTeacherList() {
   );
 }
 
-export default HomeroomTeacherList;
+export default StudentList;
