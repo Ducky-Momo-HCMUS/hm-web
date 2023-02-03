@@ -19,6 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  UploadFile: any;
 };
 
 export type AccountAddInput = {
@@ -70,6 +71,13 @@ export type AccountListItem = {
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Document = {
+  __typename?: 'Document';
+  id: Scalars['ID'];
+  name: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -259,6 +267,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+  uploadDocument: UploadDocumentResponse;
 };
 
 export type MutationAccountAddArgs = {
@@ -351,6 +360,11 @@ export type MutationTagEditArgs = {
   tagId: Scalars['Int'];
 };
 
+export type MutationUploadDocumentArgs = {
+  file: Scalars['UploadFile'];
+  input: UploadDocumentInput;
+};
+
 export type MutationStatusReponse = {
   __typename?: 'MutationStatusReponse';
   status?: Maybe<Scalars['Int']>;
@@ -424,6 +438,7 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
+  documents: Array<Document>;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
@@ -743,6 +758,34 @@ export type TagEditInput = {
 export type TagList = {
   __typename?: 'TagList';
   tags: Array<Tag>;
+};
+
+export type UploadDocumentInput = {
+  name: Scalars['String'];
+};
+
+export type UploadDocumentResponse = {
+  __typename?: 'UploadDocumentResponse';
+  code: Scalars['String'];
+  documentUniqueId: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type UploadDocumentMutationVariables = Exact<{
+  file: Scalars['UploadFile'];
+  input: UploadDocumentInput;
+}>;
+
+export type UploadDocumentMutation = {
+  __typename?: 'Mutation';
+  uploadDocument: {
+    __typename?: 'UploadDocumentResponse';
+    code: string;
+    success: boolean;
+    message: string;
+    documentUniqueId: string;
+  };
 };
 
 export type AccountAddMutationVariables = Exact<{
@@ -1440,6 +1483,60 @@ export type StudentTrainingPointByTermQuery = {
   };
 };
 
+export const UploadDocumentDocument = gql`
+  mutation UploadDocument($file: UploadFile!, $input: UploadDocumentInput!) {
+    uploadDocument(file: $file, input: $input) {
+      code
+      success
+      message
+      documentUniqueId
+    }
+  }
+`;
+export type UploadDocumentMutationFn = Apollo.MutationFunction<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
+>;
+
+/**
+ * __useUploadDocumentMutation__
+ *
+ * To run a mutation, you first call `useUploadDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadDocumentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadDocumentMutation, { data, loading, error }] = useUploadDocumentMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUploadDocumentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UploadDocumentMutation,
+    UploadDocumentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UploadDocumentMutation,
+    UploadDocumentMutationVariables
+  >(UploadDocumentDocument, options);
+}
+export type UploadDocumentMutationHookResult = ReturnType<
+  typeof useUploadDocumentMutation
+>;
+export type UploadDocumentMutationResult =
+  Apollo.MutationResult<UploadDocumentMutation>;
+export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
+  UploadDocumentMutation,
+  UploadDocumentMutationVariables
+>;
 export const AccountAddDocument = gql`
   mutation AccountAdd($payload: AccountAddInput!) {
     accountAdd(payload: $payload) {

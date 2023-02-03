@@ -13,3 +13,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.filepond--drop-label {
+  background: white!important
+}
+
+.filepond--panel-root {
+  background-color: white!important;
+}
