@@ -467,6 +467,7 @@ export type Query = {
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
+  teacherList: TeacherList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -558,6 +559,10 @@ export type QueryStudentSubjectsByTermArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryTeacherListArgs = {
+  year: Scalars['String'];
 };
 
 export type StudentAddContactInput = {
@@ -765,6 +770,18 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherList = {
+  __typename?: 'TeacherList';
+  danhSachGVCN: Array<TeacherListItem>;
+};
+
+export type TeacherListItem = {
+  __typename?: 'TeacherListItem';
+  email: Scalars['String'];
+  maSH: Scalars['String'];
+  tenGVCN: Scalars['String'];
+};
+
 export type UploadDocumentInput = {
   name: Scalars['String'];
 };
@@ -963,6 +980,8 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  TeacherList: ResolverTypeWrapper<TeacherList>;
+  TeacherListItem: ResolverTypeWrapper<TeacherListItem>;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
   UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
@@ -1049,6 +1068,8 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  TeacherList: TeacherList;
+  TeacherListItem: TeacherListItem;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: UploadDocumentResponse;
   UploadFile: Scalars['UploadFile'];
@@ -1801,6 +1822,12 @@ export type QueryResolvers<
     RequireFields<QueryStudentTrainingPointByTermArgs, 'studentId' | 'term'>
   >;
   tagList?: Resolver<ResolversTypes['TagList'], ParentType, ContextType>;
+  teacherList?: Resolver<
+    ResolversTypes['TeacherList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryTeacherListArgs, 'year'>
+  >;
 };
 
 export type StudentAllTermsResolvers<
@@ -2060,6 +2087,28 @@ export type TagListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TeacherListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherList'] = ResolversParentTypes['TeacherList']
+> = {
+  danhSachGVCN?: Resolver<
+    Array<ResolversTypes['TeacherListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TeacherListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherListItem'] = ResolversParentTypes['TeacherListItem']
+> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenGVCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UploadDocumentResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['UploadDocumentResponse'] = ResolversParentTypes['UploadDocumentResponse']
@@ -2144,6 +2193,8 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
+  TeacherList?: TeacherListResolvers<ContextType>;
+  TeacherListItem?: TeacherListItemResolvers<ContextType>;
   UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;
   UploadFile?: GraphQLScalarType;
 };

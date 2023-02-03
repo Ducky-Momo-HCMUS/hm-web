@@ -7,6 +7,7 @@ import noteTypeDefs from './note';
 import studentTypeDefs from './student';
 import tagTypeDefs from './tag';
 import accountTypeDefs from './account';
+import teacherTypeDefs from './teacher';
 
 const typeDefs = gql`
   #=============#
@@ -33,4 +34,5 @@ export default [
   tagTypeDefs,
   accountTypeDefs,
   fileTypeDefs,
+  teacherTypeDefs,
 ];
