@@ -155,7 +155,7 @@ function AcademicReport() {
                 onChange={handleChange('year')}
               >
                 {years.map((item) => (
-                  <MenuItem value={item}>
+                  <MenuItem key={item} value={item}>
                     {item} - {Number(item) + 1}
                   </MenuItem>
                 ))}
@@ -207,7 +207,11 @@ function AcademicReport() {
               <AcademicTableHead />
               <TableBody>
                 {subjectsData.map((row, index) => (
-                  <AcademicTableRow data={row} index={index + 1} />
+                  <AcademicTableRow
+                    key={row.maMH}
+                    data={row}
+                    index={index + 1}
+                  />
                 ))}
               </TableBody>
             </Table>

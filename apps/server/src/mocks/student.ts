@@ -107,7 +107,7 @@ export const STUDENT_DETAIL_SUBJECTS_RESULT = {
       diem: 7.5,
     },
     {
-      maMH: 'BAA00101',
+      maMH: 'BAA00102',
       tenMH: 'Triết học Mác-Lênin',
       soTC: 3,
       namHoc: 2019,
@@ -115,7 +115,7 @@ export const STUDENT_DETAIL_SUBJECTS_RESULT = {
       diem: 7.5,
     },
     {
-      maMH: 'BAA00101',
+      maMH: 'BAA00103',
       tenMH: 'Triết học Mác-Lênin',
       soTC: 3,
       namHoc: 2019,
@@ -123,7 +123,7 @@ export const STUDENT_DETAIL_SUBJECTS_RESULT = {
       diem: 7.5,
     },
     {
-      maMH: 'BAA00101',
+      maMH: 'BAA00104',
       tenMH: 'Triết học Mác-Lênin',
       soTC: 3,
       namHoc: 2019,

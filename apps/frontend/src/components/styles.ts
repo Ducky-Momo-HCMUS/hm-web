@@ -116,7 +116,7 @@ export const StyledHeader = styled(Box)(({ theme }) => ({
 export const StyledInfoBox = styled(Box)`
   display: flex;
   padding: 0.75rem;
-  & p:first-child {
+  & p:first-of-type {
     width: 50%;
     font-weight: bold;
   }

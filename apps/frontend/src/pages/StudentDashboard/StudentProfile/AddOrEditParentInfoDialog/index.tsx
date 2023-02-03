@@ -169,7 +169,7 @@ function AddOrEditParentInfoDialog({
               onChange={handleSelectRelationship}
             >
               {RELATIONSHIP_OPTIONS.map((item) => (
-                <MenuItem value={item}>
+                <MenuItem key={item} value={item}>
                   <ListItemText primary={item} />
                 </MenuItem>
               ))}

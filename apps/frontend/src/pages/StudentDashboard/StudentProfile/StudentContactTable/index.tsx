@@ -103,6 +103,7 @@ function StudentContactTable({ data }: StudentContactTableProps) {
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((row, index) => (
               <StudentContactRow
+                key={row.maLHSV}
                 index={index}
                 data={row}
                 onClickEdit={() => handleClickEdit(row.maLHSV)}

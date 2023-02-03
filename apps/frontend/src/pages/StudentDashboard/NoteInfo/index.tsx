@@ -300,8 +300,9 @@ function NoteInfo() {
                       page * ROWS_PER_PAGE,
                       page * ROWS_PER_PAGE + ROWS_PER_PAGE
                     )
-                    .map((item, index) => (
+                    .map((item) => (
                       <NoteItem
+                        key={item.maGC}
                         selected={values.selected}
                         data={item}
                         onClick={() => handleSelectValue('selected', item.maGC)}
