@@ -110,6 +110,10 @@ function StudentProfile() {
           page: newPage + 1,
           size: PARENT_PAGE_SIZE,
         },
+        refetchQueries: [
+          { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+          'StudentParentInfoList',
+        ],
       });
       setParentPage(newPage);
     },

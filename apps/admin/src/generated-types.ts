@@ -163,6 +163,19 @@ export type HomeroomExamAbsentListSubject = {
   tenMH: Scalars['String'];
 };
 
+export type HomeroomExamPostponedList = {
+  __typename?: 'HomeroomExamPostponedList';
+  danhSachHoanThi: Array<HomeroomExamPostponedListItem>;
+};
+
+export type HomeroomExamPostponedListItem = {
+  __typename?: 'HomeroomExamPostponedListItem';
+  hoTen: Scalars['String'];
+  lopHP?: Maybe<Scalars['String']>;
+  maSV: Scalars['String'];
+  monHoc?: Maybe<Scalars['String']>;
+};
+
 export type HomeroomFailList = {
   __typename?: 'HomeroomFailList';
   data: Array<HomeroomFailListItem>;
