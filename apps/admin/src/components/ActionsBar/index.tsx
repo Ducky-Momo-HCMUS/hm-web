@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   IconButton,
@@ -24,6 +24,12 @@ function ActionsBar() {
   };
 
   const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem('EMAIL');
+    navigate('/login');
+  }, [navigate]);
 
   return (
     <>
@@ -77,8 +83,7 @@ function ActionsBar() {
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}
-            href="/change-password"
-            LinkComponent={Link}
+            onClick={() => navigate('/change-password')}
           >
             <ListItemIcon>
               <SettingsIcon fontSize="small" />
@@ -87,10 +92,7 @@ function ActionsBar() {
           </ListItemButton>
         </MenuItem>
         <MenuItem>
-          <ListItemButton
-            sx={{ padding: 0 }}
-            onClick={() => navigate('/login')}
-          >
+          <ListItemButton sx={{ padding: 0 }} onClick={handleLogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

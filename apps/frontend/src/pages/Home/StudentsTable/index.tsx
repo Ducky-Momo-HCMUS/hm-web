@@ -112,18 +112,12 @@ function StudentsTable() {
 
   const [
     getHomeroomStudentList,
-    {
-      loading: homeroomStudentListLoading,
-      data: homeroomStudentListData,
-      error: homeroomStudentListError,
-    },
+    { loading: homeroomStudentListLoading, data: homeroomStudentListData },
   ] = useHomeroomStudentListLazyQuery();
   const studentListData = useMemo(
     () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
     [homeroomStudentListData?.homeroomStudentList]
   );
-
-  console.log('fetch error', homeroomStudentListError);
 
   useEffect(() => {
     if (values.class.length > 0 || initialClass.length > 0) {

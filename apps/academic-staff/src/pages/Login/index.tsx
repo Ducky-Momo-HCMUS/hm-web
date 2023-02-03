@@ -51,11 +51,7 @@ function Login() {
   const navigate = useNavigate();
 
   const [login, { loading: loginLoading, error: loginError }] =
-    useLoginMutation({
-      onCompleted: () => {
-        navigate('/');
-      },
-    });
+    useLoginMutation();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -72,8 +68,9 @@ function Login() {
       localStorage.setItem('EMAIL', data.get('email')?.toString() || '');
       localStorage.setItem('ACCESS_TOKEN', result.data?.login?.token || '');
       setError('');
+      navigate('/');
     },
-    [login]
+    [login, navigate]
   );
 
   useEffect(() => {
@@ -83,7 +80,7 @@ function Login() {
     }
 
     const errorId =
-      loginError?.graphQLErrors[0].extensions.response?.body.errorId;
+      loginError?.graphQLErrors[0].extensions?.response?.body.errorId;
     setError(errorMessages.find((err) => err.id === errorId)?.message || '');
   }, [loginError]);
 
