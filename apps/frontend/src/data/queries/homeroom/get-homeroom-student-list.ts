@@ -11,6 +11,7 @@ export const GET_HOMEROOM_STUDENT_LIST = gql`
         gpa4
         gpa10
         sdt
+        emailSV
         lienHe {
           mxh
           url

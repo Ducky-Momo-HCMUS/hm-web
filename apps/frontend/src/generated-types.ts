@@ -209,6 +209,7 @@ export type HomeroomStudentList = {
 
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
+  emailSV: Scalars['String'];
   gpa4?: Maybe<Scalars['Float']>;
   gpa10?: Maybe<Scalars['Float']>;
   lienHe?: Maybe<Array<Contact>>;
@@ -462,6 +463,7 @@ export type Query = {
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
+  teacherList: TeacherList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -553,6 +555,10 @@ export type QueryStudentSubjectsByTermArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryTeacherListArgs = {
+  year: Scalars['String'];
 };
 
 export type StudentAddContactInput = {
@@ -760,6 +766,18 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherList = {
+  __typename?: 'TeacherList';
+  danhSachGVCN: Array<TeacherListItem>;
+};
+
+export type TeacherListItem = {
+  __typename?: 'TeacherListItem';
+  email: Scalars['String'];
+  maSH: Scalars['String'];
+  tenGVCN: Scalars['String'];
+};
+
 export type UploadDocumentInput = {
   name: Scalars['String'];
 };
@@ -785,6 +803,23 @@ export type UploadDocumentMutation = {
     success: boolean;
     message: string;
     documentUniqueId: string;
+  };
+};
+
+export type TeacherListQueryVariables = Exact<{
+  year: Scalars['String'];
+}>;
+
+export type TeacherListQuery = {
+  __typename?: 'Query';
+  teacherList: {
+    __typename?: 'TeacherList';
+    danhSachGVCN: Array<{
+      __typename?: 'TeacherListItem';
+      maSH: string;
+      tenGVCN: string;
+      email: string;
+    }>;
   };
 };
 
@@ -1233,6 +1268,7 @@ export type HomeroomStudentListQuery = {
       gpa4?: number | null | undefined;
       gpa10?: number | null | undefined;
       sdt: string;
+      emailSV: string;
       lienHe?:
         | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
         | null
@@ -1536,6 +1572,66 @@ export type UploadDocumentMutationResult =
 export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
+>;
+export const TeacherListDocument = gql`
+  query TeacherList($year: String!) {
+    teacherList(year: $year) {
+      danhSachGVCN {
+        maSH
+        tenGVCN
+        email
+      }
+    }
+  }
+`;
+
+/**
+ * __useTeacherListQuery__
+ *
+ * To run a query within a React component, call `useTeacherListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeacherListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeacherListQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useTeacherListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TeacherListQuery,
+    TeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TeacherListQuery, TeacherListQueryVariables>(
+    TeacherListDocument,
+    options
+  );
+}
+export function useTeacherListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TeacherListQuery,
+    TeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TeacherListQuery, TeacherListQueryVariables>(
+    TeacherListDocument,
+    options
+  );
+}
+export type TeacherListQueryHookResult = ReturnType<typeof useTeacherListQuery>;
+export type TeacherListLazyQueryHookResult = ReturnType<
+  typeof useTeacherListLazyQuery
+>;
+export type TeacherListQueryResult = Apollo.QueryResult<
+  TeacherListQuery,
+  TeacherListQueryVariables
 >;
 export const AccountAddDocument = gql`
   mutation AccountAdd($payload: AccountAddInput!) {
@@ -3139,6 +3235,7 @@ export const HomeroomStudentListDocument = gql`
         gpa4
         gpa10
         sdt
+        emailSV
         lienHe {
           mxh
           url

@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
-import { Box, ListItemButton, ListItemText } from '@mui/material';
+import { Box, FormControl, ListItemButton, ListItemText } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 
 export const StyledContainer = styled(Box)`
@@ -66,4 +66,14 @@ export const StyledContent = styled(Box)`
   padding: 1.5rem;
   background: ${grey[100]};
   margin-left: 15rem;
+`;
+
+export const StyledFormControl = styled(FormControl)`
+  min-width: 7.5rem;
+  & > div {
+    background-color: white;
+  }
+  & > div > div {
+    padding: 0.875rem;
+  }
 `;

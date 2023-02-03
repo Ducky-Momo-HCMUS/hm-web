@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -20,7 +19,7 @@ import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
+import { StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
 import { useUploadDocumentMutation } from '../../../generated-types';
 
@@ -158,10 +157,6 @@ function ImportFile() {
     <>
       <ToastContainer />
       <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
-      <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link to="/">Trang chủ</Link>
-        <Typography color="text.primary">Nhập thông tin</Typography>
-      </StyledBreadCrumbs>
       <Box component="form">
         <StyledFormControl sx={{ minWidth: '18.5rem' }}>
           <InputLabel id="type-select-label">Loại thông tin</InputLabel>

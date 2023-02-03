@@ -62,6 +62,7 @@ importers:
       '@mui/icons-material': ^5.10.9
       '@mui/material': ^5.10.8
       '@mui/system': ^5.10.16
+      '@mui/utils': ^5.10.9
       '@mui/x-data-grid': ^5.17.21
       '@reduxjs/toolkit': ^1.9.1
       '@testing-library/dom': ^8.19.0
@@ -99,6 +100,7 @@ importers:
       '@emotion/styled': 11.10.4_ppf2weyoyak2rmaqbqjmaosseu
       '@mui/icons-material': 5.10.9_hxwoburrgref6nj552adkl5pte
       '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
+      '@mui/utils': 5.10.16_react@17.0.2
       '@mui/x-data-grid': 5.17.21_ka5ewhjdtr54zpqsubcgbbcuc4
       '@reduxjs/toolkit': 1.9.1_3m5k4ry2nwm36zz5ojtujpfkvq
       '@testing-library/dom': 8.19.0

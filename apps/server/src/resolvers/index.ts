@@ -7,6 +7,7 @@ import { homeroomResolver } from './homeroom-resolvers';
 import { noteResolver } from './note-resolvers';
 import { studentResolver } from './student-resolvers';
 import { tagResolver } from './tag-resolvers';
+import { teacherResolver } from './teacher-resolvers';
 
 export default merge(
   authResolvers,
@@ -15,5 +16,6 @@ export default merge(
   noteResolver,
   tagResolver,
   accountResolver,
-  fileResolver
+  fileResolver,
+  teacherResolver
 );
