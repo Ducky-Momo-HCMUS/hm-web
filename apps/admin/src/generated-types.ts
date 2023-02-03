@@ -81,6 +81,11 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type HomeroomAllList = {
+  __typename?: 'HomeroomAllList';
+  danhSachLopSH: Array<Scalars['String']>;
+};
+
 export type HomeroomDetail = {
   __typename?: 'HomeroomDetail';
   soLuongSV: Scalars['Int'];
@@ -440,6 +445,7 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   documents: Array<Document>;
+  homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
@@ -464,6 +470,7 @@ export type Query = {
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
+  yearList: YearList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -790,6 +797,11 @@ export type UploadDocumentResponse = {
   success: Scalars['Boolean'];
 };
 
+export type YearList = {
+  __typename?: 'YearList';
+  danhSachKhoa: Array<Scalars['Int']>;
+};
+
 export type UploadDocumentMutationVariables = Exact<{
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
@@ -803,6 +815,16 @@ export type UploadDocumentMutation = {
     success: boolean;
     message: string;
     documentUniqueId: string;
+  };
+};
+
+export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HomeroomAllListQuery = {
+  __typename?: 'Query';
+  homeroomAllList: {
+    __typename?: 'HomeroomAllList';
+    danhSachLopSH: Array<string>;
   };
 };
 
@@ -821,6 +843,13 @@ export type TeacherListQuery = {
       email: string;
     }>;
   };
+};
+
+export type YearListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type YearListQuery = {
+  __typename?: 'Query';
+  yearList: { __typename?: 'YearList'; danhSachKhoa: Array<number> };
 };
 
 export type AccountAddMutationVariables = Exact<{
@@ -1573,6 +1602,63 @@ export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
 >;
+export const HomeroomAllListDocument = gql`
+  query HomeroomAllList {
+    homeroomAllList {
+      danhSachLopSH
+    }
+  }
+`;
+
+/**
+ * __useHomeroomAllListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomAllListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomAllListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomAllListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHomeroomAllListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HomeroomAllListQuery, HomeroomAllListQueryVariables>(
+    HomeroomAllListDocument,
+    options
+  );
+}
+export function useHomeroomAllListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >(HomeroomAllListDocument, options);
+}
+export type HomeroomAllListQueryHookResult = ReturnType<
+  typeof useHomeroomAllListQuery
+>;
+export type HomeroomAllListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomAllListLazyQuery
+>;
+export type HomeroomAllListQueryResult = Apollo.QueryResult<
+  HomeroomAllListQuery,
+  HomeroomAllListQueryVariables
+>;
 export const TeacherListDocument = gql`
   query TeacherList($year: String!) {
     teacherList(year: $year) {
@@ -1632,6 +1718,58 @@ export type TeacherListLazyQueryHookResult = ReturnType<
 export type TeacherListQueryResult = Apollo.QueryResult<
   TeacherListQuery,
   TeacherListQueryVariables
+>;
+export const YearListDocument = gql`
+  query YearList {
+    yearList {
+      danhSachKhoa
+    }
+  }
+`;
+
+/**
+ * __useYearListQuery__
+ *
+ * To run a query within a React component, call `useYearListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useYearListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useYearListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useYearListQuery(
+  baseOptions?: Apollo.QueryHookOptions<YearListQuery, YearListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<YearListQuery, YearListQueryVariables>(
+    YearListDocument,
+    options
+  );
+}
+export function useYearListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    YearListQuery,
+    YearListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<YearListQuery, YearListQueryVariables>(
+    YearListDocument,
+    options
+  );
+}
+export type YearListQueryHookResult = ReturnType<typeof useYearListQuery>;
+export type YearListLazyQueryHookResult = ReturnType<
+  typeof useYearListLazyQuery
+>;
+export type YearListQueryResult = Apollo.QueryResult<
+  YearListQuery,
+  YearListQueryVariables
 >;
 export const AccountAddDocument = gql`
   mutation AccountAdd($payload: AccountAddInput!) {

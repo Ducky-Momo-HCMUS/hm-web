@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
 
 import {
+  HOMEROOM_ALL_LIST,
   HOMEROOM_DETAIL,
   HOMEROOM_EXAM_ABSENT_LIST_BY_TERM,
   HOMEROOM_EXAM_POSTPONED_LIST_BY_TERM,
@@ -39,6 +40,16 @@ class HomeroomAPI extends BaseDataSource {
       return homeroomList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getHomeroomAllList() {
+    try {
+      // const homeroomAllList = await this.get('v1/homerooms-list');
+      return HOMEROOM_ALL_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch homeroom all list');
       throw this.handleError(error as ApolloError);
     }
   }

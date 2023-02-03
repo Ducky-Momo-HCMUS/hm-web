@@ -1,4 +1,5 @@
 import {
+  HomeroomAllList,
   HomeroomDetail,
   HomeroomExamAbsentList,
   HomeroomExamPostponedList,
@@ -13,6 +14,10 @@ import {
   HomeroomTermList,
   HomeroomTermListItem,
 } from '../generated-types';
+
+export const HOMEROOM_ALL_LIST = {
+  danhSachLopSH: ['19CLC1', '19CLC2', '19CLC3'],
+} as HomeroomAllList;
 
 export const HOMEROOM_DETAIL = {
   tenGV: 'Hồ Tuấn Thanh',
