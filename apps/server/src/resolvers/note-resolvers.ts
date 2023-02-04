@@ -6,7 +6,6 @@ export const noteResolver: Resolvers<ResolverContext> = {
   Query: {
     noteDetail: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.getNoteDetail(args);
-      console.log('data', res.data.note);
       return res.data.note;
     },
     noteList: async (_, __, { dataSources }) => {
@@ -21,7 +20,6 @@ export const noteResolver: Resolvers<ResolverContext> = {
     },
     noteEdit: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.editNote(args);
-      console.log('data', res.data.note);
       return res.data.note;
     },
     noteDelete: async (_, args, { dataSources }) => {

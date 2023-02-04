@@ -35,8 +35,12 @@ const authLink = setContext((_, { headers }) => {
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {
-      if (message === 'Invalid JWT token') {
+      if (
+        message === 'Invalid JWT token' ||
+        message === 'Insufficient permission'
+      ) {
         localStorage.removeItem('ACCESS_TOKEN');
+        localStorage.removeItem('EMAIL');
         (
           window as Window
         ).location = `${window.location.protocol}//${window.location.host}/login`;

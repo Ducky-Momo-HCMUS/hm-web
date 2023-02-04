@@ -92,7 +92,7 @@ function TagTable({ data }: TagInfoTableProps) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell>Tag</TableCell>
               <TableCell align="center">Thao tác</TableCell>
             </TableRow>

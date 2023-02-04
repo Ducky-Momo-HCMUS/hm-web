@@ -248,7 +248,13 @@ function NoteInfo() {
   }, [deleteNote, id, values]);
 
   const handleReset = useCallback(() => {
-    setValues((v) => ({ ...v, selected: -1, title: '', tags: [] }));
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      title: '',
+      tags: [],
+      isAdding: true,
+    }));
     setFiles([]);
     if (editorRef.current) {
       editorRef.current.setContent('');

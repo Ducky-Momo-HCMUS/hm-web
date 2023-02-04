@@ -168,6 +168,7 @@ function NoteStore() {
         variables: {
           noteId: values.selected,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [getNoteDetail, values.isAdding, values.selected]);
@@ -436,11 +437,11 @@ function NoteStore() {
               ))}
             </StyledGridContainer>
           </AsyncDataRenderer>
-          <Pagination
+          {/* <Pagination
             sx={{ width: 'fit-content', margin: '1rem auto 0' }}
             count={10}
             color="primary"
-          />
+          /> */}
         </StyledContentWrapper>
       </StyledContainer>
       {values.selected >= 0 && (

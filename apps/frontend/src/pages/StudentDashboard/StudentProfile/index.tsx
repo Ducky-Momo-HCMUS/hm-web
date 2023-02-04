@@ -48,7 +48,7 @@ function StudentProfile() {
   };
 
   const handleCloseAddStudentContactDialog = () => {
-    setOpenAddStudentContactDialog(true);
+    setOpenAddStudentContactDialog(false);
   };
 
   const [addStudentContact, { loading: addStudentContactLoading }] =
@@ -245,12 +245,14 @@ function StudentProfile() {
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-        <AddStudentContactDialog
-          open={openAddStudentContactDialog}
-          onClose={handleCloseAddStudentContactDialog}
-          onClickCancel={handleCloseAddStudentContactDialog}
-          onClickConfirm={handleAddStudentContact}
-        />
+        {openAddStudentContactDialog && (
+          <AddStudentContactDialog
+            open={openAddStudentContactDialog}
+            onClose={handleCloseAddStudentContactDialog}
+            onClickCancel={handleCloseAddStudentContactDialog}
+            onClickConfirm={handleAddStudentContact}
+          />
+        )}
       </Box>
       <Box
         display="flex"
@@ -330,12 +332,14 @@ function StudentProfile() {
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-        <AddParentInfoDialog
-          open={openAddParentInfoDialog}
-          onClose={handleCloseAddParentInfoDialog}
-          onClickCancel={handleCloseAddParentInfoDialog}
-          onClickConfirm={handleAddParentInfo}
-        />
+        {openAddParentInfoDialog && (
+          <AddParentInfoDialog
+            open={openAddParentInfoDialog}
+            onClose={handleCloseAddParentInfoDialog}
+            onClickCancel={handleCloseAddParentInfoDialog}
+            onClickConfirm={handleAddParentInfo}
+          />
+        )}
       </Box>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

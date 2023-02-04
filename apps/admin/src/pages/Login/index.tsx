@@ -78,9 +78,7 @@ function Login() {
       return;
     }
 
-    const errorId =
-      loginError?.graphQLErrors[0].extensions?.response?.body.errorId;
-    setError(errorMessages.find((err) => err.id === errorId)?.message || '');
+    setError(loginError?.graphQLErrors?.[0].message);
   }, [loginError]);
 
   return (
