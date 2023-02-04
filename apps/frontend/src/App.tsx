@@ -5,7 +5,7 @@ import ClassDetail from './pages/ClassDetail';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NoteStore from './pages/NoteStore';
-import ResetPassword from './pages/ResetPassword';
+import ResetPassword from './pages/ForgotPassword';
 import StatisticalReport from './pages/ClassReport';
 import StudentDashboard from './pages/StudentDashboard';
 import ChangePassword from './pages/ChangePassword';
@@ -23,7 +23,7 @@ function App() {
         <Route path="/classes/:id/report" element={<StatisticalReport />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ResetPassword />} />
     </Routes>
   );
 }

@@ -28,9 +28,6 @@ export const accessTable: AccessTable = {
   'v1/forgot-password': {
     anonymous: true,
   },
-  'v1/reset-password': {
-    anonymous: true,
-  },
   'v1/accounts/edit-password': {
     admin: true,
     gvcn: true,

@@ -3,7 +3,6 @@ import _groupBy from 'lodash/groupBy';
 import {
   HomeroomListItem,
   HomeroomStudentListItem,
-  HomeroomTermListItem,
   StudentTerm,
 } from '../../generated-types';
 import { HomeroomStudentListData } from '../../types';

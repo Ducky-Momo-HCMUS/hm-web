@@ -48,7 +48,7 @@ export default class AuthAPI extends BaseDataSource {
   ) {
     try {
       const response = await this.post<MutationStatusReponse>(
-        'v1/reset-password',
+        'v1/forgot-password',
         { id, token, password, passwordConfirm }
       );
       return response;

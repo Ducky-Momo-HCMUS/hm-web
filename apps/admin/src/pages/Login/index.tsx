@@ -150,7 +150,7 @@ function Login() {
                 <Link
                   sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
                   component={RouterLink}
-                  to="/reset-password"
+                  to="/forgot-password"
                 >
                   Quên mật khẩu?
                 </Link>

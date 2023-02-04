@@ -326,7 +326,6 @@ export type MutationNoteEditArgs = {
 export type MutationResetPasswordArgs = {
   id: Scalars['Int'];
   password: Scalars['String'];
-  passwordConfirm: Scalars['String'];
   token: Scalars['String'];
 };
 
@@ -1539,10 +1538,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
     ContextType,
-    RequireFields<
-      MutationResetPasswordArgs,
-      'id' | 'password' | 'passwordConfirm' | 'token'
-    >
+    RequireFields<MutationResetPasswordArgs, 'id' | 'password' | 'token'>
   >;
   studentAddContact?: Resolver<
     ResolversTypes['StudentContactResponse'],

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Box,
   Button,
@@ -82,7 +82,7 @@ function AddOrEditParentInfoDialog({
   );
 
   const handleSelectRelationship = useCallback(
-    (event: SelectChangeEvent<typeof values.quanHe>) => {
+    (event: SelectChangeEvent<string>) => {
       setValues((v) => ({
         ...v,
         quanHe: event.target.value,
