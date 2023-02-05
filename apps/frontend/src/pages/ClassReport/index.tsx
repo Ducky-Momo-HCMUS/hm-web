@@ -18,6 +18,7 @@ import Header from '../../components/Header';
 import {
   StyledBreadCrumbs,
   StyledContentWrapper,
+  StyledScrollableBox,
   StyledTitle,
 } from '../../components/styles';
 import TabPanel from '../../components/TabPanel';
@@ -333,10 +334,14 @@ function ClassReport() {
               }
               data={homeroomOverviewReportData && homeroomFinalResultListData}
             >
-              <ClassOverview
-                homeroomOverviewReport={homeroomOverviewReport}
-                homeroomFinalResultList={homeroomFinalResultList}
-              />
+              <StyledScrollableBox
+                sx={{ padding: '0!important', height: '25rem' }}
+              >
+                <ClassOverview
+                  homeroomOverviewReport={homeroomOverviewReport}
+                  homeroomFinalResultList={homeroomFinalResultList}
+                />
+              </StyledScrollableBox>
             </AsyncDataRenderer>
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
@@ -347,10 +352,14 @@ function ClassReport() {
               }
               data={homeroomExamAbsentListData && homeroomExamPostponedListData}
             >
-              <PostponeExam
-                homeroomExamAbsentList={homeroomExamAbsentList}
-                homeroomExamPostponedList={homeroomExamPostponedList}
-              />
+              <StyledScrollableBox
+                sx={{ padding: '0!important', height: '25rem' }}
+              >
+                <PostponeExam
+                  homeroomExamAbsentList={homeroomExamAbsentList}
+                  homeroomExamPostponedList={homeroomExamPostponedList}
+                />
+              </StyledScrollableBox>
             </AsyncDataRenderer>
           </TabPanel>
         </Box>

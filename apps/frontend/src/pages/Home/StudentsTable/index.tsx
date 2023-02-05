@@ -188,7 +188,7 @@ function StudentsTable() {
       >
         {(values.class || initialClass) && (
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 400 }}>
               <Table stickyHeader>
                 <StudentTableHead
                   order={order}

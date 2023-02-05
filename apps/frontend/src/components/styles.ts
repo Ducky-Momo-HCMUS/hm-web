@@ -13,6 +13,12 @@ import { styled } from '@mui/material/styles';
 import { blue, grey } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 
+export const StyledScrollableBox = styled(Box)`
+  overflow-y: scroll;
+  height: 29rem;
+  padding: 2rem 0.25rem;
+`;
+
 export const StyledContainer = styled(Box)`
   background: ${grey[100]};
   height: 100vh;

@@ -65,7 +65,7 @@ function AcademicTable({ header, description, data }: AcademicTableProps) {
           {description ? `(${description})` : ''}
         </Typography>
       </StyledHeader>
-      <TableContainer>
+      <TableContainer sx={{ maxHeight: 400 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

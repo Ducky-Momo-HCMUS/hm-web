@@ -202,7 +202,7 @@ function AcademicReport() {
       <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <StyledHeader>Các môn đã đăng ký</StyledHeader>
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: 380 }}>
             <Table stickyHeader aria-label="sticky table">
               <AcademicTableHead />
               <TableBody>

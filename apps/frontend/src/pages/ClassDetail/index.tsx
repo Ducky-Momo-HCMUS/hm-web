@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import {
   StyledBreadCrumbs,
   StyledContentWrapper,
+  StyledScrollableBox,
   StyledTitle,
 } from '../../components/styles';
 import {
@@ -253,106 +254,111 @@ function ClassDetail() {
       <Header isAuthenticated />
       <StyledContentWrapper>
         <StyledTitle>Tổng quan lớp học</StyledTitle>
-        <StyledBreadCrumbs aria-label="breadcrumb">
+        <StyledBreadCrumbs sx={{ marginBottom: 0 }} aria-label="breadcrumb">
           <Link to="/">Trang chủ</Link>
           <Typography color="text.primary">Tổng quan lớp học</Typography>
         </StyledBreadCrumbs>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '2rem',
-          }}
-        >
-          <AsyncDataRenderer
-            loading={homeroomDetailLoading}
-            data={homeroomDetailData}
+        <StyledScrollableBox>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '2rem',
+            }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
+            <AsyncDataRenderer
+              loading={homeroomDetailLoading}
+              data={homeroomDetailData}
             >
-              <ClassInfo title="Lớp sinh hoạt" description={id.toUpperCase()} />
-              <ClassInfo
-                title="Giáo viên chủ nhiệm"
-                description={homeroomDetail?.tenGV}
-              />
-              <ClassInfo
-                title="Số lượng sinh viên"
-                description={homeroomDetail?.soLuongSV.toString()}
-              />
-            </Box>
-          </AsyncDataRenderer>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <ClassInfo
+                  title="Lớp sinh hoạt"
+                  description={id.toUpperCase()}
+                />
+                <ClassInfo
+                  title="Giáo viên chủ nhiệm"
+                  description={homeroomDetail?.tenGV}
+                />
+                <ClassInfo
+                  title="Số lượng sinh viên"
+                  description={homeroomDetail?.soLuongSV.toString()}
+                />
+              </Box>
+            </AsyncDataRenderer>
 
-          <Button
-            component={Link}
-            to={`/classes/${id}/report`}
-            variant="contained"
-          >
-            Báo cáo lớp học
-          </Button>
-        </Box>
-        <ClassTable
-          title="Tình hình rớt môn"
-          columns={failedColumns}
-          data={failList}
-          loading={homeroomFailListByTermLoading}
-          page={page.subjectStatus}
-          termList={termFailList as HomeroomTermListItem[]}
-          termListLoading={homeroomTermListLoading}
-          term={values.termFailList || initialTerm}
-          year={values.yearFailList || initialYear}
-          yearList={years}
-          rowsPerPage={ROWS_PER_PAGE}
-          handleChangePage={handleChangeSubjectStatusPage}
-          handleChangeTerm={handleChange('termFailList')}
-          handleChangeYear={handleChange('yearFailList')}
-          hasFilter
-        />
-        <Grid style={{ marginTop: '0.25rem' }} container spacing={3}>
-          <Grid item xs={4}>
-            <ClassTable
-              title="Danh sách không đăng ký học phần"
-              columns={notRegisteredSubjectColumns}
-              data={notEnrolledList}
-              loading={homeroomNotEnrolledListByTermLoading}
-              page={page.notRegistered}
-              termList={termNotRegistered as HomeroomTermListItem[]}
-              termListLoading={homeroomTermListLoading}
-              term={values.termNotRegistered || initialTerm}
-              year={values.yearNotRegistered || initialYear}
-              yearList={years}
-              rowsPerPage={ROWS_PER_PAGE}
-              handleChangePage={handleChangeNotRegisteredPage}
-              handleChangeTerm={handleChange('termNotRegistered')}
-              handleChangeYear={handleChange('yearNotRegistered')}
-              hasFilter
-            />
+            <Button
+              component={Link}
+              to={`/classes/${id}/report`}
+              variant="contained"
+            >
+              Báo cáo lớp học
+            </Button>
+          </Box>
+          <ClassTable
+            title="Tình hình rớt môn"
+            columns={failedColumns}
+            data={failList}
+            loading={homeroomFailListByTermLoading}
+            page={page.subjectStatus}
+            termList={termFailList as HomeroomTermListItem[]}
+            termListLoading={homeroomTermListLoading}
+            term={values.termFailList || initialTerm}
+            year={values.yearFailList || initialYear}
+            yearList={years}
+            rowsPerPage={ROWS_PER_PAGE}
+            handleChangePage={handleChangeSubjectStatusPage}
+            handleChangeTerm={handleChange('termFailList')}
+            handleChangeYear={handleChange('yearFailList')}
+            hasFilter
+          />
+          <Grid style={{ marginTop: '0.25rem' }} container spacing={3}>
+            <Grid item xs={4}>
+              <ClassTable
+                title="Danh sách không đăng ký học phần"
+                columns={notRegisteredSubjectColumns}
+                data={notEnrolledList}
+                loading={homeroomNotEnrolledListByTermLoading}
+                page={page.notRegistered}
+                termList={termNotRegistered as HomeroomTermListItem[]}
+                termListLoading={homeroomTermListLoading}
+                term={values.termNotRegistered || initialTerm}
+                year={values.yearNotRegistered || initialYear}
+                yearList={years}
+                rowsPerPage={ROWS_PER_PAGE}
+                handleChangePage={handleChangeNotRegisteredPage}
+                handleChangeTerm={handleChange('termNotRegistered')}
+                handleChangeYear={handleChange('yearNotRegistered')}
+                hasFilter
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <ClassTable
+                title="Danh sách hoãn thi"
+                columns={postponeExamColumns}
+                data={postponeExamList}
+                loading={homeroomPostponeExamListByTermLoading}
+                page={page.postponeExam}
+                termList={termPostponeExam as HomeroomTermListItem[]}
+                termListLoading={homeroomTermListLoading}
+                term={values.termPostponeExam || initialTerm}
+                year={values.yearPostponeExam || initialYear}
+                yearList={years}
+                rowsPerPage={ROWS_PER_PAGE}
+                handleChangePage={handleChangePostponeExamPage}
+                handleChangeTerm={handleChange('termPostponeExam')}
+                handleChangeYear={handleChange('yearPostponeExam')}
+                hasFilter
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={8}>
-            <ClassTable
-              title="Danh sách hoãn thi"
-              columns={postponeExamColumns}
-              data={postponeExamList}
-              loading={homeroomPostponeExamListByTermLoading}
-              page={page.postponeExam}
-              termList={termPostponeExam as HomeroomTermListItem[]}
-              termListLoading={homeroomTermListLoading}
-              term={values.termPostponeExam || initialTerm}
-              year={values.yearPostponeExam || initialYear}
-              yearList={years}
-              rowsPerPage={ROWS_PER_PAGE}
-              handleChangePage={handleChangePostponeExamPage}
-              handleChangeTerm={handleChange('termPostponeExam')}
-              handleChangeYear={handleChange('yearPostponeExam')}
-              hasFilter
-            />
-          </Grid>
-        </Grid>
+        </StyledScrollableBox>
       </StyledContentWrapper>
     </>
   );
