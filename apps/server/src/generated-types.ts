@@ -469,7 +469,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: Array<StudentParentInfo>;
+  studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
@@ -555,6 +555,8 @@ export type QueryStudentOverviewResultArgs = {
 };
 
 export type QueryStudentParentInfoListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   studentId: Scalars['String'];
 };
 
@@ -701,6 +703,12 @@ export type StudentParentInfo = {
   sdt: Scalars['String'];
   sua: Scalars['Boolean'];
   tenPH: Scalars['String'];
+};
+
+export type StudentParentInfoList = {
+  __typename?: 'StudentParentInfoList';
+  data: Array<StudentParentInfo>;
+  total: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -981,6 +989,7 @@ export type ResolversTypes = {
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
+  StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTag: ResolverTypeWrapper<StudentTag>;
@@ -1071,6 +1080,7 @@ export type ResolversParentTypes = {
   StudentParentContact: StudentParentContact;
   StudentParentContactInput: StudentParentContactInput;
   StudentParentInfo: StudentParentInfo;
+  StudentParentInfoList: StudentParentInfoList;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTag: StudentTag;
@@ -1835,10 +1845,10 @@ export type QueryResolvers<
     RequireFields<QueryStudentOverviewResultArgs, 'studentId'>
   >;
   studentParentInfoList?: Resolver<
-    Array<ResolversTypes['StudentParentInfo']>,
+    ResolversTypes['StudentParentInfoList'],
     ParentType,
     ContextType,
-    RequireFields<QueryStudentParentInfoListArgs, 'studentId'>
+    RequireFields<QueryStudentParentInfoListArgs, 'page' | 'size' | 'studentId'>
   >;
   studentSubjectsByTerm?: Resolver<
     ResolversTypes['StudentSubjectsByTerm'],
@@ -2016,6 +2026,19 @@ export type StudentParentInfoResolvers<
   sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sua?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tenPH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentParentInfoListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentParentInfoList'] = ResolversParentTypes['StudentParentInfoList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentParentInfo']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2228,6 +2251,7 @@ export type Resolvers<ContextType = any> = {
   StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;
+  StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTag?: StudentTagResolvers<ContextType>;

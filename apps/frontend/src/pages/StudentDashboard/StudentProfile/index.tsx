@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Backdrop,
@@ -27,10 +27,11 @@ import {
   useStudentAddContactMutation,
   useStudentAddParentInfoMutation,
   useStudentDetailQuery,
-  useStudentParentInfoListQuery,
+  useStudentParentInfoListLazyQuery,
 } from '../../../generated-types';
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 import { GET_STUDENT_PARENT_INFO_LIST } from '../../../data/queries/student/get-student-parent-info';
+import { PARENT_PAGE_SIZE } from '../../../constants';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -82,26 +83,6 @@ function StudentProfile() {
     setOpenAddParentInfoDialog(false);
   };
 
-  const [addStudentParentInfo, { loading: addStudentParentInfoLoading }] =
-    useStudentAddParentInfoMutation();
-
-  const handleAddParentInfo = useCallback(
-    (studentInfo: StudentAddParentInfoInput) => {
-      setOpenAddParentInfoDialog(false);
-      addStudentParentInfo({
-        variables: {
-          studentId: id,
-          payload: studentInfo,
-        },
-        refetchQueries: [
-          { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
-          'StudentParentInfoList',
-        ],
-      });
-    },
-    [addStudentParentInfo, id]
-  );
-
   const { loading: studentDetailsLoading, data: studentDetailsData } =
     useStudentDetailQuery({
       variables: {
@@ -114,18 +95,71 @@ function StudentProfile() {
     [studentDetailsData?.studentDetail]
   );
 
-  const {
-    loading: studentParentInfoListLoading,
-    data: studentParentInfoListData,
-  } = useStudentParentInfoListQuery({
-    variables: {
-      studentId: id,
-    },
-  });
+  const [
+    getStudentParentInfoList,
+    { loading: studentParentInfoListLoading, data: studentParentInfoListData },
+  ] = useStudentParentInfoListLazyQuery();
 
-  const studentParentInfoList = useMemo(
-    () => studentParentInfoListData?.studentParentInfoList || [],
-    [studentParentInfoListData?.studentParentInfoList]
+  const [parentPage, setParentPage] = useState(0);
+
+  const handleChangeParentPage = useCallback(
+    (event: unknown, newPage: number) => {
+      getStudentParentInfoList({
+        variables: {
+          studentId: id,
+          page: newPage + 1,
+          size: PARENT_PAGE_SIZE,
+        },
+      });
+      setParentPage(newPage);
+    },
+    [getStudentParentInfoList, id]
+  );
+
+  useEffect(() => {
+    getStudentParentInfoList({
+      variables: {
+        studentId: id,
+        page: 1,
+        size: PARENT_PAGE_SIZE,
+      },
+    });
+  }, [getStudentParentInfoList, id]);
+
+  const { parentListLength, studentParentInfoList } = useMemo(() => {
+    return {
+      parentListLength:
+        studentParentInfoListData?.studentParentInfoList.total || 0,
+      studentParentInfoList:
+        studentParentInfoListData?.studentParentInfoList.data || [],
+    };
+  }, [studentParentInfoListData?.studentParentInfoList]);
+
+  const [addStudentParentInfo, { loading: addStudentParentInfoLoading }] =
+    useStudentAddParentInfoMutation();
+
+  const handleAddParentInfo = useCallback(
+    (studentInfo: StudentAddParentInfoInput) => {
+      setOpenAddParentInfoDialog(false);
+      addStudentParentInfo({
+        variables: {
+          studentId: id,
+          payload: studentInfo,
+        },
+        refetchQueries: [
+          {
+            query: GET_STUDENT_PARENT_INFO_LIST,
+            variables: {
+              studentId: id,
+              page: 1,
+              size: PARENT_PAGE_SIZE,
+            },
+          },
+          'StudentParentInfoList',
+        ],
+      });
+    },
+    [addStudentParentInfo, id]
   );
 
   return (
@@ -310,31 +344,35 @@ function StudentProfile() {
               </Grid>
             </StyledGridContainer>
           </AsyncDataRenderer>
-          <AsyncDataRenderer
-            loading={studentParentInfoListLoading}
-            data={studentParentInfoListData}
-          >
-            <StyledGridContainer spacing={2} container width="50vw">
-              <Grid item xs={12}>
-                <StyledHeader>
-                  <Typography component="p" variant="h5">
-                    Thông tin phụ huynh
-                  </Typography>
-                </StyledHeader>
-                <StyledDivider />
-                <Box marginTop="0.85rem">
-                  <Button
-                    variant="text"
-                    onClick={handleOpenAddParentInfoDialog}
-                  >
-                    <AddIcon />
-                    Thêm phụ huynh
-                  </Button>
-                </Box>
-                <ParentInfoTable data={studentParentInfoList} />
-              </Grid>
-            </StyledGridContainer>
-          </AsyncDataRenderer>
+
+          <StyledGridContainer spacing={2} container width="50vw">
+            <Grid item xs={12}>
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Thông tin phụ huynh
+                </Typography>
+              </StyledHeader>
+              <StyledDivider />
+              <Box marginTop="0.85rem">
+                <Button variant="text" onClick={handleOpenAddParentInfoDialog}>
+                  <AddIcon />
+                  Thêm phụ huynh
+                </Button>
+              </Box>
+              <AsyncDataRenderer
+                loading={studentParentInfoListLoading}
+                data={studentParentInfoListData}
+              >
+                <ParentInfoTable
+                  count={parentListLength}
+                  data={studentParentInfoList}
+                  page={parentPage}
+                  handleChangePage={handleChangeParentPage}
+                  setParentPage={setParentPage}
+                />
+              </AsyncDataRenderer>
+            </Grid>
+          </StyledGridContainer>
           {openAddParentInfoDialog && (
             <AddParentInfoDialog
               open={openAddParentInfoDialog}
@@ -345,7 +383,6 @@ function StudentProfile() {
           )}
         </Box>
       </StyledScrollableBox>
-
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={addStudentContactLoading || addStudentParentInfoLoading}

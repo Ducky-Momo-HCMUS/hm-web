@@ -16,7 +16,11 @@ const studentTypeDefs = gql`
     ): StudentAveragePoint!
     studentAllTerms(studentId: String!): StudentAllTerms!
     studentDetail(studentId: String!): StudentDetail!
-    studentParentInfoList(studentId: String!): [StudentParentInfo!]!
+    studentParentInfoList(
+      studentId: String!
+      page: Int!
+      size: Int!
+    ): StudentParentInfoList!
     studentNoteList(studentId: String!): [StudentNote!]!
     studentOverviewResult(studentId: String!): StudentOverviewResult!
     studentDetailSubjectsResult(
@@ -102,6 +106,11 @@ const studentTypeDefs = gql`
     maSH: String!
     xepLoai: String
     lienHeSV: [StudentContact!]
+  }
+
+  type StudentParentInfoList {
+    total: Int!
+    data: [StudentParentInfo!]!
   }
 
   type StudentParentInfo {

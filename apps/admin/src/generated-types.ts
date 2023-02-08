@@ -464,7 +464,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: Array<StudentParentInfo>;
+  studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
@@ -550,6 +550,8 @@ export type QueryStudentOverviewResultArgs = {
 };
 
 export type QueryStudentParentInfoListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   studentId: Scalars['String'];
 };
 
@@ -696,6 +698,12 @@ export type StudentParentInfo = {
   sdt: Scalars['String'];
   sua: Scalars['Boolean'];
   tenPH: Scalars['String'];
+};
+
+export type StudentParentInfoList = {
+  __typename?: 'StudentParentInfoList';
+  data: Array<StudentParentInfo>;
+  total: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -1523,24 +1531,30 @@ export type StudentOverviewResultQuery = {
 
 export type StudentParentInfoListQueryVariables = Exact<{
   studentId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type StudentParentInfoListQuery = {
   __typename?: 'Query';
-  studentParentInfoList: Array<{
-    __typename?: 'StudentParentInfo';
-    maPH: number;
-    tenPH: string;
-    quanHe: string;
-    sdt: string;
-    sua: boolean;
-    lienHePH: Array<{
-      __typename?: 'StudentParentContact';
-      maLHPH?: number | null | undefined;
-      mxh: string;
-      url: string;
+  studentParentInfoList: {
+    __typename?: 'StudentParentInfoList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentParentInfo';
+      maPH: number;
+      tenPH: string;
+      quanHe: string;
+      sdt: string;
+      sua: boolean;
+      lienHePH: Array<{
+        __typename?: 'StudentParentContact';
+        maLHPH?: number | null | undefined;
+        mxh: string;
+        url: string;
+      }>;
     }>;
-  }>;
+  };
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -4153,17 +4167,20 @@ export type StudentOverviewResultQueryResult = Apollo.QueryResult<
   StudentOverviewResultQueryVariables
 >;
 export const StudentParentInfoListDocument = gql`
-  query StudentParentInfoList($studentId: String!) {
-    studentParentInfoList(studentId: $studentId) {
-      maPH
-      tenPH
-      quanHe
-      sdt
-      sua
-      lienHePH {
-        maLHPH
-        mxh
-        url
+  query StudentParentInfoList($studentId: String!, $page: Int!, $size: Int!) {
+    studentParentInfoList(studentId: $studentId, page: $page, size: $size) {
+      total
+      data {
+        maPH
+        tenPH
+        quanHe
+        sdt
+        sua
+        lienHePH {
+          maLHPH
+          mxh
+          url
+        }
       }
     }
   }
@@ -4182,6 +4199,8 @@ export const StudentParentInfoListDocument = gql`
  * const { data, loading, error } = useStudentParentInfoListQuery({
  *   variables: {
  *      studentId: // value for 'studentId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

@@ -29,7 +29,7 @@ export const studentResolver: Resolvers<ResolverContext> = {
     },
     studentParentInfoList: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentParentInfoList(args);
-      return res.data.data;
+      return res.data;
     },
     studentNoteList: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentNoteList(args);
