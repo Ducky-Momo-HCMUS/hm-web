@@ -81,51 +81,67 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type HomeroomAllList = {
+  __typename?: 'HomeroomAllList';
+  danhSachLopSH: Array<Scalars['String']>;
+};
+
 export type HomeroomDetail = {
   __typename?: 'HomeroomDetail';
-  soLuongSV: Scalars['Int'];
-  tenGV: Scalars['String'];
+  giaoVien: TeacherInfo;
+  siSo: Scalars['Int'];
 };
 
 export type HomeroomExamAbsentList = {
   __typename?: 'HomeroomExamAbsentList';
-  danhSachVangThi: Array<HomeroomExamAbsentListItem>;
+  data: Array<HomeroomExamAbsentListItem>;
 };
 
 export type HomeroomExamAbsentListItem = {
   __typename?: 'HomeroomExamAbsentListItem';
-  hoTen: Scalars['String'];
-  lopHP?: Maybe<Scalars['String']>;
-  maSV: Scalars['String'];
-  monHoc?: Maybe<Scalars['String']>;
+  monHoc: HomeroomExamAbsentListSubject;
+  sinhVien: HomeroomExamAbsentListStudentInfo;
 };
 
-export type HomeroomExamPostponedList = {
-  __typename?: 'HomeroomExamPostponedList';
-  danhSachHoanThi: Array<HomeroomExamPostponedListItem>;
+export type HomeroomExamAbsentListStudentInfo = {
+  __typename?: 'HomeroomExamAbsentListStudentInfo';
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
 };
 
-export type HomeroomExamPostponedListItem = {
-  __typename?: 'HomeroomExamPostponedListItem';
-  hoTen: Scalars['String'];
-  lopHP?: Maybe<Scalars['String']>;
-  maSV: Scalars['String'];
-  monHoc?: Maybe<Scalars['String']>;
+export type HomeroomExamAbsentListSubject = {
+  __typename?: 'HomeroomExamAbsentListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomFailList = {
   __typename?: 'HomeroomFailList';
-  dsRotMon: Array<HomeroomFailListItem>;
+  data: Array<HomeroomFailListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomFailListItem = {
   __typename?: 'HomeroomFailListItem';
   dtb: Scalars['Float'];
-  maSV: Scalars['String'];
+  lopHocPhan: HomeroomFailListStudentCourse;
+  sinhVien: HomeroomFailListStudentInfo;
+};
+
+export type HomeroomFailListStudentCourse = {
+  __typename?: 'HomeroomFailListStudentCourse';
+  monHoc: HomeroomFailListSubject;
   tenLopHP: Scalars['String'];
-  tenMH: Scalars['String'];
+};
+
+export type HomeroomFailListStudentInfo = {
+  __typename?: 'HomeroomFailListStudentInfo';
+  maSV: Scalars['String'];
   tenSV: Scalars['String'];
-  vang: Scalars['Boolean'];
+};
+
+export type HomeroomFailListSubject = {
+  __typename?: 'HomeroomFailListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomFinalResultList = {
@@ -166,11 +182,16 @@ export type HomeroomListItem = {
 
 export type HomeroomNotEnrolledList = {
   __typename?: 'HomeroomNotEnrolledList';
-  khongDangKy: Array<HomeroomNotEnrolledListItem>;
+  data: Array<HomeroomNotEnrolledListItem>;
 };
 
 export type HomeroomNotEnrolledListItem = {
   __typename?: 'HomeroomNotEnrolledListItem';
+  sinhVien: HomeroomNotEnrolledListStudentInfo;
+};
+
+export type HomeroomNotEnrolledListStudentInfo = {
+  __typename?: 'HomeroomNotEnrolledListStudentInfo';
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -191,15 +212,24 @@ export type HomeroomOverviewReport = {
 
 export type HomeroomPostponeExamList = {
   __typename?: 'HomeroomPostponeExamList';
-  hoanThi: Array<HomeroomPostponeExamListItem>;
+  data: Array<HomeroomPostponeExamListItem>;
 };
 
 export type HomeroomPostponeExamListItem = {
   __typename?: 'HomeroomPostponeExamListItem';
+  monHoc: HomeroomPostponeExamListSubject;
+  sinhVien: HomeroomPostponeExamListStudentInfo;
+};
+
+export type HomeroomPostponeExamListStudentInfo = {
+  __typename?: 'HomeroomPostponeExamListStudentInfo';
   maSV: Scalars['String'];
-  tenLopHP: Scalars['String'];
-  tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type HomeroomPostponeExamListSubject = {
+  __typename?: 'HomeroomPostponeExamListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomStudentList = {
@@ -316,7 +346,6 @@ export type MutationNoteEditArgs = {
 export type MutationResetPasswordArgs = {
   id: Scalars['Int'];
   password: Scalars['String'];
-  passwordConfirm: Scalars['String'];
   token: Scalars['String'];
 };
 
@@ -440,9 +469,9 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   documents: Array<Document>;
+  homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
-  homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
   homeroomFailListByTerm: HomeroomFailList;
   homeroomFinalResultListByTerm: HomeroomFinalResultList;
   homeroomList: HomeroomList;
@@ -459,11 +488,12 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
-  studentParentInfoList: Array<StudentParentInfo>;
+  studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
+  yearList: YearList;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -471,11 +501,6 @@ export type QueryHomeroomDetailArgs = {
 };
 
 export type QueryHomeroomExamAbsentListByTermArgs = {
-  homeroomId: Scalars['String'];
-  term: Scalars['Int'];
-};
-
-export type QueryHomeroomExamPostponedListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
@@ -544,6 +569,8 @@ export type QueryStudentOverviewResultArgs = {
 };
 
 export type QueryStudentParentInfoListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   studentId: Scalars['String'];
 };
 
@@ -692,6 +719,12 @@ export type StudentParentInfo = {
   tenPH: Scalars['String'];
 };
 
+export type StudentParentInfoList = {
+  __typename?: 'StudentParentInfoList';
+  data: Array<StudentParentInfo>;
+  total: Scalars['Int'];
+};
+
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   dtb?: Maybe<Scalars['Float']>;
@@ -766,6 +799,11 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherInfo = {
+  __typename?: 'TeacherInfo';
+  tenGV: Scalars['String'];
+};
+
 export type TeacherList = {
   __typename?: 'TeacherList';
   danhSachGVCN: Array<TeacherListItem>;
@@ -790,6 +828,11 @@ export type UploadDocumentResponse = {
   success: Scalars['Boolean'];
 };
 
+export type YearList = {
+  __typename?: 'YearList';
+  danhSachKhoa: Array<Scalars['Int']>;
+};
+
 export type UploadDocumentMutationVariables = Exact<{
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
@@ -803,6 +846,16 @@ export type UploadDocumentMutation = {
     success: boolean;
     message: string;
     documentUniqueId: string;
+  };
+};
+
+export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HomeroomAllListQuery = {
+  __typename?: 'Query';
+  homeroomAllList: {
+    __typename?: 'HomeroomAllList';
+    danhSachLopSH: Array<string>;
   };
 };
 
@@ -821,6 +874,13 @@ export type TeacherListQuery = {
       email: string;
     }>;
   };
+};
+
+export type YearListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type YearListQuery = {
+  __typename?: 'Query';
+  yearList: { __typename?: 'YearList'; danhSachKhoa: Array<number> };
 };
 
 export type AccountAddMutationVariables = Exact<{
@@ -925,6 +985,21 @@ export type EditPasswordMutation = {
     | undefined;
 };
 
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+export type ForgotPasswordMutation = {
+  __typename?: 'Mutation';
+  forgotPassword?:
+    | {
+        __typename?: 'MutationStatusReponse';
+        status?: number | null | undefined;
+      }
+    | null
+    | undefined;
+};
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -934,6 +1009,23 @@ export type LoginMutation = {
   __typename?: 'Mutation';
   login?:
     | { __typename?: 'LoginResponse'; token?: string | null | undefined }
+    | null
+    | undefined;
+};
+
+export type ResetPasswordMutationVariables = Exact<{
+  id: Scalars['Int'];
+  token: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+export type ResetPasswordMutation = {
+  __typename?: 'Mutation';
+  resetPassword?:
+    | {
+        __typename?: 'MutationStatusReponse';
+        status?: number | null | undefined;
+      }
     | null
     | undefined;
 };
@@ -1080,8 +1172,8 @@ export type HomeroomDetailQuery = {
   __typename?: 'Query';
   homeroomDetail: {
     __typename?: 'HomeroomDetail';
-    tenGV: string;
-    soLuongSV: number;
+    siSo: number;
+    giaoVien: { __typename?: 'TeacherInfo'; tenGV: string };
   };
 };
 
@@ -1094,31 +1186,14 @@ export type HomeroomExamAbsentListByTermQuery = {
   __typename?: 'Query';
   homeroomExamAbsentListByTerm: {
     __typename?: 'HomeroomExamAbsentList';
-    danhSachVangThi: Array<{
+    data: Array<{
       __typename?: 'HomeroomExamAbsentListItem';
-      maSV: string;
-      hoTen: string;
-      monHoc?: string | null | undefined;
-      lopHP?: string | null | undefined;
-    }>;
-  };
-};
-
-export type HomeroomExamPostponedListByTermQueryVariables = Exact<{
-  homeroomId: Scalars['String'];
-  term: Scalars['Int'];
-}>;
-
-export type HomeroomExamPostponedListByTermQuery = {
-  __typename?: 'Query';
-  homeroomExamPostponedListByTerm: {
-    __typename?: 'HomeroomExamPostponedList';
-    danhSachHoanThi: Array<{
-      __typename?: 'HomeroomExamPostponedListItem';
-      maSV: string;
-      hoTen: string;
-      monHoc?: string | null | undefined;
-      lopHP?: string | null | undefined;
+      sinhVien: {
+        __typename?: 'HomeroomExamAbsentListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
+      monHoc: { __typename?: 'HomeroomExamAbsentListSubject'; tenMH: string };
     }>;
   };
 };
@@ -1132,14 +1207,20 @@ export type HomeroomFailListByTermQuery = {
   __typename?: 'Query';
   homeroomFailListByTerm: {
     __typename?: 'HomeroomFailList';
-    dsRotMon: Array<{
+    total: number;
+    data: Array<{
       __typename?: 'HomeroomFailListItem';
-      maSV: string;
-      tenSV: string;
-      tenMH: string;
-      tenLopHP: string;
       dtb: number;
-      vang: boolean;
+      sinhVien: {
+        __typename?: 'HomeroomFailListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
+      lopHocPhan: {
+        __typename?: 'HomeroomFailListStudentCourse';
+        tenLopHP: string;
+        monHoc: { __typename?: 'HomeroomFailListSubject'; tenMH: string };
+      };
     }>;
   };
 };
@@ -1187,10 +1268,13 @@ export type HomeroomNotEnrolledListByTermQuery = {
   __typename?: 'Query';
   homeroomNotEnrolledListByTerm: {
     __typename?: 'HomeroomNotEnrolledList';
-    khongDangKy: Array<{
+    data: Array<{
       __typename?: 'HomeroomNotEnrolledListItem';
-      maSV: string;
-      tenSV: string;
+      sinhVien: {
+        __typename?: 'HomeroomNotEnrolledListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
     }>;
   };
 };
@@ -1241,12 +1325,14 @@ export type HomeroomPostponeExamListByTermQuery = {
   __typename?: 'Query';
   homeroomPostponeExamListByTerm: {
     __typename?: 'HomeroomPostponeExamList';
-    hoanThi: Array<{
+    data: Array<{
       __typename?: 'HomeroomPostponeExamListItem';
-      maSV: string;
-      tenSV: string;
-      tenMH: string;
-      tenLopHP: string;
+      sinhVien: {
+        __typename?: 'HomeroomPostponeExamListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
+      monHoc: { __typename?: 'HomeroomPostponeExamListSubject'; tenMH: string };
     }>;
   };
 };
@@ -1463,24 +1549,30 @@ export type StudentOverviewResultQuery = {
 
 export type StudentParentInfoListQueryVariables = Exact<{
   studentId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type StudentParentInfoListQuery = {
   __typename?: 'Query';
-  studentParentInfoList: Array<{
-    __typename?: 'StudentParentInfo';
-    maPH: number;
-    tenPH: string;
-    quanHe: string;
-    sdt: string;
-    sua: boolean;
-    lienHePH: Array<{
-      __typename?: 'StudentParentContact';
-      maLHPH?: number | null | undefined;
-      mxh: string;
-      url: string;
+  studentParentInfoList: {
+    __typename?: 'StudentParentInfoList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentParentInfo';
+      maPH: number;
+      tenPH: string;
+      quanHe: string;
+      sdt: string;
+      sua: boolean;
+      lienHePH: Array<{
+        __typename?: 'StudentParentContact';
+        maLHPH?: number | null | undefined;
+        mxh: string;
+        url: string;
+      }>;
     }>;
-  }>;
+  };
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -1573,6 +1665,63 @@ export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
 >;
+export const HomeroomAllListDocument = gql`
+  query HomeroomAllList {
+    homeroomAllList {
+      danhSachLopSH
+    }
+  }
+`;
+
+/**
+ * __useHomeroomAllListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomAllListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomAllListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomAllListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHomeroomAllListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HomeroomAllListQuery, HomeroomAllListQueryVariables>(
+    HomeroomAllListDocument,
+    options
+  );
+}
+export function useHomeroomAllListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomAllListQuery,
+    HomeroomAllListQueryVariables
+  >(HomeroomAllListDocument, options);
+}
+export type HomeroomAllListQueryHookResult = ReturnType<
+  typeof useHomeroomAllListQuery
+>;
+export type HomeroomAllListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomAllListLazyQuery
+>;
+export type HomeroomAllListQueryResult = Apollo.QueryResult<
+  HomeroomAllListQuery,
+  HomeroomAllListQueryVariables
+>;
 export const TeacherListDocument = gql`
   query TeacherList($year: String!) {
     teacherList(year: $year) {
@@ -1632,6 +1781,58 @@ export type TeacherListLazyQueryHookResult = ReturnType<
 export type TeacherListQueryResult = Apollo.QueryResult<
   TeacherListQuery,
   TeacherListQueryVariables
+>;
+export const YearListDocument = gql`
+  query YearList {
+    yearList {
+      danhSachKhoa
+    }
+  }
+`;
+
+/**
+ * __useYearListQuery__
+ *
+ * To run a query within a React component, call `useYearListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useYearListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useYearListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useYearListQuery(
+  baseOptions?: Apollo.QueryHookOptions<YearListQuery, YearListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<YearListQuery, YearListQueryVariables>(
+    YearListDocument,
+    options
+  );
+}
+export function useYearListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    YearListQuery,
+    YearListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<YearListQuery, YearListQueryVariables>(
+    YearListDocument,
+    options
+  );
+}
+export type YearListQueryHookResult = ReturnType<typeof useYearListQuery>;
+export type YearListLazyQueryHookResult = ReturnType<
+  typeof useYearListLazyQuery
+>;
+export type YearListQueryResult = Apollo.QueryResult<
+  YearListQuery,
+  YearListQueryVariables
 >;
 export const AccountAddDocument = gql`
   mutation AccountAdd($payload: AccountAddInput!) {
@@ -2105,6 +2306,56 @@ export type EditPasswordMutationOptions = Apollo.BaseMutationOptions<
   EditPasswordMutation,
   EditPasswordMutationVariables
 >;
+export const ForgotPasswordDocument = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email) {
+      status
+    }
+  }
+`;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<
+  ForgotPasswordMutation,
+  ForgotPasswordMutationVariables
+>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ForgotPasswordMutation,
+    ForgotPasswordMutationVariables
+  >(ForgotPasswordDocument, options);
+}
+export type ForgotPasswordMutationHookResult = ReturnType<
+  typeof useForgotPasswordMutation
+>;
+export type ForgotPasswordMutationResult =
+  Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
+  ForgotPasswordMutation,
+  ForgotPasswordMutationVariables
+>;
 export const LoginDocument = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -2152,6 +2403,58 @@ export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutation,
   LoginMutationVariables
+>;
+export const ResetPasswordDocument = gql`
+  mutation ResetPassword($id: Int!, $token: String!, $password: String!) {
+    resetPassword(id: $id, token: $token, password: $password) {
+      status
+    }
+  }
+`;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
+>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      token: // value for 'token'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >(ResetPasswordDocument, options);
+}
+export type ResetPasswordMutationHookResult = ReturnType<
+  typeof useResetPasswordMutation
+>;
+export type ResetPasswordMutationResult =
+  Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
 >;
 export const NoteAddDocument = gql`
   mutation NoteAdd($payload: NoteAddInput!) {
@@ -2643,8 +2946,10 @@ export type StudentEditParentInfoMutationOptions = Apollo.BaseMutationOptions<
 export const HomeroomDetailDocument = gql`
   query HomeroomDetail($homeroomId: String!) {
     homeroomDetail(homeroomId: $homeroomId) {
-      tenGV
-      soLuongSV
+      giaoVien {
+        tenGV
+      }
+      siSo
     }
   }
 `;
@@ -2702,11 +3007,14 @@ export type HomeroomDetailQueryResult = Apollo.QueryResult<
 export const HomeroomExamAbsentListByTermDocument = gql`
   query HomeroomExamAbsentListByTerm($homeroomId: String!, $term: Int!) {
     homeroomExamAbsentListByTerm(homeroomId: $homeroomId, term: $term) {
-      danhSachVangThi {
-        maSV
-        hoTen
-        monHoc
-        lopHP
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
+        monHoc {
+          tenMH
+        }
       }
     }
   }
@@ -2763,80 +3071,22 @@ export type HomeroomExamAbsentListByTermQueryResult = Apollo.QueryResult<
   HomeroomExamAbsentListByTermQuery,
   HomeroomExamAbsentListByTermQueryVariables
 >;
-export const HomeroomExamPostponedListByTermDocument = gql`
-  query HomeroomExamPostponedListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomExamPostponedListByTerm(homeroomId: $homeroomId, term: $term) {
-      danhSachHoanThi {
-        maSV
-        hoTen
-        monHoc
-        lopHP
-      }
-    }
-  }
-`;
-
-/**
- * __useHomeroomExamPostponedListByTermQuery__
- *
- * To run a query within a React component, call `useHomeroomExamPostponedListByTermQuery` and pass it any options that fit your needs.
- * When your component renders, `useHomeroomExamPostponedListByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useHomeroomExamPostponedListByTermQuery({
- *   variables: {
- *      homeroomId: // value for 'homeroomId'
- *      term: // value for 'term'
- *   },
- * });
- */
-export function useHomeroomExamPostponedListByTermQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >(HomeroomExamPostponedListByTermDocument, options);
-}
-export function useHomeroomExamPostponedListByTermLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >(HomeroomExamPostponedListByTermDocument, options);
-}
-export type HomeroomExamPostponedListByTermQueryHookResult = ReturnType<
-  typeof useHomeroomExamPostponedListByTermQuery
->;
-export type HomeroomExamPostponedListByTermLazyQueryHookResult = ReturnType<
-  typeof useHomeroomExamPostponedListByTermLazyQuery
->;
-export type HomeroomExamPostponedListByTermQueryResult = Apollo.QueryResult<
-  HomeroomExamPostponedListByTermQuery,
-  HomeroomExamPostponedListByTermQueryVariables
->;
 export const HomeroomFailListByTermDocument = gql`
   query HomeroomFailListByTerm($homeroomId: String!, $term: Int!) {
     homeroomFailListByTerm(homeroomId: $homeroomId, term: $term) {
-      dsRotMon {
-        maSV
-        tenSV
-        tenMH
-        tenLopHP
+      total
+      data {
         dtb
-        vang
+        sinhVien {
+          maSV
+          tenSV
+        }
+        lopHocPhan {
+          tenLopHP
+          monHoc {
+            tenMH
+          }
+        }
       }
     }
   }
@@ -3021,9 +3271,11 @@ export type HomeroomListQueryResult = Apollo.QueryResult<
 export const HomeroomNotEnrolledListByTermDocument = gql`
   query HomeroomNotEnrolledListByTerm($homeroomId: String!, $term: Int!) {
     homeroomNotEnrolledListByTerm(homeroomId: $homeroomId, term: $term) {
-      khongDangKy {
-        maSV
-        tenSV
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
       }
     }
   }
@@ -3163,11 +3415,14 @@ export type HomeroomOverviewReportByTermQueryResult = Apollo.QueryResult<
 export const HomeroomPostponeExamListByTermDocument = gql`
   query HomeroomPostponeExamListByTerm($homeroomId: String!, $term: Int!) {
     homeroomPostponeExamListByTerm(homeroomId: $homeroomId, term: $term) {
-      hoanThi {
-        maSV
-        tenSV
-        tenMH
-        tenLopHP
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
+        monHoc {
+          tenMH
+        }
       }
     }
   }
@@ -3882,17 +4137,20 @@ export type StudentOverviewResultQueryResult = Apollo.QueryResult<
   StudentOverviewResultQueryVariables
 >;
 export const StudentParentInfoListDocument = gql`
-  query StudentParentInfoList($studentId: String!) {
-    studentParentInfoList(studentId: $studentId) {
-      maPH
-      tenPH
-      quanHe
-      sdt
-      sua
-      lienHePH {
-        maLHPH
-        mxh
-        url
+  query StudentParentInfoList($studentId: String!, $page: Int!, $size: Int!) {
+    studentParentInfoList(studentId: $studentId, page: $page, size: $size) {
+      total
+      data {
+        maPH
+        tenPH
+        quanHe
+        sdt
+        sua
+        lienHePH {
+          maLHPH
+          mxh
+          url
+        }
       }
     }
   }
@@ -3911,6 +4169,8 @@ export const StudentParentInfoListDocument = gql`
  * const { data, loading, error } = useStudentParentInfoListQuery({
  *   variables: {
  *      studentId: // value for 'studentId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

@@ -248,7 +248,13 @@ function NoteInfo() {
   }, [deleteNote, id, values]);
 
   const handleReset = useCallback(() => {
-    setValues((v) => ({ ...v, selected: -1, title: '', tags: [] }));
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      title: '',
+      tags: [],
+      isAdding: true,
+    }));
     setFiles([]);
     if (editorRef.current) {
       editorRef.current.setContent('');
@@ -263,34 +269,39 @@ function NoteInfo() {
         <Typography color="text.primary">{id}</Typography>
         <Typography color="text.primary">Ghi chú sinh viên</Typography>
       </StyledBreadCrumbs>
-      <StyledGridContainer container spacing={3} columns={20}>
-        <Grid item xs={8}>
-          <Item>
+      <StyledGridContainer
+        sx={{ marginTop: '1.5rem' }}
+        container
+        spacing={3}
+        columns={20}
+      >
+        <Grid sx={{ paddingTop: '0!important' }} item xs={8}>
+          <Item sx={{ height: 'fit-content' }}>
             <Box sx={{ padding: '1rem 1rem 0 1rem' }}>
-              <List>
-                <StyledHeader>
-                  <Typography component="p" variant="h5">
-                    Danh sách ghi chú
-                  </Typography>
-                  <Box>
-                    <StyledIconButton
-                      size="large"
-                      aria-label="add note"
-                      color="inherit"
-                      onClick={handleReset}
-                    >
-                      <AddCircleOutlineOutlinedIcon fontSize="inherit" />
-                    </StyledIconButton>
-                    <StyledIconButton
-                      size="large"
-                      aria-label="sort note"
-                      color="inherit"
-                    >
-                      <SortIcon fontSize="inherit" />
-                    </StyledIconButton>
-                  </Box>
-                </StyledHeader>
-                <StyledDivider />
+              <StyledHeader>
+                <Typography component="p" variant="h5">
+                  Danh sách ghi chú
+                </Typography>
+                <Box>
+                  <StyledIconButton
+                    size="large"
+                    aria-label="add note"
+                    color="inherit"
+                    onClick={handleReset}
+                  >
+                    <AddCircleOutlineOutlinedIcon fontSize="inherit" />
+                  </StyledIconButton>
+                  <StyledIconButton
+                    size="large"
+                    aria-label="sort note"
+                    color="inherit"
+                  >
+                    <SortIcon fontSize="inherit" />
+                  </StyledIconButton>
+                </Box>
+              </StyledHeader>
+              <StyledDivider />
+              <List sx={{ overflowY: 'auto', height: '24rem' }}>
                 <AsyncDataRenderer
                   loading={studentNoteListLoading}
                   data={studentNoteListData}
@@ -300,8 +311,9 @@ function NoteInfo() {
                       page * ROWS_PER_PAGE,
                       page * ROWS_PER_PAGE + ROWS_PER_PAGE
                     )
-                    .map((item, index) => (
+                    .map((item) => (
                       <NoteItem
+                        key={item.maGC}
                         selected={values.selected}
                         data={item}
                         onClick={() => handleSelectValue('selected', item.maGC)}
@@ -325,7 +337,15 @@ function NoteInfo() {
           loading={noteDetailLoading || tagListLoading}
           data={noteDetailData && tagListData}
         >
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              overflowY: 'scroll',
+              height: '32.5rem',
+              paddingTop: '0!important',
+            }}
+          >
             <Item>
               <NoteEditor
                 tagList={tagList}

@@ -8,6 +8,10 @@ export const teacherResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.teacherAPI.getTeacherList(args);
       return res;
     },
+    yearList: async (_, __, { dataSources }) => {
+      const res = await dataSources.teacherAPI.getYearList();
+      return res;
+    },
   },
 };
 

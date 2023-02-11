@@ -18,8 +18,8 @@ function AcademicInfo({ infoList }: AcademicInfoProps) {
   return (
     <Paper>
       <StyledHeader>Thông tin chung</StyledHeader>
-      {infoList.map((item, index) => (
-        <StyledInfoBox key={index}>
+      {infoList.map((item) => (
+        <StyledInfoBox key={item.title}>
           <Typography>{item.title}</Typography>
           {typeof item.content === 'number' ? (
             <StyledInfoWithColor>{item.content}</StyledInfoWithColor>

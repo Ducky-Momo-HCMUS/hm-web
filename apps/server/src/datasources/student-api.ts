@@ -108,10 +108,12 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentParentInfoList({
     studentId,
+    page,
+    size,
   }: QueryStudentParentInfoListArgs) {
     try {
       const studentParentInfoList = await this.get(
-        `v1/students/${studentId}/parents`
+        `v1/students/${studentId}/parents?page=${page}&size=${size}`
       );
       return studentParentInfoList;
     } catch (error) {

@@ -18,11 +18,12 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { Order, StudentProperty } from '../../../types';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import { useHomeroomStudentListQuery } from '../../../generated-types';
+import {
+  useHomeroomAllListQuery,
+  useHomeroomStudentListQuery,
+} from '../../../generated-types';
 
 import StudentTableHead from './StudentTableHead';
-
-const CLASSES = ['19CLC1', '19CLC2', '19CLC3'];
 
 interface State {
   class: string;
@@ -66,11 +67,20 @@ function StudentList() {
     [orderBy, order]
   );
 
+  const { loading: homeroomAllListLoading, data: homeroomAllListData } =
+    useHomeroomAllListQuery({});
+
+  const homeroomAllList = useMemo(
+    () => homeroomAllListData?.homeroomAllList.danhSachLopSH || [],
+    [homeroomAllListData?.homeroomAllList.danhSachLopSH]
+  );
+
   const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
     useHomeroomStudentListQuery({
       variables: {
-        homeroomId: values.class || CLASSES[0],
+        homeroomId: values.class || homeroomAllList[0],
       },
+      skip: homeroomAllListLoading,
     });
 
   const homeroomStudentList = useMemo(
@@ -86,13 +96,14 @@ function StudentList() {
         <Select
           labelId="class-select-label"
           id="class-select"
-          value={values.class || CLASSES[0]}
+          value={values.class || homeroomAllList[0] || ''}
           label="Lớp"
           onChange={handleChange('class')}
         >
-          {CLASSES.map((item) => (
-            <MenuItem value={item}>{item}</MenuItem>
-          ))}
+          {homeroomAllList &&
+            homeroomAllList.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
         </Select>
       </StyledFormControl>
       <AsyncDataRenderer

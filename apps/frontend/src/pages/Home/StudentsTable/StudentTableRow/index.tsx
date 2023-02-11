@@ -52,10 +52,10 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
       <TableCell>
         <StyledRouterLink to={`/students/${maSV}`}>{tenSV}</StyledRouterLink>
       </TableCell>
-      <TableCell>{mapMajorIdToName(maCN)}</TableCell>
+      <TableCell>{mapMajorIdToName(maCN) || 'Chưa có'}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{gpa4}</TableCell>
-      <TableCell>{gpa10}</TableCell>
+      <TableCell>{gpa4 || 'Chưa có'}</TableCell>
+      <TableCell>{gpa10 || 'Chưa có'}</TableCell>
       <TableCell>
         {contact.sdt}
         {contact.lienHe?.map((social) => (

@@ -13,11 +13,11 @@ export const StyledStatusBox = styled(Box)(({ theme }) => ({
     color: '#fff',
     padding: '0.5rem 1rem',
   },
-  '& button:first-child': {
+  '& button:first-of-type': {
     background: theme.palette.warning.light,
     marginRight: '1.5rem',
   },
-  '& button:last-child': {
+  '& button:last-of-type': {
     background: theme.palette.success.light,
   },
 }));

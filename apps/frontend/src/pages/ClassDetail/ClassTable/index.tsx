@@ -100,7 +100,7 @@ function ClassTable({
         </AsyncDataRenderer>
       )}
       <AsyncDataRenderer loading={loading} data={data}>
-        <TableContainer sx={{ maxHeight: 440, marginTop: '1rem' }}>
+        <TableContainer sx={{ maxHeight: 400, marginTop: '1rem' }}>
           <Table stickyHeader>
             <CustomisedTableHead columns={columns} />
             <TableBody>

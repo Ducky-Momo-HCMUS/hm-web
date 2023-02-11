@@ -150,7 +150,9 @@ function StudentsTable() {
                 onChange={handleChange('year')}
               >
                 {years.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
                 ))}
               </Select>
             </StyledFormControl>
@@ -164,7 +166,9 @@ function StudentsTable() {
                 onChange={handleChange('class')}
               >
                 {classes.map((item) => (
-                  <MenuItem value={item}>{item.toUpperCase()}</MenuItem>
+                  <MenuItem key={item} value={item}>
+                    {item.toUpperCase()}
+                  </MenuItem>
                 ))}
               </Select>
             </StyledFormControl>
@@ -184,7 +188,7 @@ function StudentsTable() {
       >
         {(values.class || initialClass) && (
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer sx={{ maxHeight: 400 }}>
               <Table stickyHeader>
                 <StudentTableHead
                   order={order}
@@ -197,6 +201,7 @@ function StudentsTable() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <StudentTableRow
+                        key={row.maSV}
                         data={mapStudentDataToTable(row)}
                         index={index + 1}
                       />

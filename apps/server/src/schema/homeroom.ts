@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express';
 const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
+    homeroomAllList: HomeroomAllList!
     homeroomStudentList(homeroomId: String!): HomeroomStudentList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): HomeroomTermList!
@@ -27,10 +28,10 @@ const homeroomTypeDefs = gql`
       homeroomId: String!
       term: Int!
     ): HomeroomExamAbsentList!
-    homeroomExamPostponedListByTerm(
-      homeroomId: String!
-      term: Int!
-    ): HomeroomExamPostponedList!
+  }
+
+  type HomeroomAllList {
+    danhSachLopSH: [String!]!
   }
 
   type HomeroomList {
@@ -64,9 +65,13 @@ const homeroomTypeDefs = gql`
     url: String!
   }
 
-  type HomeroomDetail {
+  type TeacherInfo {
     tenGV: String!
-    soLuongSV: Int!
+  }
+
+  type HomeroomDetail {
+    giaoVien: TeacherInfo!
+    siSo: Int!
   }
 
   type HomeroomTermList {
@@ -80,36 +85,59 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomFailList {
-    dsRotMon: [HomeroomFailListItem!]!
+    total: Int!
+    data: [HomeroomFailListItem!]!
   }
 
   type HomeroomFailListItem {
+    dtb: Float!
+    sinhVien: HomeroomFailListStudentInfo!
+    lopHocPhan: HomeroomFailListStudentCourse!
+  }
+
+  type HomeroomFailListStudentInfo {
     maSV: String!
     tenSV: String!
-    tenMH: String!
+  }
+
+  type HomeroomFailListStudentCourse {
     tenLopHP: String!
-    dtb: Float!
-    vang: Boolean!
+    monHoc: HomeroomFailListSubject!
+  }
+
+  type HomeroomFailListSubject {
+    tenMH: String!
   }
 
   type HomeroomNotEnrolledList {
-    khongDangKy: [HomeroomNotEnrolledListItem!]!
+    data: [HomeroomNotEnrolledListItem!]!
   }
 
   type HomeroomNotEnrolledListItem {
+    sinhVien: HomeroomNotEnrolledListStudentInfo!
+  }
+
+  type HomeroomNotEnrolledListStudentInfo {
     maSV: String!
     tenSV: String!
   }
 
   type HomeroomPostponeExamList {
-    hoanThi: [HomeroomPostponeExamListItem!]!
+    data: [HomeroomPostponeExamListItem!]!
   }
 
   type HomeroomPostponeExamListItem {
+    sinhVien: HomeroomPostponeExamListStudentInfo!
+    monHoc: HomeroomPostponeExamListSubject!
+  }
+
+  type HomeroomPostponeExamListStudentInfo {
     maSV: String!
     tenSV: String!
+  }
+
+  type HomeroomPostponeExamListSubject {
     tenMH: String!
-    tenLopHP: String!
   }
 
   type HomeroomOverviewReport {
@@ -155,25 +183,21 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomExamAbsentList {
-    danhSachVangThi: [HomeroomExamAbsentListItem!]!
+    data: [HomeroomExamAbsentListItem!]!
   }
 
   type HomeroomExamAbsentListItem {
-    maSV: String!
-    hoTen: String!
-    monHoc: String
-    lopHP: String
+    sinhVien: HomeroomExamAbsentListStudentInfo!
+    monHoc: HomeroomExamAbsentListSubject!
   }
 
-  type HomeroomExamPostponedList {
-    danhSachHoanThi: [HomeroomExamPostponedListItem!]!
+  type HomeroomExamAbsentListStudentInfo {
+    maSV: String!
+    tenSV: String!
   }
 
-  type HomeroomExamPostponedListItem {
-    maSV: String!
-    hoTen: String!
-    monHoc: String
-    lopHP: String
+  type HomeroomExamAbsentListSubject {
+    tenMH: String!
   }
 `;
 

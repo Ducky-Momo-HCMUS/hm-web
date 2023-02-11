@@ -26,7 +26,9 @@ function StudentContactRow({
       <TableRow key={index}>
         <TableCell>
           <Tooltip title={url} placement="top">
-            <StyledMuiLink href={url}>{mxh}</StyledMuiLink>
+            <StyledMuiLink href={url} target="_blank">
+              {mxh}
+            </StyledMuiLink>
           </Tooltip>
         </TableCell>
         <TableCell align="right">

@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-express';
 
 import { QueryTeacherListArgs } from '../generated-types';
-import { TEACHER_LIST } from '../mocks/teacher';
+import { TEACHER_LIST, YEAR_LIST } from '../mocks/teacher';
 import { CORE_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -10,6 +10,16 @@ class TeacherAPI extends BaseDataSource {
   constructor(baseUrl: string = CORE_BASE_URL) {
     super();
     this.baseURL = baseUrl;
+  }
+
+  public async getYearList() {
+    try {
+      // const res = await this.get('v1/school-years'`);
+      return YEAR_LIST;
+    } catch (error) {
+      console.error('Error: cannot fetch year list');
+      throw this.handleError(error as ApolloError);
+    }
   }
 
   public async getTeacherList({ year }: QueryTeacherListArgs) {

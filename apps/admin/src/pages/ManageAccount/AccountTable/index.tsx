@@ -95,7 +95,7 @@ function AccountTable({ data }: AccountInfoTableProps) {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Họ tên</TableCell>
               <TableCell>Loại tài khoản</TableCell>

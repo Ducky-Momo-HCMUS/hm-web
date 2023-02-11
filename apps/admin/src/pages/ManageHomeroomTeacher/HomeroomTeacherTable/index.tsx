@@ -50,7 +50,7 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>#</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Họ tên</TableCell>
             <TableCell>Lớp chủ nhiệm</TableCell>
             <TableCell align="center">Thao tác</TableCell>

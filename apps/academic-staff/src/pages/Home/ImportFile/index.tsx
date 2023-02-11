@@ -173,7 +173,7 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        {values.type && (
+        {/* {values.type && (
           <StyledFormControl>
             <InputLabel id="year-select-label">Năm học</InputLabel>
             <Select
@@ -191,7 +191,7 @@ function ImportFile() {
               ))}
             </Select>
           </StyledFormControl>
-        )}
+        )} */}
 
         {TYPES.findIndex((item) => item === values.type) > 4 && (
           <StyledFormControl>

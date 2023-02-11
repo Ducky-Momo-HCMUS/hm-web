@@ -20,9 +20,5 @@ export const StyledGridContainer = styled(Grid)`
 export const StyledDialog = styled(Dialog)`
   margin-top: 4rem;
   min-height: 37.5rem;
-  & > div > div {
-    width: 100%;
-    max-width: none;
-    margin: 1.25rem;
-  }
+  width: 100% !important;
 `;

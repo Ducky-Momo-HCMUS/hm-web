@@ -14,15 +14,16 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { useTeacherListQuery } from '../../../generated-types';
+import {
+  useTeacherListQuery,
+  useYearListQuery,
+} from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { Order, TeacherProperty } from '../../../types';
 
 import { StyledFormControl } from './styles';
 import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
-
-const YEARS = ['19', '20', '21'];
 
 interface State {
   year: string;
@@ -66,11 +67,20 @@ function HomeroomTeacherList() {
     [orderBy, order]
   );
 
+  const { loading: yearListLoading, data: yearListData } = useYearListQuery({});
+
+  const yearList = useMemo(
+    () =>
+      yearListData?.yearList.danhSachKhoa.map((item) => item.toString()) || [],
+    [yearListData?.yearList.danhSachKhoa]
+  );
+
   const { loading: teacherListLoading, data: teacherListData } =
     useTeacherListQuery({
       variables: {
-        year: values.year || YEARS[0],
+        year: values.year || yearList[0],
       },
+      skip: yearListLoading,
     });
 
   const teacherList = useMemo(
@@ -81,20 +91,22 @@ function HomeroomTeacherList() {
   return (
     <Box>
       <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
-      <StyledFormControl>
-        <InputLabel id="year-select-label">Khoá</InputLabel>
-        <Select
-          labelId="year-select-label"
-          id="year-select"
-          value={values.year || YEARS[0]}
-          label="Khoá"
-          onChange={handleChange('year')}
-        >
-          {YEARS.map((item) => (
-            <MenuItem value={item}>{item}</MenuItem>
-          ))}
-        </Select>
-      </StyledFormControl>
+      <AsyncDataRenderer loading={yearListLoading} data={yearListData}>
+        <StyledFormControl>
+          <InputLabel id="year-select-label">Khoá</InputLabel>
+          <Select
+            labelId="year-select-label"
+            id="year-select"
+            value={values.year || yearList[0]}
+            label="Khoá"
+            onChange={handleChange('year')}
+          >
+            {yearList.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>
+      </AsyncDataRenderer>
       <AsyncDataRenderer loading={teacherListLoading} data={teacherListData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
