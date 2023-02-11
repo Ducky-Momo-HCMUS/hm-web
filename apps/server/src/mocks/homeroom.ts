@@ -1,10 +1,7 @@
 import {
   HomeroomAllList,
-  HomeroomDetail,
   HomeroomExamAbsentList,
   HomeroomExamPostponedList,
-  HomeroomFailList,
-  HomeroomFailListItem,
   HomeroomFinalResultList,
   HomeroomNotEnrolledList,
   HomeroomNotEnrolledListItem,
@@ -18,11 +15,6 @@ import {
 export const HOMEROOM_ALL_LIST = {
   danhSachLopSH: ['19CLC1', '19CLC2', '19CLC3'],
 } as HomeroomAllList;
-
-export const HOMEROOM_DETAIL = {
-  tenGV: 'Hồ Tuấn Thanh',
-  soLuongSV: 40,
-} as HomeroomDetail;
 
 export const HOMEROOM_TERM_LIST = {
   hocKyNamHoc: [
@@ -53,56 +45,6 @@ export const HOMEROOM_TERM_LIST = {
     },
   ] as HomeroomTermListItem[],
 } as HomeroomTermList;
-
-export const HOMEROOM_FAIL_LIST_BY_TERM = {
-  dsRotMon: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenMH: 'Nhập môn lập trình',
-      tenLopHP: '19clc4',
-      dtb: 4.75,
-      vang: false,
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenMH: 'Nhập môn công nghệ thông tin',
-      tenLopHP: '19clc4',
-      dtb: 4.75,
-      vang: false,
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenMH: 'Cơ sở dữ liệu',
-      tenLopHP: '19clc4',
-      dtb: 0,
-      vang: true,
-    },
-  ] as HomeroomFailListItem[],
-} as HomeroomFailList;
-
-export const HOMEROOM_FAIL_LIST = {
-  dsRotMon: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenMH: 'Nhập môn lập trình',
-      tenLopHP: '19clc4',
-      dtb: 4.75,
-      vang: false,
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenMH: 'Nhập môn công nghệ thông tin',
-      tenLopHP: '19clc4',
-      dtb: 4.75,
-      vang: false,
-    },
-  ] as HomeroomFailListItem[],
-} as HomeroomFailList;
 
 export const HOMEROOM_NOT_ENROLLED_LIST_BY_TERM = {
   khongDangKy: [

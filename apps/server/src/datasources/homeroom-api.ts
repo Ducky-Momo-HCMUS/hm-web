@@ -2,10 +2,8 @@ import { ApolloError } from 'apollo-server-express';
 
 import {
   HOMEROOM_ALL_LIST,
-  HOMEROOM_DETAIL,
   HOMEROOM_EXAM_ABSENT_LIST_BY_TERM,
   HOMEROOM_EXAM_POSTPONED_LIST_BY_TERM,
-  HOMEROOM_FAIL_LIST_BY_TERM,
   HOMEROOM_FINAL_RESULT_LIST_BY_TERM,
   HOMEROOM_NOT_ENROLLED_LIST_BY_TERM,
   HOMEROOM_OVERVIEW_REPORT_BY_TERM,
@@ -70,9 +68,8 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomDetail({ homeroomId }: QueryHomeroomDetailArgs) {
     try {
-      // const homeroomDetail = await this.get(`v1/homerooms/${homeroomId}`);
-      console.log('params', homeroomId);
-      return HOMEROOM_DETAIL;
+      const homeroomDetail = await this.get(`v1/homerooms/${homeroomId}`);
+      return homeroomDetail;
     } catch (error) {
       console.error('Error: cannot fetch homeroom detail');
       throw this.handleError(error as ApolloError);
@@ -97,14 +94,13 @@ class HomeroomAPI extends BaseDataSource {
     term,
   }: QueryHomeroomFailListByTermArgs) {
     try {
-      // const homeroomFailList = await this.get(
-      //   `v1/homerooms/${homeroomId}/fail`,
-      //   {
-      //     term,
-      //   }
-      // );
-      console.log('params', homeroomId, term);
-      return HOMEROOM_FAIL_LIST_BY_TERM;
+      const homeroomFailList = await this.get(
+        `v1/homerooms/${homeroomId}/fail`,
+        {
+          term,
+        }
+      );
+      return homeroomFailList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom fail list by term');
       throw this.handleError(error as ApolloError);

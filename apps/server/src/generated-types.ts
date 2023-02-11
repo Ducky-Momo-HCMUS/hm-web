@@ -93,8 +93,8 @@ export type HomeroomAllList = {
 
 export type HomeroomDetail = {
   __typename?: 'HomeroomDetail';
-  soLuongSV: Scalars['Int'];
-  tenGV: Scalars['String'];
+  giaoVien: TeacherInfo;
+  siSo: Scalars['Int'];
 };
 
 export type HomeroomExamAbsentList = {
@@ -125,17 +125,32 @@ export type HomeroomExamPostponedListItem = {
 
 export type HomeroomFailList = {
   __typename?: 'HomeroomFailList';
-  dsRotMon: Array<HomeroomFailListItem>;
+  data: Array<HomeroomFailListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomFailListItem = {
   __typename?: 'HomeroomFailListItem';
   dtb: Scalars['Float'];
-  maSV: Scalars['String'];
+  lopHocPhan: HomeroomFailListStudentCourse;
+  sinhVien: HomeroomFailListStudentInfo;
+};
+
+export type HomeroomFailListStudentCourse = {
+  __typename?: 'HomeroomFailListStudentCourse';
+  monHoc: HomeroomFailListSubject;
   tenLopHP: Scalars['String'];
-  tenMH: Scalars['String'];
+};
+
+export type HomeroomFailListStudentInfo = {
+  __typename?: 'HomeroomFailListStudentInfo';
+  maSV: Scalars['String'];
   tenSV: Scalars['String'];
-  vang: Scalars['Boolean'];
+};
+
+export type HomeroomFailListSubject = {
+  __typename?: 'HomeroomFailListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomFinalResultList = {
@@ -785,6 +800,11 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherInfo = {
+  __typename?: 'TeacherInfo';
+  tenGV: Scalars['String'];
+};
+
 export type TeacherList = {
   __typename?: 'TeacherList';
   danhSachGVCN: Array<TeacherListItem>;
@@ -940,6 +960,9 @@ export type ResolversTypes = {
   HomeroomExamPostponedListItem: ResolverTypeWrapper<HomeroomExamPostponedListItem>;
   HomeroomFailList: ResolverTypeWrapper<HomeroomFailList>;
   HomeroomFailListItem: ResolverTypeWrapper<HomeroomFailListItem>;
+  HomeroomFailListStudentCourse: ResolverTypeWrapper<HomeroomFailListStudentCourse>;
+  HomeroomFailListStudentInfo: ResolverTypeWrapper<HomeroomFailListStudentInfo>;
+  HomeroomFailListSubject: ResolverTypeWrapper<HomeroomFailListSubject>;
   HomeroomFinalResultList: ResolverTypeWrapper<HomeroomFinalResultList>;
   HomeroomFinalResultListItem: ResolverTypeWrapper<HomeroomFinalResultListItem>;
   HomeroomLearnOverview: ResolverTypeWrapper<HomeroomLearnOverview>;
@@ -1002,6 +1025,7 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  TeacherInfo: ResolverTypeWrapper<TeacherInfo>;
   TeacherList: ResolverTypeWrapper<TeacherList>;
   TeacherListItem: ResolverTypeWrapper<TeacherListItem>;
   UploadDocumentInput: UploadDocumentInput;
@@ -1031,6 +1055,9 @@ export type ResolversParentTypes = {
   HomeroomExamPostponedListItem: HomeroomExamPostponedListItem;
   HomeroomFailList: HomeroomFailList;
   HomeroomFailListItem: HomeroomFailListItem;
+  HomeroomFailListStudentCourse: HomeroomFailListStudentCourse;
+  HomeroomFailListStudentInfo: HomeroomFailListStudentInfo;
+  HomeroomFailListSubject: HomeroomFailListSubject;
   HomeroomFinalResultList: HomeroomFinalResultList;
   HomeroomFinalResultListItem: HomeroomFinalResultListItem;
   HomeroomLearnOverview: HomeroomLearnOverview;
@@ -1093,6 +1120,7 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  TeacherInfo: TeacherInfo;
   TeacherList: TeacherList;
   TeacherListItem: TeacherListItem;
   UploadDocumentInput: UploadDocumentInput;
@@ -1185,8 +1213,8 @@ export type HomeroomDetailResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomDetail'] = ResolversParentTypes['HomeroomDetail']
 > = {
-  soLuongSV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  giaoVien?: Resolver<ResolversTypes['TeacherInfo'], ParentType, ContextType>;
+  siSo?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1240,11 +1268,12 @@ export type HomeroomFailListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomFailList'] = ResolversParentTypes['HomeroomFailList']
 > = {
-  dsRotMon?: Resolver<
+  data?: Resolver<
     Array<ResolversTypes['HomeroomFailListItem']>,
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1253,11 +1282,46 @@ export type HomeroomFailListItemResolvers<
   ParentType extends ResolversParentTypes['HomeroomFailListItem'] = ResolversParentTypes['HomeroomFailListItem']
 > = {
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lopHocPhan?: Resolver<
+    ResolversTypes['HomeroomFailListStudentCourse'],
+    ParentType,
+    ContextType
+  >;
+  sinhVien?: Resolver<
+    ResolversTypes['HomeroomFailListStudentInfo'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomFailListStudentCourseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomFailListStudentCourse'] = ResolversParentTypes['HomeroomFailListStudentCourse']
+> = {
+  monHoc?: Resolver<
+    ResolversTypes['HomeroomFailListSubject'],
+    ParentType,
+    ContextType
+  >;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomFailListStudentInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomFailListStudentInfo'] = ResolversParentTypes['HomeroomFailListStudentInfo']
+> = {
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  vang?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomFailListSubjectResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomFailListSubject'] = ResolversParentTypes['HomeroomFailListSubject']
+> = {
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2142,6 +2206,14 @@ export type TagListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TeacherInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherInfo'] = ResolversParentTypes['TeacherInfo']
+> = {
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TeacherListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TeacherList'] = ResolversParentTypes['TeacherList']
@@ -2212,6 +2284,9 @@ export type Resolvers<ContextType = any> = {
   HomeroomExamPostponedListItem?: HomeroomExamPostponedListItemResolvers<ContextType>;
   HomeroomFailList?: HomeroomFailListResolvers<ContextType>;
   HomeroomFailListItem?: HomeroomFailListItemResolvers<ContextType>;
+  HomeroomFailListStudentCourse?: HomeroomFailListStudentCourseResolvers<ContextType>;
+  HomeroomFailListStudentInfo?: HomeroomFailListStudentInfoResolvers<ContextType>;
+  HomeroomFailListSubject?: HomeroomFailListSubjectResolvers<ContextType>;
   HomeroomFinalResultList?: HomeroomFinalResultListResolvers<ContextType>;
   HomeroomFinalResultListItem?: HomeroomFinalResultListItemResolvers<ContextType>;
   HomeroomLearnOverview?: HomeroomLearnOverviewResolvers<ContextType>;
@@ -2262,6 +2337,7 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
+  TeacherInfo?: TeacherInfoResolvers<ContextType>;
   TeacherList?: TeacherListResolvers<ContextType>;
   TeacherListItem?: TeacherListItemResolvers<ContextType>;
   UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;

@@ -17,15 +17,15 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     homeroomDetail: async (_, args, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomDetail(args)) || null;
+      const res = await dataSources.homeroomAPI.getHomeroomDetail(args);
+      return res.data;
     },
     homeroomTermList: async (_, args, { dataSources }) => {
       return (await dataSources.homeroomAPI.getHomeroomTermList(args)) || null;
     },
     homeroomFailListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomFailListByTerm(args)) || null
-      );
+      const res = await dataSources.homeroomAPI.getHomeroomFailListByTerm(args);
+      return res.data;
     },
     homeroomNotEnrolledListByTerm: async (_, args, { dataSources }) => {
       return (

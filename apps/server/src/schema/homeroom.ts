@@ -69,9 +69,13 @@ const homeroomTypeDefs = gql`
     url: String!
   }
 
-  type HomeroomDetail {
+  type TeacherInfo {
     tenGV: String!
-    soLuongSV: Int!
+  }
+
+  type HomeroomDetail {
+    giaoVien: TeacherInfo!
+    siSo: Int!
   }
 
   type HomeroomTermList {
@@ -85,16 +89,28 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomFailList {
-    dsRotMon: [HomeroomFailListItem!]!
+    total: Int!
+    data: [HomeroomFailListItem!]!
   }
 
   type HomeroomFailListItem {
+    dtb: Float!
+    sinhVien: HomeroomFailListStudentInfo!
+    lopHocPhan: HomeroomFailListStudentCourse!
+  }
+
+  type HomeroomFailListStudentInfo {
     maSV: String!
     tenSV: String!
-    tenMH: String!
+  }
+
+  type HomeroomFailListStudentCourse {
     tenLopHP: String!
-    dtb: Float!
-    vang: Boolean!
+    monHoc: HomeroomFailListSubject!
+  }
+
+  type HomeroomFailListSubject {
+    tenMH: String!
   }
 
   type HomeroomNotEnrolledList {

@@ -36,7 +36,7 @@ const failedColumns = [
   { id: 'tenSV', label: 'Họ và tên' },
   { id: 'tenMH', label: 'Môn học' },
   { id: 'tenLopHP', label: 'Lớp HP' },
-  { id: 'dtb', label: 'Điểm' },
+  { id: 'dtb', label: 'Điểm tổng kết' },
   { id: 'ghiChu', label: 'Ghi chú' },
 ];
 
@@ -123,8 +123,10 @@ function ClassDetail() {
   const homeroomDetail = useMemo(
     () =>
       homeroomDetailData?.homeroomDetail || {
-        tenGV: '',
-        soLuongSV: '',
+        giaoVien: {
+          tenGV: '',
+        },
+        siSo: '',
       },
     [homeroomDetailData?.homeroomDetail]
   );
@@ -196,13 +198,15 @@ function ClassDetail() {
 
   const failList = useMemo(() => {
     const failListData =
-      homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon || [];
+      homeroomFailListByTermData?.homeroomFailListByTerm?.data || [];
     return failListData.map((item) => ({
-      ..._omit(item, 'vang'),
-      tenLopHP: item.tenLopHP.toUpperCase(),
-      ghiChu: item.vang ? 'Vắng' : '',
+      maSV: item.sinhVien.maSV,
+      tenSV: item.sinhVien.tenSV,
+      tenMH: item.lopHocPhan.monHoc.tenMH,
+      tenLopHP: item.lopHocPhan.tenLopHP,
+      dtb: item.dtb,
     }));
-  }, [homeroomFailListByTermData?.homeroomFailListByTerm?.dsRotMon]);
+  }, [homeroomFailListByTermData?.homeroomFailListByTerm?.data]);
 
   const {
     loading: homeroomNotEnrolledListByTermLoading,
@@ -284,11 +288,11 @@ function ClassDetail() {
                 />
                 <ClassInfo
                   title="Giáo viên chủ nhiệm"
-                  description={homeroomDetail?.tenGV}
+                  description={homeroomDetail?.giaoVien.tenGV}
                 />
                 <ClassInfo
                   title="Số lượng sinh viên"
-                  description={homeroomDetail?.soLuongSV.toString()}
+                  description={homeroomDetail?.siSo.toString()}
                 />
               </Box>
             </AsyncDataRenderer>
