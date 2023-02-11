@@ -1,3 +1,9 @@
-export const ACCOUNT_BASE_URL = 'http://localhost:3010';
-export const CORE_BASE_URL = 'http://localhost:3020';
-export const SERVICE_TIMEOUT = 3000;
+function getOrThrow(key: string) {
+  const value = process.env[key];
+  if (!value)
+    throw ReferenceError(`Environment variable ${key} is not defined`);
+  return value;
+}
+
+export const ACCOUNT_BASE_URL = getOrThrow('ACCOUNT_BASE_URL');
+export const CORE_BASE_URL = getOrThrow('CORE_BASE_URL');

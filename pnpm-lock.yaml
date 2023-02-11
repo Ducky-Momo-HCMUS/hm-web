@@ -327,6 +327,7 @@ importers:
       apollo-datasource-rest: ^3.7.0
       apollo-server-errors: ^3.3.1
       apollo-server-express: ^2.11.0
+      dotenv: ^16.0.3
       eslint: ~8.15.0
       express: ^4.17.1
       express-jwt: ^7.7.7
@@ -364,6 +365,7 @@ importers:
       '@types/lodash.merge': 4.6.7
       '@types/node': 16.11.68
       '@types/node-fetch': 2.6.2
+      dotenv: 16.0.3
       eslint: 8.15.0
       jest: 29.2.1_5eokrdoxxrbfitqje23z3vyyym
       nodemon: 2.0.20
