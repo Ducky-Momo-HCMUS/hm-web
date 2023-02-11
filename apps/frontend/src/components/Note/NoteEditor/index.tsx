@@ -101,7 +101,7 @@ function NoteEditor({
             MenuProps={MenuProps}
           >
             {tagList.map((item) => (
-              <MenuItem value={item.tenTag}>
+              <MenuItem key={item.maTag} value={item.tenTag}>
                 <Checkbox checked={tags.indexOf(item.tenTag) > -1} />
                 <ListItemText primary={item.tenTag} />
               </MenuItem>

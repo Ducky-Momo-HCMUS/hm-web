@@ -8,7 +8,6 @@ const authTypeDefs = gql`
       id: Int!
       token: String!
       password: String!
-      passwordConfirm: String!
     ): MutationStatusReponse
     editPassword(
       email: String!

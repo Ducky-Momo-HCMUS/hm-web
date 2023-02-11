@@ -29,7 +29,7 @@ function NoteItem({ selected, data, onClick, onClickDelete }: NoteItemProps) {
         </Typography>
         <Box>
           {ghiChuTag?.map((item) => (
-            <StyledTag label={item.tag?.tenTag} />
+            <StyledTag key={item.tag?.maTag} label={item.tag?.tenTag} />
           ))}
         </Box>
       </StyledContent>

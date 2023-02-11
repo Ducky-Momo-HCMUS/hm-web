@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   IconButton,
@@ -84,8 +84,7 @@ function ActionsBar() {
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}
-            href="/notes"
-            LinkComponent={Link}
+            onClick={() => navigate('/notes')}
           >
             <ListItemIcon>
               <StickyNote2OutlinedIcon fontSize="small" />
@@ -96,8 +95,7 @@ function ActionsBar() {
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}
-            href="/change-password"
-            LinkComponent={Link}
+            onClick={() => navigate('/change-password')}
           >
             <ListItemIcon>
               <SettingsIcon fontSize="small" />

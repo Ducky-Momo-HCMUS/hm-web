@@ -3,7 +3,7 @@ import { FormControl } from '@mui/material';
 
 export const StyledFormControl = styled(FormControl)`
   min-width: 7.5rem;
-  &:first-child {
+  &:first-of-type {
     margin-right: 1rem;
   }
   & > div {

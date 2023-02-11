@@ -43,9 +43,11 @@ function ParentInfoRow({
               <EditIcon />
             </IconButton>
           )}
-          <IconButton onClick={onClickDelete}>
-            <DeleteIcon />
-          </IconButton>
+          {sua && (
+            <IconButton onClick={onClickDelete}>
+              <DeleteIcon />
+            </IconButton>
+          )}
         </TableCell>
       </TableRow>
     </>

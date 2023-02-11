@@ -155,7 +155,7 @@ function AcademicReport() {
                 onChange={handleChange('year')}
               >
                 {years.map((item) => (
-                  <MenuItem value={item}>
+                  <MenuItem key={item} value={item}>
                     {item} - {Number(item) + 1}
                   </MenuItem>
                 ))}
@@ -202,12 +202,16 @@ function AcademicReport() {
       <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <StyledHeader>Các môn đã đăng ký</StyledHeader>
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: 380 }}>
             <Table stickyHeader aria-label="sticky table">
               <AcademicTableHead />
               <TableBody>
                 {subjectsData.map((row, index) => (
-                  <AcademicTableRow data={row} index={index + 1} />
+                  <AcademicTableRow
+                    key={row.maMH}
+                    data={row}
+                    index={index + 1}
+                  />
                 ))}
               </TableBody>
             </Table>

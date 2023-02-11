@@ -1,4 +1,8 @@
-import { TeacherList } from '../generated-types';
+import { TeacherList, YearList } from '../generated-types';
+
+export const YEAR_LIST = {
+  danhSachKhoa: [19, 20, 21],
+} as YearList;
 
 export const TEACHER_LIST = {
   danhSachGVCN: [

@@ -50,11 +50,7 @@ function Login() {
   const navigate = useNavigate();
 
   const [login, { loading: loginLoading, error: loginError }] =
-    useLoginMutation({
-      onCompleted: () => {
-        navigate('/');
-      },
-    });
+    useLoginMutation();
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -71,8 +67,9 @@ function Login() {
       localStorage.setItem('EMAIL', data.get('email')?.toString() || '');
       localStorage.setItem('ACCESS_TOKEN', result.data?.login?.token || '');
       setError('');
+      navigate('/');
     },
-    [login]
+    [login, navigate]
   );
 
   useEffect(() => {
@@ -81,9 +78,7 @@ function Login() {
       return;
     }
 
-    const errorId =
-      loginError?.graphQLErrors[0].extensions.response?.body.errorId;
-    setError(errorMessages.find((err) => err.id === errorId)?.message || '');
+    setError(loginError?.graphQLErrors?.[0].message);
   }, [loginError]);
 
   return (
@@ -153,7 +148,7 @@ function Login() {
                 <Link
                   sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
                   component={RouterLink}
-                  to="/reset-password"
+                  to="/forgot-password"
                 >
                   Quên mật khẩu?
                 </Link>

@@ -20,6 +20,7 @@ import {
 import { GET_STUDENT_PARENT_INFO_LIST } from '../../../../data/queries/student/get-student-parent-info';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditParentInfoDialog from '../AddOrEditParentInfoDialog';
+import { PARENT_PAGE_SIZE } from '../../../../constants';
 
 import ParentInfoRow from './ParentInfoRow';
 
@@ -30,12 +31,20 @@ interface State {
 
 interface ParentInfoTableProps {
   data: StudentParentInfo[];
+  page: number;
+  count: number;
+  handleChangePage: any;
+  setParentPage: any;
 }
 
-function ParentInfoTable({ data }: ParentInfoTableProps) {
+function ParentInfoTable({
+  data,
+  page,
+  count,
+  handleChangePage,
+  setParentPage,
+}: ParentInfoTableProps) {
   const { id = '' } = useParams();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
@@ -50,18 +59,6 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
 
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
-
   const [editStudentParentInfo, { loading: editStudentParentInfoLoading }] =
     useStudentEditParentInfoMutation();
 
@@ -74,7 +71,10 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
           payload,
         },
         refetchQueries: [
-          { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+          {
+            query: GET_STUDENT_PARENT_INFO_LIST,
+            variables: { studentId: id, page: 1, size: PARENT_PAGE_SIZE },
+          },
           'StudentParentInfoList',
         ],
       });
@@ -92,11 +92,15 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
         parentId: values.deleteIndex,
       },
       refetchQueries: [
-        { query: GET_STUDENT_PARENT_INFO_LIST, variables: { studentId: id } },
+        {
+          query: GET_STUDENT_PARENT_INFO_LIST,
+          variables: { studentId: id, page: 1, size: PARENT_PAGE_SIZE },
+        },
         'StudentParentInfoList',
       ],
     });
-  }, [deleteStudentParentInfo, id, values.deleteIndex]);
+    setParentPage(0);
+  }, [deleteStudentParentInfo, id, setParentPage, values.deleteIndex]);
 
   return (
     <>
@@ -111,28 +115,24 @@ function ParentInfoTable({ data }: ParentInfoTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => (
-              <ParentInfoRow
-                index={index}
-                key={row.maPH}
-                data={row}
-                onClickDelete={() => handleClickDelete(row.maPH)}
-                onClickEdit={() => handleClickEdit(row.maPH)}
-              />
-            ))}
+          {data.map((row, index) => (
+            <ParentInfoRow
+              index={index}
+              key={row.maPH}
+              data={row}
+              onClickDelete={() => handleClickDelete(row.maPH)}
+              onClickEdit={() => handleClickEdit(row.maPH)}
+            />
+          ))}
         </TableBody>
       </Table>
       <TablePagination
         rowsPerPageOptions={[]}
         component="div"
-        count={data.length || 0}
+        count={count}
         page={page}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage="Số dòng trên trang"
+        rowsPerPage={PARENT_PAGE_SIZE}
         onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
       />
       {values.deleteIndex >= 0 && (
         <DeleteDialog

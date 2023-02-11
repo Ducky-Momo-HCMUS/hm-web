@@ -168,6 +168,7 @@ function NoteStore() {
         variables: {
           noteId: values.selected,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [getNoteDetail, values.isAdding, values.selected]);
@@ -417,7 +418,11 @@ function NoteStore() {
             </AsyncDataRenderer>
           </StyledFilterBar>
           <AsyncDataRenderer loading={noteListLoading}>
-            <StyledGridContainer container spacing={3}>
+            <StyledGridContainer
+              sx={{ overflowY: 'auto', height: '20rem', padding: '1rem 0' }}
+              container
+              spacing={3}
+            >
               {noteList.map((item) => (
                 <NoteCardItem
                   data={item}
@@ -446,6 +451,7 @@ function NoteStore() {
       {values.selected >= 0 && (
         <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
           <StyledDialog
+            sx={{ width: '80%' }}
             open={values.selected >= 0}
             onClose={() => setValues({ ...values, selected: -1 })}
           >

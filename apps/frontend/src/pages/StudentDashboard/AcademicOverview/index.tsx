@@ -74,7 +74,7 @@ function AcademicOverview() {
         </StyledBreadCrumbs>
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
-      <Box mt={3}>
+      <Box sx={{ overflowY: 'scroll', height: '30rem' }} mt={3}>
         <AsyncDataRenderer loading={studentOverviewResultLoading}>
           <AcademicInfo infoList={mappedData} />
         </AsyncDataRenderer>
