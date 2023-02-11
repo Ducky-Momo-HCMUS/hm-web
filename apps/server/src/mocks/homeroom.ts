@@ -1,6 +1,5 @@
 import {
   HomeroomAllList,
-  HomeroomExamAbsentList,
   HomeroomFinalResultList,
   HomeroomOverviewReport,
   HomeroomTermList,
@@ -94,32 +93,3 @@ export const HOMEROOM_FINAL_RESULT_LIST_BY_TERM = {
     },
   ],
 } as HomeroomFinalResultList;
-
-export const HOMEROOM_EXAM_ABSENT_LIST_BY_TERM = {
-  danhSachVangThi: [
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-  ],
-} as HomeroomExamAbsentList;

@@ -25,7 +25,7 @@ interface HomeroomMappedPostponeExamListItem {
 }
 
 interface PostponeExamProps {
-  homeroomExamAbsentList: HomeroomExamAbsentListItem[];
+  homeroomExamAbsentList: HomeroomMappedPostponeExamListItem[];
   homeroomExamPostponedList: HomeroomMappedPostponeExamListItem[];
 }
 

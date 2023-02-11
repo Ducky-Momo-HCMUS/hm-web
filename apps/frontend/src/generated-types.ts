@@ -94,15 +94,24 @@ export type HomeroomDetail = {
 
 export type HomeroomExamAbsentList = {
   __typename?: 'HomeroomExamAbsentList';
-  danhSachVangThi: Array<HomeroomExamAbsentListItem>;
+  data: Array<HomeroomExamAbsentListItem>;
 };
 
 export type HomeroomExamAbsentListItem = {
   __typename?: 'HomeroomExamAbsentListItem';
-  hoTen: Scalars['String'];
-  lopHP?: Maybe<Scalars['String']>;
+  monHoc: HomeroomExamAbsentListSubject;
+  sinhVien: HomeroomExamAbsentListStudentInfo;
+};
+
+export type HomeroomExamAbsentListStudentInfo = {
+  __typename?: 'HomeroomExamAbsentListStudentInfo';
   maSV: Scalars['String'];
-  monHoc?: Maybe<Scalars['String']>;
+  tenSV: Scalars['String'];
+};
+
+export type HomeroomExamAbsentListSubject = {
+  __typename?: 'HomeroomExamAbsentListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomFailList = {
@@ -1177,12 +1186,14 @@ export type HomeroomExamAbsentListByTermQuery = {
   __typename?: 'Query';
   homeroomExamAbsentListByTerm: {
     __typename?: 'HomeroomExamAbsentList';
-    danhSachVangThi: Array<{
+    data: Array<{
       __typename?: 'HomeroomExamAbsentListItem';
-      maSV: string;
-      hoTen: string;
-      monHoc?: string | null | undefined;
-      lopHP?: string | null | undefined;
+      sinhVien: {
+        __typename?: 'HomeroomExamAbsentListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
+      monHoc: { __typename?: 'HomeroomExamAbsentListSubject'; tenMH: string };
     }>;
   };
 };
@@ -2996,11 +3007,14 @@ export type HomeroomDetailQueryResult = Apollo.QueryResult<
 export const HomeroomExamAbsentListByTermDocument = gql`
   query HomeroomExamAbsentListByTerm($homeroomId: String!, $term: Int!) {
     homeroomExamAbsentListByTerm(homeroomId: $homeroomId, term: $term) {
-      danhSachVangThi {
-        maSV
-        hoTen
-        monHoc
-        lopHP
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
+        monHoc {
+          tenMH
+        }
       }
     }
   }

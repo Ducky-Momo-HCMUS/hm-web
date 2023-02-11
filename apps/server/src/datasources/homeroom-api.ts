@@ -2,7 +2,6 @@ import { ApolloError } from 'apollo-server-express';
 
 import {
   HOMEROOM_ALL_LIST,
-  HOMEROOM_EXAM_ABSENT_LIST_BY_TERM,
   HOMEROOM_FINAL_RESULT_LIST_BY_TERM,
   HOMEROOM_OVERVIEW_REPORT_BY_TERM,
   HOMEROOM_TERM_LIST,
@@ -178,14 +177,13 @@ class HomeroomAPI extends BaseDataSource {
     term,
   }: QueryHomeroomExamAbsentListByTermArgs) {
     try {
-      // const homeroomExamAbsentList = await this.get(
-      //   `v1/homerooms/${homeroomId}/absent`,
-      //   {
-      //     term,
-      //   }
-      // );
-      console.log('params', homeroomId, term);
-      return HOMEROOM_EXAM_ABSENT_LIST_BY_TERM;
+      const homeroomExamAbsentList = await this.get(
+        `v1/homerooms/${homeroomId}/absent`,
+        {
+          term,
+        }
+      );
+      return homeroomExamAbsentList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom exam absent list by term');
       throw this.handleError(error as ApolloError);

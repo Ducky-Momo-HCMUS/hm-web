@@ -51,10 +51,10 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       );
     },
     homeroomExamAbsentListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomExamAbsentListByTerm(args)) ||
-        null
+      const res = await dataSources.homeroomAPI.getHomeroomExamAbsentListByTerm(
+        args
       );
+      return res.data;
     },
   },
 };

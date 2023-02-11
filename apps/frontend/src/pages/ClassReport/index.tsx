@@ -136,12 +136,16 @@ function ClassReport() {
     },
   ] = useHomeroomExamAbsentListByTermLazyQuery();
 
-  const homeroomExamAbsentList = useMemo(
-    () =>
-      homeroomExamAbsentListData?.homeroomExamAbsentListByTerm
-        .danhSachVangThi || [],
-    [homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.danhSachVangThi]
-  );
+  const homeroomExamAbsentList = useMemo(() => {
+    const examAbsentListData =
+      homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data || [];
+
+    return examAbsentListData.map((item) => ({
+      maSV: item.sinhVien.maSV,
+      tenSV: item.sinhVien.tenSV,
+      tenMH: item.monHoc.tenMH,
+    }));
+  }, [homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data]);
 
   const [
     getHomeroomPostponeExamListByTerm,

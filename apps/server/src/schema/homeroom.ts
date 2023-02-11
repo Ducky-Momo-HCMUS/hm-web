@@ -183,14 +183,21 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomExamAbsentList {
-    danhSachVangThi: [HomeroomExamAbsentListItem!]!
+    data: [HomeroomExamAbsentListItem!]!
   }
 
   type HomeroomExamAbsentListItem {
+    sinhVien: HomeroomExamAbsentListStudentInfo!
+    monHoc: HomeroomExamAbsentListSubject!
+  }
+
+  type HomeroomExamAbsentListStudentInfo {
     maSV: String!
-    hoTen: String!
-    monHoc: String
-    lopHP: String
+    tenSV: String!
+  }
+
+  type HomeroomExamAbsentListSubject {
+    tenMH: String!
   }
 `;
 
