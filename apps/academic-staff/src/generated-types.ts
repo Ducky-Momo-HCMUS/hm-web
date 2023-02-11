@@ -105,19 +105,6 @@ export type HomeroomExamAbsentListItem = {
   monHoc?: Maybe<Scalars['String']>;
 };
 
-export type HomeroomExamPostponedList = {
-  __typename?: 'HomeroomExamPostponedList';
-  danhSachHoanThi: Array<HomeroomExamPostponedListItem>;
-};
-
-export type HomeroomExamPostponedListItem = {
-  __typename?: 'HomeroomExamPostponedListItem';
-  hoTen: Scalars['String'];
-  lopHP?: Maybe<Scalars['String']>;
-  maSV: Scalars['String'];
-  monHoc?: Maybe<Scalars['String']>;
-};
-
 export type HomeroomFailList = {
   __typename?: 'HomeroomFailList';
   data: Array<HomeroomFailListItem>;
@@ -186,11 +173,16 @@ export type HomeroomListItem = {
 
 export type HomeroomNotEnrolledList = {
   __typename?: 'HomeroomNotEnrolledList';
-  khongDangKy: Array<HomeroomNotEnrolledListItem>;
+  data: Array<HomeroomNotEnrolledListItem>;
 };
 
 export type HomeroomNotEnrolledListItem = {
   __typename?: 'HomeroomNotEnrolledListItem';
+  sinhVien: HomeroomNotEnrolledListStudentInfo;
+};
+
+export type HomeroomNotEnrolledListStudentInfo = {
+  __typename?: 'HomeroomNotEnrolledListStudentInfo';
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -211,15 +203,24 @@ export type HomeroomOverviewReport = {
 
 export type HomeroomPostponeExamList = {
   __typename?: 'HomeroomPostponeExamList';
-  hoanThi: Array<HomeroomPostponeExamListItem>;
+  data: Array<HomeroomPostponeExamListItem>;
 };
 
 export type HomeroomPostponeExamListItem = {
   __typename?: 'HomeroomPostponeExamListItem';
+  monHoc: HomeroomPostponeExamListSubject;
+  sinhVien: HomeroomPostponeExamListStudentInfo;
+};
+
+export type HomeroomPostponeExamListStudentInfo = {
+  __typename?: 'HomeroomPostponeExamListStudentInfo';
   maSV: Scalars['String'];
-  tenLopHP: Scalars['String'];
-  tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type HomeroomPostponeExamListSubject = {
+  __typename?: 'HomeroomPostponeExamListSubject';
+  tenMH: Scalars['String'];
 };
 
 export type HomeroomStudentList = {
@@ -462,7 +463,6 @@ export type Query = {
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
-  homeroomExamPostponedListByTerm: HomeroomExamPostponedList;
   homeroomFailListByTerm: HomeroomFailList;
   homeroomFinalResultListByTerm: HomeroomFinalResultList;
   homeroomList: HomeroomList;
@@ -492,11 +492,6 @@ export type QueryHomeroomDetailArgs = {
 };
 
 export type QueryHomeroomExamAbsentListByTermArgs = {
-  homeroomId: Scalars['String'];
-  term: Scalars['Int'];
-};
-
-export type QueryHomeroomExamPostponedListByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
@@ -1192,25 +1187,6 @@ export type HomeroomExamAbsentListByTermQuery = {
   };
 };
 
-export type HomeroomExamPostponedListByTermQueryVariables = Exact<{
-  homeroomId: Scalars['String'];
-  term: Scalars['Int'];
-}>;
-
-export type HomeroomExamPostponedListByTermQuery = {
-  __typename?: 'Query';
-  homeroomExamPostponedListByTerm: {
-    __typename?: 'HomeroomExamPostponedList';
-    danhSachHoanThi: Array<{
-      __typename?: 'HomeroomExamPostponedListItem';
-      maSV: string;
-      hoTen: string;
-      monHoc?: string | null | undefined;
-      lopHP?: string | null | undefined;
-    }>;
-  };
-};
-
 export type HomeroomFailListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
@@ -1281,10 +1257,13 @@ export type HomeroomNotEnrolledListByTermQuery = {
   __typename?: 'Query';
   homeroomNotEnrolledListByTerm: {
     __typename?: 'HomeroomNotEnrolledList';
-    khongDangKy: Array<{
+    data: Array<{
       __typename?: 'HomeroomNotEnrolledListItem';
-      maSV: string;
-      tenSV: string;
+      sinhVien: {
+        __typename?: 'HomeroomNotEnrolledListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
     }>;
   };
 };
@@ -1335,12 +1314,14 @@ export type HomeroomPostponeExamListByTermQuery = {
   __typename?: 'Query';
   homeroomPostponeExamListByTerm: {
     __typename?: 'HomeroomPostponeExamList';
-    hoanThi: Array<{
+    data: Array<{
       __typename?: 'HomeroomPostponeExamListItem';
-      maSV: string;
-      tenSV: string;
-      tenMH: string;
-      tenLopHP: string;
+      sinhVien: {
+        __typename?: 'HomeroomPostponeExamListStudentInfo';
+        maSV: string;
+        tenSV: string;
+      };
+      monHoc: { __typename?: 'HomeroomPostponeExamListSubject'; tenMH: string };
     }>;
   };
 };
@@ -3076,70 +3057,6 @@ export type HomeroomExamAbsentListByTermQueryResult = Apollo.QueryResult<
   HomeroomExamAbsentListByTermQuery,
   HomeroomExamAbsentListByTermQueryVariables
 >;
-export const HomeroomExamPostponedListByTermDocument = gql`
-  query HomeroomExamPostponedListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomExamPostponedListByTerm(homeroomId: $homeroomId, term: $term) {
-      danhSachHoanThi {
-        maSV
-        hoTen
-        monHoc
-        lopHP
-      }
-    }
-  }
-`;
-
-/**
- * __useHomeroomExamPostponedListByTermQuery__
- *
- * To run a query within a React component, call `useHomeroomExamPostponedListByTermQuery` and pass it any options that fit your needs.
- * When your component renders, `useHomeroomExamPostponedListByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useHomeroomExamPostponedListByTermQuery({
- *   variables: {
- *      homeroomId: // value for 'homeroomId'
- *      term: // value for 'term'
- *   },
- * });
- */
-export function useHomeroomExamPostponedListByTermQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >(HomeroomExamPostponedListByTermDocument, options);
-}
-export function useHomeroomExamPostponedListByTermLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    HomeroomExamPostponedListByTermQuery,
-    HomeroomExamPostponedListByTermQueryVariables
-  >(HomeroomExamPostponedListByTermDocument, options);
-}
-export type HomeroomExamPostponedListByTermQueryHookResult = ReturnType<
-  typeof useHomeroomExamPostponedListByTermQuery
->;
-export type HomeroomExamPostponedListByTermLazyQueryHookResult = ReturnType<
-  typeof useHomeroomExamPostponedListByTermLazyQuery
->;
-export type HomeroomExamPostponedListByTermQueryResult = Apollo.QueryResult<
-  HomeroomExamPostponedListByTermQuery,
-  HomeroomExamPostponedListByTermQueryVariables
->;
 export const HomeroomFailListByTermDocument = gql`
   query HomeroomFailListByTerm($homeroomId: String!, $term: Int!) {
     homeroomFailListByTerm(homeroomId: $homeroomId, term: $term) {
@@ -3340,9 +3257,11 @@ export type HomeroomListQueryResult = Apollo.QueryResult<
 export const HomeroomNotEnrolledListByTermDocument = gql`
   query HomeroomNotEnrolledListByTerm($homeroomId: String!, $term: Int!) {
     homeroomNotEnrolledListByTerm(homeroomId: $homeroomId, term: $term) {
-      khongDangKy {
-        maSV
-        tenSV
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
       }
     }
   }
@@ -3482,11 +3401,14 @@ export type HomeroomOverviewReportByTermQueryResult = Apollo.QueryResult<
 export const HomeroomPostponeExamListByTermDocument = gql`
   query HomeroomPostponeExamListByTerm($homeroomId: String!, $term: Int!) {
     homeroomPostponeExamListByTerm(homeroomId: $homeroomId, term: $term) {
-      hoanThi {
-        maSV
-        tenSV
-        tenMH
-        tenLopHP
+      data {
+        sinhVien {
+          maSV
+          tenSV
+        }
+        monHoc {
+          tenMH
+        }
       }
     }
   }

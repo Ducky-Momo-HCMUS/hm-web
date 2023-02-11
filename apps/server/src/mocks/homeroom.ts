@@ -1,13 +1,8 @@
 import {
   HomeroomAllList,
   HomeroomExamAbsentList,
-  HomeroomExamPostponedList,
   HomeroomFinalResultList,
-  HomeroomNotEnrolledList,
-  HomeroomNotEnrolledListItem,
   HomeroomOverviewReport,
-  HomeroomPostponeExamList,
-  HomeroomPostponeExamListItem,
   HomeroomTermList,
   HomeroomTermListItem,
 } from '../generated-types';
@@ -45,92 +40,6 @@ export const HOMEROOM_TERM_LIST = {
     },
   ] as HomeroomTermListItem[],
 } as HomeroomTermList;
-
-export const HOMEROOM_NOT_ENROLLED_LIST_BY_TERM = {
-  khongDangKy: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-  ] as HomeroomNotEnrolledListItem[],
-} as HomeroomNotEnrolledList;
-
-export const HOMEROOM_NOT_ENROLLED_LIST = {
-  khongDangKy: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-    },
-  ] as HomeroomNotEnrolledListItem[],
-} as HomeroomNotEnrolledList;
-
-export const HOMEROOM_POSTPONE_EXAM_LIST_BY_TERM = {
-  hoanThi: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-  ] as HomeroomPostponeExamListItem[],
-} as HomeroomPostponeExamList;
-
-export const HOMEROOM_POSTPONE_EXAM_LIST = {
-  hoanThi: [
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-    {
-      maSV: '19127000',
-      tenSV: 'Nguyễn Văn A',
-      tenLopHP: '19clc3',
-      tenMH: 'Chủ nghĩa xã hội khoa học',
-    },
-  ] as HomeroomPostponeExamListItem[],
-} as HomeroomPostponeExamList;
 
 export const HOMEROOM_OVERVIEW_REPORT_BY_TERM = {
   siSo: {
@@ -214,32 +123,3 @@ export const HOMEROOM_EXAM_ABSENT_LIST_BY_TERM = {
     },
   ],
 } as HomeroomExamAbsentList;
-
-export const HOMEROOM_EXAM_POSTPONED_LIST_BY_TERM = {
-  danhSachHoanThi: [
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-    {
-      maSV: '19127001',
-      hoTen: 'Nguyễn Văn A',
-      monHoc: 'Kỹ năng mềm',
-      lopHP: '19CLC1',
-    },
-  ],
-} as HomeroomExamPostponedList;

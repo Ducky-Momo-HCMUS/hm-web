@@ -7,7 +7,6 @@ import {
 } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import _omit from 'lodash/omit';
 
 import Header from '../../components/Header';
 import {
@@ -222,14 +221,15 @@ function ClassDetail() {
   });
 
   const notEnrolledList = useMemo(() => {
-    return (
-      homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
-        ?.khongDangKy || []
-    );
-  }, [
-    homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
-      ?.khongDangKy,
-  ]);
+    const notEnrolledListData =
+      homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm?.data ||
+      [];
+
+    return notEnrolledListData.map((item) => ({
+      maSV: item.sinhVien.maSV,
+      tenSV: item.sinhVien.tenSV,
+    }));
+  }, [homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm?.data]);
 
   const {
     loading: homeroomPostponeExamListByTermLoading,
@@ -245,12 +245,17 @@ function ClassDetail() {
   });
 
   const postponeExamList = useMemo(() => {
-    return (
+    const postponeExamListData =
       homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
-        ?.hoanThi || []
-    );
+        ?.data || [];
+
+    return postponeExamListData.map((item) => ({
+      maSV: item.sinhVien.maSV,
+      tenSV: item.sinhVien.tenSV,
+      tenMH: item.monHoc.tenMH,
+    }));
   }, [
-    homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.hoanThi,
+    homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.data,
   ]);
 
   return (

@@ -2,10 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Box } from '@mui/material';
 
 import ClassTable from '../../ClassDetail/ClassTable';
-import {
-  HomeroomExamAbsentListItem,
-  HomeroomExamPostponedListItem,
-} from '../../../generated-types';
+import { HomeroomExamAbsentListItem } from '../../../generated-types';
 
 const missExamColumns = [
   { id: 'maSV', label: 'MSSV' },
@@ -21,9 +18,15 @@ interface Page {
   postponeExam: number;
 }
 
+interface HomeroomMappedPostponeExamListItem {
+  maSV: string;
+  tenSV: string;
+  tenMH: string;
+}
+
 interface PostponeExamProps {
   homeroomExamAbsentList: HomeroomExamAbsentListItem[];
-  homeroomExamPostponedList: HomeroomExamPostponedListItem[];
+  homeroomExamPostponedList: HomeroomMappedPostponeExamListItem[];
 }
 
 function PostponeExam({

@@ -26,9 +26,9 @@ import {
   HomeroomOverviewReport,
   StudentTerm,
   useHomeroomExamAbsentListByTermLazyQuery,
-  useHomeroomExamPostponedListByTermLazyQuery,
   useHomeroomFinalResultListByTermLazyQuery,
   useHomeroomOverviewReportByTermLazyQuery,
+  useHomeroomPostponeExamListByTermLazyQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
 import { groupTermsByYear } from '../../utils';
@@ -144,22 +144,23 @@ function ClassReport() {
   );
 
   const [
-    getHomeroomExamPostponedListByTerm,
+    getHomeroomPostponeExamListByTerm,
     {
-      loading: homeroomExamPostponedListLoading,
-      data: homeroomExamPostponedListData,
+      loading: homeroomPostponeExamListLoading,
+      data: homeroomPostponeExamListData,
     },
-  ] = useHomeroomExamPostponedListByTermLazyQuery();
+  ] = useHomeroomPostponeExamListByTermLazyQuery();
 
-  const homeroomExamPostponedList = useMemo(
-    () =>
-      homeroomExamPostponedListData?.homeroomExamPostponedListByTerm
-        .danhSachHoanThi || [],
-    [
-      homeroomExamPostponedListData?.homeroomExamPostponedListByTerm
-        .danhSachHoanThi,
-    ]
-  );
+  const homeroomPostponeExamList = useMemo(() => {
+    const postponeExamListData =
+      homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data || [];
+
+    return postponeExamListData.map((item) => ({
+      maSV: item.sinhVien.maSV,
+      tenSV: item.sinhVien.tenSV,
+      tenMH: item.monHoc.tenMH,
+    }));
+  }, [homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data]);
 
   useEffect(() => {
     if (!homeroomTermListLoading) {
@@ -186,7 +187,7 @@ function ClassReport() {
           term: values.term ? Number(values.term) : Number(initialTerm),
         },
       });
-      getHomeroomExamPostponedListByTerm({
+      getHomeroomPostponeExamListByTerm({
         variables: {
           homeroomId: id,
           term: values.term ? Number(values.term) : Number(initialTerm),
@@ -195,7 +196,7 @@ function ClassReport() {
     }
   }, [
     getHomeroomExamAbsentListByTerm,
-    getHomeroomExamPostponedListByTerm,
+    getHomeroomPostponeExamListByTerm,
     getHomeroomFinalResultListByTerm,
     getHomeroomOverviewReportByTerm,
     homeroomTermListLoading,
@@ -231,7 +232,7 @@ function ClassReport() {
               term: values.term ? Number(values.term) : Number(initialTerm),
             },
           });
-          getHomeroomExamPostponedListByTerm({
+          getHomeroomPostponeExamListByTerm({
             variables: {
               homeroomId: id,
               term: values.term ? Number(values.term) : Number(initialTerm),
@@ -244,7 +245,7 @@ function ClassReport() {
     },
     [
       getHomeroomExamAbsentListByTerm,
-      getHomeroomExamPostponedListByTerm,
+      getHomeroomPostponeExamListByTerm,
       getHomeroomFinalResultListByTerm,
       getHomeroomOverviewReportByTerm,
       id,
@@ -347,17 +348,16 @@ function ClassReport() {
           <TabPanel index={1} value={selectedTab}>
             <AsyncDataRenderer
               loading={
-                homeroomExamAbsentListLoading ||
-                homeroomExamPostponedListLoading
+                homeroomExamAbsentListLoading || homeroomPostponeExamListLoading
               }
-              data={homeroomExamAbsentListData && homeroomExamPostponedListData}
+              data={homeroomExamAbsentListData && homeroomPostponeExamListData}
             >
               <StyledScrollableBox
                 sx={{ padding: '0!important', height: '25rem' }}
               >
                 <PostponeExam
                   homeroomExamAbsentList={homeroomExamAbsentList}
-                  homeroomExamPostponedList={homeroomExamPostponedList}
+                  homeroomExamPostponedList={homeroomPostponeExamList}
                 />
               </StyledScrollableBox>
             </AsyncDataRenderer>

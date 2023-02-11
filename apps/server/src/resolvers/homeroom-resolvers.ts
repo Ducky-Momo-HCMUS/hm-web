@@ -28,18 +28,14 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     homeroomNotEnrolledListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomNotEnrolledListByTerm(
-          args
-        )) || null
-      );
+      const res =
+        await dataSources.homeroomAPI.getHomeroomNotEnrolledListByTerm(args);
+      return res.data;
     },
     homeroomPostponeExamListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomPostponeExamListByTerm(
-          args
-        )) || null
-      );
+      const res =
+        await dataSources.homeroomAPI.getHomeroomPostponeExamListByTerm(args);
+      return res.data;
     },
     homeroomOverviewReportByTerm: async (_, args, { dataSources }) => {
       return (
@@ -58,13 +54,6 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return (
         (await dataSources.homeroomAPI.getHomeroomExamAbsentListByTerm(args)) ||
         null
-      );
-    },
-    homeroomExamPostponedListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomExamPostponedListByTerm(
-          args
-        )) || null
       );
     },
   },
