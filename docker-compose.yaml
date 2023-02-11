@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  bff:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    image: ${DOCKER_REGISTRY}/hm-bff
+    hostname: bff
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
