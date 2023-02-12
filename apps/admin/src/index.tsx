@@ -15,9 +15,10 @@ import { onError } from '@apollo/client/link/error';
 
 import { theme } from './theme';
 import App from './App';
+import { REACT_APP_GRAPHQL_URL } from './utils/config';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql',
+  uri: `${REACT_APP_GRAPHQL_URL}/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {
