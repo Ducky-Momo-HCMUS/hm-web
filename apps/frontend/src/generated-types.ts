@@ -68,6 +68,18 @@ export type AccountListItem = {
   tenGV: Scalars['String'];
 };
 
+export type AllTeacherList = {
+  __typename?: 'AllTeacherList';
+  data: Array<AllTeacherListItem>;
+};
+
+export type AllTeacherListItem = {
+  __typename?: 'AllTeacherListItem';
+  email: Scalars['String'];
+  lopSinhHoat: Array<HomeroomInfo>;
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -156,6 +168,11 @@ export type HomeroomFinalResultListItem = {
   hoTen: Scalars['String'];
   maSV: Scalars['String'];
   xepLoai?: Maybe<Scalars['String']>;
+};
+
+export type HomeroomInfo = {
+  __typename?: 'HomeroomInfo';
+  maSH: Scalars['String'];
 };
 
 export type HomeroomLearnOverview = {
@@ -466,6 +483,7 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
+  allTeacherList: AllTeacherList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
@@ -960,6 +978,21 @@ export type TagListQuery = {
   tagList: {
     __typename?: 'TagList';
     tags: Array<{ __typename?: 'Tag'; maTag: number; tenTag: string }>;
+  };
+};
+
+export type AllTeacherListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AllTeacherListQuery = {
+  __typename?: 'Query';
+  allTeacherList: {
+    __typename?: 'AllTeacherList';
+    data: Array<{
+      __typename?: 'AllTeacherListItem';
+      tenGV: string;
+      email: string;
+      lopSinhHoat: Array<{ __typename?: 'HomeroomInfo'; maSH: string }>;
+    }>;
   };
 };
 
@@ -2243,6 +2276,69 @@ export type TagListLazyQueryHookResult = ReturnType<typeof useTagListLazyQuery>;
 export type TagListQueryResult = Apollo.QueryResult<
   TagListQuery,
   TagListQueryVariables
+>;
+export const AllTeacherListDocument = gql`
+  query AllTeacherList {
+    allTeacherList {
+      data {
+        tenGV
+        email
+        lopSinhHoat {
+          maSH
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useAllTeacherListQuery__
+ *
+ * To run a query within a React component, call `useAllTeacherListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllTeacherListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllTeacherListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllTeacherListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AllTeacherListQuery,
+    AllTeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AllTeacherListQuery, AllTeacherListQueryVariables>(
+    AllTeacherListDocument,
+    options
+  );
+}
+export function useAllTeacherListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AllTeacherListQuery,
+    AllTeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AllTeacherListQuery, AllTeacherListQueryVariables>(
+    AllTeacherListDocument,
+    options
+  );
+}
+export type AllTeacherListQueryHookResult = ReturnType<
+  typeof useAllTeacherListQuery
+>;
+export type AllTeacherListLazyQueryHookResult = ReturnType<
+  typeof useAllTeacherListLazyQuery
+>;
+export type AllTeacherListQueryResult = Apollo.QueryResult<
+  AllTeacherListQuery,
+  AllTeacherListQueryVariables
 >;
 export const EditPasswordDocument = gql`
   mutation EditPassword(

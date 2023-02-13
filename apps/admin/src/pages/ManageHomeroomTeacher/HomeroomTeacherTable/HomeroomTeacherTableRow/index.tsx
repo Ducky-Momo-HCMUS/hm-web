@@ -3,12 +3,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useState } from 'react';
 
-import { HomeroomTeacherInfo } from '../../../../types';
-import AddOrEditHomeroomTeacherInfoDialog from '../../AddOrEditHomeroomTeacherInfoDialog';
+import { TeacherListItem } from '../../../../types';
+import EditHomeroomTeacherInfoDialog from '../../AddOrEditHomeroomTeacherInfoDialog';
 
 interface HomeroomTeacherTableRowProps {
   index: number;
-  data: HomeroomTeacherInfo;
+  data: TeacherListItem;
   onClickDelete: any;
 }
 
@@ -17,28 +17,29 @@ function HomeroomTeacherTableRow({
   data,
   onClickDelete,
 }: HomeroomTeacherTableRowProps) {
-  const { fullName, className } = data;
+  const { tenGV, lopChuNhiem, email } = data;
   const [
-    openAddOrEditHomeroomTeacherInfoDialog,
-    setOpenAddOrEditHomeroomTeacherInfoDialog,
+    openEditHomeroomTeacherInfoDialog,
+    setOpenEditHomeroomTeacherInfoDialog,
   ] = useState(false);
 
-  const handleOpenAddOrEditHomeroomTeacherInfoDialog = () => {
-    setOpenAddOrEditHomeroomTeacherInfoDialog(true);
+  const handleOpenEditHomeroomTeacherInfoDialog = () => {
+    setOpenEditHomeroomTeacherInfoDialog(true);
   };
 
-  const handleCloseAddOrEditHomeroomTeacherInfoDialog = () => {
-    setOpenAddOrEditHomeroomTeacherInfoDialog(false);
+  const handleCloseEditHomeroomTeacherInfoDialog = () => {
+    setOpenEditHomeroomTeacherInfoDialog(false);
   };
 
   return (
     <>
       <TableRow key={index}>
         <TableCell>{index + 1}</TableCell>
-        <TableCell>{fullName}</TableCell>
-        <TableCell>{className}</TableCell>
+        <TableCell>{tenGV}</TableCell>
+        <TableCell>{lopChuNhiem}</TableCell>
+        <TableCell>{email}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={handleOpenAddOrEditHomeroomTeacherInfoDialog}>
+          <IconButton onClick={handleOpenEditHomeroomTeacherInfoDialog}>
             <EditIcon />
           </IconButton>
           <IconButton onClick={onClickDelete}>
@@ -46,13 +47,15 @@ function HomeroomTeacherTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-      <AddOrEditHomeroomTeacherInfoDialog
-        open={openAddOrEditHomeroomTeacherInfoDialog}
-        onClose={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        onClickCancel={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        onClickConfirm={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        data={data}
-      />
+      {openEditHomeroomTeacherInfoDialog && (
+        <EditHomeroomTeacherInfoDialog
+          open={openEditHomeroomTeacherInfoDialog}
+          onClose={handleCloseEditHomeroomTeacherInfoDialog}
+          onClickCancel={handleCloseEditHomeroomTeacherInfoDialog}
+          onClickConfirm={handleCloseEditHomeroomTeacherInfoDialog}
+          data={data}
+        />
+      )}
     </>
   );
 }

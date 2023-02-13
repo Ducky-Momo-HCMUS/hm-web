@@ -16,7 +16,7 @@ import React, { useCallback, useState } from 'react';
 
 import { CLASS_LIST } from '../../../mocks/teacher';
 import { StyledTextField } from '../../../components/styles';
-import { HomeroomTeacherInfo } from '../../../types';
+import { TeacherListItem } from '../../../types';
 
 interface State {
   fullName: string;
@@ -28,7 +28,7 @@ interface AddOrEditHomeroomTeacherInfoDialogProps {
   onClose: any;
   onClickCancel: any;
   onClickConfirm: any;
-  data?: HomeroomTeacherInfo;
+  data?: TeacherListItem;
 }
 
 function AddOrEditHomeroomTeacherInfoDialog({
@@ -39,8 +39,8 @@ function AddOrEditHomeroomTeacherInfoDialog({
   data,
 }: AddOrEditHomeroomTeacherInfoDialogProps) {
   const [values, setValues] = useState<State>({
-    fullName: data ? data.fullName : '',
-    className: data ? data.className : '',
+    fullName: data ? data.tenGV : '',
+    className: data ? data.lopChuNhiem : '',
   });
 
   const handleChange = useCallback(

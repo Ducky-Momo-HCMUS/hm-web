@@ -9,8 +9,8 @@ import {
   TablePagination,
 } from '@mui/material';
 
-import { HomeroomTeacherInfo } from '../../../types/teacher';
 import DeleteDialog from '../../../components/DeleteDialog';
+import { TeacherListItem } from '../../../types';
 
 import HomeroomTeacherTableRow from './HomeroomTeacherTableRow';
 
@@ -18,7 +18,7 @@ interface State {
   deleteIndex: number;
 }
 interface HomeroomTeacherInfoTableProps {
-  data: HomeroomTeacherInfo[];
+  data: TeacherListItem[];
 }
 
 function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
@@ -53,6 +53,7 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
             <TableCell>STT</TableCell>
             <TableCell>Họ tên</TableCell>
             <TableCell>Lớp chủ nhiệm</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell align="center">Thao tác</TableCell>
           </TableRow>
         </TableHead>
@@ -62,7 +63,7 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
             .map((row, index) => (
               <HomeroomTeacherTableRow
                 index={index}
-                key={row.className}
+                key={row.email}
                 data={row}
                 onClickDelete={() => handleClickDelete(index)}
               />
@@ -84,7 +85,7 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá giáo viên chủ nhiệm"
-          boldText={data[values.deleteIndex].fullName}
+          boldText={data[values.deleteIndex].tenGV}
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
         />

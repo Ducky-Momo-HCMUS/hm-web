@@ -73,6 +73,18 @@ export type AccountListItem = {
   tenGV: Scalars['String'];
 };
 
+export type AllTeacherList = {
+  __typename?: 'AllTeacherList';
+  data: Array<AllTeacherListItem>;
+};
+
+export type AllTeacherListItem = {
+  __typename?: 'AllTeacherListItem';
+  email: Scalars['String'];
+  lopSinhHoat: Array<HomeroomInfo>;
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -161,6 +173,11 @@ export type HomeroomFinalResultListItem = {
   hoTen: Scalars['String'];
   maSV: Scalars['String'];
   xepLoai?: Maybe<Scalars['String']>;
+};
+
+export type HomeroomInfo = {
+  __typename?: 'HomeroomInfo';
+  maSH: Scalars['String'];
 };
 
 export type HomeroomLearnOverview = {
@@ -471,6 +488,7 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
+  allTeacherList: AllTeacherList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
@@ -945,6 +963,8 @@ export type ResolversTypes = {
   AccountEditResponse: ResolverTypeWrapper<AccountEditResponse>;
   AccountList: ResolverTypeWrapper<AccountList>;
   AccountListItem: ResolverTypeWrapper<AccountListItem>;
+  AllTeacherList: ResolverTypeWrapper<AllTeacherList>;
+  AllTeacherListItem: ResolverTypeWrapper<AllTeacherListItem>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Document: ResolverTypeWrapper<Document>;
@@ -962,6 +982,7 @@ export type ResolversTypes = {
   HomeroomFailListSubject: ResolverTypeWrapper<HomeroomFailListSubject>;
   HomeroomFinalResultList: ResolverTypeWrapper<HomeroomFinalResultList>;
   HomeroomFinalResultListItem: ResolverTypeWrapper<HomeroomFinalResultListItem>;
+  HomeroomInfo: ResolverTypeWrapper<HomeroomInfo>;
   HomeroomLearnOverview: ResolverTypeWrapper<HomeroomLearnOverview>;
   HomeroomList: ResolverTypeWrapper<HomeroomList>;
   HomeroomListItem: ResolverTypeWrapper<HomeroomListItem>;
@@ -1040,6 +1061,8 @@ export type ResolversParentTypes = {
   AccountEditResponse: AccountEditResponse;
   AccountList: AccountList;
   AccountListItem: AccountListItem;
+  AllTeacherList: AllTeacherList;
+  AllTeacherListItem: AllTeacherListItem;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Document: Document;
@@ -1057,6 +1080,7 @@ export type ResolversParentTypes = {
   HomeroomFailListSubject: HomeroomFailListSubject;
   HomeroomFinalResultList: HomeroomFinalResultList;
   HomeroomFinalResultListItem: HomeroomFinalResultListItem;
+  HomeroomInfo: HomeroomInfo;
   HomeroomLearnOverview: HomeroomLearnOverview;
   HomeroomList: HomeroomList;
   HomeroomListItem: HomeroomListItem;
@@ -1171,6 +1195,32 @@ export type AccountListItemResolvers<
   gvu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   hoatDong?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AllTeacherListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AllTeacherList'] = ResolversParentTypes['AllTeacherList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['AllTeacherListItem']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AllTeacherListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AllTeacherListItem'] = ResolversParentTypes['AllTeacherListItem']
+> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lopSinhHoat?: Resolver<
+    Array<ResolversTypes['HomeroomInfo']>,
+    ParentType,
+    ContextType
+  >;
   tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1343,6 +1393,14 @@ export type HomeroomFinalResultListItemResolvers<
   hoTen?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomInfo'] = ResolversParentTypes['HomeroomInfo']
+> = {
+  maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1802,6 +1860,11 @@ export type QueryResolvers<
 > = {
   accountList?: Resolver<
     ResolversTypes['AccountList'],
+    ParentType,
+    ContextType
+  >;
+  allTeacherList?: Resolver<
+    ResolversTypes['AllTeacherList'],
     ParentType,
     ContextType
   >;
@@ -2267,6 +2330,8 @@ export type Resolvers<ContextType = any> = {
   AccountEditResponse?: AccountEditResponseResolvers<ContextType>;
   AccountList?: AccountListResolvers<ContextType>;
   AccountListItem?: AccountListItemResolvers<ContextType>;
+  AllTeacherList?: AllTeacherListResolvers<ContextType>;
+  AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   Document?: DocumentResolvers<ContextType>;
   HomeroomAllList?: HomeroomAllListResolvers<ContextType>;
@@ -2282,6 +2347,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomFailListSubject?: HomeroomFailListSubjectResolvers<ContextType>;
   HomeroomFinalResultList?: HomeroomFinalResultListResolvers<ContextType>;
   HomeroomFinalResultListItem?: HomeroomFinalResultListItemResolvers<ContextType>;
+  HomeroomInfo?: HomeroomInfoResolvers<ContextType>;
   HomeroomLearnOverview?: HomeroomLearnOverviewResolvers<ContextType>;
   HomeroomList?: HomeroomListResolvers<ContextType>;
   HomeroomListItem?: HomeroomListItemResolvers<ContextType>;

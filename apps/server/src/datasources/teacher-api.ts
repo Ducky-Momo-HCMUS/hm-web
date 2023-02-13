@@ -31,6 +31,16 @@ class TeacherAPI extends BaseDataSource {
       throw this.handleError(error as ApolloError);
     }
   }
+
+  public async getAllTeacherList() {
+    try {
+      const res = await this.get('v1/teachers/all');
+      return res;
+    } catch (error) {
+      console.error('Error: cannot fetch all teacher list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
 }
 
 export default TeacherAPI;

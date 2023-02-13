@@ -1,8 +1,10 @@
 import { Button, Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../components/styles';
-import { TEACHERS_DATA } from '../../mocks/teacher';
+import { useAllTeacherListQuery } from '../../generated-types';
+import { TeacherListItem } from '../../types';
 
 import HomeroomTeacherTable from './HomeroomTeacherTable';
 import ImportHomeroomTeacherListDialog from './ImportHomeroomTeacherListDialog';
@@ -22,6 +24,19 @@ function ManageHomeroomTeacher() {
     setOpenImportHomeroomTeacherInfoDialog(false);
   };
 
+  const { loading: allTeacherListLoading, data: allTeacherListData } =
+    useAllTeacherListQuery({});
+
+  const teacherList = useMemo(() => {
+    const allTeacherList = allTeacherListData?.allTeacherList.data || [];
+
+    return allTeacherList.map((item) => ({
+      tenGV: item.tenGV,
+      email: item.email,
+      lopChuNhiem: item.lopSinhHoat.map((lop) => lop.maSH).join(', '),
+    })) as TeacherListItem[];
+  }, [allTeacherListData?.allTeacherList.data]);
+
   return (
     <Box display="flex" flexDirection="column" gap={1}>
       <Box display="flex" justifyContent="space-between" alignItems="baseline">
@@ -36,7 +51,12 @@ function ManageHomeroomTeacher() {
           </Button>
         </Box>
       </Box>
-      <HomeroomTeacherTable data={TEACHERS_DATA} />
+      <AsyncDataRenderer
+        loading={allTeacherListLoading}
+        data={allTeacherListData}
+      >
+        <HomeroomTeacherTable data={teacherList} />
+      </AsyncDataRenderer>
       <ImportHomeroomTeacherListDialog
         open={openImportHomeroomTeacherInfoDialog}
         onClose={handleCloseImportHomeroomTeacherInfoDialog}
