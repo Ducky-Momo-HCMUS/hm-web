@@ -5,5 +5,4 @@ function getOrThrow(key: string) {
   return value;
 }
 
-export const ACCOUNT_BASE_URL = getOrThrow('ACCOUNT_BASE_URL');
-export const CORE_BASE_URL = getOrThrow('CORE_BASE_URL');
+export const SERVICES_BASE_URL = getOrThrow('SERVICES_BASE_URL');

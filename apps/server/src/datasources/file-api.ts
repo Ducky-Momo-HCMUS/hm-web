@@ -2,12 +2,12 @@ import { ApolloError } from 'apollo-server-express';
 import FormData from 'form-data';
 
 import { MutationUploadDocumentArgs } from '../generated-types';
-import { CORE_BASE_URL } from '../utils/config';
+import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
 class FileAPI extends BaseDataSource {
-  constructor(baseUrl: string = CORE_BASE_URL) {
+  constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
   }

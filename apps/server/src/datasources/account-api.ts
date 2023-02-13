@@ -6,12 +6,12 @@ import {
   MutationAccountEditArgs,
 } from '../generated-types';
 import { ACCOUNT_LIST } from '../mocks/account';
-import { ACCOUNT_BASE_URL } from '../utils/config';
+import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
 class AccountAPI extends BaseDataSource {
-  constructor(baseUrl: string = ACCOUNT_BASE_URL) {
+  constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
   }

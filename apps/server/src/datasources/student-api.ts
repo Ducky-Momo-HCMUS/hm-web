@@ -25,12 +25,12 @@ import {
   SUBJECTS_BY_TERM,
   TRAINING_POINT_BY_TERM,
 } from '../mocks/student';
-import { CORE_BASE_URL } from '../utils/config';
+import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
 class StudentAPI extends BaseDataSource {
-  constructor(baseUrl: string = CORE_BASE_URL) {
+  constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
   }

@@ -2,12 +2,12 @@ import { ApolloError } from 'apollo-server-express';
 
 import { QueryTeacherListArgs } from '../generated-types';
 import { TEACHER_LIST, YEAR_LIST } from '../mocks/teacher';
-import { CORE_BASE_URL } from '../utils/config';
+import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
 
 class TeacherAPI extends BaseDataSource {
-  constructor(baseUrl: string = CORE_BASE_URL) {
+  constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
   }

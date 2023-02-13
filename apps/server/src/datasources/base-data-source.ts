@@ -3,10 +3,16 @@ import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { ForbiddenError, ApolloError } from 'apollo-server-errors';
 
 import { RequestContext, RolesContext } from '../types';
+import { SERVICES_BASE_URL } from '../utils/config';
 
 import { getACL } from './access-control';
 
 export class BaseDataSource extends RESTDataSource<RequestContext> {
+  constructor() {
+    super();
+    this.baseURL = SERVICES_BASE_URL;
+  }
+
   protected override willSendRequest(req: RequestOptions) {
     // this.authorize(req);
     const { authorization } = this.context;

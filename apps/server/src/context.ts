@@ -4,7 +4,7 @@ import fetch, { Response } from 'node-fetch';
 import { ExpressContext } from 'apollo-server-express';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
-import { ACCOUNT_BASE_URL } from './utils/config';
+import { SERVICES_BASE_URL } from './utils/config';
 
 import type {
   DataSourceResponse,
@@ -17,7 +17,7 @@ import type {
  * @deprecated RBAC now handles on BE
  */
 async function getAccount(id: string, headers: IncomingHttpHeaders) {
-  return fetch(`${ACCOUNT_BASE_URL}/v1/accounts/${id}`, {
+  return fetch(`${SERVICES_BASE_URL}/v1/accounts/${id}`, {
     headers: { Authorization: headers.authorization! },
   });
 }
