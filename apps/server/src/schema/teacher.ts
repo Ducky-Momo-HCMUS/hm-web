@@ -7,11 +7,24 @@ const teacherTypeDefs = gql`
     yearList: YearList!
   }
 
+  extend type Mutation {
+    teacherEdit(
+      teacherId: Int!
+      payload: TeacherEditInput!
+    ): AllTeacherListItem!
+    teacherDelete(teacherId: Int!): AllTeacherListItem!
+  }
+
+  input TeacherEditInput {
+    lopSH: [String!]!
+  }
+
   type AllTeacherList {
     data: [AllTeacherListItem!]!
   }
 
   type AllTeacherListItem {
+    maGV: Int!
     tenGV: String!
     email: String!
     lopSinhHoat: [HomeroomInfo!]!

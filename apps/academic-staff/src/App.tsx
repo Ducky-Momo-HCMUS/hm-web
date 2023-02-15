@@ -6,6 +6,8 @@ import ChangePassword from './pages/ChangePassword';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import ResetPassword from './pages/ForgotPassword';
+import Authenticated from './components/Authenticated';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -14,8 +16,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/change-password" element={<ChangePassword />} />
       </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ResetPassword />} />
+      <Route element={<Authenticated />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ResetPassword />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

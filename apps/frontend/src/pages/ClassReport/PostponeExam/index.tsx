@@ -2,13 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { Box } from '@mui/material';
 
 import ClassTable from '../../ClassDetail/ClassTable';
-import { HomeroomExamAbsentListItem } from '../../../generated-types';
 
 const missExamColumns = [
   { id: 'maSV', label: 'MSSV' },
   { id: 'hoTen', label: 'Họ và tên' },
   { id: 'monHoc', label: 'Môn học' },
-  { id: 'lopHP', label: 'Lớp học phần' },
 ];
 
 const ROWS_PER_PAGE = 5;

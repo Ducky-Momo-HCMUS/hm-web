@@ -31,9 +31,10 @@ function ManageHomeroomTeacher() {
     const allTeacherList = allTeacherListData?.allTeacherList.data || [];
 
     return allTeacherList.map((item) => ({
+      maGV: item.maGV,
       tenGV: item.tenGV,
       email: item.email,
-      lopChuNhiem: item.lopSinhHoat.map((lop) => lop.maSH).join(', '),
+      lopChuNhiem: item.lopSinhHoat.map((lop) => lop.maSH),
     })) as TeacherListItem[];
   }, [allTeacherListData?.allTeacherList.data]);
 

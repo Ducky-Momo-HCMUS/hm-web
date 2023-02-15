@@ -77,6 +77,7 @@ export type AllTeacherListItem = {
   __typename?: 'AllTeacherListItem';
   email: Scalars['String'];
   lopSinhHoat: Array<HomeroomInfo>;
+  maGV: Scalars['Int'];
   tenGV: Scalars['String'];
 };
 
@@ -312,6 +313,8 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+  teacherDelete: AllTeacherListItem;
+  teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
 
@@ -403,6 +406,15 @@ export type MutationTagDeleteArgs = {
 export type MutationTagEditArgs = {
   payload: TagEditInput;
   tagId: Scalars['Int'];
+};
+
+export type MutationTeacherDeleteArgs = {
+  teacherId: Scalars['Int'];
+};
+
+export type MutationTeacherEditArgs = {
+  payload: TeacherEditInput;
+  teacherId: Scalars['Int'];
 };
 
 export type MutationUploadDocumentArgs = {
@@ -809,6 +821,10 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherEditInput = {
+  lopSH: Array<Scalars['String']>;
+};
+
 export type TeacherInfo = {
   __typename?: 'TeacherInfo';
   tenGV: Scalars['String'];
@@ -953,6 +969,25 @@ export type TagEditMutation = {
   tagEdit: { __typename?: 'Tag'; maTag: number; tenTag: string };
 };
 
+export type DeleteEditMutationVariables = Exact<{
+  teacherId: Scalars['Int'];
+}>;
+
+export type DeleteEditMutation = {
+  __typename?: 'Mutation';
+  teacherDelete: { __typename?: 'AllTeacherListItem'; maGV: number };
+};
+
+export type TeacherEditMutationVariables = Exact<{
+  teacherId: Scalars['Int'];
+  payload: TeacherEditInput;
+}>;
+
+export type TeacherEditMutation = {
+  __typename?: 'Mutation';
+  teacherEdit: { __typename?: 'AllTeacherListItem'; maGV: number };
+};
+
 export type AccountListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountListQuery = {
@@ -989,6 +1024,7 @@ export type AllTeacherListQuery = {
     __typename?: 'AllTeacherList';
     data: Array<{
       __typename?: 'AllTeacherListItem';
+      maGV: number;
       tenGV: string;
       email: string;
       lopSinhHoat: Array<{ __typename?: 'HomeroomInfo'; maSH: string }>;
@@ -2165,6 +2201,107 @@ export type TagEditMutationOptions = Apollo.BaseMutationOptions<
   TagEditMutation,
   TagEditMutationVariables
 >;
+export const DeleteEditDocument = gql`
+  mutation DeleteEdit($teacherId: Int!) {
+    teacherDelete(teacherId: $teacherId) {
+      maGV
+    }
+  }
+`;
+export type DeleteEditMutationFn = Apollo.MutationFunction<
+  DeleteEditMutation,
+  DeleteEditMutationVariables
+>;
+
+/**
+ * __useDeleteEditMutation__
+ *
+ * To run a mutation, you first call `useDeleteEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEditMutation, { data, loading, error }] = useDeleteEditMutation({
+ *   variables: {
+ *      teacherId: // value for 'teacherId'
+ *   },
+ * });
+ */
+export function useDeleteEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteEditMutation,
+    DeleteEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteEditMutation, DeleteEditMutationVariables>(
+    DeleteEditDocument,
+    options
+  );
+}
+export type DeleteEditMutationHookResult = ReturnType<
+  typeof useDeleteEditMutation
+>;
+export type DeleteEditMutationResult =
+  Apollo.MutationResult<DeleteEditMutation>;
+export type DeleteEditMutationOptions = Apollo.BaseMutationOptions<
+  DeleteEditMutation,
+  DeleteEditMutationVariables
+>;
+export const TeacherEditDocument = gql`
+  mutation TeacherEdit($teacherId: Int!, $payload: TeacherEditInput!) {
+    teacherEdit(teacherId: $teacherId, payload: $payload) {
+      maGV
+    }
+  }
+`;
+export type TeacherEditMutationFn = Apollo.MutationFunction<
+  TeacherEditMutation,
+  TeacherEditMutationVariables
+>;
+
+/**
+ * __useTeacherEditMutation__
+ *
+ * To run a mutation, you first call `useTeacherEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTeacherEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [teacherEditMutation, { data, loading, error }] = useTeacherEditMutation({
+ *   variables: {
+ *      teacherId: // value for 'teacherId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useTeacherEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TeacherEditMutation,
+    TeacherEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<TeacherEditMutation, TeacherEditMutationVariables>(
+    TeacherEditDocument,
+    options
+  );
+}
+export type TeacherEditMutationHookResult = ReturnType<
+  typeof useTeacherEditMutation
+>;
+export type TeacherEditMutationResult =
+  Apollo.MutationResult<TeacherEditMutation>;
+export type TeacherEditMutationOptions = Apollo.BaseMutationOptions<
+  TeacherEditMutation,
+  TeacherEditMutationVariables
+>;
 export const AccountListDocument = gql`
   query AccountList {
     accountList {
@@ -2281,6 +2418,7 @@ export const AllTeacherListDocument = gql`
   query AllTeacherList {
     allTeacherList {
       data {
+        maGV
         tenGV
         email
         lopSinhHoat {

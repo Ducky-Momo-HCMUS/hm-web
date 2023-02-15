@@ -82,6 +82,7 @@ export type AllTeacherListItem = {
   __typename?: 'AllTeacherListItem';
   email: Scalars['String'];
   lopSinhHoat: Array<HomeroomInfo>;
+  maGV: Scalars['Int'];
   tenGV: Scalars['String'];
 };
 
@@ -317,6 +318,8 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+  teacherDelete: AllTeacherListItem;
+  teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
 
@@ -408,6 +411,15 @@ export type MutationTagDeleteArgs = {
 export type MutationTagEditArgs = {
   payload: TagEditInput;
   tagId: Scalars['Int'];
+};
+
+export type MutationTeacherDeleteArgs = {
+  teacherId: Scalars['Int'];
+};
+
+export type MutationTeacherEditArgs = {
+  payload: TeacherEditInput;
+  teacherId: Scalars['Int'];
 };
 
 export type MutationUploadDocumentArgs = {
@@ -814,6 +826,10 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherEditInput = {
+  lopSH: Array<Scalars['String']>;
+};
+
 export type TeacherInfo = {
   __typename?: 'TeacherInfo';
   tenGV: Scalars['String'];
@@ -1043,6 +1059,7 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  TeacherEditInput: TeacherEditInput;
   TeacherInfo: ResolverTypeWrapper<TeacherInfo>;
   TeacherList: ResolverTypeWrapper<TeacherList>;
   TeacherListItem: ResolverTypeWrapper<TeacherListItem>;
@@ -1141,6 +1158,7 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  TeacherEditInput: TeacherEditInput;
   TeacherInfo: TeacherInfo;
   TeacherList: TeacherList;
   TeacherListItem: TeacherListItem;
@@ -1221,6 +1239,7 @@ export type AllTeacherListItemResolvers<
     ParentType,
     ContextType
   >;
+  maGV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1750,6 +1769,18 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
+  >;
+  teacherDelete?: Resolver<
+    ResolversTypes['AllTeacherListItem'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTeacherDeleteArgs, 'teacherId'>
+  >;
+  teacherEdit?: Resolver<
+    ResolversTypes['AllTeacherListItem'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationTeacherEditArgs, 'payload' | 'teacherId'>
   >;
   uploadDocument?: Resolver<
     ResolversTypes['UploadDocumentResponse'],

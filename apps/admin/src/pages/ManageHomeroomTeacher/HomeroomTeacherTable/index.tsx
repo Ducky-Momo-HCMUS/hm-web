@@ -11,11 +11,13 @@ import {
 
 import DeleteDialog from '../../../components/DeleteDialog';
 import { TeacherListItem } from '../../../types';
+import EditHomeroomTeacherInfoDialog from '../AddOrEditHomeroomTeacherInfoDialog';
 
 import HomeroomTeacherTableRow from './HomeroomTeacherTableRow';
 
 interface State {
   deleteIndex: number;
+  editIndex: number;
 }
 interface HomeroomTeacherInfoTableProps {
   data: TeacherListItem[];
@@ -27,10 +29,15 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
+    editIndex: -1,
   });
 
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
+  }, []);
+
+  const handleClickEdit = useCallback((index: number) => {
+    setValues((v) => ({ ...v, editIndex: index }));
   }, []);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
@@ -65,7 +72,8 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
                 index={index}
                 key={row.email}
                 data={row}
-                onClickDelete={() => handleClickDelete(index)}
+                onClickDelete={() => handleClickDelete(row.maGV)}
+                onClickEdit={() => handleClickEdit(row.maGV)}
               />
             ))}
         </TableBody>
@@ -85,9 +93,20 @@ function HomeroomTeacherTable({ data }: HomeroomTeacherInfoTableProps) {
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá giáo viên chủ nhiệm"
-          boldText={data[values.deleteIndex].tenGV}
+          boldText={
+            data.find((item) => item.maGV === values.deleteIndex)?.tenGV || ''
+          }
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={() => setValues({ ...values, deleteIndex: -1 })}
+        />
+      )}
+      {values.editIndex >= 0 && (
+        <EditHomeroomTeacherInfoDialog
+          open={values.editIndex >= 0}
+          onClose={() => setValues({ ...values, editIndex: -1 })}
+          onClickCancel={() => setValues({ ...values, editIndex: -1 })}
+          onClickConfirm={() => setValues({ ...values, editIndex: -1 })}
+          data={data.find((item) => item.maGV === values.editIndex)}
         />
       )}
     </Paper>

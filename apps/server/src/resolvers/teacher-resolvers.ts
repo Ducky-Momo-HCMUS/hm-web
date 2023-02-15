@@ -17,6 +17,16 @@ export const teacherResolver: Resolvers<ResolverContext> = {
       return res;
     },
   },
+  Mutation: {
+    teacherEdit: async (_, args, { dataSources }) => {
+      const res = await dataSources.teacherAPI.updateTeacher(args);
+      return res;
+    },
+    teacherDelete: async (_, args, { dataSources }) => {
+      const res = await dataSources.teacherAPI.deleteTeacher(args);
+      return res;
+    },
+  },
 };
 
 export default teacherResolver;

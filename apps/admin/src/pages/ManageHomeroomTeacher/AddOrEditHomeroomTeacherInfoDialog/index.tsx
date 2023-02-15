@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,7 +21,7 @@ import { TeacherListItem } from '../../../types';
 
 interface State {
   fullName: string;
-  className: string;
+  className: string[];
 }
 
 interface AddOrEditHomeroomTeacherInfoDialogProps {
@@ -31,6 +32,16 @@ interface AddOrEditHomeroomTeacherInfoDialogProps {
   data?: TeacherListItem;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function AddOrEditHomeroomTeacherInfoDialog({
   open,
   onClose,
@@ -40,7 +51,7 @@ function AddOrEditHomeroomTeacherInfoDialog({
 }: AddOrEditHomeroomTeacherInfoDialogProps) {
   const [values, setValues] = useState<State>({
     fullName: data ? data.tenGV : '',
-    className: data ? data.lopChuNhiem : '',
+    className: data ? data.lopChuNhiem : [],
   });
 
   const handleChange = useCallback(
@@ -52,9 +63,12 @@ function AddOrEditHomeroomTeacherInfoDialog({
 
   const handleSelectClass = useCallback(
     (event: SelectChangeEvent<typeof values.className>) => {
+      const {
+        target: { value },
+      } = event;
       setValues((v) => ({
         ...v,
-        type: event.target.value,
+        className: typeof value === 'string' ? value.split(',') : value,
       }));
     },
     []
@@ -63,7 +77,7 @@ function AddOrEditHomeroomTeacherInfoDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? <>Chỉnh sửa lớp của GVCN</> : <>Thêm giáo viên chủ nhiệm</>}
+        {data ? 'Chỉnh sửa lớp của GVCN' : 'Thêm giáo viên chủ nhiệm'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">
@@ -99,15 +113,19 @@ function AddOrEditHomeroomTeacherInfoDialog({
                       }
                     : {},
               }}
+              multiple
+              renderValue={(selected) => selected.join(', ')}
               labelId="class-select-label"
               id="class-select"
               label="Lớp chủ nhiệm"
               value={values.className}
               onChange={handleSelectClass}
+              MenuProps={MenuProps}
             >
-              {CLASS_LIST.map((type) => (
-                <MenuItem key={type} value={type}>
-                  <ListItemText primary={type} />
+              {CLASS_LIST.map((item) => (
+                <MenuItem key={item} value={item}>
+                  <Checkbox checked={values.className.indexOf(item) > -1} />
+                  <ListItemText primary={item} />
                 </MenuItem>
               ))}
             </Select>
@@ -116,7 +134,7 @@ function AddOrEditHomeroomTeacherInfoDialog({
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
           <Button color="primary" variant="contained" onClick={onClickConfirm}>
-            {data ? <>Lưu</> : <>Thêm</>}
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>

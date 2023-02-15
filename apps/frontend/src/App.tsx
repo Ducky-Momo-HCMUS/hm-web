@@ -11,6 +11,8 @@ import StudentDashboard from './pages/StudentDashboard';
 import ChangePassword from './pages/ChangePassword';
 import RequireAuth from './components/RequireAuth';
 import ResetPassword from './pages/ResetPassword';
+import Authenticated from './components/Authenticated';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -23,9 +25,12 @@ function App() {
         <Route path="/classes/:id" element={<ClassDetail />} />
         <Route path="/classes/:id/report" element={<StatisticalReport />} />
       </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route element={<Authenticated />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+      </Route>
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

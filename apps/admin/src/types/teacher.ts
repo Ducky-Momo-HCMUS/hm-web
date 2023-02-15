@@ -4,7 +4,8 @@ export interface HomeroomTeacherInfo {
 }
 
 export interface TeacherListItem {
+  maGV: number;
   tenGV: string;
   email: string;
-  lopChuNhiem: string;
+  lopChuNhiem: string[];
 }
