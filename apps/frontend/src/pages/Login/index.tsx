@@ -79,7 +79,7 @@ function Login() {
       return;
     }
 
-    setError(loginError?.graphQLErrors?.[0].message);
+    setError(loginError?.graphQLErrors?.[0]?.message);
   }, [loginError]);
 
   return (
