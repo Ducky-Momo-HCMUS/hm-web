@@ -18,6 +18,7 @@ import App from './App';
 import { REACT_APP_GRAPHQL_URL } from './utils/config';
 
 const httpLink = createUploadLink({
+  headers: { 'Apollo-Require-Preflight': 'true' },
   uri: `${REACT_APP_GRAPHQL_URL}/graphql`,
 });
 
