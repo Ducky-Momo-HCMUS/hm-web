@@ -1,10 +1,6 @@
 import { ApolloError } from 'apollo-server-express';
 
-import {
-  HOMEROOM_ALL_LIST,
-  HOMEROOM_FINAL_RESULT_LIST_BY_TERM,
-  HOMEROOM_OVERVIEW_REPORT_BY_TERM,
-} from '../mocks/homeroom';
+import { HOMEROOM_ALL_LIST } from '../mocks/homeroom';
 import {
   QueryHomeroomDetailArgs,
   QueryHomeroomExamAbsentListByTermArgs,
@@ -139,14 +135,13 @@ class HomeroomAPI extends BaseDataSource {
     term,
   }: QueryHomeroomOverviewReportByTermArgs) {
     try {
-      // const homeroomOverviewReport = await this.get(
-      //   `v1/homerooms/${homeroomId}/report`,
-      //   {
-      //     term,
-      //   }
-      // );
-      console.log('params', homeroomId, term);
-      return HOMEROOM_OVERVIEW_REPORT_BY_TERM;
+      const homeroomOverviewReport = await this.get(
+        `v1/homerooms/${homeroomId}/report`,
+        {
+          term,
+        }
+      );
+      return homeroomOverviewReport;
     } catch (error) {
       console.error('Error: cannot fetch homeroom overview report by term');
       throw this.handleError(error as ApolloError);
@@ -158,14 +153,13 @@ class HomeroomAPI extends BaseDataSource {
     term,
   }: QueryHomeroomFinalResultListByTermArgs) {
     try {
-      // const homeroomFinalResultList = await this.get(
-      //   `v1/homerooms/${homeroomId}/score`,
-      //   {
-      //     term,
-      //   }
-      // );
-      console.log('params', homeroomId, term);
-      return HOMEROOM_FINAL_RESULT_LIST_BY_TERM;
+      const homeroomFinalResultList = await this.get(
+        `v1/homerooms/${homeroomId}/score`,
+        {
+          term,
+        }
+      );
+      return homeroomFinalResultList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom final result list by term');
       throw this.handleError(error as ApolloError);

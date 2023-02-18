@@ -166,14 +166,15 @@ export type HomeroomFailListSubject = {
 
 export type HomeroomFinalResultList = {
   __typename?: 'HomeroomFinalResultList';
-  danhSachKetQua: Array<HomeroomFinalResultListItem>;
+  data: Array<HomeroomFinalResultListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomFinalResultListItem = {
   __typename?: 'HomeroomFinalResultListItem';
   dtb?: Maybe<Scalars['Float']>;
-  hoTen: Scalars['String'];
   maSV: Scalars['String'];
+  tenSV: Scalars['String'];
   xepLoai?: Maybe<Scalars['String']>;
 };
 
@@ -184,13 +185,13 @@ export type HomeroomInfo = {
 
 export type HomeroomLearnOverview = {
   __typename?: 'HomeroomLearnOverview';
-  chungChiNgoaiNgu?: Maybe<Scalars['Int']>;
-  gioi?: Maybe<Scalars['Int']>;
-  kha?: Maybe<Scalars['Int']>;
-  trungBinh?: Maybe<Scalars['Int']>;
-  trungBinhKha?: Maybe<Scalars['Int']>;
-  xuatSac?: Maybe<Scalars['Int']>;
-  yeu?: Maybe<Scalars['Int']>;
+  chungChiNgoaiNgu: Scalars['Int'];
+  gioi: Scalars['Int'];
+  kem: Scalars['Int'];
+  kha: Scalars['Int'];
+  trungBinh: Scalars['Int'];
+  xuatSac: Scalars['Int'];
+  yeu: Scalars['Int'];
 };
 
 export type HomeroomList = {
@@ -285,12 +286,12 @@ export type HomeroomTermListItem = {
 
 export type HomeroomTrainingPointOverview = {
   __typename?: 'HomeroomTrainingPointOverview';
-  gioi?: Maybe<Scalars['Int']>;
-  kha?: Maybe<Scalars['Int']>;
-  trungBinh?: Maybe<Scalars['Int']>;
-  trungBinhKha?: Maybe<Scalars['Int']>;
-  xuatSac?: Maybe<Scalars['Int']>;
-  yeu?: Maybe<Scalars['Int']>;
+  gioi: Scalars['Int'];
+  kem: Scalars['Int'];
+  kha: Scalars['Int'];
+  trungBinh: Scalars['Int'];
+  xuatSac: Scalars['Int'];
+  yeu: Scalars['Int'];
 };
 
 export type LoginResponse = {
@@ -551,6 +552,8 @@ export type QueryHomeroomFailListByTermArgs = {
 
 export type QueryHomeroomFinalResultListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -1403,11 +1406,12 @@ export type HomeroomFinalResultListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomFinalResultList'] = ResolversParentTypes['HomeroomFinalResultList']
 > = {
-  danhSachKetQua?: Resolver<
+  data?: Resolver<
     Array<ResolversTypes['HomeroomFinalResultListItem']>,
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1416,8 +1420,8 @@ export type HomeroomFinalResultListItemResolvers<
   ParentType extends ResolversParentTypes['HomeroomFinalResultListItem'] = ResolversParentTypes['HomeroomFinalResultListItem']
 > = {
   dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  hoTen?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1434,21 +1438,13 @@ export type HomeroomLearnOverviewResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomLearnOverview'] = ResolversParentTypes['HomeroomLearnOverview']
 > = {
-  chungChiNgoaiNgu?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  gioi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  kha?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  trungBinh?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  trungBinhKha?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  xuatSac?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  yeu?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  chungChiNgoaiNgu?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  gioi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  kem?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  kha?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  trungBinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  xuatSac?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  yeu?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1632,16 +1628,12 @@ export type HomeroomTrainingPointOverviewResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomTrainingPointOverview'] = ResolversParentTypes['HomeroomTrainingPointOverview']
 > = {
-  gioi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  kha?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  trungBinh?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  trungBinhKha?: Resolver<
-    Maybe<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
-  xuatSac?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  yeu?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  gioi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  kem?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  kha?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  trungBinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  xuatSac?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  yeu?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1939,7 +1931,10 @@ export type QueryResolvers<
     ResolversTypes['HomeroomFinalResultList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomFinalResultListByTermArgs, 'homeroomId' | 'term'>
+    RequireFields<
+      QueryHomeroomFinalResultListByTermArgs,
+      'homeroomId' | 'page' | 'size' | 'term'
+    >
   >;
   homeroomList?: Resolver<
     ResolversTypes['HomeroomList'],

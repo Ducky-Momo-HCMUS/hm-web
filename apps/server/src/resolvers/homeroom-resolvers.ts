@@ -39,17 +39,15 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     homeroomOverviewReportByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomOverviewReportByTerm(args)) ||
-        null
+      const res = await dataSources.homeroomAPI.getHomeroomOverviewReportByTerm(
+        args
       );
+      return res.data;
     },
     homeroomFinalResultListByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.homeroomAPI.getHomeroomFinalResultListByTerm(
-          args
-        )) || null
-      );
+      const res =
+        await dataSources.homeroomAPI.getHomeroomFinalResultListByTerm(args);
+      return res.data;
     },
     homeroomExamAbsentListByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomExamAbsentListByTerm(
