@@ -76,6 +76,7 @@ export type AccountListItem = {
 export type AllTeacherList = {
   __typename?: 'AllTeacherList';
   data: Array<AllTeacherListItem>;
+  total: Scalars['Int'];
 };
 
 export type AllTeacherListItem = {
@@ -527,6 +528,11 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   yearList: YearList;
+};
+
+export type QueryAllTeacherListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -1226,6 +1232,7 @@ export type AllTeacherListResolvers<
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1897,7 +1904,8 @@ export type QueryResolvers<
   allTeacherList?: Resolver<
     ResolversTypes['AllTeacherList'],
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<QueryAllTeacherListArgs, 'page' | 'size'>
   >;
   documents?: Resolver<
     Array<ResolversTypes['Document']>,

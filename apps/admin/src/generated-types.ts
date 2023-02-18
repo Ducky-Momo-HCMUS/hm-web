@@ -71,6 +71,7 @@ export type AccountListItem = {
 export type AllTeacherList = {
   __typename?: 'AllTeacherList';
   data: Array<AllTeacherListItem>;
+  total: Scalars['Int'];
 };
 
 export type AllTeacherListItem = {
@@ -524,6 +525,11 @@ export type Query = {
   yearList: YearList;
 };
 
+export type QueryAllTeacherListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+};
+
 export type QueryHomeroomDetailArgs = {
   homeroomId: Scalars['String'];
 };
@@ -969,11 +975,11 @@ export type TagEditMutation = {
   tagEdit: { __typename?: 'Tag'; maTag: number; tenTag: string };
 };
 
-export type DeleteEditMutationVariables = Exact<{
+export type TeacherDeleteMutationVariables = Exact<{
   teacherId: Scalars['Int'];
 }>;
 
-export type DeleteEditMutation = {
+export type TeacherDeleteMutation = {
   __typename?: 'Mutation';
   teacherDelete: { __typename?: 'AllTeacherListItem'; maGV: number };
 };
@@ -1016,12 +1022,16 @@ export type TagListQuery = {
   };
 };
 
-export type AllTeacherListQueryVariables = Exact<{ [key: string]: never }>;
+export type AllTeacherListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
 
 export type AllTeacherListQuery = {
   __typename?: 'Query';
   allTeacherList: {
     __typename?: 'AllTeacherList';
+    total: number;
     data: Array<{
       __typename?: 'AllTeacherListItem';
       maGV: number;
@@ -2201,55 +2211,55 @@ export type TagEditMutationOptions = Apollo.BaseMutationOptions<
   TagEditMutation,
   TagEditMutationVariables
 >;
-export const DeleteEditDocument = gql`
-  mutation DeleteEdit($teacherId: Int!) {
+export const TeacherDeleteDocument = gql`
+  mutation TeacherDelete($teacherId: Int!) {
     teacherDelete(teacherId: $teacherId) {
       maGV
     }
   }
 `;
-export type DeleteEditMutationFn = Apollo.MutationFunction<
-  DeleteEditMutation,
-  DeleteEditMutationVariables
+export type TeacherDeleteMutationFn = Apollo.MutationFunction<
+  TeacherDeleteMutation,
+  TeacherDeleteMutationVariables
 >;
 
 /**
- * __useDeleteEditMutation__
+ * __useTeacherDeleteMutation__
  *
- * To run a mutation, you first call `useDeleteEditMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEditMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useTeacherDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTeacherDeleteMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteEditMutation, { data, loading, error }] = useDeleteEditMutation({
+ * const [teacherDeleteMutation, { data, loading, error }] = useTeacherDeleteMutation({
  *   variables: {
  *      teacherId: // value for 'teacherId'
  *   },
  * });
  */
-export function useDeleteEditMutation(
+export function useTeacherDeleteMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    DeleteEditMutation,
-    DeleteEditMutationVariables
+    TeacherDeleteMutation,
+    TeacherDeleteMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteEditMutation, DeleteEditMutationVariables>(
-    DeleteEditDocument,
-    options
-  );
+  return Apollo.useMutation<
+    TeacherDeleteMutation,
+    TeacherDeleteMutationVariables
+  >(TeacherDeleteDocument, options);
 }
-export type DeleteEditMutationHookResult = ReturnType<
-  typeof useDeleteEditMutation
+export type TeacherDeleteMutationHookResult = ReturnType<
+  typeof useTeacherDeleteMutation
 >;
-export type DeleteEditMutationResult =
-  Apollo.MutationResult<DeleteEditMutation>;
-export type DeleteEditMutationOptions = Apollo.BaseMutationOptions<
-  DeleteEditMutation,
-  DeleteEditMutationVariables
+export type TeacherDeleteMutationResult =
+  Apollo.MutationResult<TeacherDeleteMutation>;
+export type TeacherDeleteMutationOptions = Apollo.BaseMutationOptions<
+  TeacherDeleteMutation,
+  TeacherDeleteMutationVariables
 >;
 export const TeacherEditDocument = gql`
   mutation TeacherEdit($teacherId: Int!, $payload: TeacherEditInput!) {
@@ -2415,8 +2425,9 @@ export type TagListQueryResult = Apollo.QueryResult<
   TagListQueryVariables
 >;
 export const AllTeacherListDocument = gql`
-  query AllTeacherList {
-    allTeacherList {
+  query AllTeacherList($page: Int!, $size: Int!) {
+    allTeacherList(page: $page, size: $size) {
+      total
       data {
         maGV
         tenGV
@@ -2441,11 +2452,13 @@ export const AllTeacherListDocument = gql`
  * @example
  * const { data, loading, error } = useAllTeacherListQuery({
  *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
 export function useAllTeacherListQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     AllTeacherListQuery,
     AllTeacherListQueryVariables
   >

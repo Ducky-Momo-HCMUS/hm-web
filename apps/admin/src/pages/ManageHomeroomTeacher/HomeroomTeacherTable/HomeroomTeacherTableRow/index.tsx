@@ -23,7 +23,7 @@ function HomeroomTeacherTableRow({
   return (
     <>
       <TableRow key={index}>
-        <TableCell>{index + 1}</TableCell>
+        <TableCell>{index}</TableCell>
         <TableCell>{tenGV}</TableCell>
         <TableCell>{lopChuNhiem.join(', ')}</TableCell>
         <TableCell>{email}</TableCell>

@@ -1,9 +1,10 @@
 import { Button, Box } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../components/styles';
-import { useAllTeacherListQuery } from '../../generated-types';
+import { TEACHER_LIST_PAGE_SIZE } from '../../constants';
+import { useAllTeacherListLazyQuery } from '../../generated-types';
 import { TeacherListItem } from '../../types';
 
 import HomeroomTeacherTable from './HomeroomTeacherTable';
@@ -16,6 +17,12 @@ function ManageHomeroomTeacher() {
     setOpenImportHomeroomTeacherInfoDialog,
   ] = useState(false);
 
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = useCallback((event: unknown, newPage: number) => {
+    setPage(newPage);
+  }, []);
+
   const handleOpenImportHomeroomTeacherInfoDialog = () => {
     setOpenImportHomeroomTeacherInfoDialog(true);
   };
@@ -24,19 +31,36 @@ function ManageHomeroomTeacher() {
     setOpenImportHomeroomTeacherInfoDialog(false);
   };
 
-  const { loading: allTeacherListLoading, data: allTeacherListData } =
-    useAllTeacherListQuery({});
+  const [
+    getAllTeacherList,
+    { loading: allTeacherListLoading, data: allTeacherListData },
+  ] = useAllTeacherListLazyQuery();
 
-  const teacherList = useMemo(() => {
+  const { teacherList, teacherListLength } = useMemo(() => {
     const allTeacherList = allTeacherListData?.allTeacherList.data || [];
 
-    return allTeacherList.map((item) => ({
-      maGV: item.maGV,
-      tenGV: item.tenGV,
-      email: item.email,
-      lopChuNhiem: item.lopSinhHoat.map((lop) => lop.maSH),
-    })) as TeacherListItem[];
-  }, [allTeacherListData?.allTeacherList.data]);
+    return {
+      teacherList: allTeacherList.map((item) => ({
+        maGV: item.maGV,
+        tenGV: item.tenGV,
+        email: item.email,
+        lopChuNhiem: item.lopSinhHoat.map((lop) => lop.maSH),
+      })) as TeacherListItem[],
+      teacherListLength: allTeacherListData?.allTeacherList.total || 0,
+    };
+  }, [
+    allTeacherListData?.allTeacherList.data,
+    allTeacherListData?.allTeacherList.total,
+  ]);
+
+  useEffect(() => {
+    getAllTeacherList({
+      variables: {
+        page: page + 1,
+        size: TEACHER_LIST_PAGE_SIZE,
+      },
+    });
+  }, [getAllTeacherList, page]);
 
   return (
     <Box display="flex" flexDirection="column" gap={1}>
@@ -56,7 +80,12 @@ function ManageHomeroomTeacher() {
         loading={allTeacherListLoading}
         data={allTeacherListData}
       >
-        <HomeroomTeacherTable data={teacherList} />
+        <HomeroomTeacherTable
+          data={teacherList}
+          page={page}
+          handleChangePage={handleChangePage}
+          total={teacherListLength}
+        />
       </AsyncDataRenderer>
       <ImportHomeroomTeacherListDialog
         open={openImportHomeroomTeacherInfoDialog}

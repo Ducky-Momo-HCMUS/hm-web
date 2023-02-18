@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 const teacherTypeDefs = gql`
   extend type Query {
     teacherList(year: Int!, page: Int!, size: Int!): TeacherList!
-    allTeacherList: AllTeacherList!
+    allTeacherList(page: Int!, size: Int!): AllTeacherList!
     yearList: YearList!
   }
 
@@ -20,6 +20,7 @@ const teacherTypeDefs = gql`
   }
 
   type AllTeacherList {
+    total: Int!
     data: [AllTeacherListItem!]!
   }
 

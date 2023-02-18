@@ -18,6 +18,7 @@ import React, { useCallback, useState } from 'react';
 import { CLASS_LIST } from '../../../mocks/teacher';
 import { StyledTextField } from '../../../components/styles';
 import { TeacherListItem } from '../../../types';
+import { TeacherEditInput } from '../../../generated-types';
 
 interface State {
   fullName: string;
@@ -28,7 +29,7 @@ interface AddOrEditHomeroomTeacherInfoDialogProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
-  onClickConfirm: any;
+  onClickConfirm: (payload: TeacherEditInput) => void;
   data?: TeacherListItem;
 }
 
@@ -133,7 +134,11 @@ function AddOrEditHomeroomTeacherInfoDialog({
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
-          <Button color="primary" variant="contained" onClick={onClickConfirm}>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => onClickConfirm({ lopSH: values.className })}
+          >
             {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
