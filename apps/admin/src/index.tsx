@@ -37,8 +37,8 @@ const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {
       if (
-        message === 'Invalid JWT token' ||
-        message === 'Insufficient permission'
+        message === 'Invalid authorization token' ||
+        message === 'Forbidden resource'
       ) {
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('EMAIL');

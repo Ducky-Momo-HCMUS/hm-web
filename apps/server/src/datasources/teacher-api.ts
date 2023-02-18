@@ -1,6 +1,10 @@
 import { ApolloError } from 'apollo-server-express';
 
-import { QueryTeacherListArgs } from '../generated-types';
+import {
+  MutationTeacherDeleteArgs,
+  MutationTeacherEditArgs,
+  QueryTeacherListArgs,
+} from '../generated-types';
 import { YEAR_LIST } from '../mocks/teacher';
 import { SERVICES_BASE_URL } from '../utils/config';
 
@@ -28,6 +32,36 @@ class TeacherAPI extends BaseDataSource {
       return teacherList;
     } catch (error) {
       console.error('Error: cannot fetch teacher list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getAllTeacherList() {
+    try {
+      const res = await this.get('v1/teachers/all');
+      return res;
+    } catch (error) {
+      console.error('Error: cannot fetch all teacher list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async updateTeacher({ teacherId, payload }: MutationTeacherEditArgs) {
+    try {
+      const res = await this.patch(`v1/teachers/${teacherId}`, payload);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot update teacher');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteTeacher({ teacherId }: MutationTeacherDeleteArgs) {
+    try {
+      const res = await this.delete(`v1/teachers/${teacherId}`);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot delete teacher');
       throw this.handleError(error as ApolloError);
     }
   }

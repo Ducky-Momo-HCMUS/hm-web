@@ -68,6 +68,20 @@ export type AccountListItem = {
   tenGV: Scalars['String'];
 };
 
+export type AllTeacherList = {
+  __typename?: 'AllTeacherList';
+  data: Array<AllTeacherListItem>;
+  total: Scalars['Int'];
+};
+
+export type AllTeacherListItem = {
+  __typename?: 'AllTeacherListItem';
+  email: Scalars['String'];
+  lopSinhHoat: Array<HomeroomInfo>;
+  maGV: Scalars['Int'];
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -156,6 +170,11 @@ export type HomeroomFinalResultListItem = {
   hoTen: Scalars['String'];
   maSV: Scalars['String'];
   xepLoai?: Maybe<Scalars['String']>;
+};
+
+export type HomeroomInfo = {
+  __typename?: 'HomeroomInfo';
+  maSH: Scalars['String'];
 };
 
 export type HomeroomLearnOverview = {
@@ -295,6 +314,8 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
+  teacherDelete: AllTeacherListItem;
+  teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
 
@@ -388,6 +409,15 @@ export type MutationTagEditArgs = {
   tagId: Scalars['Int'];
 };
 
+export type MutationTeacherDeleteArgs = {
+  teacherId: Scalars['Int'];
+};
+
+export type MutationTeacherEditArgs = {
+  payload: TeacherEditInput;
+  teacherId: Scalars['Int'];
+};
+
 export type MutationUploadDocumentArgs = {
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
@@ -466,6 +496,7 @@ export type NoteTag = {
 export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
+  allTeacherList: AllTeacherList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
@@ -492,6 +523,11 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   yearList: YearList;
+};
+
+export type QueryAllTeacherListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -791,6 +827,10 @@ export type TagList = {
   tags: Array<Tag>;
 };
 
+export type TeacherEditInput = {
+  lopSH: Array<Scalars['String']>;
+};
+
 export type TeacherInfo = {
   __typename?: 'TeacherInfo';
   tenGV: Scalars['String'];
@@ -935,6 +975,25 @@ export type TagEditMutation = {
   tagEdit: { __typename?: 'Tag'; maTag: number; tenTag: string };
 };
 
+export type TeacherDeleteMutationVariables = Exact<{
+  teacherId: Scalars['Int'];
+}>;
+
+export type TeacherDeleteMutation = {
+  __typename?: 'Mutation';
+  teacherDelete: { __typename?: 'AllTeacherListItem'; maGV: number };
+};
+
+export type TeacherEditMutationVariables = Exact<{
+  teacherId: Scalars['Int'];
+  payload: TeacherEditInput;
+}>;
+
+export type TeacherEditMutation = {
+  __typename?: 'Mutation';
+  teacherEdit: { __typename?: 'AllTeacherListItem'; maGV: number };
+};
+
 export type AccountListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type AccountListQuery = {
@@ -960,6 +1019,26 @@ export type TagListQuery = {
   tagList: {
     __typename?: 'TagList';
     tags: Array<{ __typename?: 'Tag'; maTag: number; tenTag: string }>;
+  };
+};
+
+export type AllTeacherListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type AllTeacherListQuery = {
+  __typename?: 'Query';
+  allTeacherList: {
+    __typename?: 'AllTeacherList';
+    total: number;
+    data: Array<{
+      __typename?: 'AllTeacherListItem';
+      maGV: number;
+      tenGV: string;
+      email: string;
+      lopSinhHoat: Array<{ __typename?: 'HomeroomInfo'; maSH: string }>;
+    }>;
   };
 };
 
@@ -2132,6 +2211,107 @@ export type TagEditMutationOptions = Apollo.BaseMutationOptions<
   TagEditMutation,
   TagEditMutationVariables
 >;
+export const TeacherDeleteDocument = gql`
+  mutation TeacherDelete($teacherId: Int!) {
+    teacherDelete(teacherId: $teacherId) {
+      maGV
+    }
+  }
+`;
+export type TeacherDeleteMutationFn = Apollo.MutationFunction<
+  TeacherDeleteMutation,
+  TeacherDeleteMutationVariables
+>;
+
+/**
+ * __useTeacherDeleteMutation__
+ *
+ * To run a mutation, you first call `useTeacherDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTeacherDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [teacherDeleteMutation, { data, loading, error }] = useTeacherDeleteMutation({
+ *   variables: {
+ *      teacherId: // value for 'teacherId'
+ *   },
+ * });
+ */
+export function useTeacherDeleteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TeacherDeleteMutation,
+    TeacherDeleteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    TeacherDeleteMutation,
+    TeacherDeleteMutationVariables
+  >(TeacherDeleteDocument, options);
+}
+export type TeacherDeleteMutationHookResult = ReturnType<
+  typeof useTeacherDeleteMutation
+>;
+export type TeacherDeleteMutationResult =
+  Apollo.MutationResult<TeacherDeleteMutation>;
+export type TeacherDeleteMutationOptions = Apollo.BaseMutationOptions<
+  TeacherDeleteMutation,
+  TeacherDeleteMutationVariables
+>;
+export const TeacherEditDocument = gql`
+  mutation TeacherEdit($teacherId: Int!, $payload: TeacherEditInput!) {
+    teacherEdit(teacherId: $teacherId, payload: $payload) {
+      maGV
+    }
+  }
+`;
+export type TeacherEditMutationFn = Apollo.MutationFunction<
+  TeacherEditMutation,
+  TeacherEditMutationVariables
+>;
+
+/**
+ * __useTeacherEditMutation__
+ *
+ * To run a mutation, you first call `useTeacherEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTeacherEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [teacherEditMutation, { data, loading, error }] = useTeacherEditMutation({
+ *   variables: {
+ *      teacherId: // value for 'teacherId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useTeacherEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    TeacherEditMutation,
+    TeacherEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<TeacherEditMutation, TeacherEditMutationVariables>(
+    TeacherEditDocument,
+    options
+  );
+}
+export type TeacherEditMutationHookResult = ReturnType<
+  typeof useTeacherEditMutation
+>;
+export type TeacherEditMutationResult =
+  Apollo.MutationResult<TeacherEditMutation>;
+export type TeacherEditMutationOptions = Apollo.BaseMutationOptions<
+  TeacherEditMutation,
+  TeacherEditMutationVariables
+>;
 export const AccountListDocument = gql`
   query AccountList {
     accountList {
@@ -2243,6 +2423,73 @@ export type TagListLazyQueryHookResult = ReturnType<typeof useTagListLazyQuery>;
 export type TagListQueryResult = Apollo.QueryResult<
   TagListQuery,
   TagListQueryVariables
+>;
+export const AllTeacherListDocument = gql`
+  query AllTeacherList($page: Int!, $size: Int!) {
+    allTeacherList(page: $page, size: $size) {
+      total
+      data {
+        maGV
+        tenGV
+        email
+        lopSinhHoat {
+          maSH
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useAllTeacherListQuery__
+ *
+ * To run a query within a React component, call `useAllTeacherListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllTeacherListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllTeacherListQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useAllTeacherListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AllTeacherListQuery,
+    AllTeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AllTeacherListQuery, AllTeacherListQueryVariables>(
+    AllTeacherListDocument,
+    options
+  );
+}
+export function useAllTeacherListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AllTeacherListQuery,
+    AllTeacherListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<AllTeacherListQuery, AllTeacherListQueryVariables>(
+    AllTeacherListDocument,
+    options
+  );
+}
+export type AllTeacherListQueryHookResult = ReturnType<
+  typeof useAllTeacherListQuery
+>;
+export type AllTeacherListLazyQueryHookResult = ReturnType<
+  typeof useAllTeacherListLazyQuery
+>;
+export type AllTeacherListQueryResult = Apollo.QueryResult<
+  AllTeacherListQuery,
+  AllTeacherListQueryVariables
 >;
 export const EditPasswordDocument = gql`
   mutation EditPassword(

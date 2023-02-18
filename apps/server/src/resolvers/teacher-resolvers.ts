@@ -8,8 +8,22 @@ export const teacherResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.teacherAPI.getTeacherList(args);
       return res.data;
     },
+    allTeacherList: async (_, __, { dataSources }) => {
+      const res = await dataSources.teacherAPI.getAllTeacherList();
+      return res.data;
+    },
     yearList: async (_, __, { dataSources }) => {
       const res = await dataSources.teacherAPI.getYearList();
+      return res;
+    },
+  },
+  Mutation: {
+    teacherEdit: async (_, args, { dataSources }) => {
+      const res = await dataSources.teacherAPI.updateTeacher(args);
+      return res;
+    },
+    teacherDelete: async (_, args, { dataSources }) => {
+      const res = await dataSources.teacherAPI.deleteTeacher(args);
       return res;
     },
   },

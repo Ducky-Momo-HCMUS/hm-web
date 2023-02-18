@@ -1,44 +1,34 @@
 import { IconButton, TableRow, TableCell } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState } from 'react';
+import React from 'react';
 
-import { HomeroomTeacherInfo } from '../../../../types';
-import AddOrEditHomeroomTeacherInfoDialog from '../../AddOrEditHomeroomTeacherInfoDialog';
+import { TeacherListItem } from '../../../../types';
 
 interface HomeroomTeacherTableRowProps {
   index: number;
-  data: HomeroomTeacherInfo;
+  data: TeacherListItem;
   onClickDelete: any;
+  onClickEdit: any;
 }
 
 function HomeroomTeacherTableRow({
   index,
   data,
   onClickDelete,
+  onClickEdit,
 }: HomeroomTeacherTableRowProps) {
-  const { fullName, className } = data;
-  const [
-    openAddOrEditHomeroomTeacherInfoDialog,
-    setOpenAddOrEditHomeroomTeacherInfoDialog,
-  ] = useState(false);
-
-  const handleOpenAddOrEditHomeroomTeacherInfoDialog = () => {
-    setOpenAddOrEditHomeroomTeacherInfoDialog(true);
-  };
-
-  const handleCloseAddOrEditHomeroomTeacherInfoDialog = () => {
-    setOpenAddOrEditHomeroomTeacherInfoDialog(false);
-  };
+  const { tenGV, lopChuNhiem, email } = data;
 
   return (
     <>
       <TableRow key={index}>
-        <TableCell>{index + 1}</TableCell>
-        <TableCell>{fullName}</TableCell>
-        <TableCell>{className}</TableCell>
+        <TableCell>{index}</TableCell>
+        <TableCell>{tenGV}</TableCell>
+        <TableCell>{lopChuNhiem.join(', ')}</TableCell>
+        <TableCell>{email}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={handleOpenAddOrEditHomeroomTeacherInfoDialog}>
+          <IconButton onClick={onClickEdit}>
             <EditIcon />
           </IconButton>
           <IconButton onClick={onClickDelete}>
@@ -46,13 +36,6 @@ function HomeroomTeacherTableRow({
           </IconButton>
         </TableCell>
       </TableRow>
-      <AddOrEditHomeroomTeacherInfoDialog
-        open={openAddOrEditHomeroomTeacherInfoDialog}
-        onClose={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        onClickCancel={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        onClickConfirm={handleCloseAddOrEditHomeroomTeacherInfoDialog}
-        data={data}
-      />
     </>
   );
 }
