@@ -33,13 +33,11 @@ export const studentResolver: Resolvers<ResolverContext> = {
     },
     studentNoteList: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentNoteList(args);
-      console.log('data', res.data);
       return res.data;
     },
     studentOverviewResult: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentOverviewResult(args)) || null
-      );
+      const res = await dataSources.studentAPI.getStudentOverviewResult(args);
+      return res.data;
     },
     studentDetailSubjectsResult: async (_, args, { dataSources }) => {
       return (

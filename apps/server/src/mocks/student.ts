@@ -2,7 +2,6 @@ import {
   StudentContactResponse,
   StudentParentInfo,
   StudentDetailSubjectsResult,
-  StudentOverviewResult,
 } from '../generated-types';
 
 export const STUDENT_ADD_CONTACT_RESPONSE = {
@@ -33,18 +32,6 @@ export const STUDENT_PARENT_INFO_RESPONSE = {
     },
   ],
 } as StudentParentInfo;
-
-export const STUDENT_OVERVIEW_RESULT = {
-  tenCN: 'Kỹ thuật phần mềm',
-  daiCuong: 56,
-  coSoNganh: 38,
-  chuyenNganh: 12,
-  tuChonChuyenNganh: 8,
-  tuChonTuDo: 4,
-  totNghiep: 0,
-  tongTC: 124,
-  dtb: 7.68,
-} as StudentOverviewResult;
 
 export const STUDENT_DETAIL_SUBJECTS_RESULT = {
   tichLuy: 11,

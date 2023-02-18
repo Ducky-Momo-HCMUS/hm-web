@@ -4,9 +4,13 @@ const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
     homeroomAllList: HomeroomAllList!
-    homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]!
+    homeroomStudentList(
+      homeroomId: String!
+      page: Int!
+      size: Int!
+    ): HomeroomStudentList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
-    homeroomTermList(homeroomId: String!): HomeroomTermList!
+    homeroomTermList(homeroomId: String!): [HomeroomTermListItem!]!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
     homeroomNotEnrolledListByTerm(
       homeroomId: String!
@@ -44,6 +48,11 @@ const homeroomTypeDefs = gql`
     khoa: Int!
   }
 
+  type HomeroomStudentList {
+    total: Int!
+    data: [HomeroomStudentListItem!]
+  }
+
   type HomeroomStudentListItem {
     maSV: String!
     tenSV: String!
@@ -70,10 +79,6 @@ const homeroomTypeDefs = gql`
     siSo: Int!
   }
 
-  type HomeroomTermList {
-    hocKyNamHoc: [HomeroomTermListItem!]!
-  }
-
   type HomeroomTermListItem {
     maHK: Int!
     hocKy: Int!
@@ -87,6 +92,7 @@ const homeroomTypeDefs = gql`
 
   type HomeroomFailListItem {
     dtb: Float!
+    vang: Boolean!
     sinhVien: HomeroomFailListStudentInfo!
     lopHocPhan: HomeroomFailListStudentCourse!
   }

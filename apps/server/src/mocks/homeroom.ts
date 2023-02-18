@@ -2,43 +2,11 @@ import {
   HomeroomAllList,
   HomeroomFinalResultList,
   HomeroomOverviewReport,
-  HomeroomTermList,
-  HomeroomTermListItem,
 } from '../generated-types';
 
 export const HOMEROOM_ALL_LIST = {
   danhSachLopSH: ['19CLC1', '19CLC2', '19CLC3'],
 } as HomeroomAllList;
-
-export const HOMEROOM_TERM_LIST = {
-  hocKyNamHoc: [
-    {
-      maHK: 1,
-      hocKy: 1,
-      namHocBD: 2019,
-    },
-    {
-      maHK: 2,
-      hocKy: 2,
-      namHocBD: 2019,
-    },
-    {
-      maHK: 3,
-      hocKy: 3,
-      namHocBD: 2019,
-    },
-    {
-      maHK: 4,
-      hocKy: 1,
-      namHocBD: 2020,
-    },
-    {
-      maHK: 5,
-      hocKy: 2,
-      namHocBD: 2020,
-    },
-  ] as HomeroomTermListItem[],
-} as HomeroomTermList;
 
 export const HOMEROOM_OVERVIEW_REPORT_BY_TERM = {
   siSo: {

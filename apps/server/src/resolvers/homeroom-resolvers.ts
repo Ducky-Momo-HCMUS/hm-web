@@ -14,14 +14,15 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomStudentList(args);
-      return res.data;
+      return res;
     },
     homeroomDetail: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomDetail(args);
       return res.data;
     },
     homeroomTermList: async (_, args, { dataSources }) => {
-      return (await dataSources.homeroomAPI.getHomeroomTermList(args)) || null;
+      const res = await dataSources.homeroomAPI.getHomeroomTermList(args);
+      return res.data;
     },
     homeroomFailListByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomFailListByTerm(args);

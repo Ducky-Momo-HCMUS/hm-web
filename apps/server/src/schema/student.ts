@@ -19,7 +19,7 @@ const studentTypeDefs = gql`
       size: Int!
     ): StudentParentInfoList!
     studentNoteList(studentId: String!): [StudentNote!]!
-    studentOverviewResult(studentId: String!): StudentOverviewResult!
+    studentOverviewResult(studentId: String!): StudentOverviewResult
     studentDetailSubjectsResult(
       studentId: String!
       subject: String!

@@ -130,6 +130,7 @@ export type HomeroomFailListItem = {
   dtb: Scalars['Float'];
   lopHocPhan: HomeroomFailListStudentCourse;
   sinhVien: HomeroomFailListStudentInfo;
+  vang: Scalars['Boolean'];
 };
 
 export type HomeroomFailListStudentCourse = {
@@ -237,6 +238,12 @@ export type HomeroomPostponeExamListSubject = {
   tenMH: Scalars['String'];
 };
 
+export type HomeroomStudentList = {
+  __typename?: 'HomeroomStudentList';
+  data?: Maybe<Array<HomeroomStudentListItem>>;
+  total: Scalars['Int'];
+};
+
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   emailSV: Scalars['String'];
@@ -248,11 +255,6 @@ export type HomeroomStudentListItem = {
   tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
-};
-
-export type HomeroomTermList = {
-  __typename?: 'HomeroomTermList';
-  hocKyNamHoc: Array<HomeroomTermListItem>;
 };
 
 export type HomeroomTermListItem = {
@@ -478,8 +480,8 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomOverviewReportByTerm: HomeroomOverviewReport;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList: Array<HomeroomStudentListItem>;
-  homeroomTermList: HomeroomTermList;
+  homeroomStudentList: HomeroomStudentList;
+  homeroomTermList: Array<HomeroomTermListItem>;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   studentAllTerms: Array<StudentTerm>;
@@ -487,7 +489,7 @@ export type Query = {
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
-  studentOverviewResult: StudentOverviewResult;
+  studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: Array<StudentSubject>;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -532,6 +534,8 @@ export type QueryHomeroomPostponeExamListByTermArgs = {
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -966,8 +970,8 @@ export type ResolversTypes = {
   HomeroomPostponeExamListItem: ResolverTypeWrapper<HomeroomPostponeExamListItem>;
   HomeroomPostponeExamListStudentInfo: ResolverTypeWrapper<HomeroomPostponeExamListStudentInfo>;
   HomeroomPostponeExamListSubject: ResolverTypeWrapper<HomeroomPostponeExamListSubject>;
+  HomeroomStudentList: ResolverTypeWrapper<HomeroomStudentList>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
-  HomeroomTermList: ResolverTypeWrapper<HomeroomTermList>;
   HomeroomTermListItem: ResolverTypeWrapper<HomeroomTermListItem>;
   HomeroomTrainingPointOverview: ResolverTypeWrapper<HomeroomTrainingPointOverview>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -1061,8 +1065,8 @@ export type ResolversParentTypes = {
   HomeroomPostponeExamListItem: HomeroomPostponeExamListItem;
   HomeroomPostponeExamListStudentInfo: HomeroomPostponeExamListStudentInfo;
   HomeroomPostponeExamListSubject: HomeroomPostponeExamListSubject;
+  HomeroomStudentList: HomeroomStudentList;
   HomeroomStudentListItem: HomeroomStudentListItem;
-  HomeroomTermList: HomeroomTermList;
   HomeroomTermListItem: HomeroomTermListItem;
   HomeroomTrainingPointOverview: HomeroomTrainingPointOverview;
   ID: Scalars['ID'];
@@ -1281,6 +1285,7 @@ export type HomeroomFailListItemResolvers<
     ParentType,
     ContextType
   >;
+  vang?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1492,6 +1497,19 @@ export type HomeroomPostponeExamListSubjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HomeroomStudentListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomStudentList'] = ResolversParentTypes['HomeroomStudentList']
+> = {
+  data?: Resolver<
+    Maybe<Array<ResolversTypes['HomeroomStudentListItem']>>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HomeroomStudentListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomStudentListItem'] = ResolversParentTypes['HomeroomStudentListItem']
@@ -1509,18 +1527,6 @@ export type HomeroomStudentListItemResolvers<
   tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type HomeroomTermListResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['HomeroomTermList'] = ResolversParentTypes['HomeroomTermList']
-> = {
-  hocKyNamHoc?: Resolver<
-    Array<ResolversTypes['HomeroomTermListItem']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1853,13 +1859,13 @@ export type QueryResolvers<
     >
   >;
   homeroomStudentList?: Resolver<
-    Array<ResolversTypes['HomeroomStudentListItem']>,
+    ResolversTypes['HomeroomStudentList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
+    RequireFields<QueryHomeroomStudentListArgs, 'homeroomId' | 'page' | 'size'>
   >;
   homeroomTermList?: Resolver<
-    ResolversTypes['HomeroomTermList'],
+    Array<ResolversTypes['HomeroomTermListItem']>,
     ParentType,
     ContextType,
     RequireFields<QueryHomeroomTermListArgs, 'homeroomId'>
@@ -1906,7 +1912,7 @@ export type QueryResolvers<
     RequireFields<QueryStudentNoteListArgs, 'studentId'>
   >;
   studentOverviewResult?: Resolver<
-    ResolversTypes['StudentOverviewResult'],
+    Maybe<ResolversTypes['StudentOverviewResult']>,
     ParentType,
     ContextType,
     RequireFields<QueryStudentOverviewResultArgs, 'studentId'>
@@ -2280,8 +2286,8 @@ export type Resolvers<ContextType = any> = {
   HomeroomPostponeExamListItem?: HomeroomPostponeExamListItemResolvers<ContextType>;
   HomeroomPostponeExamListStudentInfo?: HomeroomPostponeExamListStudentInfoResolvers<ContextType>;
   HomeroomPostponeExamListSubject?: HomeroomPostponeExamListSubjectResolvers<ContextType>;
+  HomeroomStudentList?: HomeroomStudentListResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
-  HomeroomTermList?: HomeroomTermListResolvers<ContextType>;
   HomeroomTermListItem?: HomeroomTermListItemResolvers<ContextType>;
   HomeroomTrainingPointOverview?: HomeroomTrainingPointOverviewResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;

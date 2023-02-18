@@ -138,7 +138,7 @@ function ClassDetail() {
     });
 
   const termList = useMemo(
-    () => homeroomTermListData?.homeroomTermList?.hocKyNamHoc || [],
+    () => homeroomTermListData?.homeroomTermList || [],
     [homeroomTermListData?.homeroomTermList]
   );
 
@@ -204,6 +204,7 @@ function ClassDetail() {
       tenMH: item.lopHocPhan.monHoc.tenMH,
       tenLopHP: item.lopHocPhan.tenLopHP,
       dtb: item.dtb,
+      ghiChu: item.vang ? 'Vắng' : '',
     }));
   }, [homeroomFailListByTermData?.homeroomFailListByTerm?.data]);
 

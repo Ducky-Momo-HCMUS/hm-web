@@ -17,10 +17,7 @@ import {
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
-import {
-  STUDENT_DETAIL_SUBJECTS_RESULT,
-  STUDENT_OVERVIEW_RESULT,
-} from '../mocks/student';
+import { STUDENT_DETAIL_SUBJECTS_RESULT } from '../mocks/student';
 import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -160,11 +157,8 @@ class StudentAPI extends BaseDataSource {
     studentId,
   }: QueryStudentOverviewResultArgs) {
     try {
-      // const overviewResult = await this.get(
-      //   `v1/students/${studentId}/general`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_OVERVIEW_RESULT;
+      const overviewResult = await this.get(`v1/students/${studentId}/general`);
+      return overviewResult;
     } catch (error) {
       console.error('Error: cannot fetch student overview result');
       throw this.handleError(error as ApolloError);

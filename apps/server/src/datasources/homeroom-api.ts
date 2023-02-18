@@ -4,7 +4,6 @@ import {
   HOMEROOM_ALL_LIST,
   HOMEROOM_FINAL_RESULT_LIST_BY_TERM,
   HOMEROOM_OVERVIEW_REPORT_BY_TERM,
-  HOMEROOM_TERM_LIST,
 } from '../mocks/homeroom';
 import {
   QueryHomeroomDetailArgs,
@@ -49,10 +48,12 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomStudentList({
     homeroomId,
+    page,
+    size,
   }: QueryHomeroomStudentListArgs) {
     try {
       const homeroomStudentList = await this.get(
-        `v1/homerooms/${homeroomId}/students`
+        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}`
       );
       return homeroomStudentList;
     } catch (error) {
@@ -73,11 +74,10 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomTermList({ homeroomId }: QueryHomeroomTermListArgs) {
     try {
-      // const homeroomTermList = await this.get(
-      //   `v1/homerooms/${homeroomId}/terms`
-      // );
-      console.log('params', homeroomId);
-      return HOMEROOM_TERM_LIST;
+      const homeroomTermList = await this.get(
+        `v1/homerooms/${homeroomId}/terms`
+      );
+      return homeroomTermList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom term list');
       throw this.handleError(error as ApolloError);

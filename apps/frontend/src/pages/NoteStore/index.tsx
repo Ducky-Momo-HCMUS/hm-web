@@ -377,7 +377,7 @@ function NoteStore() {
                 ))}
               </Select>
             </FormControl>
-            <AsyncDataRenderer loading={tagListLoading}>
+            <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
               <FormControl variant="standard" sx={{ width: '15%' }}>
                 <InputLabel
                   sx={{ fontWeight: 'bold' }}
@@ -417,7 +417,7 @@ function NoteStore() {
               </FormControl>
             </AsyncDataRenderer>
           </StyledFilterBar>
-          <AsyncDataRenderer loading={noteListLoading}>
+          <AsyncDataRenderer loading={noteListLoading} data={noteListData}>
             <StyledGridContainer
               sx={{ overflowY: 'auto', height: '20rem', padding: '1rem 0' }}
               container
@@ -451,7 +451,6 @@ function NoteStore() {
       {values.selected >= 0 && (
         <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
           <StyledDialog
-            sx={{ width: '80%' }}
             open={values.selected >= 0}
             onClose={() => setValues({ ...values, selected: -1 })}
           >

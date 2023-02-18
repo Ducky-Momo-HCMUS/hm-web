@@ -60,7 +60,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
         {contact.lienHe?.map((social) => (
           <>
             ,{' '}
-            <StyledMuiLink target="_blank" href={social.url}>
+            <StyledMuiLink key={social.url} target="_blank" href={social.url}>
               {social.mxh}
             </StyledMuiLink>
           </>

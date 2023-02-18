@@ -339,7 +339,7 @@ function NoteInfo() {
         </Grid>
         <AsyncDataRenderer
           loading={noteDetailLoading || tagListLoading}
-          data={noteDetailData && tagListData}
+          data={values.selected >= 0 ? noteDetailData : tagListData}
         >
           <Grid
             item

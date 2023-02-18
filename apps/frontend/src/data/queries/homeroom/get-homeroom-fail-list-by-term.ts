@@ -6,6 +6,7 @@ export const GET_HOMEROOM_FAIL_LIST_BY_TERM = gql`
       total
       data {
         dtb
+        vang
         sinhVien {
           maSV
           tenSV

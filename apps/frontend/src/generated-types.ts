@@ -125,6 +125,7 @@ export type HomeroomFailListItem = {
   dtb: Scalars['Float'];
   lopHocPhan: HomeroomFailListStudentCourse;
   sinhVien: HomeroomFailListStudentInfo;
+  vang: Scalars['Boolean'];
 };
 
 export type HomeroomFailListStudentCourse = {
@@ -232,6 +233,12 @@ export type HomeroomPostponeExamListSubject = {
   tenMH: Scalars['String'];
 };
 
+export type HomeroomStudentList = {
+  __typename?: 'HomeroomStudentList';
+  data?: Maybe<Array<HomeroomStudentListItem>>;
+  total: Scalars['Int'];
+};
+
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   emailSV: Scalars['String'];
@@ -243,11 +250,6 @@ export type HomeroomStudentListItem = {
   tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
-};
-
-export type HomeroomTermList = {
-  __typename?: 'HomeroomTermList';
-  hocKyNamHoc: Array<HomeroomTermListItem>;
 };
 
 export type HomeroomTermListItem = {
@@ -473,8 +475,8 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomOverviewReportByTerm: HomeroomOverviewReport;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList: Array<HomeroomStudentListItem>;
-  homeroomTermList: HomeroomTermList;
+  homeroomStudentList: HomeroomStudentList;
+  homeroomTermList: Array<HomeroomTermListItem>;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   studentAllTerms: Array<StudentTerm>;
@@ -482,7 +484,7 @@ export type Query = {
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
-  studentOverviewResult: StudentOverviewResult;
+  studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentSubjectsByTerm: Array<StudentSubject>;
   studentTrainingPointByTerm: StudentTrainingPoint;
@@ -527,6 +529,8 @@ export type QueryHomeroomPostponeExamListByTermArgs = {
 
 export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -1196,6 +1200,7 @@ export type HomeroomFailListByTermQuery = {
     data: Array<{
       __typename?: 'HomeroomFailListItem';
       dtb: number;
+      vang: boolean;
       sinhVien: {
         __typename?: 'HomeroomFailListStudentInfo';
         maSV: string;
@@ -1324,25 +1329,34 @@ export type HomeroomPostponeExamListByTermQuery = {
 
 export type HomeroomStudentListQueryVariables = Exact<{
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomStudentListQuery = {
   __typename?: 'Query';
-  homeroomStudentList: Array<{
-    __typename?: 'HomeroomStudentListItem';
-    maSV: string;
-    tenSV: string;
-    tenCN?: string | null | undefined;
-    tinhTrang: string;
-    gpa4?: number | null | undefined;
-    gpa10?: number | null | undefined;
-    sdt: string;
-    emailSV: string;
-    lienHeSV?:
-      | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+  homeroomStudentList: {
+    __typename?: 'HomeroomStudentList';
+    total: number;
+    data?:
+      | Array<{
+          __typename?: 'HomeroomStudentListItem';
+          maSV: string;
+          tenSV: string;
+          tenCN?: string | null | undefined;
+          tinhTrang: string;
+          gpa4?: number | null | undefined;
+          gpa10?: number | null | undefined;
+          sdt: string;
+          emailSV: string;
+          lienHeSV?:
+            | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+            | null
+            | undefined;
+        }>
       | null
       | undefined;
-  }>;
+  };
 };
 
 export type HomeroomTermListQueryVariables = Exact<{
@@ -1351,15 +1365,12 @@ export type HomeroomTermListQueryVariables = Exact<{
 
 export type HomeroomTermListQuery = {
   __typename?: 'Query';
-  homeroomTermList: {
-    __typename?: 'HomeroomTermList';
-    hocKyNamHoc: Array<{
-      __typename?: 'HomeroomTermListItem';
-      maHK: number;
-      hocKy: number;
-      namHocBD: number;
-    }>;
-  };
+  homeroomTermList: Array<{
+    __typename?: 'HomeroomTermListItem';
+    maHK: number;
+    hocKy: number;
+    namHocBD: number;
+  }>;
 };
 
 export type NoteDetailQueryVariables = Exact<{
@@ -1512,18 +1523,21 @@ export type StudentOverviewResultQueryVariables = Exact<{
 
 export type StudentOverviewResultQuery = {
   __typename?: 'Query';
-  studentOverviewResult: {
-    __typename?: 'StudentOverviewResult';
-    tenCN: string;
-    daiCuong: number;
-    coSoNganh: number;
-    chuyenNganh: number;
-    tuChonTuDo: number;
-    tuChonChuyenNganh: number;
-    totNghiep: number;
-    tongTC: number;
-    dtb: number;
-  };
+  studentOverviewResult?:
+    | {
+        __typename?: 'StudentOverviewResult';
+        tenCN: string;
+        daiCuong: number;
+        coSoNganh: number;
+        chuyenNganh: number;
+        tuChonTuDo: number;
+        tuChonChuyenNganh: number;
+        totNghiep: number;
+        tongTC: number;
+        dtb: number;
+      }
+    | null
+    | undefined;
 };
 
 export type StudentParentInfoListQueryVariables = Exact<{
@@ -3053,6 +3067,7 @@ export const HomeroomFailListByTermDocument = gql`
       total
       data {
         dtb
+        vang
         sinhVien {
           maSV
           tenSV
@@ -3456,19 +3471,22 @@ export type HomeroomPostponeExamListByTermQueryResult = Apollo.QueryResult<
   HomeroomPostponeExamListByTermQueryVariables
 >;
 export const HomeroomStudentListDocument = gql`
-  query HomeroomStudentList($homeroomId: String!) {
-    homeroomStudentList(homeroomId: $homeroomId) {
-      maSV
-      tenSV
-      tenCN
-      tinhTrang
-      gpa4
-      gpa10
-      sdt
-      emailSV
-      lienHeSV {
-        mxh
-        url
+  query HomeroomStudentList($homeroomId: String!, $page: Int!, $size: Int!) {
+    homeroomStudentList(homeroomId: $homeroomId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        tenCN
+        tinhTrang
+        gpa4
+        gpa10
+        sdt
+        emailSV
+        lienHeSV {
+          mxh
+          url
+        }
       }
     }
   }
@@ -3487,6 +3505,8 @@ export const HomeroomStudentListDocument = gql`
  * const { data, loading, error } = useHomeroomStudentListQuery({
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -3527,11 +3547,9 @@ export type HomeroomStudentListQueryResult = Apollo.QueryResult<
 export const HomeroomTermListDocument = gql`
   query HomeroomTermList($homeroomId: String!) {
     homeroomTermList(homeroomId: $homeroomId) {
-      hocKyNamHoc {
-        maHK
-        hocKy
-        namHocBD
-      }
+      maHK
+      hocKy
+      namHocBD
     }
   }
 `;

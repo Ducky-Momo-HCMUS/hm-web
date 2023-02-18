@@ -180,10 +180,7 @@ function AcademicReport() {
           </AsyncDataRenderer>
         </Box>
         <StyledStatusBox>
-          <AsyncDataRenderer
-            loading={trainingPointByTermLoading}
-            data={trainingPoint}
-          >
+          <AsyncDataRenderer loading={trainingPointByTermLoading}>
             <Button disabled sx={{ color: '#fff!important' }}>
               ĐRL:{' '}
               {trainingPoint
@@ -191,10 +188,7 @@ function AcademicReport() {
                 : 'Chưa có'}
             </Button>
           </AsyncDataRenderer>
-          <AsyncDataRenderer
-            loading={averagePointByTermLoading}
-            data={averagePoint}
-          >
+          <AsyncDataRenderer loading={averagePointByTermLoading}>
             <Button disabled sx={{ color: '#fff!important' }}>
               ĐTB:{' '}
               {averagePoint
