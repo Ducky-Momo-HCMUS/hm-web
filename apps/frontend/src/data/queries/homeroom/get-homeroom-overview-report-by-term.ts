@@ -12,18 +12,18 @@ export const GET_HOMEROOM_OVERVIEW_REPORT_BY_TERM = gql`
         xuatSac
         gioi
         kha
-        trungBinhKha
         trungBinh
         yeu
+        kem
         chungChiNgoaiNgu
       }
       drl {
         xuatSac
         gioi
         kha
-        trungBinhKha
         trungBinh
         yeu
+        kem
       }
     }
   }

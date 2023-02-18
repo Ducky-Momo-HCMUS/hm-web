@@ -161,14 +161,15 @@ export type HomeroomFailListSubject = {
 
 export type HomeroomFinalResultList = {
   __typename?: 'HomeroomFinalResultList';
-  danhSachKetQua: Array<HomeroomFinalResultListItem>;
+  data: Array<HomeroomFinalResultListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomFinalResultListItem = {
   __typename?: 'HomeroomFinalResultListItem';
   dtb?: Maybe<Scalars['Float']>;
-  hoTen: Scalars['String'];
   maSV: Scalars['String'];
+  tenSV: Scalars['String'];
   xepLoai?: Maybe<Scalars['String']>;
 };
 
@@ -179,13 +180,13 @@ export type HomeroomInfo = {
 
 export type HomeroomLearnOverview = {
   __typename?: 'HomeroomLearnOverview';
-  chungChiNgoaiNgu?: Maybe<Scalars['Int']>;
-  gioi?: Maybe<Scalars['Int']>;
-  kha?: Maybe<Scalars['Int']>;
-  trungBinh?: Maybe<Scalars['Int']>;
-  trungBinhKha?: Maybe<Scalars['Int']>;
-  xuatSac?: Maybe<Scalars['Int']>;
-  yeu?: Maybe<Scalars['Int']>;
+  chungChiNgoaiNgu: Scalars['Int'];
+  gioi: Scalars['Int'];
+  kem: Scalars['Int'];
+  kha: Scalars['Int'];
+  trungBinh: Scalars['Int'];
+  xuatSac: Scalars['Int'];
+  yeu: Scalars['Int'];
 };
 
 export type HomeroomList = {
@@ -280,12 +281,12 @@ export type HomeroomTermListItem = {
 
 export type HomeroomTrainingPointOverview = {
   __typename?: 'HomeroomTrainingPointOverview';
-  gioi?: Maybe<Scalars['Int']>;
-  kha?: Maybe<Scalars['Int']>;
-  trungBinh?: Maybe<Scalars['Int']>;
-  trungBinhKha?: Maybe<Scalars['Int']>;
-  xuatSac?: Maybe<Scalars['Int']>;
-  yeu?: Maybe<Scalars['Int']>;
+  gioi: Scalars['Int'];
+  kem: Scalars['Int'];
+  kha: Scalars['Int'];
+  trungBinh: Scalars['Int'];
+  xuatSac: Scalars['Int'];
+  yeu: Scalars['Int'];
 };
 
 export type LoginResponse = {
@@ -546,6 +547,8 @@ export type QueryHomeroomFailListByTermArgs = {
 
 export type QueryHomeroomFinalResultListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -1305,16 +1308,19 @@ export type HomeroomFailListByTermQuery = {
 export type HomeroomFinalResultListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomFinalResultListByTermQuery = {
   __typename?: 'Query';
   homeroomFinalResultListByTerm: {
     __typename?: 'HomeroomFinalResultList';
-    danhSachKetQua: Array<{
+    total: number;
+    data: Array<{
       __typename?: 'HomeroomFinalResultListItem';
       maSV: string;
-      hoTen: string;
+      tenSV: string;
       dtb?: number | null | undefined;
       xepLoai?: string | null | undefined;
     }>;
@@ -1373,22 +1379,22 @@ export type HomeroomOverviewReportByTermQuery = {
     };
     hocTap: {
       __typename?: 'HomeroomLearnOverview';
-      xuatSac?: number | null | undefined;
-      gioi?: number | null | undefined;
-      kha?: number | null | undefined;
-      trungBinhKha?: number | null | undefined;
-      trungBinh?: number | null | undefined;
-      yeu?: number | null | undefined;
-      chungChiNgoaiNgu?: number | null | undefined;
+      xuatSac: number;
+      gioi: number;
+      kha: number;
+      trungBinh: number;
+      yeu: number;
+      kem: number;
+      chungChiNgoaiNgu: number;
     };
     drl: {
       __typename?: 'HomeroomTrainingPointOverview';
-      xuatSac?: number | null | undefined;
-      gioi?: number | null | undefined;
-      kha?: number | null | undefined;
-      trungBinhKha?: number | null | undefined;
-      trungBinh?: number | null | undefined;
-      yeu?: number | null | undefined;
+      xuatSac: number;
+      gioi: number;
+      kha: number;
+      trungBinh: number;
+      yeu: number;
+      kem: number;
     };
   };
 };
@@ -3404,11 +3410,22 @@ export type HomeroomFailListByTermQueryResult = Apollo.QueryResult<
   HomeroomFailListByTermQueryVariables
 >;
 export const HomeroomFinalResultListByTermDocument = gql`
-  query HomeroomFinalResultListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomFinalResultListByTerm(homeroomId: $homeroomId, term: $term) {
-      danhSachKetQua {
+  query HomeroomFinalResultListByTerm(
+    $homeroomId: String!
+    $term: Int!
+    $page: Int!
+    $size: Int!
+  ) {
+    homeroomFinalResultListByTerm(
+      homeroomId: $homeroomId
+      term: $term
+      page: $page
+      size: $size
+    ) {
+      total
+      data {
         maSV
-        hoTen
+        tenSV
         dtb
         xepLoai
       }
@@ -3430,6 +3447,8 @@ export const HomeroomFinalResultListByTermDocument = gql`
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
  *      term: // value for 'term'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -3604,18 +3623,18 @@ export const HomeroomOverviewReportByTermDocument = gql`
         xuatSac
         gioi
         kha
-        trungBinhKha
         trungBinh
         yeu
+        kem
         chungChiNgoaiNgu
       }
       drl {
         xuatSac
         gioi
         kha
-        trungBinhKha
         trungBinh
         yeu
+        kem
       }
     }
   }

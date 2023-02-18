@@ -27,6 +27,8 @@ const homeroomTypeDefs = gql`
     homeroomFinalResultListByTerm(
       homeroomId: String!
       term: Int!
+      page: Int!
+      size: Int!
     ): HomeroomFinalResultList!
     homeroomExamAbsentListByTerm(
       homeroomId: String!
@@ -155,31 +157,32 @@ const homeroomTypeDefs = gql`
   }
 
   type HomeroomLearnOverview {
-    xuatSac: Int
-    gioi: Int
-    kha: Int
-    trungBinhKha: Int
-    trungBinh: Int
-    yeu: Int
-    chungChiNgoaiNgu: Int
+    xuatSac: Int!
+    gioi: Int!
+    kha: Int!
+    trungBinh: Int!
+    yeu: Int!
+    kem: Int!
+    chungChiNgoaiNgu: Int!
   }
 
   type HomeroomTrainingPointOverview {
-    xuatSac: Int
-    gioi: Int
-    kha: Int
-    trungBinhKha: Int
-    trungBinh: Int
-    yeu: Int
+    xuatSac: Int!
+    gioi: Int!
+    kha: Int!
+    trungBinh: Int!
+    yeu: Int!
+    kem: Int!
   }
 
   type HomeroomFinalResultList {
-    danhSachKetQua: [HomeroomFinalResultListItem!]!
+    total: Int!
+    data: [HomeroomFinalResultListItem!]!
   }
 
   type HomeroomFinalResultListItem {
     maSV: String!
-    hoTen: String!
+    tenSV: String!
     dtb: Float
     xepLoai: String
   }

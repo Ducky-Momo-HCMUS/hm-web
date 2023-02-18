@@ -22,6 +22,7 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import TabPanel from '../../components/TabPanel';
+import { FINAL_RESULT_LIST_PAGE_SIZE } from '../../constants';
 import {
   HomeroomOverviewReport,
   StudentTerm,
@@ -44,6 +45,13 @@ interface State {
 
 function ClassReport() {
   const { id = '' } = useParams();
+
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = useCallback((event: unknown, newPage: number) => {
+    setPage(newPage);
+  }, []);
+
   const [values, setValues] = useState<State>({
     year: '',
     term: '',
@@ -122,10 +130,8 @@ function ClassReport() {
   ] = useHomeroomFinalResultListByTermLazyQuery();
 
   const homeroomFinalResultList = useMemo(
-    () =>
-      homeroomFinalResultListData?.homeroomFinalResultListByTerm
-        .danhSachKetQua || [],
-    [homeroomFinalResultListData?.homeroomFinalResultListByTerm.danhSachKetQua]
+    () => homeroomFinalResultListData?.homeroomFinalResultListByTerm.data || [],
+    [homeroomFinalResultListData?.homeroomFinalResultListByTerm.data]
   );
 
   const [
@@ -179,6 +185,8 @@ function ClassReport() {
           variables: {
             homeroomId: id,
             term: values.term ? Number(values.term) : Number(initialTerm),
+            page: page + 1,
+            size: FINAL_RESULT_LIST_PAGE_SIZE,
           },
         });
 
@@ -208,6 +216,7 @@ function ClassReport() {
     initialTerm,
     selectedTab,
     values.term,
+    page,
   ]);
 
   const handleChangeTab = useCallback(
@@ -226,6 +235,8 @@ function ClassReport() {
             variables: {
               homeroomId: id,
               term: values.term ? Number(values.term) : Number(initialTerm),
+              page: 1,
+              size: FINAL_RESULT_LIST_PAGE_SIZE,
             },
           });
           break;
@@ -333,21 +344,18 @@ function ClassReport() {
             </Tabs>
           </AppBar>
           <TabPanel index={0} value={selectedTab}>
-            <AsyncDataRenderer
-              loading={
-                homeroomOverviewReportLoading || homeroomFinalResultListLoading
-              }
-              data={homeroomOverviewReportData && homeroomFinalResultListData}
+            <StyledScrollableBox
+              sx={{ padding: '0!important', height: '25rem' }}
             >
-              <StyledScrollableBox
-                sx={{ padding: '0!important', height: '25rem' }}
-              >
-                <ClassOverview
-                  homeroomOverviewReport={homeroomOverviewReport}
-                  homeroomFinalResultList={homeroomFinalResultList}
-                />
-              </StyledScrollableBox>
-            </AsyncDataRenderer>
+              <ClassOverview
+                homeroomOverviewReport={homeroomOverviewReport}
+                homeroomFinalResultList={homeroomFinalResultList}
+                homeroomOverviewReportLoading={homeroomOverviewReportLoading}
+                homeroomFinalResultListLoading={homeroomFinalResultListLoading}
+                page={page}
+                handleChangePage={handleChangePage}
+              />
+            </StyledScrollableBox>
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
             <AsyncDataRenderer
