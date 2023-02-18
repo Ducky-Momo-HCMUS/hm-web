@@ -2,10 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const studentTypeDefs = gql`
   extend type Query {
-    studentSubjectsByTerm(
-      studentId: String!
-      term: Int!
-    ): StudentSubjectsByTerm!
+    studentSubjectsByTerm(studentId: String!, term: Int!): [StudentSubject!]!
     studentTrainingPointByTerm(
       studentId: String!
       term: Int!
@@ -14,7 +11,7 @@ const studentTypeDefs = gql`
       studentId: String!
       term: Int!
     ): StudentAveragePoint!
-    studentAllTerms(studentId: String!): StudentAllTerms!
+    studentAllTerms(studentId: String!): [StudentTerm!]!
     studentDetail(studentId: String!): StudentDetail!
     studentParentInfoList(
       studentId: String!
@@ -48,14 +45,6 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
-  }
-
-  type StudentSubjectsByTerm {
-    monhoc: [StudentSubject!]!
-  }
-
-  type StudentAllTerms {
-    hocKyNamHoc: [StudentTerm!]!
   }
 
   type StudentSubject {

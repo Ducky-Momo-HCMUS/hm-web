@@ -237,20 +237,15 @@ export type HomeroomPostponeExamListSubject = {
   tenMH: Scalars['String'];
 };
 
-export type HomeroomStudentList = {
-  __typename?: 'HomeroomStudentList';
-  sinhVien: Array<HomeroomStudentListItem>;
-};
-
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   emailSV: Scalars['String'];
   gpa4?: Maybe<Scalars['Float']>;
   gpa10?: Maybe<Scalars['Float']>;
-  lienHe?: Maybe<Array<Contact>>;
-  maCN?: Maybe<Scalars['String']>;
+  lienHeSV?: Maybe<Array<Contact>>;
   maSV: Scalars['String'];
   sdt: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
 };
@@ -483,18 +478,18 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomOverviewReportByTerm: HomeroomOverviewReport;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList: HomeroomStudentList;
+  homeroomStudentList: Array<HomeroomStudentListItem>;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
-  studentAllTerms: StudentAllTerms;
+  studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: StudentParentInfoList;
-  studentSubjectsByTerm: StudentSubjectsByTerm;
+  studentSubjectsByTerm: Array<StudentSubject>;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
@@ -603,11 +598,6 @@ export type StudentAddParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
-};
-
-export type StudentAllTerms = {
-  __typename?: 'StudentAllTerms';
-  hocKyNamHoc: Array<StudentTerm>;
 };
 
 export type StudentAveragePoint = {
@@ -739,11 +729,6 @@ export type StudentSubject = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
-};
-
-export type StudentSubjectsByTerm = {
-  __typename?: 'StudentSubjectsByTerm';
-  monhoc: Array<StudentSubject>;
 };
 
 export type StudentTag = {
@@ -981,7 +966,6 @@ export type ResolversTypes = {
   HomeroomPostponeExamListItem: ResolverTypeWrapper<HomeroomPostponeExamListItem>;
   HomeroomPostponeExamListStudentInfo: ResolverTypeWrapper<HomeroomPostponeExamListStudentInfo>;
   HomeroomPostponeExamListSubject: ResolverTypeWrapper<HomeroomPostponeExamListSubject>;
-  HomeroomStudentList: ResolverTypeWrapper<HomeroomStudentList>;
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   HomeroomTermList: ResolverTypeWrapper<HomeroomTermList>;
   HomeroomTermListItem: ResolverTypeWrapper<HomeroomTermListItem>;
@@ -1004,7 +988,6 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAddContactInput: StudentAddContactInput;
   StudentAddParentInfoInput: StudentAddParentInfoInput;
-  StudentAllTerms: ResolverTypeWrapper<StudentAllTerms>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
   StudentContactResponse: ResolverTypeWrapper<StudentContactResponse>;
@@ -1021,7 +1004,6 @@ export type ResolversTypes = {
   StudentParentInfo: ResolverTypeWrapper<StudentParentInfo>;
   StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
-  StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTag: ResolverTypeWrapper<StudentTag>;
   StudentTagListItem: ResolverTypeWrapper<StudentTagListItem>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
@@ -1079,7 +1061,6 @@ export type ResolversParentTypes = {
   HomeroomPostponeExamListItem: HomeroomPostponeExamListItem;
   HomeroomPostponeExamListStudentInfo: HomeroomPostponeExamListStudentInfo;
   HomeroomPostponeExamListSubject: HomeroomPostponeExamListSubject;
-  HomeroomStudentList: HomeroomStudentList;
   HomeroomStudentListItem: HomeroomStudentListItem;
   HomeroomTermList: HomeroomTermList;
   HomeroomTermListItem: HomeroomTermListItem;
@@ -1102,7 +1083,6 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   StudentAddContactInput: StudentAddContactInput;
   StudentAddParentInfoInput: StudentAddParentInfoInput;
-  StudentAllTerms: StudentAllTerms;
   StudentAveragePoint: StudentAveragePoint;
   StudentContact: StudentContact;
   StudentContactResponse: StudentContactResponse;
@@ -1119,7 +1099,6 @@ export type ResolversParentTypes = {
   StudentParentInfo: StudentParentInfo;
   StudentParentInfoList: StudentParentInfoList;
   StudentSubject: StudentSubject;
-  StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTag: StudentTag;
   StudentTagListItem: StudentTagListItem;
   StudentTerm: StudentTerm;
@@ -1513,18 +1492,6 @@ export type HomeroomPostponeExamListSubjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type HomeroomStudentListResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['HomeroomStudentList'] = ResolversParentTypes['HomeroomStudentList']
-> = {
-  sinhVien?: Resolver<
-    Array<ResolversTypes['HomeroomStudentListItem']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type HomeroomStudentListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomStudentListItem'] = ResolversParentTypes['HomeroomStudentListItem']
@@ -1532,14 +1499,14 @@ export type HomeroomStudentListItemResolvers<
   emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  lienHe?: Resolver<
+  lienHeSV?: Resolver<
     Maybe<Array<ResolversTypes['Contact']>>,
     ParentType,
     ContextType
   >;
-  maCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sdt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1886,7 +1853,7 @@ export type QueryResolvers<
     >
   >;
   homeroomStudentList?: Resolver<
-    ResolversTypes['HomeroomStudentList'],
+    Array<ResolversTypes['HomeroomStudentListItem']>,
     ParentType,
     ContextType,
     RequireFields<QueryHomeroomStudentListArgs, 'homeroomId'>
@@ -1909,7 +1876,7 @@ export type QueryResolvers<
     ContextType
   >;
   studentAllTerms?: Resolver<
-    ResolversTypes['StudentAllTerms'],
+    Array<ResolversTypes['StudentTerm']>,
     ParentType,
     ContextType,
     RequireFields<QueryStudentAllTermsArgs, 'studentId'>
@@ -1951,7 +1918,7 @@ export type QueryResolvers<
     RequireFields<QueryStudentParentInfoListArgs, 'page' | 'size' | 'studentId'>
   >;
   studentSubjectsByTerm?: Resolver<
-    ResolversTypes['StudentSubjectsByTerm'],
+    Array<ResolversTypes['StudentSubject']>,
     ParentType,
     ContextType,
     RequireFields<QueryStudentSubjectsByTermArgs, 'studentId' | 'term'>
@@ -1970,18 +1937,6 @@ export type QueryResolvers<
     RequireFields<QueryTeacherListArgs, 'year'>
   >;
   yearList?: Resolver<ResolversTypes['YearList'], ParentType, ContextType>;
-};
-
-export type StudentAllTermsResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentAllTerms'] = ResolversParentTypes['StudentAllTerms']
-> = {
-  hocKyNamHoc?: Resolver<
-    Array<ResolversTypes['StudentTerm']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type StudentAveragePointResolvers<
@@ -2156,18 +2111,6 @@ export type StudentSubjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type StudentSubjectsByTermResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentSubjectsByTerm'] = ResolversParentTypes['StudentSubjectsByTerm']
-> = {
-  monhoc?: Resolver<
-    Array<ResolversTypes['StudentSubject']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type StudentTagResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentTag'] = ResolversParentTypes['StudentTag']
@@ -2337,7 +2280,6 @@ export type Resolvers<ContextType = any> = {
   HomeroomPostponeExamListItem?: HomeroomPostponeExamListItemResolvers<ContextType>;
   HomeroomPostponeExamListStudentInfo?: HomeroomPostponeExamListStudentInfoResolvers<ContextType>;
   HomeroomPostponeExamListSubject?: HomeroomPostponeExamListSubjectResolvers<ContextType>;
-  HomeroomStudentList?: HomeroomStudentListResolvers<ContextType>;
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   HomeroomTermList?: HomeroomTermListResolvers<ContextType>;
   HomeroomTermListItem?: HomeroomTermListItemResolvers<ContextType>;
@@ -2353,7 +2295,6 @@ export type Resolvers<ContextType = any> = {
   NoteListItem?: NoteListItemResolvers<ContextType>;
   NoteTag?: NoteTagResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  StudentAllTerms?: StudentAllTermsResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;
   StudentContactResponse?: StudentContactResponseResolvers<ContextType>;
@@ -2367,7 +2308,6 @@ export type Resolvers<ContextType = any> = {
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;
   StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
-  StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTag?: StudentTagResolvers<ContextType>;
   StudentTagListItem?: StudentTagListItemResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;

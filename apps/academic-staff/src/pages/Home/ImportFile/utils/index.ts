@@ -17,7 +17,6 @@ export const TYPES = [
   'Danh sách không đăng ký học phần',
   'Bảng điểm tổng hợp',
   'Bảng điểm lớp học phần',
-  'Điểm miễn/bảo lưu',
   'Danh sách hoãn thi',
   'Danh sách vắng thi',
 ];

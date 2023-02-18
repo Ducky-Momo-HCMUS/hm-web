@@ -5,24 +5,24 @@ import { ResolverContext } from './types';
 export const studentResolver: Resolvers<ResolverContext> = {
   Query: {
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentSubjectsByTerm(args)) || null
-      );
+      const res = await dataSources.studentAPI.getStudentSubjectsByTerm(args);
+      return res.data;
     },
     studentTrainingPointByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentTrainingPointByTerm(args)) ||
-        null
+      const res = await dataSources.studentAPI.getStudentTrainingPointByTerm(
+        args
       );
+      return res.data;
     },
     studentAveragePointByTerm: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentAveragePointByTerm(args)) ||
-        null
+      const res = await dataSources.studentAPI.getStudentAveragePointByTerm(
+        args
       );
+      return res.data;
     },
     studentAllTerms: async (_, args, { dataSources }) => {
-      return (await dataSources.studentAPI.getStudentAllTerms(args)) || null;
+      const res = await dataSources.studentAPI.getStudentAllTerms(args);
+      return res.data;
     },
     studentDetail: async (_, args, { dataSources }) => {
       return (await dataSources.studentAPI.getStudentDetail(args)) || null;

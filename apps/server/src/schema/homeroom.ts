@@ -4,7 +4,7 @@ const homeroomTypeDefs = gql`
   extend type Query {
     homeroomList: HomeroomList!
     homeroomAllList: HomeroomAllList!
-    homeroomStudentList(homeroomId: String!): HomeroomStudentList!
+    homeroomStudentList(homeroomId: String!): [HomeroomStudentListItem!]!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): HomeroomTermList!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
@@ -44,20 +44,16 @@ const homeroomTypeDefs = gql`
     khoa: Int!
   }
 
-  type HomeroomStudentList {
-    sinhVien: [HomeroomStudentListItem!]!
-  }
-
   type HomeroomStudentListItem {
     maSV: String!
     tenSV: String!
-    maCN: String
+    tenCN: String
     tinhTrang: String!
     gpa4: Float
     gpa10: Float
     sdt: String!
     emailSV: String!
-    lienHe: [Contact!]
+    lienHeSV: [Contact!]
   }
 
   type Contact {

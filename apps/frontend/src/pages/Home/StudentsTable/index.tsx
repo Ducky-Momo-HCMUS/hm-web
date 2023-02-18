@@ -115,7 +115,7 @@ function StudentsTable() {
     { loading: homeroomStudentListLoading, data: homeroomStudentListData },
   ] = useHomeroomStudentListLazyQuery();
   const studentListData = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
+    () => homeroomStudentListData?.homeroomStudentList || [],
     [homeroomStudentListData?.homeroomStudentList]
   );
 
@@ -125,6 +125,7 @@ function StudentsTable() {
         variables: {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [getHomeroomStudentList, initialClass, values.class]);

@@ -84,7 +84,7 @@ function StudentList() {
     });
 
   const homeroomStudentList = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
+    () => homeroomStudentListData?.homeroomStudentList || [],
     [homeroomStudentListData?.homeroomStudentList]
   );
 
@@ -127,7 +127,7 @@ function StudentList() {
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{row.maSV}</TableCell>
                       <TableCell>{row.tenSV}</TableCell>
-                      <TableCell>{row.maCN || 'Chưa có'}</TableCell>
+                      <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
                       <TableCell>{row.tinhTrang}</TableCell>
                       <TableCell>{row.sdt}</TableCell>
                       <TableCell>{row.emailSV}</TableCell>

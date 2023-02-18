@@ -232,20 +232,15 @@ export type HomeroomPostponeExamListSubject = {
   tenMH: Scalars['String'];
 };
 
-export type HomeroomStudentList = {
-  __typename?: 'HomeroomStudentList';
-  sinhVien: Array<HomeroomStudentListItem>;
-};
-
 export type HomeroomStudentListItem = {
   __typename?: 'HomeroomStudentListItem';
   emailSV: Scalars['String'];
   gpa4?: Maybe<Scalars['Float']>;
   gpa10?: Maybe<Scalars['Float']>;
-  lienHe?: Maybe<Array<Contact>>;
-  maCN?: Maybe<Scalars['String']>;
+  lienHeSV?: Maybe<Array<Contact>>;
   maSV: Scalars['String'];
   sdt: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tenSV: Scalars['String'];
   tinhTrang: Scalars['String'];
 };
@@ -478,18 +473,18 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomOverviewReportByTerm: HomeroomOverviewReport;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
-  homeroomStudentList: HomeroomStudentList;
+  homeroomStudentList: Array<HomeroomStudentListItem>;
   homeroomTermList: HomeroomTermList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
-  studentAllTerms: StudentAllTerms;
+  studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult: StudentOverviewResult;
   studentParentInfoList: StudentParentInfoList;
-  studentSubjectsByTerm: StudentSubjectsByTerm;
+  studentSubjectsByTerm: Array<StudentSubject>;
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
@@ -598,11 +593,6 @@ export type StudentAddParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
-};
-
-export type StudentAllTerms = {
-  __typename?: 'StudentAllTerms';
-  hocKyNamHoc: Array<StudentTerm>;
 };
 
 export type StudentAveragePoint = {
@@ -734,11 +724,6 @@ export type StudentSubject = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
-};
-
-export type StudentSubjectsByTerm = {
-  __typename?: 'StudentSubjectsByTerm';
-  monhoc: Array<StudentSubject>;
 };
 
 export type StudentTag = {
@@ -1343,24 +1328,21 @@ export type HomeroomStudentListQueryVariables = Exact<{
 
 export type HomeroomStudentListQuery = {
   __typename?: 'Query';
-  homeroomStudentList: {
-    __typename?: 'HomeroomStudentList';
-    sinhVien: Array<{
-      __typename?: 'HomeroomStudentListItem';
-      maSV: string;
-      tenSV: string;
-      maCN?: string | null | undefined;
-      tinhTrang: string;
-      gpa4?: number | null | undefined;
-      gpa10?: number | null | undefined;
-      sdt: string;
-      emailSV: string;
-      lienHe?:
-        | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
-        | null
-        | undefined;
-    }>;
-  };
+  homeroomStudentList: Array<{
+    __typename?: 'HomeroomStudentListItem';
+    maSV: string;
+    tenSV: string;
+    tenCN?: string | null | undefined;
+    tinhTrang: string;
+    gpa4?: number | null | undefined;
+    gpa10?: number | null | undefined;
+    sdt: string;
+    emailSV: string;
+    lienHeSV?:
+      | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+      | null
+      | undefined;
+  }>;
 };
 
 export type HomeroomTermListQueryVariables = Exact<{
@@ -1423,15 +1405,12 @@ export type StudentAllTermsQueryVariables = Exact<{
 
 export type StudentAllTermsQuery = {
   __typename?: 'Query';
-  studentAllTerms: {
-    __typename?: 'StudentAllTerms';
-    hocKyNamHoc: Array<{
-      __typename?: 'StudentTerm';
-      maHK: number;
-      hocKy: number;
-      namHocBD: number;
-    }>;
-  };
+  studentAllTerms: Array<{
+    __typename?: 'StudentTerm';
+    maHK: number;
+    hocKy: number;
+    namHocBD: number;
+  }>;
 };
 
 export type StudentAveragePointByTermQueryVariables = Exact<{
@@ -1582,19 +1561,16 @@ export type StudentSubjectsByTermQueryVariables = Exact<{
 
 export type StudentSubjectsByTermQuery = {
   __typename?: 'Query';
-  studentSubjectsByTerm: {
-    __typename?: 'StudentSubjectsByTerm';
-    monhoc: Array<{
-      __typename?: 'StudentSubject';
-      maMH: string;
-      tenMH: string;
-      tenLopHP: string;
-      dtb?: number | null | undefined;
-      gvlt: string;
-      gvth: string;
-      tinhTrang: string;
-    }>;
-  };
+  studentSubjectsByTerm: Array<{
+    __typename?: 'StudentSubject';
+    maMH: string;
+    tenMH: string;
+    tenLopHP: string;
+    dtb?: number | null | undefined;
+    gvlt: string;
+    gvth: string;
+    tinhTrang: string;
+  }>;
 };
 
 export type StudentTrainingPointByTermQueryVariables = Exact<{
@@ -3482,19 +3458,17 @@ export type HomeroomPostponeExamListByTermQueryResult = Apollo.QueryResult<
 export const HomeroomStudentListDocument = gql`
   query HomeroomStudentList($homeroomId: String!) {
     homeroomStudentList(homeroomId: $homeroomId) {
-      sinhVien {
-        maSV
-        tenSV
-        maCN
-        tinhTrang
-        gpa4
-        gpa10
-        sdt
-        emailSV
-        lienHe {
-          mxh
-          url
-        }
+      maSV
+      tenSV
+      tenCN
+      tinhTrang
+      gpa4
+      gpa10
+      sdt
+      emailSV
+      lienHeSV {
+        mxh
+        url
       }
     }
   }
@@ -3740,11 +3714,9 @@ export type NoteListQueryResult = Apollo.QueryResult<
 export const StudentAllTermsDocument = gql`
   query StudentAllTerms($studentId: String!) {
     studentAllTerms(studentId: $studentId) {
-      hocKyNamHoc {
-        maHK
-        hocKy
-        namHocBD
-      }
+      maHK
+      hocKy
+      namHocBD
     }
   }
 `;
@@ -4211,15 +4183,13 @@ export type StudentParentInfoListQueryResult = Apollo.QueryResult<
 export const StudentSubjectsByTermDocument = gql`
   query StudentSubjectsByTerm($studentId: String!, $term: Int!) {
     studentSubjectsByTerm(studentId: $studentId, term: $term) {
-      monhoc {
-        maMH
-        tenMH
-        tenLopHP
-        dtb
-        gvlt
-        gvth
-        tinhTrang
-      }
+      maMH
+      tenMH
+      tenLopHP
+      dtb
+      gvlt
+      gvth
+      tinhTrang
     }
   }
 `;

@@ -4,14 +4,13 @@ import { TableCell, TableRow, Typography } from '@mui/material';
 import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
-import { mapMajorIdToName } from '../../../../utils';
 
 interface StudentTableRowProps {
   data: HomeroomStudentListData;
   index: number;
 }
 function StudentTableRow({ data, index }: StudentTableRowProps) {
-  const { maSV, tenSV, maCN = '', tinhTrang, gpa4, gpa10, contact } = data;
+  const { maSV, tenSV, tenCN, tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
@@ -52,7 +51,7 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
       <TableCell>
         <StyledRouterLink to={`/students/${maSV}`}>{tenSV}</StyledRouterLink>
       </TableCell>
-      <TableCell>{mapMajorIdToName(maCN) || 'Chưa có'}</TableCell>
+      <TableCell>{tenCN || 'Chưa có'}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
       <TableCell>{gpa4 || 'Chưa có'}</TableCell>
       <TableCell>{gpa10 || 'Chưa có'}</TableCell>

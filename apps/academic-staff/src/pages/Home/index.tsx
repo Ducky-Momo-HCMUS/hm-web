@@ -29,29 +29,29 @@ function Home() {
               active={selected === 0}
               onClick={() => setSelected(0)}
             >
-              <PublishIcon color="action" />
-              <StyledListItemText primary="Nhập thông tin" />
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Danh sách GVCN" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 1}
               onClick={() => setSelected(1)}
             >
               <ListAltIcon color="action" />
-              <StyledListItemText primary="Danh sách GVCN" />
+              <StyledListItemText primary="Danh sách sinh viên" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 2}
               onClick={() => setSelected(2)}
             >
-              <ListAltIcon color="action" />
-              <StyledListItemText primary="Danh sách sinh viên" />
+              <PublishIcon color="action" />
+              <StyledListItemText primary="Nhập thông tin" />
             </StyledListItemButton>
           </List>
         </Drawer>
         <StyledContent component="main">
-          {selected === 0 && <ImportFile />}
-          {selected === 1 && <HomeroomTeacherList />}
-          {selected === 2 && <StudentList />}
+          {selected === 0 && <HomeroomTeacherList />}
+          {selected === 1 && <StudentList />}
+          {selected === 2 && <ImportFile />}
         </StyledContent>
       </StyledContainer>
     </>

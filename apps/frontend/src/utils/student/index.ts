@@ -12,26 +12,9 @@ export const mapStudentDataToTable = (data: HomeroomStudentListItem) => {
     ...data,
     contact: {
       sdt: data.sdt,
-      lienHe: data.lienHe,
+      lienHe: data.lienHeSV,
     },
   } as HomeroomStudentListData;
-};
-
-export const mapMajorIdToName = (maCN: string) => {
-  switch (maCN) {
-    case 'KTPM':
-      return 'Kỹ thuật phần mềm';
-    case 'HTTT':
-      return 'Hệ thống thông tin';
-    case 'KHMT':
-      return 'Khoa học máy tính';
-    case 'MMT':
-      return 'Mạng máy tính';
-    case 'CNTT':
-      return 'Công nghệ tri thức';
-    default:
-      return '';
-  }
 };
 
 export const groupClassesByYear = (homeroomList: HomeroomListItem[]) => {
