@@ -14,10 +14,15 @@ export const authResolvers: Resolvers<ResolverContext> = {
     },
     resetPassword: async (
       _parent,
-      { id, token, password },
+      { id, token, password, passwordConfirm },
       { dataSources }
     ) => {
-      const res = await dataSources.authAPI.resetPassword(id, token, password);
+      const res = await dataSources.authAPI.resetPassword(
+        id,
+        token,
+        password,
+        passwordConfirm
+      );
       return { status: res.data.status };
     },
     editPassword: async (

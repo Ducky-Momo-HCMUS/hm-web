@@ -6,7 +6,7 @@ export const teacherResolver: Resolvers<ResolverContext> = {
   Query: {
     teacherList: async (_, args, { dataSources }) => {
       const res = await dataSources.teacherAPI.getTeacherList(args);
-      return res;
+      return res.data;
     },
     yearList: async (_, __, { dataSources }) => {
       const res = await dataSources.teacherAPI.getYearList();

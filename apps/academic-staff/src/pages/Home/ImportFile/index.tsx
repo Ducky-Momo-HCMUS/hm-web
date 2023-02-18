@@ -34,7 +34,6 @@ import {
   SUBJECTS,
   TERMS,
   TYPES,
-  YEARS,
 } from './utils';
 
 interface State {
@@ -47,7 +46,7 @@ interface State {
 
 function ImportFile() {
   const [values, setValues] = useState<State>({
-    type: '',
+    type: TYPES[0],
     year: '',
     term: '',
     subject: '',

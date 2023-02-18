@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 
 import { GenericObject } from '../../types';
 
+import { StyledInfoAlert } from './styles';
+
 export interface AsyncDataRendererProps {
   children: ReactNode;
   error?: ApolloError;
@@ -12,7 +14,11 @@ export interface AsyncDataRendererProps {
   data?: GenericObject | GenericObject[] | null;
 }
 
-function AsyncDataRenderer({ children, loading }: AsyncDataRendererProps) {
+function AsyncDataRenderer({
+  children,
+  loading,
+  data,
+}: AsyncDataRendererProps) {
   if (loading) {
     return (
       <Box sx={{ marginTop: '1rem' }}>
@@ -20,6 +26,11 @@ function AsyncDataRenderer({ children, loading }: AsyncDataRendererProps) {
       </Box>
     );
   }
+
+  if (!data || data.length === 0) {
+    return <StyledInfoAlert severity="info">Không có dữ liệu</StyledInfoAlert>;
+  }
+
   return <>{children}</>;
 }
 

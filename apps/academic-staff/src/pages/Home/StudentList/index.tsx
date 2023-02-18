@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   InputLabel,
@@ -20,8 +20,9 @@ import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
   useHomeroomAllListQuery,
-  useHomeroomStudentListQuery,
+  useHomeroomStudentListLazyQuery,
 } from '../../../generated-types';
+import { STUDENT_LIST_PAGE_SIZE } from '../../../constants';
 
 import StudentTableHead from './StudentTableHead';
 
@@ -35,21 +36,12 @@ function StudentList() {
   });
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<StudentProperty>('maSV');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
 
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
@@ -75,40 +67,65 @@ function StudentList() {
     [homeroomAllListData?.homeroomAllList.danhSachLopSH]
   );
 
-  const { loading: homeroomStudentListLoading, data: homeroomStudentListData } =
-    useHomeroomStudentListQuery({
-      variables: {
-        homeroomId: values.class || homeroomAllList[0],
-      },
-      skip: homeroomAllListLoading,
-    });
+  const [
+    getHomeroomStudentList,
+    { loading: homeroomStudentListLoading, data: homeroomStudentListData },
+  ] = useHomeroomStudentListLazyQuery();
 
-  const homeroomStudentList = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList || [],
-    [homeroomStudentListData?.homeroomStudentList]
-  );
+  useEffect(() => {
+    if (!homeroomAllListLoading) {
+      getHomeroomStudentList({
+        variables: {
+          homeroomId:
+            values.class.length > 0 ? values.class : homeroomAllList[0],
+          page: page + 1,
+          size: STUDENT_LIST_PAGE_SIZE,
+        },
+        fetchPolicy: 'no-cache',
+      });
+    }
+  }, [
+    getHomeroomStudentList,
+    homeroomAllList,
+    homeroomAllListLoading,
+    page,
+    values.class,
+  ]);
+
+  const { studentListLength, studentListData } = useMemo(() => {
+    return {
+      studentListLength:
+        homeroomStudentListData?.homeroomStudentList.total || 0,
+      studentListData: homeroomStudentListData?.homeroomStudentList.data || [],
+    };
+  }, [homeroomStudentListData?.homeroomStudentList]);
 
   return (
     <Box>
       <StyledTitle>Danh sách sinh viên</StyledTitle>
-      <StyledFormControl>
-        <InputLabel id="class-select-label">Lớp</InputLabel>
-        <Select
-          labelId="class-select-label"
-          id="class-select"
-          value={values.class || homeroomAllList[0] || ''}
-          label="Lớp"
-          onChange={handleChange('class')}
-        >
-          {homeroomAllList &&
-            homeroomAllList.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
-            ))}
-        </Select>
-      </StyledFormControl>
+      <AsyncDataRenderer
+        loading={homeroomAllListLoading}
+        data={homeroomAllListData}
+      >
+        <StyledFormControl>
+          <InputLabel id="class-select-label">Lớp</InputLabel>
+          <Select
+            labelId="class-select-label"
+            id="class-select"
+            value={values.class || homeroomAllList[0] || ''}
+            label="Lớp"
+            onChange={handleChange('class')}
+          >
+            {homeroomAllList &&
+              homeroomAllList.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+          </Select>
+        </StyledFormControl>
+      </AsyncDataRenderer>
       <AsyncDataRenderer
         loading={homeroomStudentListLoading}
-        data={homeroomStudentListData}
+        data={studentListData}
       >
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
@@ -119,9 +136,8 @@ function StudentList() {
                 onRequestSort={handleRequestSort}
               />
               <TableBody>
-                {[...homeroomStudentList]
+                {studentListData
                   // ?.sort(getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow hover tabIndex={-1} key={row.maSV}>
                       <TableCell>{index + 1}</TableCell>
@@ -137,14 +153,12 @@ function StudentList() {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
+            rowsPerPageOptions={[]}
             component="div"
-            count={homeroomStudentList.length}
-            rowsPerPage={rowsPerPage}
-            labelRowsPerPage="Số dòng trên trang"
+            count={studentListLength}
+            rowsPerPage={STUDENT_LIST_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       </AsyncDataRenderer>

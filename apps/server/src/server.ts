@@ -15,12 +15,6 @@ startServer();
 export async function startServer() {
   const app = express();
 
-  // CORS configuration
-  const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true,
-  };
-
   const server = new ApolloServer({
     uploads: false,
     typeDefs,
@@ -44,7 +38,7 @@ export async function startServer() {
 
   // app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
 
-  server.applyMiddleware({ app, cors: corsOptions });
+  server.applyMiddleware({ app });
   app.listen({ host: '0.0.0.0', port: '5000' }, () => {
     console.log(`Server ready at http://localhost:5000${server.graphqlPath}`);
   });

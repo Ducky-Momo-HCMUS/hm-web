@@ -40,11 +40,16 @@ export default class AuthAPI extends BaseDataSource {
     }
   }
 
-  public async resetPassword(id: number, token: string, password: string) {
+  public async resetPassword(
+    id: number,
+    token: string,
+    password: string,
+    passwordConfirm: string
+  ) {
     try {
       const response = await this.post<MutationStatusReponse>(
         'v1/reset-password',
-        { id, token, password }
+        { id, token, password, passwordConfirm }
       );
       return response;
     } catch (error) {

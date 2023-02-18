@@ -343,6 +343,7 @@ export type MutationNoteEditArgs = {
 export type MutationResetPasswordArgs = {
   id: Scalars['Int'];
   password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
   token: Scalars['String'];
 };
 
@@ -584,7 +585,9 @@ export type QueryStudentTrainingPointByTermArgs = {
 };
 
 export type QueryTeacherListArgs = {
-  year: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  year: Scalars['Int'];
 };
 
 export type StudentAddContactInput = {
@@ -795,14 +798,15 @@ export type TeacherInfo = {
 
 export type TeacherList = {
   __typename?: 'TeacherList';
-  danhSachGVCN: Array<TeacherListItem>;
+  data: Array<TeacherListItem>;
+  total: Scalars['Int'];
 };
 
 export type TeacherListItem = {
   __typename?: 'TeacherListItem';
   email: Scalars['String'];
   maSH: Scalars['String'];
-  tenGVCN: Scalars['String'];
+  tenGV: Scalars['String'];
 };
 
 export type UploadDocumentInput = {
@@ -849,17 +853,20 @@ export type HomeroomAllListQuery = {
 };
 
 export type TeacherListQueryVariables = Exact<{
-  year: Scalars['String'];
+  year: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type TeacherListQuery = {
   __typename?: 'Query';
   teacherList: {
     __typename?: 'TeacherList';
-    danhSachGVCN: Array<{
+    total: number;
+    data: Array<{
       __typename?: 'TeacherListItem';
       maSH: string;
-      tenGVCN: string;
+      tenGV: string;
       email: string;
     }>;
   };
@@ -1006,6 +1013,7 @@ export type ResetPasswordMutationVariables = Exact<{
   id: Scalars['Int'];
   token: Scalars['String'];
   password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
 }>;
 
 export type ResetPasswordMutation = {
@@ -1713,11 +1721,12 @@ export type HomeroomAllListQueryResult = Apollo.QueryResult<
   HomeroomAllListQueryVariables
 >;
 export const TeacherListDocument = gql`
-  query TeacherList($year: String!) {
-    teacherList(year: $year) {
-      danhSachGVCN {
+  query TeacherList($year: Int!, $page: Int!, $size: Int!) {
+    teacherList(year: $year, page: $page, size: $size) {
+      total
+      data {
         maSH
-        tenGVCN
+        tenGV
         email
       }
     }
@@ -1737,6 +1746,8 @@ export const TeacherListDocument = gql`
  * const { data, loading, error } = useTeacherListQuery({
  *   variables: {
  *      year: // value for 'year'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -2395,8 +2406,18 @@ export type LoginMutationOptions = Apollo.BaseMutationOptions<
   LoginMutationVariables
 >;
 export const ResetPasswordDocument = gql`
-  mutation ResetPassword($id: Int!, $token: String!, $password: String!) {
-    resetPassword(id: $id, token: $token, password: $password) {
+  mutation ResetPassword(
+    $id: Int!
+    $token: String!
+    $password: String!
+    $passwordConfirm: String!
+  ) {
+    resetPassword(
+      id: $id
+      token: $token
+      password: $password
+      passwordConfirm: $passwordConfirm
+    ) {
       status
     }
   }
@@ -2422,6 +2443,7 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<
  *      id: // value for 'id'
  *      token: // value for 'token'
  *      password: // value for 'password'
+ *      passwordConfirm: // value for 'passwordConfirm'
  *   },
  * });
  */

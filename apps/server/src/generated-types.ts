@@ -348,6 +348,7 @@ export type MutationNoteEditArgs = {
 export type MutationResetPasswordArgs = {
   id: Scalars['Int'];
   password: Scalars['String'];
+  passwordConfirm: Scalars['String'];
   token: Scalars['String'];
 };
 
@@ -589,7 +590,9 @@ export type QueryStudentTrainingPointByTermArgs = {
 };
 
 export type QueryTeacherListArgs = {
-  year: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  year: Scalars['Int'];
 };
 
 export type StudentAddContactInput = {
@@ -800,14 +803,15 @@ export type TeacherInfo = {
 
 export type TeacherList = {
   __typename?: 'TeacherList';
-  danhSachGVCN: Array<TeacherListItem>;
+  data: Array<TeacherListItem>;
+  total: Scalars['Int'];
 };
 
 export type TeacherListItem = {
   __typename?: 'TeacherListItem';
   email: Scalars['String'];
   maSH: Scalars['String'];
-  tenGVCN: Scalars['String'];
+  tenGV: Scalars['String'];
 };
 
 export type UploadDocumentInput = {
@@ -1630,7 +1634,10 @@ export type MutationResolvers<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
     ContextType,
-    RequireFields<MutationResetPasswordArgs, 'id' | 'password' | 'token'>
+    RequireFields<
+      MutationResetPasswordArgs,
+      'id' | 'password' | 'passwordConfirm' | 'token'
+    >
   >;
   studentAddContact?: Resolver<
     ResolversTypes['StudentContactResponse'],
@@ -1940,7 +1947,7 @@ export type QueryResolvers<
     ResolversTypes['TeacherList'],
     ParentType,
     ContextType,
-    RequireFields<QueryTeacherListArgs, 'year'>
+    RequireFields<QueryTeacherListArgs, 'page' | 'size' | 'year'>
   >;
   yearList?: Resolver<ResolversTypes['YearList'], ParentType, ContextType>;
 };
@@ -2203,11 +2210,12 @@ export type TeacherListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TeacherList'] = ResolversParentTypes['TeacherList']
 > = {
-  danhSachGVCN?: Resolver<
+  data?: Resolver<
     Array<ResolversTypes['TeacherListItem']>,
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2217,7 +2225,7 @@ export type TeacherListItemResolvers<
 > = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tenGVCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

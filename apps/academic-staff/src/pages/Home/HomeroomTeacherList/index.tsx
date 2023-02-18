@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   InputLabel,
@@ -15,12 +15,13 @@ import {
 } from '@mui/material';
 
 import {
-  useTeacherListQuery,
+  useTeacherListLazyQuery,
   useYearListQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { Order, TeacherProperty } from '../../../types';
+import { TEACHER_LIST_PAGE_SIZE } from '../../../constants';
 
 import { StyledFormControl } from './styles';
 import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
@@ -35,21 +36,12 @@ function HomeroomTeacherList() {
   });
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<TeacherProperty>('maSH');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
 
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
@@ -75,18 +67,29 @@ function HomeroomTeacherList() {
     [yearListData?.yearList.danhSachKhoa]
   );
 
-  const { loading: teacherListLoading, data: teacherListData } =
-    useTeacherListQuery({
-      variables: {
-        year: values.year || yearList[0],
-      },
-      skip: yearListLoading,
-    });
+  const [
+    getTeacherList,
+    { loading: teacherListLoading, data: teacherListData },
+  ] = useTeacherListLazyQuery();
 
-  const teacherList = useMemo(
-    () => teacherListData?.teacherList.danhSachGVCN || [],
-    [teacherListData?.teacherList.danhSachGVCN]
-  );
+  const { teacherList, teacherListLength } = useMemo(() => {
+    return {
+      teacherList: teacherListData?.teacherList.data || [],
+      teacherListLength: teacherListData?.teacherList.total || 0,
+    };
+  }, [teacherListData?.teacherList.data, teacherListData?.teacherList.total]);
+
+  useEffect(() => {
+    if (!yearListLoading) {
+      getTeacherList({
+        variables: {
+          year: Number(values.year) || Number(yearList[0]),
+          page: page + 1,
+          size: TEACHER_LIST_PAGE_SIZE,
+        },
+      });
+    }
+  }, [getTeacherList, page, values.year, yearList, yearListLoading]);
 
   return (
     <Box>
@@ -107,7 +110,7 @@ function HomeroomTeacherList() {
           </Select>
         </StyledFormControl>
       </AsyncDataRenderer>
-      <AsyncDataRenderer loading={teacherListLoading} data={teacherListData}>
+      <AsyncDataRenderer loading={teacherListLoading} data={teacherList}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
@@ -117,13 +120,12 @@ function HomeroomTeacherList() {
                 onRequestSort={handleRequestSort}
               />
               <TableBody>
-                {[...teacherList]
+                {teacherList
                   // ?.sort(getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow hover tabIndex={-1} key={row.email}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row.tenGVCN}</TableCell>
+                      <TableCell>{row.tenGV}</TableCell>
                       <TableCell>{row.maSH}</TableCell>
                       <TableCell>{row.email}</TableCell>
                     </TableRow>
@@ -132,14 +134,12 @@ function HomeroomTeacherList() {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
+            rowsPerPageOptions={[]}
             component="div"
-            count={teacherList.length}
-            rowsPerPage={rowsPerPage}
-            labelRowsPerPage="Số dòng trên trang"
+            count={teacherListLength}
+            rowsPerPage={TEACHER_LIST_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       </AsyncDataRenderer>
