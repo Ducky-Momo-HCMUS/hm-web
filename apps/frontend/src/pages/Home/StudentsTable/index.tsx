@@ -30,6 +30,7 @@ import {
   mapStudentDataToTable,
 } from '../../../utils';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import { STUDENT_LIST_PAGE_SIZE } from '../../../constants';
 
 import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
@@ -46,7 +47,6 @@ function StudentsTable() {
     class: '',
   });
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<Property>('maSV');
 
@@ -60,14 +60,6 @@ function StudentsTable() {
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
 
   const handleChange = useCallback(
     (prop: keyof State) => (event: SelectChangeEvent) => {
@@ -114,20 +106,26 @@ function StudentsTable() {
     getHomeroomStudentList,
     { loading: homeroomStudentListLoading, data: homeroomStudentListData },
   ] = useHomeroomStudentListLazyQuery();
-  const studentListData = useMemo(
-    () => homeroomStudentListData?.homeroomStudentList.sinhVien || [],
-    [homeroomStudentListData?.homeroomStudentList]
-  );
+  const { studentListLength, studentListData } = useMemo(() => {
+    return {
+      studentListLength:
+        homeroomStudentListData?.homeroomStudentList.total || 0,
+      studentListData: homeroomStudentListData?.homeroomStudentList.data || [],
+    };
+  }, [homeroomStudentListData?.homeroomStudentList]);
 
   useEffect(() => {
     if (values.class.length > 0 || initialClass.length > 0) {
       getHomeroomStudentList({
         variables: {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
+          page: page + 1,
+          size: STUDENT_LIST_PAGE_SIZE,
         },
+        fetchPolicy: 'no-cache',
       });
     }
-  }, [getHomeroomStudentList, initialClass, values.class]);
+  }, [getHomeroomStudentList, initialClass, page, values.class]);
 
   const selectedClass = useMemo(
     () => values.class || initialClass,
@@ -196,28 +194,25 @@ function StudentsTable() {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {[...studentListData]
+                  {studentListData
                     // ?.sort(getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => (
                       <StudentTableRow
                         key={row.maSV}
                         data={mapStudentDataToTable(row)}
-                        index={index + 1}
+                        index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
                       />
                     ))}
                 </TableBody>
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
+              rowsPerPageOptions={[]}
               component="div"
-              count={studentListData?.length || 0}
-              rowsPerPage={rowsPerPage}
-              labelRowsPerPage="Số dòng trên trang"
+              count={studentListLength}
+              rowsPerPage={STUDENT_LIST_PAGE_SIZE}
               page={page}
               onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Paper>
         )}

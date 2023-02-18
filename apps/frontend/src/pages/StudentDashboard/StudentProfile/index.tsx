@@ -275,7 +275,12 @@ function StudentProfile() {
                     Thêm
                   </Button>
                 </Box>
-                <StudentContactTable data={studentDetails?.lienHeSV || []} />
+                <AsyncDataRenderer
+                  loading={studentDetailsLoading}
+                  data={studentDetails?.lienHeSV}
+                >
+                  <StudentContactTable data={studentDetails?.lienHeSV || []} />
+                </AsyncDataRenderer>
               </Grid>
             </StyledGridContainer>
           </AsyncDataRenderer>
@@ -361,7 +366,7 @@ function StudentProfile() {
               </Box>
               <AsyncDataRenderer
                 loading={studentParentInfoListLoading}
-                data={studentParentInfoListData}
+                data={studentParentInfoList}
               >
                 <ParentInfoTable
                   count={parentListLength}

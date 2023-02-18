@@ -2,16 +2,27 @@ import { gql } from 'apollo-server-express';
 
 const teacherTypeDefs = gql`
   extend type Query {
-    teacherList(year: String!): TeacherList!
+    teacherList(year: Int!, page: Int!, size: Int!): TeacherList!
+    allTeacherList: AllTeacherList!
     yearList: YearList!
   }
 
+  type AllTeacherList {
+    total: Int!
+    
+  }
+
+  type AllTeacherListItem {
+    
+  }
+
   type TeacherList {
-    danhSachGVCN: [TeacherListItem!]!
+    total: Int!
+    data: [TeacherListItem!]!
   }
 
   type TeacherListItem {
-    tenGVCN: String!
+    tenGV: String!
     maSH: String!
     email: String!
   }

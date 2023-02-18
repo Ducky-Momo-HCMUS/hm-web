@@ -11,7 +11,7 @@ export type Property =
 export interface HomeroomStudentListData {
   maSV: string;
   tenSV: string;
-  maCN?: string;
+  tenCN?: string;
   tinhTrang: string;
   gpa4?: number;
   gpa10?: number;

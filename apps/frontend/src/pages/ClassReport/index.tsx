@@ -65,7 +65,7 @@ function ClassReport() {
     });
 
   const termList = useMemo(
-    () => homeroomTermListData?.homeroomTermList?.hocKyNamHoc || [],
+    () => homeroomTermListData?.homeroomTermList || [],
     [homeroomTermListData?.homeroomTermList]
   );
 

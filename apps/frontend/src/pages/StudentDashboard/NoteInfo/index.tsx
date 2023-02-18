@@ -223,6 +223,20 @@ function NoteInfo() {
     setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
   }, []);
 
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      title: '',
+      tags: [],
+      isAdding: true,
+    }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+  }, [editorRef]);
+
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
@@ -245,21 +259,11 @@ function NoteInfo() {
         'StudentNoteList',
       ],
     });
-  }, [deleteNote, id, values]);
 
-  const handleReset = useCallback(() => {
-    setValues((v) => ({
-      ...v,
-      selected: -1,
-      title: '',
-      tags: [],
-      isAdding: true,
-    }));
-    setFiles([]);
-    if (editorRef.current) {
-      editorRef.current.setContent('');
+    if (values.selected === values.deleteIndex) {
+      handleReset();
     }
-  }, [editorRef]);
+  }, [deleteNote, handleReset, id, values]);
 
   return (
     <>
@@ -335,7 +339,7 @@ function NoteInfo() {
         </Grid>
         <AsyncDataRenderer
           loading={noteDetailLoading || tagListLoading}
-          data={noteDetailData && tagListData}
+          data={values.selected >= 0 ? noteDetailData : tagListData}
         >
           <Grid
             item

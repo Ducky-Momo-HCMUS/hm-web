@@ -34,27 +34,25 @@ function AcademicOverview() {
 
   const mappedData = useMemo(() => {
     const data = studentOverviewResultData?.studentOverviewResult;
-    if (data) {
-      const result = [
-        data.tenCN,
-        data.daiCuong,
-        data.coSoNganh,
-        data.chuyenNganh,
-        data.tuChonChuyenNganh,
-        data.tuChonTuDo,
-        data.totNghiep,
-        data.tongTC,
-        data.dtb,
-      ];
-      return OVERVIEW_CONTENT.map((item, index) => ({
-        title: OVERVIEW_CONTENT[index].title,
-        content:
-          OVERVIEW_CONTENT[index].goal.length > 0
-            ? `${result[index]}/${OVERVIEW_CONTENT[index].goal}`
-            : `${result[index]}`,
-      }));
-    }
-    return [];
+    const result = [
+      data?.tenCN || 'Chưa có',
+      data?.daiCuong || 0,
+      data?.coSoNganh || 0,
+      data?.chuyenNganh || 0,
+      data?.tuChonChuyenNganh || 0,
+      data?.tuChonTuDo || 0,
+      data?.totNghiep || 0,
+      data?.tongTC || 0,
+      data?.dtb || 'Chưa có',
+    ];
+
+    return OVERVIEW_CONTENT.map((item, index) => ({
+      title: OVERVIEW_CONTENT[index].title,
+      content:
+        OVERVIEW_CONTENT[index].goal.length > 0
+          ? `${result[index]}/${OVERVIEW_CONTENT[index].goal}`
+          : `${result[index]}`,
+    }));
   }, [studentOverviewResultData?.studentOverviewResult]);
 
   return (

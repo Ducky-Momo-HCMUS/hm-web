@@ -93,7 +93,10 @@ function AcademicResult() {
           <Tab label="Tốt nghiệp" />
         </Tabs>
       </AppBar>
-      <AsyncDataRenderer loading={studentDetailSubjectsResultLoading}>
+      <AsyncDataRenderer
+        loading={studentDetailSubjectsResultLoading}
+        data={studentDetailSubjectsResultData}
+      >
         <TabPanel index={0} value={selectedTab}>
           <AcademicTable
             header="Giáo dục đại cương"

@@ -59,8 +59,8 @@ function AcademicReport() {
     });
 
   const termsData = useMemo(
-    () => allTermsData?.studentAllTerms?.hocKyNamHoc || [],
-    [allTermsData?.studentAllTerms?.hocKyNamHoc]
+    () => allTermsData?.studentAllTerms || [],
+    [allTermsData?.studentAllTerms]
   );
 
   const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
@@ -125,8 +125,8 @@ function AcademicReport() {
     });
 
   const subjectsData = useMemo(() => {
-    return subjectsByTermData?.studentSubjectsByTerm?.monhoc || [];
-  }, [subjectsByTermData?.studentSubjectsByTerm?.monhoc]);
+    return subjectsByTermData?.studentSubjectsByTerm || [];
+  }, [subjectsByTermData?.studentSubjectsByTerm]);
 
   return (
     <>
@@ -180,20 +180,20 @@ function AcademicReport() {
           </AsyncDataRenderer>
         </Box>
         <StyledStatusBox>
-          <AsyncDataRenderer
-            loading={trainingPointByTermLoading}
-            data={trainingPoint}
-          >
+          <AsyncDataRenderer loading={trainingPointByTermLoading}>
             <Button disabled sx={{ color: '#fff!important' }}>
-              ĐRL: {trainingPoint?.drl} | {trainingPoint?.xepLoai}
+              ĐRL:{' '}
+              {trainingPoint
+                ? `${trainingPoint.drl} | ${trainingPoint.xepLoai}`
+                : 'Chưa có'}
             </Button>
           </AsyncDataRenderer>
-          <AsyncDataRenderer
-            loading={averagePointByTermLoading}
-            data={averagePoint}
-          >
+          <AsyncDataRenderer loading={averagePointByTermLoading}>
             <Button disabled sx={{ color: '#fff!important' }}>
-              ĐTB: {averagePoint?.dtbTong} | {averagePoint?.xepLoai}
+              ĐTB:{' '}
+              {averagePoint
+                ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
+                : 'Chưa có'}
             </Button>
           </AsyncDataRenderer>
         </StyledStatusBox>

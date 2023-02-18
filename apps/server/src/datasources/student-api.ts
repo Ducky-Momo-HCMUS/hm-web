@@ -17,14 +17,7 @@ import {
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
-import {
-  ALL_TERMS,
-  AVERAGE_POINT_BY_TERM,
-  STUDENT_DETAIL_SUBJECTS_RESULT,
-  STUDENT_OVERVIEW_RESULT,
-  SUBJECTS_BY_TERM,
-  TRAINING_POINT_BY_TERM,
-} from '../mocks/student';
+import { STUDENT_DETAIL_SUBJECTS_RESULT } from '../mocks/student';
 import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -40,11 +33,10 @@ class StudentAPI extends BaseDataSource {
     term,
   }: QueryStudentSubjectsByTermArgs) {
     try {
-      // const subjectList = await this.get(
-      //   `v1/students/${studentId}/subjects?term=${term}`,
-      // );
-      console.log('params', studentId, term);
-      return SUBJECTS_BY_TERM;
+      const subjectList = await this.get(
+        `v1/students/${studentId}/subjects?term=${term}`
+      );
+      return subjectList;
     } catch (error) {
       console.error('Error: cannot fetch subject list by term');
       throw this.handleError(error as ApolloError);
@@ -56,11 +48,10 @@ class StudentAPI extends BaseDataSource {
     term,
   }: QueryStudentTrainingPointByTermArgs) {
     try {
-      // const trainingPoint = await this.get(
-      //   `v1/students/${studentId}/drl?term=${term}`,
-      // );
-      console.log('params', studentId, term);
-      return TRAINING_POINT_BY_TERM;
+      const trainingPoint = await this.get(
+        `v1/students/${studentId}/drl?term=${term}`
+      );
+      return trainingPoint;
     } catch (error) {
       console.error('Error: cannot fetch training point by term');
       throw this.handleError(error as ApolloError);
@@ -72,11 +63,10 @@ class StudentAPI extends BaseDataSource {
     term,
   }: QueryStudentAveragePointByTermArgs) {
     try {
-      // const averagePoint = await this.get(
-      //   `v1/students/${studentId}/point?term=${term}`,
-      // );
-      console.log('params', studentId, term);
-      return AVERAGE_POINT_BY_TERM;
+      const averagePoint = await this.get(
+        `v1/students/${studentId}/point?term=${term}`
+      );
+      return averagePoint;
     } catch (error) {
       console.error('Error: cannot fetch average point by term');
       throw this.handleError(error as ApolloError);
@@ -85,11 +75,8 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentAllTerms({ studentId }: QueryStudentAllTermsArgs) {
     try {
-      // const termList = await this.get(
-      //   `v1/students/${studentId}/terms`,
-      // );
-      console.log('params', studentId);
-      return ALL_TERMS;
+      const termList = await this.get(`v1/students/${studentId}/terms`);
+      return termList;
     } catch (error) {
       console.error('Error: cannot fetch all terms');
       throw this.handleError(error as ApolloError);
@@ -170,11 +157,8 @@ class StudentAPI extends BaseDataSource {
     studentId,
   }: QueryStudentOverviewResultArgs) {
     try {
-      // const overviewResult = await this.get(
-      //   `v1/students/${studentId}/general`,
-      // );
-      console.log('params', studentId);
-      return STUDENT_OVERVIEW_RESULT;
+      const overviewResult = await this.get(`v1/students/${studentId}/general`);
+      return overviewResult;
     } catch (error) {
       console.error('Error: cannot fetch student overview result');
       throw this.handleError(error as ApolloError);

@@ -1,18 +1,19 @@
 import { gql } from '@apollo/client';
 
 export const GET_HOMEROOM_STUDENT_LIST = gql`
-  query HomeroomStudentList($homeroomId: String!) {
-    homeroomStudentList(homeroomId: $homeroomId) {
-      sinhVien {
+  query HomeroomStudentList($homeroomId: String!, $page: Int!, $size: Int!) {
+    homeroomStudentList(homeroomId: $homeroomId, page: $page, size: $size) {
+      total
+      data {
         maSV
         tenSV
-        maCN
+        tenCN
         tinhTrang
         gpa4
         gpa10
         sdt
         emailSV
-        lienHe {
+        lienHeSV {
           mxh
           url
         }

@@ -5,11 +5,12 @@ import ClassDetail from './pages/ClassDetail';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NoteStore from './pages/NoteStore';
-import ResetPassword from './pages/ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
 import StatisticalReport from './pages/ClassReport';
 import StudentDashboard from './pages/StudentDashboard';
 import ChangePassword from './pages/ChangePassword';
 import RequireAuth from './components/RequireAuth';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Route path="/classes/:id/report" element={<StatisticalReport />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ResetPassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 }
