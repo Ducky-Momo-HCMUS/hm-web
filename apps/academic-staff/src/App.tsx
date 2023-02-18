@@ -5,9 +5,10 @@ import RequireAuth from './components/RequireAuth';
 import ChangePassword from './pages/ChangePassword';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import ResetPassword from './pages/ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
 import Authenticated from './components/Authenticated';
 import NotFound from './pages/NotFound';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
       </Route>
       <Route element={<Authenticated />}>
         <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Route>
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
