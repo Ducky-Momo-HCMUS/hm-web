@@ -768,7 +768,6 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  dtb?: Maybe<Scalars['Float']>;
   gvlt: Scalars['String'];
   gvth: Scalars['String'];
   maMH: Scalars['String'];
@@ -2211,7 +2210,6 @@ export type StudentSubjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
 > = {
-  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   gvlt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gvth?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -7,8 +7,10 @@ interface Column {
     | 'subjectName'
     | 'class'
     | 'status'
-    | 'theoryTeacher'
-    | 'practiceTeacher';
+    | 'midtermPoint'
+    | 'practicePoint'
+    | 'finalPoint'
+    | 'averagePoint';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -28,23 +30,28 @@ const columns: readonly Column[] = [
     minWidth: 120,
   },
   {
-    id: 'status',
-    label: 'Tình trạng',
-    minWidth: 120,
+    id: 'midtermPoint',
+    label: 'Điểm GK',
+    minWidth: 60,
   },
   {
-    id: 'theoryTeacher',
-    label: 'GV lý thuyết',
-    minWidth: 80,
+    id: 'practicePoint',
+    label: 'Điểm TH',
+    minWidth: 60,
   },
   {
-    id: 'practiceTeacher',
-    label: 'GV thực hành',
-    minWidth: 80,
+    id: 'finalPoint',
+    label: 'Điểm CK',
+    minWidth: 60,
+  },
+  {
+    id: 'averagePoint',
+    label: 'Điểm Tổng',
+    minWidth: 60,
   },
 ];
 
-function AcademicTableHead() {
+function PointTableHead() {
   return (
     <TableHead>
       <TableRow>
@@ -59,4 +66,4 @@ function AcademicTableHead() {
   );
 }
 
-export default AcademicTableHead;
+export default PointTableHead;

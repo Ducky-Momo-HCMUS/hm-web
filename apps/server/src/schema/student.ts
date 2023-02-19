@@ -51,7 +51,6 @@ const studentTypeDefs = gql`
     maMH: String!
     tenMH: String!
     tenLopHP: String!
-    dtb: Float
     gvlt: String!
     gvth: String!
     tinhTrang: String!

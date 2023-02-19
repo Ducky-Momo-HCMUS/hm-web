@@ -763,7 +763,6 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  dtb?: Maybe<Scalars['Float']>;
   gvlt: Scalars['String'];
   gvth: Scalars['String'];
   maMH: Scalars['String'];
@@ -1673,7 +1672,6 @@ export type StudentSubjectsByTermQuery = {
     maMH: string;
     tenMH: string;
     tenLopHP: string;
-    dtb?: number | null | undefined;
     gvlt: string;
     gvth: string;
     tinhTrang: string;
@@ -4492,7 +4490,6 @@ export const StudentSubjectsByTermDocument = gql`
       maMH
       tenMH
       tenLopHP
-      dtb
       gvlt
       gvth
       tinhTrang
