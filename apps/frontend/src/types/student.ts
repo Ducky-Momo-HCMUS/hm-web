@@ -23,9 +23,12 @@ export interface ContactInfo {
   lienHe: Contact[];
 }
 
-export interface ParentInfo {
-  fullName: string;
-  relationship: string;
-  phoneNumber: string;
-  contact: Contact[];
+export interface StudentDetailResult {
+  maMH: string;
+  tenMH: string;
+  lopHP: string;
+  diemGK: number;
+  diemTH: number;
+  diemCK: number;
+  diemTong: number;
 }

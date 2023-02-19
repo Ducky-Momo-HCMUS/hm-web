@@ -27,15 +27,30 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
+import { StudentDetailResult } from '../../../types';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
 import AcademicTableRow from './AcademicTableRow';
+import PointTableHead from './PointTableHead';
+import PointTableRow from './PointTableRow';
 
 interface State {
   year: string;
   term: string;
 }
+
+const STUDENT_DETAIL_RESULT = [
+  {
+    maMH: 'CSC10005',
+    tenMH: 'Kỹ thuật máy tính',
+    lopHP: '19CLC4',
+    diemGK: 5.4,
+    diemTH: 4.5,
+    diemCK: 6.5,
+    diemTong: 5.8,
+  },
+] as StudentDetailResult[];
 
 function AcademicReport() {
   const { id = '' } = useParams();
@@ -89,27 +104,25 @@ function AcademicReport() {
     };
   }, [mappedData, years]);
 
-  const { loading: trainingPointByTermLoading, data: trainingPointByTermData } =
-    useStudentTrainingPointByTermQuery({
-      variables: {
-        studentId: id,
-        term: values.term ? Number(values.term) : Number(initialTerm),
-      },
-      skip: allTermsLoading,
-    });
+  const { data: trainingPointByTermData } = useStudentTrainingPointByTermQuery({
+    variables: {
+      studentId: id,
+      term: values.term ? Number(values.term) : Number(initialTerm),
+    },
+    skip: allTermsLoading,
+  });
 
   const trainingPoint = useMemo(() => {
     return trainingPointByTermData?.studentTrainingPointByTerm;
   }, [trainingPointByTermData?.studentTrainingPointByTerm]);
 
-  const { loading: averagePointByTermLoading, data: averagePointByTermData } =
-    useStudentAveragePointByTermQuery({
-      variables: {
-        studentId: id,
-        term: values.term ? Number(values.term) : Number(initialTerm),
-      },
-      skip: allTermsLoading,
-    });
+  const { data: averagePointByTermData } = useStudentAveragePointByTermQuery({
+    variables: {
+      studentId: id,
+      term: values.term ? Number(values.term) : Number(initialTerm),
+    },
+    skip: allTermsLoading,
+  });
 
   const averagePoint = useMemo(() => {
     return averagePointByTermData?.studentAveragePointByTerm;
@@ -180,28 +193,25 @@ function AcademicReport() {
           </AsyncDataRenderer>
         </Box>
         <StyledStatusBox>
-          <AsyncDataRenderer loading={trainingPointByTermLoading}>
-            <Button disabled sx={{ color: '#fff!important' }}>
-              ĐRL:{' '}
-              {trainingPoint
-                ? `${trainingPoint.drl} | ${trainingPoint.xepLoai}`
-                : 'Chưa có'}
-            </Button>
-          </AsyncDataRenderer>
-          <AsyncDataRenderer loading={averagePointByTermLoading}>
-            <Button disabled sx={{ color: '#fff!important' }}>
-              ĐTB:{' '}
-              {averagePoint
-                ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
-                : 'Chưa có'}
-            </Button>
-          </AsyncDataRenderer>
+          <Button disabled sx={{ color: '#fff!important' }}>
+            ĐRL:{' '}
+            {trainingPoint
+              ? `${trainingPoint.drl} | ${trainingPoint.xepLoai}`
+              : 'Chưa có'}
+          </Button>
+
+          <Button disabled sx={{ color: '#fff!important' }}>
+            ĐTB:{' '}
+            {averagePoint
+              ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
+              : 'Chưa có'}
+          </Button>
         </StyledStatusBox>
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
-      <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-          <StyledHeader>Các môn đã đăng ký</StyledHeader>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <StyledHeader>Các môn đã đăng ký</StyledHeader>
+        <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>
           <TableContainer sx={{ maxHeight: 380 }}>
             <Table stickyHeader aria-label="sticky table">
               <AcademicTableHead />
@@ -216,8 +226,21 @@ function AcademicReport() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <StyledHeader>Điểm chi tiết</StyledHeader>
+        <TableContainer sx={{ maxHeight: 380 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <PointTableHead />
+            <TableBody>
+              {STUDENT_DETAIL_RESULT.map((row, index) => (
+                <PointTableRow key={row.maMH} data={row} index={index + 1} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </>
   );
 }
