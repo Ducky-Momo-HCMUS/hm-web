@@ -289,6 +289,17 @@ export type HomeroomTrainingPointOverview = {
   yeu: Scalars['Int'];
 };
 
+export type HomeroomWatchList = {
+  __typename?: 'HomeroomWatchList';
+  data?: Maybe<Array<HomeroomWatchListItem>>;
+  total: Scalars['Int'];
+};
+
+export type HomeroomWatchListItem = {
+  __typename?: 'HomeroomWatchListItem';
+  sinhVien: HomeroomStudentListItem;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   token?: Maybe<Scalars['String']>;
@@ -510,6 +521,7 @@ export type Query = {
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
+  homeroomWatchList: HomeroomWatchList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   studentAllTerms: Array<StudentTerm>;
@@ -574,6 +586,10 @@ export type QueryHomeroomStudentListArgs = {
 };
 
 export type QueryHomeroomTermListArgs = {
+  homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
 };
 
@@ -1463,6 +1479,39 @@ export type HomeroomTermListQuery = {
     hocKy: number;
     namHocBD: number;
   }>;
+};
+
+export type HomeroomWatchListQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+}>;
+
+export type HomeroomWatchListQuery = {
+  __typename?: 'Query';
+  homeroomWatchList: {
+    __typename?: 'HomeroomWatchList';
+    total: number;
+    data?:
+      | Array<{
+          __typename?: 'HomeroomWatchListItem';
+          sinhVien: {
+            __typename?: 'HomeroomStudentListItem';
+            maSV: string;
+            tenSV: string;
+            tenCN?: string | null | undefined;
+            tinhTrang: string;
+            gpa4?: number | null | undefined;
+            gpa10?: number | null | undefined;
+            sdt: string;
+            emailSV: string;
+            lienHeSV?:
+              | Array<{ __typename?: 'Contact'; mxh: string; url: string }>
+              | null
+              | undefined;
+          };
+        }>
+      | null
+      | undefined;
+  };
 };
 
 export type NoteDetailQueryVariables = Exact<{
@@ -3889,6 +3938,80 @@ export type HomeroomTermListLazyQueryHookResult = ReturnType<
 export type HomeroomTermListQueryResult = Apollo.QueryResult<
   HomeroomTermListQuery,
   HomeroomTermListQueryVariables
+>;
+export const HomeroomWatchListDocument = gql`
+  query HomeroomWatchList($homeroomId: String!) {
+    homeroomWatchList(homeroomId: $homeroomId) {
+      total
+      data {
+        sinhVien {
+          maSV
+          tenSV
+          tenCN
+          tinhTrang
+          gpa4
+          gpa10
+          sdt
+          emailSV
+          lienHeSV {
+            mxh
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomWatchListQuery__
+ *
+ * To run a query within a React component, call `useHomeroomWatchListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomWatchListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomWatchListQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *   },
+ * });
+ */
+export function useHomeroomWatchListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomWatchListQuery,
+    HomeroomWatchListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HomeroomWatchListQuery,
+    HomeroomWatchListQueryVariables
+  >(HomeroomWatchListDocument, options);
+}
+export function useHomeroomWatchListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomWatchListQuery,
+    HomeroomWatchListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomWatchListQuery,
+    HomeroomWatchListQueryVariables
+  >(HomeroomWatchListDocument, options);
+}
+export type HomeroomWatchListQueryHookResult = ReturnType<
+  typeof useHomeroomWatchListQuery
+>;
+export type HomeroomWatchListLazyQueryHookResult = ReturnType<
+  typeof useHomeroomWatchListLazyQuery
+>;
+export type HomeroomWatchListQueryResult = Apollo.QueryResult<
+  HomeroomWatchListQuery,
+  HomeroomWatchListQueryVariables
 >;
 export const NoteDetailDocument = gql`
   query NoteDetail($noteId: Int!) {

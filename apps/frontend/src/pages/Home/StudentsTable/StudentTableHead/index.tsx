@@ -69,6 +69,7 @@ function StudentTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
+        <TableCell key="watchlist">Chú ý</TableCell>
         <TableCell key="index">STT</TableCell>
         {columns.map((column) => (
           <TableCell

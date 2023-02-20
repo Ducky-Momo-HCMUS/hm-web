@@ -294,6 +294,17 @@ export type HomeroomTrainingPointOverview = {
   yeu: Scalars['Int'];
 };
 
+export type HomeroomWatchList = {
+  __typename?: 'HomeroomWatchList';
+  data?: Maybe<Array<HomeroomWatchListItem>>;
+  total: Scalars['Int'];
+};
+
+export type HomeroomWatchListItem = {
+  __typename?: 'HomeroomWatchListItem';
+  sinhVien: HomeroomStudentListItem;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   token?: Maybe<Scalars['String']>;
@@ -515,6 +526,7 @@ export type Query = {
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
+  homeroomWatchList: HomeroomWatchList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   studentAllTerms: Array<StudentTerm>;
@@ -579,6 +591,10 @@ export type QueryHomeroomStudentListArgs = {
 };
 
 export type QueryHomeroomTermListArgs = {
+  homeroomId: Scalars['String'];
+};
+
+export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
 };
 
@@ -1023,6 +1039,8 @@ export type ResolversTypes = {
   HomeroomStudentListItem: ResolverTypeWrapper<HomeroomStudentListItem>;
   HomeroomTermListItem: ResolverTypeWrapper<HomeroomTermListItem>;
   HomeroomTrainingPointOverview: ResolverTypeWrapper<HomeroomTrainingPointOverview>;
+  HomeroomWatchList: ResolverTypeWrapper<HomeroomWatchList>;
+  HomeroomWatchListItem: ResolverTypeWrapper<HomeroomWatchListItem>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
@@ -1122,6 +1140,8 @@ export type ResolversParentTypes = {
   HomeroomStudentListItem: HomeroomStudentListItem;
   HomeroomTermListItem: HomeroomTermListItem;
   HomeroomTrainingPointOverview: HomeroomTrainingPointOverview;
+  HomeroomWatchList: HomeroomWatchList;
+  HomeroomWatchListItem: HomeroomWatchListItem;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
@@ -1636,6 +1656,31 @@ export type HomeroomTrainingPointOverviewResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HomeroomWatchListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomWatchList'] = ResolversParentTypes['HomeroomWatchList']
+> = {
+  data?: Resolver<
+    Maybe<Array<ResolversTypes['HomeroomWatchListItem']>>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomWatchListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomWatchListItem'] = ResolversParentTypes['HomeroomWatchListItem']
+> = {
+  sinhVien?: Resolver<
+    ResolversTypes['HomeroomStudentListItem'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LoginResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LoginResponse'] = ResolversParentTypes['LoginResponse']
@@ -1972,6 +2017,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryHomeroomTermListArgs, 'homeroomId'>
+  >;
+  homeroomWatchList?: Resolver<
+    ResolversTypes['HomeroomWatchList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryHomeroomWatchListArgs, 'homeroomId'>
   >;
   noteDetail?: Resolver<
     ResolversTypes['NoteDetail'],
@@ -2396,6 +2447,8 @@ export type Resolvers<ContextType = any> = {
   HomeroomStudentListItem?: HomeroomStudentListItemResolvers<ContextType>;
   HomeroomTermListItem?: HomeroomTermListItemResolvers<ContextType>;
   HomeroomTrainingPointOverview?: HomeroomTrainingPointOverviewResolvers<ContextType>;
+  HomeroomWatchList?: HomeroomWatchListResolvers<ContextType>;
+  HomeroomWatchListItem?: HomeroomWatchListItemResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;

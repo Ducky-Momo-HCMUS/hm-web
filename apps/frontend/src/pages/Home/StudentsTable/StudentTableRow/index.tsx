@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { TableCell, TableRow, Typography } from '@mui/material';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+import { Checkbox, TableCell, TableRow, Typography } from '@mui/material';
 
 import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
@@ -8,8 +8,9 @@ import { theme } from '../../../../theme';
 interface StudentTableRowProps {
   data: HomeroomStudentListData;
   index: number;
+  handleCheck: any;
 }
-function StudentTableRow({ data, index }: StudentTableRowProps) {
+function StudentTableRow({ data, index, handleCheck }: StudentTableRowProps) {
   const { maSV, tenSV, tenCN, tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
@@ -44,8 +45,25 @@ function StudentTableRow({ data, index }: StudentTableRowProps) {
     );
   }, [tinhTrang]);
 
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setChecked(event.target.checked);
+      handleCheck(data.maSV);
+    },
+    [data.maSV, handleCheck]
+  );
+
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={data.maSV}>
+      <TableCell>
+        <Checkbox
+          checked={checked}
+          onChange={handleChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </TableCell>
       <TableCell>{index}</TableCell>
       <TableCell>{maSV}</TableCell>
       <TableCell>

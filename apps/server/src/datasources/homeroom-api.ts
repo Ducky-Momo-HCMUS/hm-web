@@ -11,6 +11,7 @@ import {
   QueryHomeroomPostponeExamListByTermArgs,
   QueryHomeroomStudentListArgs,
   QueryHomeroomTermListArgs,
+  QueryHomeroomWatchListArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 
@@ -54,6 +55,20 @@ class HomeroomAPI extends BaseDataSource {
       return homeroomStudentList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom student list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getHomeroomWatchList({
+    homeroomId,
+  }: QueryHomeroomWatchListArgs) {
+    try {
+      const homeroomStudentList = await this.get(
+        `v1/homerooms/${homeroomId}/watchlist`
+      );
+      return homeroomStudentList;
+    } catch (error) {
+      console.error('Error: cannot fetch homeroom watch list');
       throw this.handleError(error as ApolloError);
     }
   }

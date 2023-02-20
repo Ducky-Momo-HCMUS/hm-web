@@ -9,6 +9,7 @@ const homeroomTypeDefs = gql`
       page: Int!
       size: Int!
     ): HomeroomStudentList!
+    homeroomWatchList(homeroomId: String!): HomeroomWatchList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): [HomeroomTermListItem!]!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
@@ -65,6 +66,15 @@ const homeroomTypeDefs = gql`
     sdt: String!
     emailSV: String!
     lienHeSV: [Contact!]
+  }
+
+  type HomeroomWatchList {
+    total: Int!
+    data: [HomeroomWatchListItem!]
+  }
+
+  type HomeroomWatchListItem {
+    sinhVien: HomeroomStudentListItem!
   }
 
   type Contact {

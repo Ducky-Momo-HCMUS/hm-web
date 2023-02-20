@@ -17,6 +17,7 @@ import TablePagination from '@mui/material/TablePagination';
 import {
   useHomeroomListQuery,
   useHomeroomStudentListLazyQuery,
+  useHomeroomWatchListLazyQuery,
 } from '../../../generated-types';
 import {
   StyledActionsBar,
@@ -36,15 +37,21 @@ import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
 import { StyledFormControl } from './styles';
 
+const TYPES = ['Tất cả', 'Cần chú ý'];
+
 interface State {
   year: string;
   class: string;
+  type: string;
+  selected: string[];
 }
 
 function StudentsTable() {
   const [values, setValues] = useState<State>({
     year: '',
     class: '',
+    type: TYPES[0],
+    selected: [],
   });
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState<Order>('asc');
@@ -114,23 +121,93 @@ function StudentsTable() {
     };
   }, [homeroomStudentListData?.homeroomStudentList]);
 
+  const [
+    getHomeroomWatchList,
+    { loading: homeroomWatchListLoading, data: homeroomWatchListData },
+  ] = useHomeroomWatchListLazyQuery();
+  const { watchListLength, watchListData } = useMemo(() => {
+    return {
+      watchListLength: homeroomWatchListData?.homeroomWatchList.total || 0,
+      watchListData:
+        homeroomWatchListData?.homeroomWatchList.data?.map(
+          (item) => item.sinhVien
+        ) || [],
+    };
+  }, [
+    homeroomWatchListData?.homeroomWatchList.data,
+    homeroomWatchListData?.homeroomWatchList.total,
+  ]);
+
+  const { homeroomLoading, homeroomData, homeroomLength } = useMemo(
+    () => ({
+      homeroomLoading:
+        values.type === 'Tất cả'
+          ? homeroomStudentListLoading
+          : homeroomWatchListLoading,
+      homeroomData: values.type === 'Tất cả' ? studentListData : watchListData,
+      homeroomLength:
+        values.type === 'Tất cả' ? studentListLength : watchListLength,
+    }),
+    [
+      homeroomStudentListLoading,
+      homeroomWatchListLoading,
+      studentListData,
+      studentListLength,
+      values.type,
+      watchListData,
+      watchListLength,
+    ]
+  );
+
   useEffect(() => {
     if (values.class.length > 0 || initialClass.length > 0) {
-      getHomeroomStudentList({
+      if (values.type === 'Tất cả') {
+        getHomeroomStudentList({
+          variables: {
+            homeroomId: values.class.length > 0 ? values.class : initialClass,
+            page: page + 1,
+            size: STUDENT_LIST_PAGE_SIZE,
+          },
+          fetchPolicy: 'no-cache',
+        });
+        return;
+      }
+
+      getHomeroomWatchList({
         variables: {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
-          page: page + 1,
-          size: STUDENT_LIST_PAGE_SIZE,
         },
         fetchPolicy: 'no-cache',
       });
     }
-  }, [getHomeroomStudentList, initialClass, page, values.class]);
+  }, [
+    getHomeroomStudentList,
+    getHomeroomWatchList,
+    initialClass,
+    page,
+    values.class,
+    values.type,
+  ]);
 
   const selectedClass = useMemo(
     () => values.class || initialClass,
     [values.class, initialClass]
   );
+
+  const handleCheck = useCallback(
+    (maSV: string) => {
+      setValues((v) => ({
+        ...v,
+        selected:
+          values.selected.findIndex((item) => item === maSV) > -1
+            ? values.selected.filter((item) => item !== maSV)
+            : [...values.selected, maSV],
+      }));
+    },
+    [values.selected]
+  );
+
+  console.log('selected', values.selected);
 
   return (
     <StyledContentWrapper>
@@ -170,6 +247,22 @@ function StudentsTable() {
                 ))}
               </Select>
             </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel id="type-select-label">Loại</InputLabel>
+              <Select
+                labelId="type-select-label"
+                id="type-select"
+                value={values.type}
+                label="Loại"
+                onChange={handleChange('type')}
+              >
+                {TYPES.map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
           </Box>
           <Button
             component={Link}
@@ -180,10 +273,7 @@ function StudentsTable() {
           </Button>
         </StyledActionsBar>
       </AsyncDataRenderer>
-      <AsyncDataRenderer
-        loading={homeroomStudentListLoading}
-        data={homeroomStudentListData}
-      >
+      <AsyncDataRenderer loading={homeroomLoading} data={homeroomData}>
         {(values.class || initialClass) && (
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
             <TableContainer sx={{ maxHeight: 400 }}>
@@ -194,13 +284,14 @@ function StudentsTable() {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {studentListData
+                  {homeroomData
                     // ?.sort(getComparator(order, orderBy))
                     .map((row, index) => (
                       <StudentTableRow
                         key={row.maSV}
                         data={mapStudentDataToTable(row)}
                         index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
+                        handleCheck={handleCheck}
                       />
                     ))}
                 </TableBody>
@@ -209,7 +300,7 @@ function StudentsTable() {
             <TablePagination
               rowsPerPageOptions={[]}
               component="div"
-              count={studentListLength}
+              count={homeroomLength}
               rowsPerPage={STUDENT_LIST_PAGE_SIZE}
               page={page}
               onPageChange={handleChangePage}
@@ -217,6 +308,11 @@ function StudentsTable() {
           </Paper>
         )}
       </AsyncDataRenderer>
+      {values.selected.length > 0 && (
+        <Button variant="contained" color="primary">
+          Lưu thay đổi
+        </Button>
+      )}
     </StyledContentWrapper>
   );
 }
