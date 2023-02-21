@@ -16,6 +16,10 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.homeroomAPI.getHomeroomStudentList(args);
       return res;
     },
+    homeroomWatchList: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.getHomeroomWatchList(args);
+      return res.data.watchlist;
+    },
     homeroomDetail: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomDetail(args);
       return res.data;
@@ -54,6 +58,16 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
         args
       );
       return res.data;
+    },
+  },
+  Mutation: {
+    homeroomAddWatchlist: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.addHomeroomWatchlist(args);
+      return res.data.watchlist;
+    },
+    homeroomDeleteWatchlist: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.deleteHomeroomWatchlist(args);
+      return res.data.watchlist;
     },
   },
 };

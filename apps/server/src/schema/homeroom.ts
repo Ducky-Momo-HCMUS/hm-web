@@ -9,6 +9,7 @@ const homeroomTypeDefs = gql`
       page: Int!
       size: Int!
     ): HomeroomStudentList!
+    homeroomWatchList(homeroomId: String!): HomeroomWatchList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): [HomeroomTermListItem!]!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
@@ -34,6 +35,31 @@ const homeroomTypeDefs = gql`
       homeroomId: String!
       term: Int!
     ): HomeroomExamAbsentList!
+  }
+
+  extend type Mutation {
+    homeroomAddWatchlist(
+      payload: HomeroomAddWatchlistInput!
+    ): HomeroomAddWatchlistResponse!
+    homeroomDeleteWatchlist(
+      payload: HomeroomDeleteWatchlistInput!
+    ): HomeroomDeleteWatchlistResponse!
+  }
+
+  input HomeroomAddWatchlistInput {
+    maSV: [String!]!
+  }
+
+  input HomeroomDeleteWatchlistInput {
+    maSV: [String!]!
+  }
+
+  type HomeroomAddWatchlistResponse {
+    status: Int!
+  }
+
+  type HomeroomDeleteWatchlistResponse {
+    status: Int!
   }
 
   type HomeroomAllList {
@@ -65,6 +91,15 @@ const homeroomTypeDefs = gql`
     sdt: String!
     emailSV: String!
     lienHeSV: [Contact!]
+  }
+
+  type HomeroomWatchList {
+    total: Int!
+    data: [HomeroomWatchListItem!]
+  }
+
+  type HomeroomWatchListItem {
+    sinhVien: HomeroomStudentListItem!
   }
 
   type Contact {
