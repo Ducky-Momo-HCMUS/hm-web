@@ -100,9 +100,27 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type HomeroomAddWatchlistInput = {
+  maSV: Array<Scalars['String']>;
+};
+
+export type HomeroomAddWatchlistResponse = {
+  __typename?: 'HomeroomAddWatchlistResponse';
+  status: Scalars['Int'];
+};
+
 export type HomeroomAllList = {
   __typename?: 'HomeroomAllList';
   danhSachLopSH: Array<Scalars['String']>;
+};
+
+export type HomeroomDeleteWatchlistInput = {
+  maSV: Array<Scalars['String']>;
+};
+
+export type HomeroomDeleteWatchlistResponse = {
+  __typename?: 'HomeroomDeleteWatchlistResponse';
+  status: Scalars['Int'];
 };
 
 export type HomeroomDetail = {
@@ -317,6 +335,8 @@ export type Mutation = {
   accountEdit: AccountEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
+  homeroomAddWatchlist: HomeroomAddWatchlistResponse;
+  homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
@@ -358,6 +378,14 @@ export type MutationEditPasswordArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+export type MutationHomeroomAddWatchlistArgs = {
+  payload: HomeroomAddWatchlistInput;
+};
+
+export type MutationHomeroomDeleteWatchlistArgs = {
+  payload: HomeroomDeleteWatchlistInput;
 };
 
 export type MutationLoginArgs = {
@@ -1009,7 +1037,11 @@ export type ResolversTypes = {
   Contact: ResolverTypeWrapper<Contact>;
   Document: ResolverTypeWrapper<Document>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
+  HomeroomAddWatchlistResponse: ResolverTypeWrapper<HomeroomAddWatchlistResponse>;
   HomeroomAllList: ResolverTypeWrapper<HomeroomAllList>;
+  HomeroomDeleteWatchlistInput: HomeroomDeleteWatchlistInput;
+  HomeroomDeleteWatchlistResponse: ResolverTypeWrapper<HomeroomDeleteWatchlistResponse>;
   HomeroomDetail: ResolverTypeWrapper<HomeroomDetail>;
   HomeroomExamAbsentList: ResolverTypeWrapper<HomeroomExamAbsentList>;
   HomeroomExamAbsentListItem: ResolverTypeWrapper<HomeroomExamAbsentListItem>;
@@ -1110,7 +1142,11 @@ export type ResolversParentTypes = {
   Contact: Contact;
   Document: Document;
   Float: Scalars['Float'];
+  HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
+  HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
   HomeroomAllList: HomeroomAllList;
+  HomeroomDeleteWatchlistInput: HomeroomDeleteWatchlistInput;
+  HomeroomDeleteWatchlistResponse: HomeroomDeleteWatchlistResponse;
   HomeroomDetail: HomeroomDetail;
   HomeroomExamAbsentList: HomeroomExamAbsentList;
   HomeroomExamAbsentListItem: HomeroomExamAbsentListItem;
@@ -1292,6 +1328,14 @@ export type DocumentResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type HomeroomAddWatchlistResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomAddWatchlistResponse'] = ResolversParentTypes['HomeroomAddWatchlistResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type HomeroomAllListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomAllList'] = ResolversParentTypes['HomeroomAllList']
@@ -1301,6 +1345,14 @@ export type HomeroomAllListResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeroomDeleteWatchlistResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['HomeroomDeleteWatchlistResponse'] = ResolversParentTypes['HomeroomDeleteWatchlistResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1725,6 +1777,18 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationForgotPasswordArgs, 'email'>
+  >;
+  homeroomAddWatchlist?: Resolver<
+    ResolversTypes['HomeroomAddWatchlistResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationHomeroomAddWatchlistArgs, 'payload'>
+  >;
+  homeroomDeleteWatchlist?: Resolver<
+    ResolversTypes['HomeroomDeleteWatchlistResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationHomeroomDeleteWatchlistArgs, 'payload'>
   >;
   login?: Resolver<
     Maybe<ResolversTypes['LoginResponse']>,
@@ -2417,7 +2481,9 @@ export type Resolvers<ContextType = any> = {
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   Document?: DocumentResolvers<ContextType>;
+  HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllList?: HomeroomAllListResolvers<ContextType>;
+  HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
   HomeroomExamAbsentList?: HomeroomExamAbsentListResolvers<ContextType>;
   HomeroomExamAbsentListItem?: HomeroomExamAbsentListItemResolvers<ContextType>;

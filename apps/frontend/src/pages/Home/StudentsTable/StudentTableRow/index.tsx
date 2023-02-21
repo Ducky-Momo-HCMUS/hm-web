@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Checkbox, TableCell, TableRow, Typography } from '@mui/material';
 
 import { HomeroomStudentListData } from '../../../../types';
@@ -6,11 +6,17 @@ import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
 
 interface StudentTableRowProps {
+  checked: boolean;
   data: HomeroomStudentListData;
   index: number;
   handleCheck: any;
 }
-function StudentTableRow({ data, index, handleCheck }: StudentTableRowProps) {
+function StudentTableRow({
+  checked,
+  data,
+  index,
+  handleCheck,
+}: StudentTableRowProps) {
   const { maSV, tenSV, tenCN, tinhTrang, gpa4, gpa10, contact } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
@@ -45,15 +51,9 @@ function StudentTableRow({ data, index, handleCheck }: StudentTableRowProps) {
     );
   }, [tinhTrang]);
 
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setChecked(event.target.checked);
-      handleCheck(data.maSV);
-    },
-    [data.maSV, handleCheck]
-  );
+  const handleChange = useCallback(() => {
+    handleCheck(data.maSV);
+  }, [data.maSV, handleCheck]);
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={data.maSV}>

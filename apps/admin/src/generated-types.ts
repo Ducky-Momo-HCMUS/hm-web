@@ -95,9 +95,27 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type HomeroomAddWatchlistInput = {
+  maSV: Array<Scalars['String']>;
+};
+
+export type HomeroomAddWatchlistResponse = {
+  __typename?: 'HomeroomAddWatchlistResponse';
+  status: Scalars['Int'];
+};
+
 export type HomeroomAllList = {
   __typename?: 'HomeroomAllList';
   danhSachLopSH: Array<Scalars['String']>;
+};
+
+export type HomeroomDeleteWatchlistInput = {
+  maSV: Array<Scalars['String']>;
+};
+
+export type HomeroomDeleteWatchlistResponse = {
+  __typename?: 'HomeroomDeleteWatchlistResponse';
+  status: Scalars['Int'];
 };
 
 export type HomeroomDetail = {
@@ -312,6 +330,8 @@ export type Mutation = {
   accountEdit: AccountEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
+  homeroomAddWatchlist: HomeroomAddWatchlistResponse;
+  homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
@@ -353,6 +373,14 @@ export type MutationEditPasswordArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+export type MutationHomeroomAddWatchlistArgs = {
+  payload: HomeroomAddWatchlistInput;
+};
+
+export type MutationHomeroomDeleteWatchlistArgs = {
+  payload: HomeroomDeleteWatchlistInput;
 };
 
 export type MutationLoginArgs = {
@@ -1122,6 +1150,30 @@ export type ResetPasswordMutation = {
       }
     | null
     | undefined;
+};
+
+export type HomeroomAddWatchlistMutationVariables = Exact<{
+  payload: HomeroomAddWatchlistInput;
+}>;
+
+export type HomeroomAddWatchlistMutation = {
+  __typename?: 'Mutation';
+  homeroomAddWatchlist: {
+    __typename?: 'HomeroomAddWatchlistResponse';
+    status: number;
+  };
+};
+
+export type HomeroomDeleteWatchlistMutationVariables = Exact<{
+  payload: HomeroomDeleteWatchlistInput;
+}>;
+
+export type HomeroomDeleteWatchlistMutation = {
+  __typename?: 'Mutation';
+  homeroomDeleteWatchlist: {
+    __typename?: 'HomeroomDeleteWatchlistResponse';
+    status: number;
+  };
 };
 
 export type NoteAddMutationVariables = Exact<{
@@ -2767,6 +2819,106 @@ export type ResetPasswordMutationResult =
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   ResetPasswordMutation,
   ResetPasswordMutationVariables
+>;
+export const HomeroomAddWatchlistDocument = gql`
+  mutation HomeroomAddWatchlist($payload: HomeroomAddWatchlistInput!) {
+    homeroomAddWatchlist(payload: $payload) {
+      status
+    }
+  }
+`;
+export type HomeroomAddWatchlistMutationFn = Apollo.MutationFunction<
+  HomeroomAddWatchlistMutation,
+  HomeroomAddWatchlistMutationVariables
+>;
+
+/**
+ * __useHomeroomAddWatchlistMutation__
+ *
+ * To run a mutation, you first call `useHomeroomAddWatchlistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomAddWatchlistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [homeroomAddWatchlistMutation, { data, loading, error }] = useHomeroomAddWatchlistMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useHomeroomAddWatchlistMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    HomeroomAddWatchlistMutation,
+    HomeroomAddWatchlistMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    HomeroomAddWatchlistMutation,
+    HomeroomAddWatchlistMutationVariables
+  >(HomeroomAddWatchlistDocument, options);
+}
+export type HomeroomAddWatchlistMutationHookResult = ReturnType<
+  typeof useHomeroomAddWatchlistMutation
+>;
+export type HomeroomAddWatchlistMutationResult =
+  Apollo.MutationResult<HomeroomAddWatchlistMutation>;
+export type HomeroomAddWatchlistMutationOptions = Apollo.BaseMutationOptions<
+  HomeroomAddWatchlistMutation,
+  HomeroomAddWatchlistMutationVariables
+>;
+export const HomeroomDeleteWatchlistDocument = gql`
+  mutation HomeroomDeleteWatchlist($payload: HomeroomDeleteWatchlistInput!) {
+    homeroomDeleteWatchlist(payload: $payload) {
+      status
+    }
+  }
+`;
+export type HomeroomDeleteWatchlistMutationFn = Apollo.MutationFunction<
+  HomeroomDeleteWatchlistMutation,
+  HomeroomDeleteWatchlistMutationVariables
+>;
+
+/**
+ * __useHomeroomDeleteWatchlistMutation__
+ *
+ * To run a mutation, you first call `useHomeroomDeleteWatchlistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomDeleteWatchlistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [homeroomDeleteWatchlistMutation, { data, loading, error }] = useHomeroomDeleteWatchlistMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useHomeroomDeleteWatchlistMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    HomeroomDeleteWatchlistMutation,
+    HomeroomDeleteWatchlistMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    HomeroomDeleteWatchlistMutation,
+    HomeroomDeleteWatchlistMutationVariables
+  >(HomeroomDeleteWatchlistDocument, options);
+}
+export type HomeroomDeleteWatchlistMutationHookResult = ReturnType<
+  typeof useHomeroomDeleteWatchlistMutation
+>;
+export type HomeroomDeleteWatchlistMutationResult =
+  Apollo.MutationResult<HomeroomDeleteWatchlistMutation>;
+export type HomeroomDeleteWatchlistMutationOptions = Apollo.BaseMutationOptions<
+  HomeroomDeleteWatchlistMutation,
+  HomeroomDeleteWatchlistMutationVariables
 >;
 export const NoteAddDocument = gql`
   mutation NoteAdd($payload: NoteAddInput!) {

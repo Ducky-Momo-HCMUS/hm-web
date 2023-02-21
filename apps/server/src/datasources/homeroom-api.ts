@@ -2,6 +2,8 @@ import { ApolloError } from 'apollo-server-express';
 
 import { HOMEROOM_ALL_LIST } from '../mocks/homeroom';
 import {
+  MutationHomeroomAddWatchlistArgs,
+  MutationHomeroomDeleteWatchlistArgs,
   QueryHomeroomDetailArgs,
   QueryHomeroomExamAbsentListByTermArgs,
   QueryHomeroomFailListByTermArgs,
@@ -195,6 +197,30 @@ class HomeroomAPI extends BaseDataSource {
       return homeroomExamAbsentList;
     } catch (error) {
       console.error('Error: cannot fetch homeroom exam absent list by term');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addHomeroomWatchlist({
+    payload,
+  }: MutationHomeroomAddWatchlistArgs) {
+    try {
+      const res = await this.post('v1/watchlist', payload);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot add student to homeroom watchlist');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async deleteHomeroomWatchlist({
+    payload,
+  }: MutationHomeroomDeleteWatchlistArgs) {
+    try {
+      const res = await this.patch('v1/watchlist', payload);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot remove student from homeroom watchlist');
       throw this.handleError(error as ApolloError);
     }
   }

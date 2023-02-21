@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import _isEqual from 'lodash/isEqual';
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   InputLabel,
   MenuItem,
   Select,
@@ -15,6 +18,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import {
+  useHomeroomAddWatchlistMutation,
+  useHomeroomDeleteWatchlistMutation,
   useHomeroomListQuery,
   useHomeroomStudentListLazyQuery,
   useHomeroomWatchListLazyQuery,
@@ -32,6 +37,7 @@ import {
 } from '../../../utils';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { STUDENT_LIST_PAGE_SIZE } from '../../../constants';
+import { GET_HOMEROOM_WATCH_LIST } from '../../../data/queries/homeroom/get-homeroom-watch-list';
 
 import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
@@ -161,17 +167,14 @@ function StudentsTable() {
 
   useEffect(() => {
     if (values.class.length > 0 || initialClass.length > 0) {
-      if (values.type === 'Tất cả') {
-        getHomeroomStudentList({
-          variables: {
-            homeroomId: values.class.length > 0 ? values.class : initialClass,
-            page: page + 1,
-            size: STUDENT_LIST_PAGE_SIZE,
-          },
-          fetchPolicy: 'no-cache',
-        });
-        return;
-      }
+      getHomeroomStudentList({
+        variables: {
+          homeroomId: values.class.length > 0 ? values.class : initialClass,
+          page: page + 1,
+          size: STUDENT_LIST_PAGE_SIZE,
+        },
+        fetchPolicy: 'no-cache',
+      });
 
       getHomeroomWatchList({
         variables: {
@@ -188,6 +191,18 @@ function StudentsTable() {
     values.class,
     values.type,
   ]);
+
+  const initialSelected = useMemo(
+    () => watchListData.map((item) => item.maSV),
+    [watchListData]
+  );
+
+  useEffect(() => {
+    setValues((v) => ({
+      ...v,
+      selected: initialSelected,
+    }));
+  }, [initialSelected]);
 
   const selectedClass = useMemo(
     () => values.class || initialClass,
@@ -207,113 +222,190 @@ function StudentsTable() {
     [values.selected]
   );
 
-  console.log('selected', values.selected);
+  const [addStudentToWatchlist, { loading: addStudentToWatchlistLoading }] =
+    useHomeroomAddWatchlistMutation();
+
+  const [
+    removeStudentFromWatchlist,
+    { loading: removeStudentFromWatchlistLoading },
+  ] = useHomeroomDeleteWatchlistMutation();
+
+  const handleUpdateWatchlist = useCallback(() => {
+    const studentAddPayload = values.selected.filter(
+      (item) =>
+        initialSelected.findIndex((initialItem) => initialItem === item) === -1
+    );
+    const studentDeletePayload = initialSelected.filter(
+      (item) =>
+        values.selected.findIndex((selectedItem) => selectedItem === item) ===
+        -1
+    );
+
+    if (studentAddPayload.length > 0) {
+      addStudentToWatchlist({
+        variables: {
+          payload: {
+            maSV: studentAddPayload,
+          },
+        },
+        refetchQueries: [
+          {
+            query: GET_HOMEROOM_WATCH_LIST,
+            variables: { homeroomId: selectedClass },
+          },
+          'HomeroomWatchList',
+        ],
+      });
+    }
+
+    if (studentDeletePayload.length > 0) {
+      removeStudentFromWatchlist({
+        variables: {
+          payload: {
+            maSV: studentDeletePayload,
+          },
+        },
+        refetchQueries: [
+          {
+            query: GET_HOMEROOM_WATCH_LIST,
+            variables: { homeroomId: selectedClass },
+          },
+          'HomeroomWatchList',
+        ],
+      });
+    }
+  }, [
+    addStudentToWatchlist,
+    initialSelected,
+    removeStudentFromWatchlist,
+    selectedClass,
+    values.selected,
+  ]);
 
   return (
-    <StyledContentWrapper>
-      <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
-      <AsyncDataRenderer loading={homeroomListLoading} data={homeroomListData}>
-        <StyledActionsBar>
-          <Box>
-            <StyledFormControl>
-              <InputLabel id="year-select-label">Khoá</InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={values.year || initialYear}
-                label="Khoá"
-                onChange={handleChange('year')}
-              >
-                {years.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl>
-              <InputLabel id="class-select-label">Lớp</InputLabel>
-              <Select
-                labelId="class-select-label"
-                id="class-select"
-                value={values.class || initialClass}
-                label="Lớp"
-                onChange={handleChange('class')}
-              >
-                {classes.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item.toUpperCase()}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl>
-              <InputLabel id="type-select-label">Loại</InputLabel>
-              <Select
-                labelId="type-select-label"
-                id="type-select"
-                value={values.type}
-                label="Loại"
-                onChange={handleChange('type')}
-              >
-                {TYPES.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-          </Box>
+    <>
+      <StyledContentWrapper>
+        <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
+        <AsyncDataRenderer
+          loading={homeroomListLoading}
+          data={homeroomListData}
+        >
+          <StyledActionsBar>
+            <Box>
+              <StyledFormControl>
+                <InputLabel id="year-select-label">Khoá</InputLabel>
+                <Select
+                  labelId="year-select-label"
+                  id="year-select"
+                  value={values.year || initialYear}
+                  label="Khoá"
+                  onChange={handleChange('year')}
+                >
+                  {years.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="class-select-label">Lớp</InputLabel>
+                <Select
+                  labelId="class-select-label"
+                  id="class-select"
+                  value={values.class || initialClass}
+                  label="Lớp"
+                  onChange={handleChange('class')}
+                >
+                  {classes.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item.toUpperCase()}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="type-select-label">Loại</InputLabel>
+                <Select
+                  labelId="type-select-label"
+                  id="type-select"
+                  value={values.type}
+                  label="Loại"
+                  onChange={handleChange('type')}
+                >
+                  {TYPES.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </Box>
+            <Button
+              component={Link}
+              to={`/classes/${selectedClass}`}
+              variant="contained"
+            >
+              Tổng quan lớp học
+            </Button>
+          </StyledActionsBar>
+        </AsyncDataRenderer>
+        <AsyncDataRenderer loading={homeroomLoading} data={homeroomData}>
+          {(values.class || initialClass) && (
+            <Paper
+              sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}
+            >
+              <TableContainer sx={{ maxHeight: 350 }}>
+                <Table stickyHeader>
+                  <StudentTableHead
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={handleRequestSort}
+                  />
+                  <TableBody>
+                    {homeroomData
+                      // ?.sort(getComparator(order, orderBy))
+                      .map((row, index) => (
+                        <StudentTableRow
+                          key={row.maSV}
+                          checked={values.selected.includes(row.maSV)}
+                          data={mapStudentDataToTable(row)}
+                          index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
+                          handleCheck={handleCheck}
+                        />
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[]}
+                component="div"
+                count={homeroomLength}
+                rowsPerPage={STUDENT_LIST_PAGE_SIZE}
+                page={page}
+                onPageChange={handleChangePage}
+              />
+            </Paper>
+          )}
+        </AsyncDataRenderer>
+        {!_isEqual(values.selected, initialSelected) && (
           <Button
-            component={Link}
-            to={`/classes/${selectedClass}`}
+            sx={{ marginTop: '1rem' }}
             variant="contained"
+            color="primary"
+            onClick={handleUpdateWatchlist}
           >
-            Tổng quan lớp học
+            Lưu thay đổi
           </Button>
-        </StyledActionsBar>
-      </AsyncDataRenderer>
-      <AsyncDataRenderer loading={homeroomLoading} data={homeroomData}>
-        {(values.class || initialClass) && (
-          <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-            <TableContainer sx={{ maxHeight: 400 }}>
-              <Table stickyHeader>
-                <StudentTableHead
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={handleRequestSort}
-                />
-                <TableBody>
-                  {homeroomData
-                    // ?.sort(getComparator(order, orderBy))
-                    .map((row, index) => (
-                      <StudentTableRow
-                        key={row.maSV}
-                        data={mapStudentDataToTable(row)}
-                        index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
-                        handleCheck={handleCheck}
-                      />
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[]}
-              component="div"
-              count={homeroomLength}
-              rowsPerPage={STUDENT_LIST_PAGE_SIZE}
-              page={page}
-              onPageChange={handleChangePage}
-            />
-          </Paper>
         )}
-      </AsyncDataRenderer>
-      {values.selected.length > 0 && (
-        <Button variant="contained" color="primary">
-          Lưu thay đổi
-        </Button>
-      )}
-    </StyledContentWrapper>
+      </StyledContentWrapper>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={addStudentToWatchlistLoading || removeStudentFromWatchlistLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
 }
 

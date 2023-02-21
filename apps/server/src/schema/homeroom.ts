@@ -37,6 +37,31 @@ const homeroomTypeDefs = gql`
     ): HomeroomExamAbsentList!
   }
 
+  extend type Mutation {
+    homeroomAddWatchlist(
+      payload: HomeroomAddWatchlistInput!
+    ): HomeroomAddWatchlistResponse!
+    homeroomDeleteWatchlist(
+      payload: HomeroomDeleteWatchlistInput!
+    ): HomeroomDeleteWatchlistResponse!
+  }
+
+  input HomeroomAddWatchlistInput {
+    maSV: [String!]!
+  }
+
+  input HomeroomDeleteWatchlistInput {
+    maSV: [String!]!
+  }
+
+  type HomeroomAddWatchlistResponse {
+    status: Int!
+  }
+
+  type HomeroomDeleteWatchlistResponse {
+    status: Int!
+  }
+
   type HomeroomAllList {
     danhSachLopSH: [String!]!
   }

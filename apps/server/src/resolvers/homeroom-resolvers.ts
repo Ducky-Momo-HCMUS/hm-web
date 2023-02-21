@@ -60,6 +60,16 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
   },
+  Mutation: {
+    homeroomAddWatchlist: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.addHomeroomWatchlist(args);
+      return res.data.watchlist;
+    },
+    homeroomDeleteWatchlist: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.deleteHomeroomWatchlist(args);
+      return res.data.watchlist;
+    },
+  },
 };
 
 export default homeroomResolver;
