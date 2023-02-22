@@ -13,6 +13,7 @@ import RequireAuth from './components/RequireAuth';
 import ResetPassword from './pages/ResetPassword';
 import Authenticated from './components/Authenticated';
 import NotFound from './pages/NotFound';
+import Search from './pages/Search';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/notes" element={<NoteStore />} />
         <Route path="/classes/:id" element={<ClassDetail />} />
         <Route path="/classes/:id/report" element={<StatisticalReport />} />
+        <Route path="/search" element={<Search />} />
       </Route>
       <Route element={<Authenticated />}>
         <Route path="/login" element={<Login />} />

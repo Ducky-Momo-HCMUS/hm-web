@@ -563,6 +563,7 @@ export type Query = {
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
+  teacherSearchStudentList: TeacherStudentList;
   yearList: YearList;
 };
 
@@ -671,6 +672,11 @@ export type QueryTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   year: Scalars['Int'];
+};
+
+export type QueryTeacherSearchStudentListArgs = {
+  maSV?: InputMaybe<Scalars['String']>;
+  tenSV?: InputMaybe<Scalars['String']>;
 };
 
 export type StudentAddContactInput = {
@@ -893,6 +899,22 @@ export type TeacherListItem = {
   email: Scalars['String'];
   maSH: Scalars['String'];
   tenGV: Scalars['String'];
+};
+
+export type TeacherSearchStudentListItem = {
+  __typename?: 'TeacherSearchStudentListItem';
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
+  maSV: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
+};
+
+export type TeacherStudentList = {
+  __typename?: 'TeacherStudentList';
+  data: Array<TeacherSearchStudentListItem>;
+  total: Scalars['Int'];
 };
 
 export type UploadDocumentInput = {
@@ -1790,6 +1812,28 @@ export type StudentTrainingPointByTermQuery = {
     __typename?: 'StudentTrainingPoint';
     drl: number;
     xepLoai: string;
+  };
+};
+
+export type TeacherSearchStudentListQueryVariables = Exact<{
+  maSV?: InputMaybe<Scalars['String']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+}>;
+
+export type TeacherSearchStudentListQuery = {
+  __typename?: 'Query';
+  teacherSearchStudentList: {
+    __typename?: 'TeacherStudentList';
+    total: number;
+    data: Array<{
+      __typename?: 'TeacherSearchStudentListItem';
+      maSV: string;
+      tenSV: string;
+      tenCN?: string | null | undefined;
+      tinhTrang: string;
+      gpa4?: number | null | undefined;
+      gpa10?: number | null | undefined;
+    }>;
   };
 };
 
@@ -4882,4 +4926,71 @@ export type StudentTrainingPointByTermLazyQueryHookResult = ReturnType<
 export type StudentTrainingPointByTermQueryResult = Apollo.QueryResult<
   StudentTrainingPointByTermQuery,
   StudentTrainingPointByTermQueryVariables
+>;
+export const TeacherSearchStudentListDocument = gql`
+  query TeacherSearchStudentList($maSV: String, $tenSV: String) {
+    teacherSearchStudentList(maSV: $maSV, tenSV: $tenSV) {
+      total
+      data {
+        maSV
+        tenSV
+        tenCN
+        tinhTrang
+        gpa4
+        gpa10
+      }
+    }
+  }
+`;
+
+/**
+ * __useTeacherSearchStudentListQuery__
+ *
+ * To run a query within a React component, call `useTeacherSearchStudentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeacherSearchStudentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeacherSearchStudentListQuery({
+ *   variables: {
+ *      maSV: // value for 'maSV'
+ *      tenSV: // value for 'tenSV'
+ *   },
+ * });
+ */
+export function useTeacherSearchStudentListQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    TeacherSearchStudentListQuery,
+    TeacherSearchStudentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    TeacherSearchStudentListQuery,
+    TeacherSearchStudentListQueryVariables
+  >(TeacherSearchStudentListDocument, options);
+}
+export function useTeacherSearchStudentListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TeacherSearchStudentListQuery,
+    TeacherSearchStudentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    TeacherSearchStudentListQuery,
+    TeacherSearchStudentListQueryVariables
+  >(TeacherSearchStudentListDocument, options);
+}
+export type TeacherSearchStudentListQueryHookResult = ReturnType<
+  typeof useTeacherSearchStudentListQuery
+>;
+export type TeacherSearchStudentListLazyQueryHookResult = ReturnType<
+  typeof useTeacherSearchStudentListLazyQuery
+>;
+export type TeacherSearchStudentListQueryResult = Apollo.QueryResult<
+  TeacherSearchStudentListQuery,
+  TeacherSearchStudentListQueryVariables
 >;

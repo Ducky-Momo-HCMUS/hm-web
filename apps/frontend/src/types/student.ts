@@ -3,7 +3,7 @@ import { Contact } from '../generated-types';
 export type Property =
   | 'maSV'
   | 'tenSV'
-  | 'maCN'
+  | 'tenCN'
   | 'tinhTrang'
   | 'gpa4'
   | 'gpa10';

@@ -5,6 +5,7 @@ const teacherTypeDefs = gql`
     teacherList(year: Int!, page: Int!, size: Int!): TeacherList!
     allTeacherList(page: Int!, size: Int!): AllTeacherList!
     yearList: YearList!
+    teacherSearchStudentList(maSV: String, tenSV: String): TeacherStudentList!
   }
 
   extend type Mutation {
@@ -13,6 +14,20 @@ const teacherTypeDefs = gql`
       payload: TeacherEditInput!
     ): AllTeacherListItem!
     teacherDelete(teacherId: Int!): AllTeacherListItem!
+  }
+
+  type TeacherStudentList {
+    total: Int!
+    data: [TeacherSearchStudentListItem!]!
+  }
+
+  type TeacherSearchStudentListItem {
+    maSV: String!
+    tenSV: String!
+    tenCN: String
+    tinhTrang: String!
+    gpa4: Float
+    gpa10: Float
   }
 
   input TeacherEditInput {

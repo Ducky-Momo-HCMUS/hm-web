@@ -4,6 +4,7 @@ import {
   MutationTeacherDeleteArgs,
   MutationTeacherEditArgs,
   QueryTeacherListArgs,
+  QueryTeacherSearchStudentListArgs,
 } from '../generated-types';
 import { YEAR_LIST } from '../mocks/teacher';
 import { SERVICES_BASE_URL } from '../utils/config';
@@ -59,6 +60,24 @@ class TeacherAPI extends BaseDataSource {
   public async deleteTeacher({ teacherId }: MutationTeacherDeleteArgs) {
     try {
       const res = await this.delete(`v1/teachers/${teacherId}`);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot delete teacher');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getSearchStudentList({
+    maSV,
+    tenSV,
+  }: QueryTeacherSearchStudentListArgs) {
+    try {
+      let payload = {};
+      if (maSV) {
+        payload = { ...payload, maSV };
+      } else payload = { ...payload, tenSV };
+
+      const res = await this.get(`v1/search/students`, payload);
       return res;
     } catch (error) {
       console.error('Error: cannot delete teacher');
