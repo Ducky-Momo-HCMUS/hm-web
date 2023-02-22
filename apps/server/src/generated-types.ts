@@ -568,6 +568,7 @@ export type Query = {
   studentTrainingPointByTerm: StudentTrainingPoint;
   tagList: TagList;
   teacherList: TeacherList;
+  teacherSearchStudentList: TeacherStudentList;
   yearList: YearList;
 };
 
@@ -676,6 +677,11 @@ export type QueryTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   year: Scalars['Int'];
+};
+
+export type QueryTeacherSearchStudentListArgs = {
+  maSV?: InputMaybe<Scalars['String']>;
+  tenSV?: InputMaybe<Scalars['String']>;
 };
 
 export type StudentAddContactInput = {
@@ -900,6 +906,22 @@ export type TeacherListItem = {
   tenGV: Scalars['String'];
 };
 
+export type TeacherSearchStudentListItem = {
+  __typename?: 'TeacherSearchStudentListItem';
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
+  maSV: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
+  tenSV: Scalars['String'];
+  tinhTrang: Scalars['String'];
+};
+
+export type TeacherStudentList = {
+  __typename?: 'TeacherStudentList';
+  data: Array<TeacherSearchStudentListItem>;
+  total: Scalars['Int'];
+};
+
 export type UploadDocumentInput = {
   name: Scalars['String'];
 };
@@ -1121,6 +1143,8 @@ export type ResolversTypes = {
   TeacherInfo: ResolverTypeWrapper<TeacherInfo>;
   TeacherList: ResolverTypeWrapper<TeacherList>;
   TeacherListItem: ResolverTypeWrapper<TeacherListItem>;
+  TeacherSearchStudentListItem: ResolverTypeWrapper<TeacherSearchStudentListItem>;
+  TeacherStudentList: ResolverTypeWrapper<TeacherStudentList>;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
   UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
@@ -1226,6 +1250,8 @@ export type ResolversParentTypes = {
   TeacherInfo: TeacherInfo;
   TeacherList: TeacherList;
   TeacherListItem: TeacherListItem;
+  TeacherSearchStudentListItem: TeacherSearchStudentListItem;
+  TeacherStudentList: TeacherStudentList;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: UploadDocumentResponse;
   UploadFile: Scalars['UploadFile'];
@@ -2160,6 +2186,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryTeacherListArgs, 'page' | 'size' | 'year'>
   >;
+  teacherSearchStudentList?: Resolver<
+    ResolversTypes['TeacherStudentList'],
+    ParentType,
+    ContextType,
+    Partial<QueryTeacherSearchStudentListArgs>
+  >;
   yearList?: Resolver<ResolversTypes['YearList'], ParentType, ContextType>;
 };
 
@@ -2439,6 +2471,32 @@ export type TeacherListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TeacherSearchStudentListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherSearchStudentListItem'] = ResolversParentTypes['TeacherSearchStudentListItem']
+> = {
+  gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TeacherStudentListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherStudentList'] = ResolversParentTypes['TeacherStudentList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['TeacherSearchStudentListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UploadDocumentResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['UploadDocumentResponse'] = ResolversParentTypes['UploadDocumentResponse']
@@ -2550,6 +2608,8 @@ export type Resolvers<ContextType = any> = {
   TeacherInfo?: TeacherInfoResolvers<ContextType>;
   TeacherList?: TeacherListResolvers<ContextType>;
   TeacherListItem?: TeacherListItemResolvers<ContextType>;
+  TeacherSearchStudentListItem?: TeacherSearchStudentListItemResolvers<ContextType>;
+  TeacherStudentList?: TeacherStudentListResolvers<ContextType>;
   UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;
   UploadFile?: GraphQLScalarType;
   YearList?: YearListResolvers<ContextType>;

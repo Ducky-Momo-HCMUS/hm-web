@@ -17,7 +17,7 @@ interface EnhancedTableProps {
 }
 
 interface Column {
-  id: 'maSV' | 'tenSV' | 'maCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'contact';
+  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'contact';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -32,7 +32,7 @@ const columns: readonly Column[] = [
     minWidth: 200,
   },
   {
-    id: 'maCN',
+    id: 'tenCN',
     label: 'Chuyên ngành',
     minWidth: 120,
   },

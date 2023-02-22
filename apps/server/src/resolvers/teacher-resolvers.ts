@@ -16,6 +16,10 @@ export const teacherResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.teacherAPI.getYearList();
       return res;
     },
+    teacherSearchStudentList: async (_, args, { dataSources }) => {
+      const res = await dataSources.teacherAPI.getSearchStudentList(args);
+      return res;
+    },
   },
   Mutation: {
     teacherEdit: async (_, args, { dataSources }) => {
