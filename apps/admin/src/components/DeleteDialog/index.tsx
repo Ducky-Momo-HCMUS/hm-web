@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
   Button,
@@ -11,6 +12,7 @@ import {
 interface DeleteDialogProps {
   description: string;
   boldText: string;
+  confirmAction?: string;
   open: boolean;
   onClose: any;
   onClickCancel: any;
@@ -20,6 +22,7 @@ interface DeleteDialogProps {
 function DeleteDialog({
   description,
   boldText,
+  confirmAction = '',
   open,
   onClose,
   onClickCancel,
@@ -40,8 +43,18 @@ function DeleteDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClickCancel}>Hủy</Button>
-        <Button color="error" variant="contained" onClick={onClickConfirm}>
-          Xoá
+        <Button
+          color={
+            confirmAction
+              ? confirmAction === 'Khoá'
+                ? 'error'
+                : 'success'
+              : 'error'
+          }
+          variant="contained"
+          onClick={onClickConfirm}
+        >
+          {confirmAction || 'Xoá'}
         </Button>
       </DialogActions>
     </Dialog>

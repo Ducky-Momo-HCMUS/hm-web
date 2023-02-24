@@ -1,15 +1,11 @@
 import { Button, Box, Backdrop, CircularProgress } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
 import { StyledTitle } from '../../components/styles';
-import {
-  AccountAddInput,
-  useAccountAddMutation,
-  useAccountListQuery,
-} from '../../generated-types';
-import AsyncDataRenderer from '../../components/AsyncDataRenderer';
+import { AccountAddInput, useAccountAddMutation } from '../../generated-types';
 import { GET_ACCOUNT_LIST } from '../../data/queries/account/get-account-list';
+import { ACCOUNT_LIST_PAGE_SIZE } from '../../constants';
 
 import AccountTable from './AccountTable';
 import AddOrEditAccountInfoDialog from './AddOrEditAccountInfoDialog';
@@ -39,14 +35,6 @@ function ManageAccount() {
     setOpenImportAccountInfoDialog(false);
   };
 
-  const { loading: accountListLoading, data: accountListData } =
-    useAccountListQuery({});
-
-  const accountList = useMemo(
-    () => accountListData?.accountList.danhSachTaiKhoan || [],
-    [accountListData?.accountList]
-  );
-
   const [addAccount, { loading: addAccountLoading }] = useAccountAddMutation();
 
   const handleAddAccount = useCallback(
@@ -56,7 +44,13 @@ function ManageAccount() {
         variables: {
           payload,
         },
-        refetchQueries: [{ query: GET_ACCOUNT_LIST }, 'AccountList'],
+        refetchQueries: [
+          {
+            query: GET_ACCOUNT_LIST,
+            variables: { page: 1, size: ACCOUNT_LIST_PAGE_SIZE },
+          },
+          'AccountList',
+        ],
       });
     },
     [addAccount]
@@ -89,9 +83,7 @@ function ManageAccount() {
             </Button>
           </Box>
         </Box>
-        <AsyncDataRenderer loading={accountListLoading} data={accountListData}>
-          <AccountTable data={accountList} />
-        </AsyncDataRenderer>
+        <AccountTable />
         {openAddAccountInfoDialog && (
           <AddOrEditAccountInfoDialog
             open={openAddAccountInfoDialog}

@@ -1,11 +1,11 @@
 import { ApolloError } from 'apollo-server-express';
 
 import {
+  MutationAccountActivateArgs,
   MutationAccountAddArgs,
   MutationAccountDeleteArgs,
   MutationAccountEditArgs,
 } from '../generated-types';
-import { ACCOUNT_LIST } from '../mocks/account';
 import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -18,8 +18,8 @@ class AccountAPI extends BaseDataSource {
 
   public async getAccountList() {
     try {
-      // const res = await this.get('v1/accounts');
-      return ACCOUNT_LIST;
+      const res = await this.get('v1/admin');
+      return res;
     } catch (error) {
       console.error('Error: cannot fetch account list');
       throw this.handleError(error as ApolloError);
@@ -28,33 +28,40 @@ class AccountAPI extends BaseDataSource {
 
   public async addAccount({ payload }: MutationAccountAddArgs) {
     try {
-      // const res = await this.post('v1/accounts', payload);
-      console.log('params', payload);
-      return { status: 200 };
+      const res = await this.post('v1/admin/account', payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot add new account');
       throw this.handleError(error as ApolloError);
     }
   }
 
-  public async editAccount({ accountId, payload }: MutationAccountEditArgs) {
+  public async editAccount({ payload }: MutationAccountEditArgs) {
     try {
-      // const res = await this.patch(`v1/accounts/${accountId}`, payload);
-      console.log('params', accountId, payload);
-      return { status: 200 };
+      const res = await this.post('v1/admin/edit-role', payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot edit account');
       throw this.handleError(error as ApolloError);
     }
   }
 
-  public async deleteAccount({ accountId }: MutationAccountDeleteArgs) {
+  public async deleteAccount({ payload }: MutationAccountDeleteArgs) {
     try {
-      // const res = await this.delete(`v1/accounts/${accountId}`);
-      console.log('params', accountId);
-      return { status: 200 };
+      const res = await this.post('v1/admin/deactivate', payload);
+      return res;
     } catch (error) {
       console.error('Error: cannot delete account');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async activateAccount({ payload }: MutationAccountActivateArgs) {
+    try {
+      const res = await this.post('v1/admin/activate', payload);
+      return res;
+    } catch (error) {
+      console.error('Error: cannot activate account');
       throw this.handleError(error as ApolloError);
     }
   }

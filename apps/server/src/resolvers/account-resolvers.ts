@@ -6,21 +6,25 @@ export const accountResolver: Resolvers<ResolverContext> = {
   Query: {
     accountList: async (_, __, { dataSources }) => {
       const res = await dataSources.accountAPI.getAccountList();
-      return res;
+      return res.data;
     },
   },
   Mutation: {
     accountAdd: async (_, args, { dataSources }) => {
       const res = await dataSources.accountAPI.addAccount(args);
-      return res;
+      return res.data;
     },
     accountEdit: async (_, args, { dataSources }) => {
       const res = await dataSources.accountAPI.editAccount(args);
-      return res;
+      return res.data;
     },
     accountDelete: async (_, args, { dataSources }) => {
       const res = await dataSources.accountAPI.deleteAccount(args);
-      return res;
+      return res.data;
+    },
+    accountActivate: async (_, args, { dataSources }) => {
+      const res = await dataSources.accountAPI.activateAccount(args);
+      return res.data;
     },
   },
 };
