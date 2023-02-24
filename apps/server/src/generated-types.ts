@@ -852,7 +852,7 @@ export type StudentTrainingPoint = {
 
 export type SubjectDetailResult = {
   __typename?: 'SubjectDetailResult';
-  diem: Scalars['Float'];
+  dtb: Scalars['Float'];
   hocKy: Scalars['Int'];
   maMH: Scalars['String'];
   namHoc: Scalars['Int'];
@@ -2406,7 +2406,7 @@ export type SubjectDetailResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SubjectDetailResult'] = ResolversParentTypes['SubjectDetailResult']
 > = {
-  diem?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

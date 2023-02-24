@@ -847,7 +847,7 @@ export type StudentTrainingPoint = {
 
 export type SubjectDetailResult = {
   __typename?: 'SubjectDetailResult';
-  diem: Scalars['Float'];
+  dtb: Scalars['Float'];
   hocKy: Scalars['Int'];
   maMH: Scalars['String'];
   namHoc: Scalars['Int'];
@@ -1670,7 +1670,7 @@ export type StudentDetailSubjectsResultQuery = {
       soTC: number;
       namHoc: number;
       hocKy: number;
-      diem: number;
+      dtb: number;
     }>;
   };
 };
@@ -4464,7 +4464,7 @@ export const StudentDetailSubjectsResultDocument = gql`
         soTC
         namHoc
         hocKy
-        diem
+        dtb
       }
     }
   }

@@ -1,8 +1,4 @@
-import {
-  StudentContactResponse,
-  StudentParentInfo,
-  StudentDetailSubjectsResult,
-} from '../generated-types';
+import { StudentContactResponse, StudentParentInfo } from '../generated-types';
 
 export const STUDENT_ADD_CONTACT_RESPONSE = {
   maLHSV: 1,
@@ -32,65 +28,3 @@ export const STUDENT_PARENT_INFO_RESPONSE = {
     },
   ],
 } as StudentParentInfo;
-
-export const STUDENT_DETAIL_SUBJECTS_RESULT = {
-  tichLuy: 11,
-  monHoc: [
-    {
-      maMH: 'BAA00101',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00102',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00103',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00104',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00105',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00106',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-    {
-      maMH: 'BAA00107',
-      tenMH: 'Triết học Mác-Lênin',
-      soTC: 3,
-      namHoc: 2019,
-      hocKy: 2,
-      diem: 7.5,
-    },
-  ],
-} as StudentDetailSubjectsResult;

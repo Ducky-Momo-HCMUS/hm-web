@@ -36,22 +36,22 @@ function AcademicResult() {
       let subject = '';
       switch (newValue) {
         case 0:
-          subject = 'dai-cuong';
+          subject = 'daiCuong';
           break;
         case 1:
-          subject = 'co-so-nganh';
+          subject = 'coSoNganh';
           break;
         case 2:
-          subject = 'bat-buoc-nganh';
+          subject = 'batBuocNganh';
           break;
         case 3:
-          subject = 'tu-chon-chuyen-nganh';
+          subject = 'tuChonChuyenNganh';
           break;
         case 4:
-          subject = 'tu-chon-tu-do';
+          subject = 'tuChonTuDo';
           break;
         case 5:
-          subject = 'tot-nghiep';
+          subject = 'totNghiep';
           break;
         default:
           break;
@@ -62,6 +62,7 @@ function AcademicResult() {
           studentId: id,
           subject,
         },
+        fetchPolicy: 'no-cache',
       });
     },
     [getStudentDetailSubjectsResult, id]
@@ -71,7 +72,7 @@ function AcademicResult() {
     getStudentDetailSubjectsResult({
       variables: {
         studentId: id,
-        subject: 'dai-cuong',
+        subject: 'daiCuong',
       },
     });
   }, [getStudentDetailSubjectsResult, id]);

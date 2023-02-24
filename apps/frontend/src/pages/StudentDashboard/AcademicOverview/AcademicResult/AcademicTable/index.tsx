@@ -14,7 +14,7 @@ import { StyledHeader } from '../../../../../components/styles';
 import { SubjectDetailResult } from '../../../../../generated-types';
 
 interface Column {
-  id: 'maMH' | 'tenMH' | 'soTC' | 'namHoc' | 'hocKy' | 'diem';
+  id: 'maMH' | 'tenMH' | 'soTC' | 'namHoc' | 'hocKy' | 'dtb';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -44,7 +44,7 @@ const columns: readonly Column[] = [
     minWidth: 60,
   },
   {
-    id: 'diem',
+    id: 'dtb',
     label: 'Điểm',
     minWidth: 60,
   },
@@ -84,7 +84,7 @@ function AcademicTable({ header, description, data }: AcademicTableProps) {
                   {item.namHoc} - {item.namHoc + 1}
                 </TableCell>
                 <TableCell>{item.hocKy}</TableCell>
-                <TableCell>{item.diem}</TableCell>
+                <TableCell>{item.dtb}</TableCell>
               </TableRow>
             ))}
           </TableBody>

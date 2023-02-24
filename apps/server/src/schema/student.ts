@@ -202,7 +202,7 @@ const studentTypeDefs = gql`
     soTC: Int!
     namHoc: Int!
     hocKy: Int!
-    diem: Float!
+    dtb: Float!
   }
 `;
 

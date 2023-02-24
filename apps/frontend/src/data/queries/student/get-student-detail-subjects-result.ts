@@ -10,7 +10,7 @@ export const GET_STUDENT_DETAIL_SUBJECTS_RESULT = gql`
         soTC
         namHoc
         hocKy
-        diem
+        dtb
       }
     }
   }
