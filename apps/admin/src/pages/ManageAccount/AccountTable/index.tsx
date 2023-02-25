@@ -115,6 +115,16 @@ function AccountTable() {
         variables: {
           payload,
         },
+        refetchQueries: [
+          {
+            query: GET_ACCOUNT_LIST,
+            variables: {
+              page: 1,
+              size: ACCOUNT_LIST_PAGE_SIZE,
+            },
+          },
+          'AccountList',
+        ],
       });
     },
     [editAccount]
