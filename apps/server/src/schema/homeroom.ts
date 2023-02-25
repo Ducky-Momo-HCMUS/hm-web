@@ -241,59 +241,6 @@ const homeroomTypeDefs = gql`
   type HomeroomExamAbsentListSubject {
     tenMH: String!
   }
-
-  type HomeroomOverviewReport {
-    siSo: HomeroomNumberOverview!
-    hocTap: HomeroomLearnOverview!
-    drl: HomeroomTrainingPointOverview!
-  }
-
-  type HomeroomNumberOverview {
-    tong: Int!
-    nam: Int!
-    nu: Int!
-  }
-
-  type HomeroomLearnOverview {
-    xuatSac: Int
-    gioi: Int
-    kha: Int
-    trungBinhKha: Int
-    trungBinh: Int
-    yeu: Int
-    chungChiNgoaiNgu: Int
-  }
-
-  type HomeroomTrainingPointOverview {
-    xuatSac: Int
-    gioi: Int
-    kha: Int
-    trungBinhKha: Int
-    trungBinh: Int
-    yeu: Int
-  }
-
-  type HomeroomFinalResultList {
-    danhSachKetQua: [HomeroomFinalResultListItem!]!
-  }
-
-  type HomeroomFinalResultListItem {
-    maSV: String!
-    hoTen: String!
-    dtb: Float
-    xepLoai: String
-  }
-
-  type HomeroomExamPostponedList {
-    danhSachHoanThi: [HomeroomExamPostponedListItem!]!
-  }
-
-  type HomeroomExamPostponedListItem {
-    maSV: String!
-    hoTen: String!
-    monHoc: String
-    lopHP: String
-  }
 `;
 
 export default homeroomTypeDefs;
