@@ -25,11 +25,15 @@ function StudentContactRow({
     <>
       <TableRow key={index}>
         <TableCell>
-          <Tooltip title={url} placement="top">
-            <StyledMuiLink href={url} target="_blank">
-              {mxh}
-            </StyledMuiLink>
-          </Tooltip>
+          {mxh === 'Facebook' ? (
+            <Tooltip title={url} placement="top">
+              <StyledMuiLink href={url} target="_blank">
+                {mxh}
+              </StyledMuiLink>
+            </Tooltip>
+          ) : (
+            `${mxh}: ${url}`
+          )}
         </TableCell>
         <TableCell align="right">
           <IconButton onClick={onClickEdit}>

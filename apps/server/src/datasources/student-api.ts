@@ -129,10 +129,7 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentEditContactArgs) {
     try {
-      const res = await this.patch(
-        `v1/students/contacts/${contactId}`,
-        payload
-      );
+      const res = await this.patch(`v1/student/contacts/${contactId}`, payload);
       return res;
     } catch (error) {
       console.error('Error: cannot edit student contact');
@@ -144,7 +141,7 @@ class StudentAPI extends BaseDataSource {
     contactId,
   }: MutationStudentDeleteContactArgs) {
     try {
-      const res = await this.delete(`v1/students/contacts/${contactId}`);
+      const res = await this.delete(`v1/student/contacts/${contactId}`);
       return res;
     } catch (error) {
       console.error('Error: cannot delete student contact');
