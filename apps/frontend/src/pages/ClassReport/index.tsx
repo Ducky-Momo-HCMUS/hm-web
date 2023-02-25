@@ -12,9 +12,11 @@ import {
 } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Document, Packer, Paragraph, Header, Footer } from 'docx';
+import { saveAs } from 'file-saver';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
-import Header from '../../components/Header';
+import AppHeader from '../../components/Header';
 import {
   StyledBreadCrumbs,
   StyledContentWrapper,
@@ -37,6 +39,12 @@ import { groupTermsByYear } from '../../utils';
 import ClassOverview from './ClassOverview';
 import PostponeExam from './PostponeExam';
 import { StyledFormControl } from './styles';
+import DocumentCreator, {
+  achievements,
+  education,
+  experiences,
+  skills,
+} from './document-creator';
 
 interface State {
   year: string;
@@ -269,9 +277,27 @@ function ClassReport() {
     ]
   );
 
+  function saveDocumentToFile(doc, fileName) {
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, fileName);
+    });
+  }
+
+  const handleExportDocument = useCallback((event) => {
+    event.preventDefault();
+    const documentCreator = new DocumentCreator();
+    const doc = documentCreator.create([
+      experiences,
+      education,
+      skills,
+      achievements,
+    ]);
+    saveDocumentToFile(doc, 'New Document.docx');
+  }, []);
+
   return (
     <>
-      <Header isAuthenticated />
+      <AppHeader isAuthenticated />
       <StyledContentWrapper>
         <StyledTitle variant="h1">Báo cáo lớp học</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
@@ -325,7 +351,11 @@ function ClassReport() {
               </StyledFormControl>
             </Box>
           </AsyncDataRenderer>
-          <Button sx={{ textTransform: 'uppercase' }} variant="contained">
+          <Button
+            sx={{ textTransform: 'uppercase' }}
+            variant="contained"
+            onClick={handleExportDocument}
+          >
             Xuất báo cáo
           </Button>
         </Box>
