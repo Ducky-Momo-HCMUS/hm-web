@@ -11,7 +11,7 @@ import { visuallyHidden } from '@mui/utils';
 import { Order, Property } from '../../../../types';
 
 interface EnhancedTableProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: Property) => void;
+  onRequestSort: (property: Property) => void;
   order: Order;
   orderBy: string;
 }
@@ -61,38 +61,44 @@ const columns: readonly Column[] = [
 function StudentTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
 
-  const createSortHandler =
-    (property: Property) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+  const createSortHandler = (property: Property) => {
+    onRequestSort(property);
+  };
 
   return (
     <TableHead>
       <TableRow>
         <TableCell key="watchlist">Chú ý</TableCell>
         <TableCell key="index">STT</TableCell>
-        {columns.map((column) => (
-          <TableCell
-            key={column.id}
-            sortDirection={orderBy === column.id ? order : false}
-          >
-            <TableSortLabel
-              direction={orderBy === column.id ? order : 'asc'}
-              onClick={() => {
-                if (column.id !== 'contact') {
-                  createSortHandler(column.id);
-                }
-              }}
-            >
-              {column.label}
-              {orderBy === column.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+        {columns.map((column) => {
+          if (['maSV', 'tenSV', 'gpa4', 'gpa10'].includes(column.id)) {
+            return (
+              <TableCell
+                key={column.id}
+                sortDirection={orderBy === column.id ? order : false}
+              >
+                <TableSortLabel
+                  direction={orderBy === column.id ? order : 'asc'}
+                  onClick={() => {
+                    if (column.id !== 'contact') {
+                      createSortHandler(column.id);
+                    }
+                  }}
+                >
+                  {column.label}
+                  {orderBy === column.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === 'desc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell>
+            );
+          }
+          return <TableCell key={column.id}>{column.label}</TableCell>;
+        })}
       </TableRow>
     </TableHead>
   );
