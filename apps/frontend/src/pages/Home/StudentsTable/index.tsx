@@ -82,12 +82,12 @@ function StudentsTable() {
   );
 
   const handleRequestSort = useCallback(
-    (event: React.MouseEvent<unknown>, property: Property) => {
+    (property: Property) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
     },
-    [orderBy, order]
+    [order, orderBy]
   );
 
   const mappedData = useMemo(
@@ -172,6 +172,8 @@ function StudentsTable() {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
           page: page + 1,
           size: STUDENT_LIST_PAGE_SIZE,
+          sortOrder: order,
+          sortBy: orderBy,
         },
         fetchPolicy: 'no-cache',
       });
@@ -187,6 +189,8 @@ function StudentsTable() {
     getHomeroomStudentList,
     getHomeroomWatchList,
     initialClass,
+    order,
+    orderBy,
     page,
     values.class,
     values.type,
@@ -363,17 +367,15 @@ function StudentsTable() {
                     onRequestSort={handleRequestSort}
                   />
                   <TableBody>
-                    {homeroomData
-                      // ?.sort(getComparator(order, orderBy))
-                      .map((row, index) => (
-                        <StudentTableRow
-                          key={row.maSV}
-                          checked={values.selected.includes(row.maSV)}
-                          data={mapStudentDataToTable(row)}
-                          index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
-                          handleCheck={handleCheck}
-                        />
-                      ))}
+                    {homeroomData.map((row, index) => (
+                      <StudentTableRow
+                        key={row.maSV}
+                        checked={values.selected.includes(row.maSV)}
+                        data={mapStudentDataToTable(row)}
+                        index={page * STUDENT_LIST_PAGE_SIZE + index + 1}
+                        handleCheck={handleCheck}
+                      />
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>

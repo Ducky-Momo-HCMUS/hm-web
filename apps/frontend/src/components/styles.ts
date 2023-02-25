@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 export const StyledScrollableBox = styled(Box)`
   overflow-y: scroll;
-  height: 29rem;
+  height: 50%;
   padding: 2rem 0.25rem;
 `;
 

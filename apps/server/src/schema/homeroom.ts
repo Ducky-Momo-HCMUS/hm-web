@@ -8,6 +8,8 @@ const homeroomTypeDefs = gql`
       homeroomId: String!
       page: Int!
       size: Int!
+      sortBy: String
+      sortOrder: String
     ): HomeroomStudentList!
     homeroomWatchList(homeroomId: String!): HomeroomWatchList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!

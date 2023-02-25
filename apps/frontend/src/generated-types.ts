@@ -637,6 +637,8 @@ export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
   page: Scalars['Int'];
   size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -1566,6 +1568,8 @@ export type HomeroomStudentListQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   page: Scalars['Int'];
   size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 }>;
 
 export type HomeroomStudentListQuery = {
@@ -4111,8 +4115,20 @@ export type HomeroomPostponeExamListByTermQueryResult = Apollo.QueryResult<
   HomeroomPostponeExamListByTermQueryVariables
 >;
 export const HomeroomStudentListDocument = gql`
-  query HomeroomStudentList($homeroomId: String!, $page: Int!, $size: Int!) {
-    homeroomStudentList(homeroomId: $homeroomId, page: $page, size: $size) {
+  query HomeroomStudentList(
+    $homeroomId: String!
+    $page: Int!
+    $size: Int!
+    $sortBy: String
+    $sortOrder: String
+  ) {
+    homeroomStudentList(
+      homeroomId: $homeroomId
+      page: $page
+      size: $size
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+    ) {
       total
       data {
         maSV
@@ -4147,6 +4163,8 @@ export const HomeroomStudentListDocument = gql`
  *      homeroomId: // value for 'homeroomId'
  *      page: // value for 'page'
  *      size: // value for 'size'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */

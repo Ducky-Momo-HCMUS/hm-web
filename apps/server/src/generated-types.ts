@@ -642,6 +642,8 @@ export type QueryHomeroomStudentListArgs = {
   homeroomId: Scalars['String'];
   page: Scalars['Int'];
   size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryHomeroomTermListArgs = {

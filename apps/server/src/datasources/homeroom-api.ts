@@ -49,10 +49,12 @@ class HomeroomAPI extends BaseDataSource {
     homeroomId,
     page,
     size,
+    sortOrder,
+    sortBy,
   }: QueryHomeroomStudentListArgs) {
     try {
       const homeroomStudentList = await this.get(
-        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}`
+        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}&sort-order=${sortOrder}&sort-by=${sortBy}`
       );
       return homeroomStudentList;
     } catch (error) {
