@@ -27,40 +27,56 @@ export type Scalars = {
   UploadFile: any;
 };
 
+export type AccountActivateInput = {
+  email: Scalars['String'];
+};
+
+export type AccountActivateResponse = {
+  __typename?: 'AccountActivateResponse';
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
+};
+
 export type AccountAddInput = {
   email: Scalars['String'];
-  gvcn: Scalars['Boolean'];
-  gvu: Scalars['Boolean'];
-  hoatDong: Scalars['Boolean'];
-  tenGV: Scalars['String'];
+  isStaff: Scalars['Boolean'];
+  isTeacher: Scalars['Boolean'];
+  name: Scalars['String'];
 };
 
 export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
-  status: Scalars['Int'];
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
+};
+
+export type AccountDeleteInput = {
+  email: Scalars['String'];
 };
 
 export type AccountDeleteResponse = {
   __typename?: 'AccountDeleteResponse';
-  status: Scalars['Int'];
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
 };
 
 export type AccountEditInput = {
   email: Scalars['String'];
-  gvcn: Scalars['Boolean'];
-  gvu: Scalars['Boolean'];
-  hoatDong: Scalars['Boolean'];
-  tenGV: Scalars['String'];
+  isStaff: Scalars['Boolean'];
+  isTeacher: Scalars['Boolean'];
+  name: Scalars['String'];
 };
 
 export type AccountEditResponse = {
   __typename?: 'AccountEditResponse';
-  status: Scalars['Int'];
+  maTK: Scalars['Int'];
+  tenGV: Scalars['String'];
 };
 
 export type AccountList = {
   __typename?: 'AccountList';
-  danhSachTaiKhoan: Array<AccountListItem>;
+  data: Array<AccountListItem>;
+  total: Scalars['Int'];
 };
 
 export type AccountListItem = {
@@ -330,6 +346,7 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  accountActivate: AccountActivateResponse;
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
@@ -356,16 +373,19 @@ export type Mutation = {
   uploadDocument: UploadDocumentResponse;
 };
 
+export type MutationAccountActivateArgs = {
+  payload: AccountActivateInput;
+};
+
 export type MutationAccountAddArgs = {
   payload: AccountAddInput;
 };
 
 export type MutationAccountDeleteArgs = {
-  accountId: Scalars['Int'];
+  payload: AccountDeleteInput;
 };
 
 export type MutationAccountEditArgs = {
-  accountId: Scalars['Int'];
   payload: AccountEditInput;
 };
 
@@ -570,6 +590,11 @@ export type Query = {
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
   yearList: YearList;
+};
+
+export type QueryAccountListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryAllTeacherListArgs = {
@@ -852,7 +877,7 @@ export type StudentTrainingPoint = {
 
 export type SubjectDetailResult = {
   __typename?: 'SubjectDetailResult';
-  diem: Scalars['Float'];
+  dtb: Scalars['Float'];
   hocKy: Scalars['Int'];
   maMH: Scalars['String'];
   namHoc: Scalars['Int'];
@@ -1046,8 +1071,11 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AccountActivateInput: AccountActivateInput;
+  AccountActivateResponse: ResolverTypeWrapper<AccountActivateResponse>;
   AccountAddInput: AccountAddInput;
   AccountAddResponse: ResolverTypeWrapper<AccountAddResponse>;
+  AccountDeleteInput: AccountDeleteInput;
   AccountDeleteResponse: ResolverTypeWrapper<AccountDeleteResponse>;
   AccountEditInput: AccountEditInput;
   AccountEditResponse: ResolverTypeWrapper<AccountEditResponse>;
@@ -1153,8 +1181,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AccountActivateInput: AccountActivateInput;
+  AccountActivateResponse: AccountActivateResponse;
   AccountAddInput: AccountAddInput;
   AccountAddResponse: AccountAddResponse;
+  AccountDeleteInput: AccountDeleteInput;
   AccountDeleteResponse: AccountDeleteResponse;
   AccountEditInput: AccountEditInput;
   AccountEditResponse: AccountEditResponse;
@@ -1258,11 +1289,21 @@ export type ResolversParentTypes = {
   YearList: YearList;
 };
 
+export type AccountActivateResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AccountActivateResponse'] = ResolversParentTypes['AccountActivateResponse']
+> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type AccountAddResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AccountAddResponse'] = ResolversParentTypes['AccountAddResponse']
 > = {
-  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1270,7 +1311,8 @@ export type AccountDeleteResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AccountDeleteResponse'] = ResolversParentTypes['AccountDeleteResponse']
 > = {
-  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1278,7 +1320,8 @@ export type AccountEditResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AccountEditResponse'] = ResolversParentTypes['AccountEditResponse']
 > = {
-  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1286,11 +1329,12 @@ export type AccountListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AccountList'] = ResolversParentTypes['AccountList']
 > = {
-  danhSachTaiKhoan?: Resolver<
+  data?: Resolver<
     Array<ResolversTypes['AccountListItem']>,
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1771,6 +1815,12 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  accountActivate?: Resolver<
+    ResolversTypes['AccountActivateResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAccountActivateArgs, 'payload'>
+  >;
   accountAdd?: Resolver<
     ResolversTypes['AccountAddResponse'],
     ParentType,
@@ -1781,13 +1831,13 @@ export type MutationResolvers<
     ResolversTypes['AccountDeleteResponse'],
     ParentType,
     ContextType,
-    RequireFields<MutationAccountDeleteArgs, 'accountId'>
+    RequireFields<MutationAccountDeleteArgs, 'payload'>
   >;
   accountEdit?: Resolver<
     ResolversTypes['AccountEditResponse'],
     ParentType,
     ContextType,
-    RequireFields<MutationAccountEditArgs, 'accountId' | 'payload'>
+    RequireFields<MutationAccountEditArgs, 'payload'>
   >;
   editPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
@@ -2025,7 +2075,8 @@ export type QueryResolvers<
   accountList?: Resolver<
     ResolversTypes['AccountList'],
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<QueryAccountListArgs, 'page' | 'size'>
   >;
   allTeacherList?: Resolver<
     ResolversTypes['AllTeacherList'],
@@ -2406,7 +2457,7 @@ export type SubjectDetailResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SubjectDetailResult'] = ResolversParentTypes['SubjectDetailResult']
 > = {
-  diem?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -2530,6 +2581,7 @@ export type YearListResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  AccountActivateResponse?: AccountActivateResponseResolvers<ContextType>;
   AccountAddResponse?: AccountAddResponseResolvers<ContextType>;
   AccountDeleteResponse?: AccountDeleteResponseResolvers<ContextType>;
   AccountEditResponse?: AccountEditResponseResolvers<ContextType>;

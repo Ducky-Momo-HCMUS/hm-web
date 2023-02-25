@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
-import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { useStudentOverviewResultQuery } from '../../../generated-types';
 
 import AcademicInfo from './AcademicInfo';
@@ -23,10 +22,7 @@ const OVERVIEW_CONTENT = [
 
 function AcademicOverview() {
   const { id = '' } = useParams();
-  const {
-    data: studentOverviewResultData,
-    loading: studentOverviewResultLoading,
-  } = useStudentOverviewResultQuery({
+  const { data: studentOverviewResultData } = useStudentOverviewResultQuery({
     variables: {
       studentId: id,
     },
@@ -73,9 +69,7 @@ function AcademicOverview() {
         <Button variant="contained">Xuất phiếu điểm</Button>
       </Box>
       <Box sx={{ overflowY: 'scroll', height: '30rem' }} mt={3}>
-        <AsyncDataRenderer loading={studentOverviewResultLoading}>
-          <AcademicInfo infoList={mappedData} />
-        </AsyncDataRenderer>
+        <AcademicInfo infoList={mappedData} />
         <AcademicResult />
       </Box>
     </>

@@ -42,16 +42,16 @@ function AddOrEditAccountInfoDialog({
   onClose,
   onClickCancel,
   onClickConfirm,
-  data = {
-    maTK: 0,
-    email: '',
-    tenGV: '',
-    gvcn: true,
-    gvu: false,
-    hoatDong: true,
-  },
+  data,
 }: AddOrEditAccountInfoDialogProps) {
   const { type, status } = useMemo(() => {
+    if (!data) {
+      return {
+        type: '',
+        status: '',
+      };
+    }
+
     const { gvcn, gvu, hoatDong } = data as AccountListItem;
     const getType = () => {
       if (gvcn && gvu) {
@@ -140,6 +140,9 @@ function AddOrEditAccountInfoDialog({
             InputLabelProps={{
               shrink: true,
             }}
+            InputProps={{
+              readOnly: !!data,
+            }}
           />
           <FormControl
             sx={{ margin: '0.5rem 0', width: '100%' }}
@@ -172,37 +175,39 @@ function AddOrEditAccountInfoDialog({
               ))}
             </Select>
           </FormControl>
-          <FormControl
-            sx={{ margin: '0.5rem 0', width: '100%' }}
-            variant="filled"
-            required
-          >
-            <InputLabel shrink id="account-status-select-label">
-              Trạng thái
-            </InputLabel>
-            <Select
-              sx={{
-                '& .MuiSelect-select .notranslate::after':
-                  values.type.length === 0
-                    ? {
-                        content: `"Chọn trạng thái"`,
-                        opacity: 0.42,
-                      }
-                    : {},
-              }}
-              labelId="account-status-select-label"
-              id="account-status-select"
-              label="Trạng thái"
-              value={values.status}
-              onChange={handleSelectAccountStatus}
+          {!data && (
+            <FormControl
+              sx={{ margin: '0.5rem 0', width: '100%' }}
+              variant="filled"
+              required
             >
-              {ACCOUNT_STATUSES.map((item) => (
-                <MenuItem key={item} value={item}>
-                  <ListItemText primary={item} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel shrink id="account-status-select-label">
+                Trạng thái
+              </InputLabel>
+              <Select
+                sx={{
+                  '& .MuiSelect-select .notranslate::after':
+                    values.type.length === 0
+                      ? {
+                          content: `"Chọn trạng thái"`,
+                          opacity: 0.42,
+                        }
+                      : {},
+                }}
+                labelId="account-status-select-label"
+                id="account-status-select"
+                label="Trạng thái"
+                value={values.status}
+                onChange={handleSelectAccountStatus}
+              >
+                {ACCOUNT_STATUSES.map((item) => (
+                  <MenuItem key={item} value={item}>
+                    <ListItemText primary={item} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
@@ -212,10 +217,9 @@ function AddOrEditAccountInfoDialog({
             onClick={() => {
               onClickConfirm({
                 email: values.email,
-                tenGV: values.fullName,
-                hoatDong: values.status === 'Hoạt động',
-                gvu: values.type.includes('Giáo vụ'),
-                gvcn: values.type.includes('Giáo viên chủ nhiệm'),
+                name: values.fullName,
+                isStaff: values.type.includes('Giáo vụ'),
+                isTeacher: values.type.includes('Giáo viên chủ nhiệm'),
               });
             }}
           >

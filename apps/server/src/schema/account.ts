@@ -2,20 +2,19 @@ import { gql } from 'apollo-server-express';
 
 const accountTypeDefs = gql`
   extend type Query {
-    accountList: AccountList!
+    accountList(page: Int!, size: Int!): AccountList!
   }
 
   extend type Mutation {
     accountAdd(payload: AccountAddInput!): AccountAddResponse!
-    accountEdit(
-      accountId: Int!
-      payload: AccountEditInput!
-    ): AccountEditResponse!
-    accountDelete(accountId: Int!): AccountDeleteResponse!
+    accountEdit(payload: AccountEditInput!): AccountEditResponse!
+    accountDelete(payload: AccountDeleteInput!): AccountDeleteResponse!
+    accountActivate(payload: AccountActivateInput!): AccountActivateResponse!
   }
 
   type AccountList {
-    danhSachTaiKhoan: [AccountListItem!]!
+    total: Int!
+    data: [AccountListItem!]!
   }
 
   type AccountListItem {
@@ -29,30 +28,44 @@ const accountTypeDefs = gql`
 
   input AccountAddInput {
     email: String!
-    tenGV: String!
-    gvcn: Boolean!
-    gvu: Boolean!
-    hoatDong: Boolean!
+    name: String!
+    isTeacher: Boolean!
+    isStaff: Boolean!
+  }
+
+  input AccountDeleteInput {
+    email: String!
+  }
+
+  input AccountActivateInput {
+    email: String!
   }
 
   input AccountEditInput {
     email: String!
-    tenGV: String!
-    gvcn: Boolean!
-    gvu: Boolean!
-    hoatDong: Boolean!
+    name: String!
+    isTeacher: Boolean!
+    isStaff: Boolean!
   }
 
   type AccountAddResponse {
-    status: Int!
+    maTK: Int!
+    email: String!
   }
 
   type AccountEditResponse {
-    status: Int!
+    maTK: Int!
+    tenGV: String!
   }
 
   type AccountDeleteResponse {
-    status: Int!
+    maTK: Int!
+    email: String!
+  }
+
+  type AccountActivateResponse {
+    maTK: Int!
+    email: String!
   }
 `;
 

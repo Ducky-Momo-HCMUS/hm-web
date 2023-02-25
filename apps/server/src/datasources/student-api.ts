@@ -17,7 +17,6 @@ import {
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
-import { STUDENT_DETAIL_SUBJECTS_RESULT } from '../mocks/student';
 import { SERVICES_BASE_URL } from '../utils/config';
 
 import { BaseDataSource } from './base-data-source';
@@ -218,11 +217,10 @@ class StudentAPI extends BaseDataSource {
     subject,
   }: QueryStudentDetailSubjectsResultArgs) {
     try {
-      // const detailSubjectsResult = await this.get(
-      //   `v1/students/${studentId}?subject=${subject}`,
-      // );
-      console.log('params', studentId, subject);
-      return STUDENT_DETAIL_SUBJECTS_RESULT;
+      const detailSubjectsResult = await this.get(
+        `v1/students/${studentId}/result?subject=${subject}`
+      );
+      return detailSubjectsResult;
     } catch (error) {
       console.error('Error: cannot fetch student detail subjects result');
       throw this.handleError(error as ApolloError);

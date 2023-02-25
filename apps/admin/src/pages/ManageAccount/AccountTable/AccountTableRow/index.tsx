@@ -1,6 +1,7 @@
 import { IconButton, TableRow, TableCell } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import React, { useMemo } from 'react';
 
 import { AccountListItem } from '../../../../generated-types';
@@ -10,6 +11,7 @@ interface AccountTableRowProps {
   data: AccountListItem;
   onClickDelete: any;
   onClickEdit: any;
+  onClickActivate: any;
 }
 
 function AccountTableRow({
@@ -17,6 +19,7 @@ function AccountTableRow({
   data,
   onClickDelete,
   onClickEdit,
+  onClickActivate,
 }: AccountTableRowProps) {
   const { email, tenGV, gvcn, gvu, hoatDong } = data;
 
@@ -48,9 +51,15 @@ function AccountTableRow({
           <IconButton onClick={onClickEdit}>
             <EditIcon />
           </IconButton>
-          <IconButton onClick={onClickDelete}>
-            <DeleteIcon />
-          </IconButton>
+          {hoatDong ? (
+            <IconButton onClick={onClickDelete}>
+              <LockIcon />
+            </IconButton>
+          ) : (
+            <IconButton onClick={onClickActivate}>
+              <LockOpenIcon />
+            </IconButton>
+          )}
         </TableCell>
       </TableRow>
     </>

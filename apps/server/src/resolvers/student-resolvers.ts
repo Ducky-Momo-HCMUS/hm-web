@@ -40,10 +40,10 @@ export const studentResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
     studentDetailSubjectsResult: async (_, args, { dataSources }) => {
-      return (
-        (await dataSources.studentAPI.getStudentDetailSubjectsResult(args)) ||
-        null
+      const res = await dataSources.studentAPI.getStudentDetailSubjectsResult(
+        args
       );
+      return res.data.data;
     },
   },
   Mutation: {

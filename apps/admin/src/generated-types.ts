@@ -22,40 +22,56 @@ export type Scalars = {
   UploadFile: any;
 };
 
+export type AccountActivateInput = {
+  email: Scalars['String'];
+};
+
+export type AccountActivateResponse = {
+  __typename?: 'AccountActivateResponse';
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
+};
+
 export type AccountAddInput = {
   email: Scalars['String'];
-  gvcn: Scalars['Boolean'];
-  gvu: Scalars['Boolean'];
-  hoatDong: Scalars['Boolean'];
-  tenGV: Scalars['String'];
+  isStaff: Scalars['Boolean'];
+  isTeacher: Scalars['Boolean'];
+  name: Scalars['String'];
 };
 
 export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
-  status: Scalars['Int'];
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
+};
+
+export type AccountDeleteInput = {
+  email: Scalars['String'];
 };
 
 export type AccountDeleteResponse = {
   __typename?: 'AccountDeleteResponse';
-  status: Scalars['Int'];
+  email: Scalars['String'];
+  maTK: Scalars['Int'];
 };
 
 export type AccountEditInput = {
   email: Scalars['String'];
-  gvcn: Scalars['Boolean'];
-  gvu: Scalars['Boolean'];
-  hoatDong: Scalars['Boolean'];
-  tenGV: Scalars['String'];
+  isStaff: Scalars['Boolean'];
+  isTeacher: Scalars['Boolean'];
+  name: Scalars['String'];
 };
 
 export type AccountEditResponse = {
   __typename?: 'AccountEditResponse';
-  status: Scalars['Int'];
+  maTK: Scalars['Int'];
+  tenGV: Scalars['String'];
 };
 
 export type AccountList = {
   __typename?: 'AccountList';
-  danhSachTaiKhoan: Array<AccountListItem>;
+  data: Array<AccountListItem>;
+  total: Scalars['Int'];
 };
 
 export type AccountListItem = {
@@ -325,6 +341,7 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  accountActivate: AccountActivateResponse;
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
@@ -351,16 +368,19 @@ export type Mutation = {
   uploadDocument: UploadDocumentResponse;
 };
 
+export type MutationAccountActivateArgs = {
+  payload: AccountActivateInput;
+};
+
 export type MutationAccountAddArgs = {
   payload: AccountAddInput;
 };
 
 export type MutationAccountDeleteArgs = {
-  accountId: Scalars['Int'];
+  payload: AccountDeleteInput;
 };
 
 export type MutationAccountEditArgs = {
-  accountId: Scalars['Int'];
   payload: AccountEditInput;
 };
 
@@ -565,6 +585,11 @@ export type Query = {
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
   yearList: YearList;
+};
+
+export type QueryAccountListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryAllTeacherListArgs = {
@@ -847,7 +872,7 @@ export type StudentTrainingPoint = {
 
 export type SubjectDetailResult = {
   __typename?: 'SubjectDetailResult';
-  diem: Scalars['Float'];
+  dtb: Scalars['Float'];
   hocKy: Scalars['Int'];
   maMH: Scalars['String'];
   namHoc: Scalars['Int'];
@@ -987,32 +1012,56 @@ export type YearListQuery = {
   yearList: { __typename?: 'YearList'; danhSachKhoa: Array<number> };
 };
 
+export type AccountActivateMutationVariables = Exact<{
+  payload: AccountActivateInput;
+}>;
+
+export type AccountActivateMutation = {
+  __typename?: 'Mutation';
+  accountActivate: {
+    __typename?: 'AccountActivateResponse';
+    maTK: number;
+    email: string;
+  };
+};
+
 export type AccountAddMutationVariables = Exact<{
   payload: AccountAddInput;
 }>;
 
 export type AccountAddMutation = {
   __typename?: 'Mutation';
-  accountAdd: { __typename?: 'AccountAddResponse'; status: number };
+  accountAdd: {
+    __typename?: 'AccountAddResponse';
+    maTK: number;
+    email: string;
+  };
 };
 
 export type AccountDeleteMutationVariables = Exact<{
-  accountId: Scalars['Int'];
+  payload: AccountDeleteInput;
 }>;
 
 export type AccountDeleteMutation = {
   __typename?: 'Mutation';
-  accountDelete: { __typename?: 'AccountDeleteResponse'; status: number };
+  accountDelete: {
+    __typename?: 'AccountDeleteResponse';
+    maTK: number;
+    email: string;
+  };
 };
 
 export type AccountEditMutationVariables = Exact<{
-  accountId: Scalars['Int'];
   payload: AccountEditInput;
 }>;
 
 export type AccountEditMutation = {
   __typename?: 'Mutation';
-  accountEdit: { __typename?: 'AccountEditResponse'; status: number };
+  accountEdit: {
+    __typename?: 'AccountEditResponse';
+    maTK: number;
+    tenGV: string;
+  };
 };
 
 export type TagAddMutationVariables = Exact<{
@@ -1062,13 +1111,17 @@ export type TeacherEditMutation = {
   teacherEdit: { __typename?: 'AllTeacherListItem'; maGV: number };
 };
 
-export type AccountListQueryVariables = Exact<{ [key: string]: never }>;
+export type AccountListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
 
 export type AccountListQuery = {
   __typename?: 'Query';
   accountList: {
     __typename?: 'AccountList';
-    danhSachTaiKhoan: Array<{
+    total: number;
+    data: Array<{
       __typename?: 'AccountListItem';
       maTK: number;
       email: string;
@@ -1670,7 +1723,7 @@ export type StudentDetailSubjectsResultQuery = {
       soTC: number;
       namHoc: number;
       hocKy: number;
-      diem: number;
+      dtb: number;
     }>;
   };
 };
@@ -2063,10 +2116,62 @@ export type YearListQueryResult = Apollo.QueryResult<
   YearListQuery,
   YearListQueryVariables
 >;
+export const AccountActivateDocument = gql`
+  mutation AccountActivate($payload: AccountActivateInput!) {
+    accountActivate(payload: $payload) {
+      maTK
+      email
+    }
+  }
+`;
+export type AccountActivateMutationFn = Apollo.MutationFunction<
+  AccountActivateMutation,
+  AccountActivateMutationVariables
+>;
+
+/**
+ * __useAccountActivateMutation__
+ *
+ * To run a mutation, you first call `useAccountActivateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccountActivateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accountActivateMutation, { data, loading, error }] = useAccountActivateMutation({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useAccountActivateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AccountActivateMutation,
+    AccountActivateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AccountActivateMutation,
+    AccountActivateMutationVariables
+  >(AccountActivateDocument, options);
+}
+export type AccountActivateMutationHookResult = ReturnType<
+  typeof useAccountActivateMutation
+>;
+export type AccountActivateMutationResult =
+  Apollo.MutationResult<AccountActivateMutation>;
+export type AccountActivateMutationOptions = Apollo.BaseMutationOptions<
+  AccountActivateMutation,
+  AccountActivateMutationVariables
+>;
 export const AccountAddDocument = gql`
   mutation AccountAdd($payload: AccountAddInput!) {
     accountAdd(payload: $payload) {
-      status
+      maTK
+      email
     }
   }
 `;
@@ -2114,9 +2219,10 @@ export type AccountAddMutationOptions = Apollo.BaseMutationOptions<
   AccountAddMutationVariables
 >;
 export const AccountDeleteDocument = gql`
-  mutation AccountDelete($accountId: Int!) {
-    accountDelete(accountId: $accountId) {
-      status
+  mutation AccountDelete($payload: AccountDeleteInput!) {
+    accountDelete(payload: $payload) {
+      maTK
+      email
     }
   }
 `;
@@ -2138,7 +2244,7 @@ export type AccountDeleteMutationFn = Apollo.MutationFunction<
  * @example
  * const [accountDeleteMutation, { data, loading, error }] = useAccountDeleteMutation({
  *   variables: {
- *      accountId: // value for 'accountId'
+ *      payload: // value for 'payload'
  *   },
  * });
  */
@@ -2164,9 +2270,10 @@ export type AccountDeleteMutationOptions = Apollo.BaseMutationOptions<
   AccountDeleteMutationVariables
 >;
 export const AccountEditDocument = gql`
-  mutation AccountEdit($accountId: Int!, $payload: AccountEditInput!) {
-    accountEdit(accountId: $accountId, payload: $payload) {
-      status
+  mutation AccountEdit($payload: AccountEditInput!) {
+    accountEdit(payload: $payload) {
+      maTK
+      tenGV
     }
   }
 `;
@@ -2188,7 +2295,6 @@ export type AccountEditMutationFn = Apollo.MutationFunction<
  * @example
  * const [accountEditMutation, { data, loading, error }] = useAccountEditMutation({
  *   variables: {
- *      accountId: // value for 'accountId'
  *      payload: // value for 'payload'
  *   },
  * });
@@ -2462,9 +2568,10 @@ export type TeacherEditMutationOptions = Apollo.BaseMutationOptions<
   TeacherEditMutationVariables
 >;
 export const AccountListDocument = gql`
-  query AccountList {
-    accountList {
-      danhSachTaiKhoan {
+  query AccountList($page: Int!, $size: Int!) {
+    accountList(page: $page, size: $size) {
+      total
+      data {
         maTK
         email
         tenGV
@@ -2488,11 +2595,13 @@ export const AccountListDocument = gql`
  * @example
  * const { data, loading, error } = useAccountListQuery({
  *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
 export function useAccountListQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     AccountListQuery,
     AccountListQueryVariables
   >
@@ -4464,7 +4573,7 @@ export const StudentDetailSubjectsResultDocument = gql`
         soTC
         namHoc
         hocKy
-        diem
+        dtb
       }
     }
   }
