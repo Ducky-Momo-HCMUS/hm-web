@@ -167,16 +167,11 @@ const studentTypeDefs = gql`
     noiDung: String!
     thoiGianTao: String!
     thoiGianSua: String!
-    ghiChuTag: [StudentTagListItem!]!
-  }
-
-  type StudentTagListItem {
-    tag: StudentTag
+    ghiChuTag: [StudentTag!]!
   }
 
   type StudentTag {
     maTag: Int!
-    tenTag: String!
   }
 
   type StudentOverviewResult {

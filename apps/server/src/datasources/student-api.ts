@@ -201,7 +201,7 @@ class StudentAPI extends BaseDataSource {
 
   public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
     try {
-      const res = await this.get('v1/notes', studentId);
+      const res = await this.get(`v1/notes?maSV=${studentId}`);
       return res;
     } catch (error) {
       console.error('Error: cannot fetch student note list');

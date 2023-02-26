@@ -793,7 +793,7 @@ export type StudentEditParentInfoInput = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
-  ghiChuTag: Array<StudentTagListItem>;
+  ghiChuTag: Array<StudentTag>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   thoiGianSua: Scalars['String'];
@@ -856,12 +856,6 @@ export type StudentSubject = {
 export type StudentTag = {
   __typename?: 'StudentTag';
   maTag: Scalars['Int'];
-  tenTag: Scalars['String'];
-};
-
-export type StudentTagListItem = {
-  __typename?: 'StudentTagListItem';
-  tag?: Maybe<StudentTag>;
 };
 
 export type StudentTerm = {
@@ -1160,7 +1154,6 @@ export type ResolversTypes = {
   StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentTag: ResolverTypeWrapper<StudentTag>;
-  StudentTagListItem: ResolverTypeWrapper<StudentTagListItem>;
   StudentTerm: ResolverTypeWrapper<StudentTerm>;
   StudentTrainingPoint: ResolverTypeWrapper<StudentTrainingPoint>;
   SubjectDetailResult: ResolverTypeWrapper<SubjectDetailResult>;
@@ -1270,7 +1263,6 @@ export type ResolversParentTypes = {
   StudentParentInfoList: StudentParentInfoList;
   StudentSubject: StudentSubject;
   StudentTag: StudentTag;
-  StudentTagListItem: StudentTagListItem;
   StudentTerm: StudentTerm;
   StudentTrainingPoint: StudentTrainingPoint;
   SubjectDetailResult: SubjectDetailResult;
@@ -2338,7 +2330,7 @@ export type StudentNoteResolvers<
   ParentType extends ResolversParentTypes['StudentNote'] = ResolversParentTypes['StudentNote']
 > = {
   ghiChuTag?: Resolver<
-    Array<ResolversTypes['StudentTagListItem']>,
+    Array<ResolversTypes['StudentTag']>,
     ParentType,
     ContextType
   >;
@@ -2424,15 +2416,6 @@ export type StudentTagResolvers<
   ParentType extends ResolversParentTypes['StudentTag'] = ResolversParentTypes['StudentTag']
 > = {
   maTag?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tenTag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type StudentTagListItemResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['StudentTagListItem'] = ResolversParentTypes['StudentTagListItem']
-> = {
-  tag?: Resolver<Maybe<ResolversTypes['StudentTag']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2652,7 +2635,6 @@ export type Resolvers<ContextType = any> = {
   StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentTag?: StudentTagResolvers<ContextType>;
-  StudentTagListItem?: StudentTagListItemResolvers<ContextType>;
   StudentTerm?: StudentTermResolvers<ContextType>;
   StudentTrainingPoint?: StudentTrainingPointResolvers<ContextType>;
   SubjectDetailResult?: SubjectDetailResultResolvers<ContextType>;

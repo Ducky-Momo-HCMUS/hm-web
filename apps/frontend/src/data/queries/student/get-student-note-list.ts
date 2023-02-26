@@ -5,10 +5,7 @@ export const GET_STUDENT_NOTE_LIST = gql`
     studentNoteList(studentId: $studentId) {
       maGC
       ghiChuTag {
-        tag {
-          maTag
-          tenTag
-        }
+        maTag
       }
       tieuDe
       noiDung
