@@ -7,15 +7,18 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import Header from '../../components/Header';
 import {
+  StyledBreadCrumbs,
   StyledContainer,
   StyledContentWrapper,
+  StyledRouterLink,
   StyledTitle,
 } from '../../components/styles';
 import { STUDENT_LIST_PAGE_SIZE } from '../../constants';
@@ -99,6 +102,10 @@ function Search() {
       <Header isAuthenticated />
       <StyledContentWrapper>
         <StyledTitle>Kết quả tìm kiếm</StyledTitle>
+        <StyledBreadCrumbs aria-label="breadcrumb">
+          <Link to="/">Trang chủ</Link>
+          <Typography color="text.primary">Kết quả tìm kiếm</Typography>
+        </StyledBreadCrumbs>
         <AsyncDataRenderer loading={searchStudentsLoading} data={studentsList}>
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
             <TableContainer sx={{ maxHeight: 350 }}>
@@ -118,7 +125,11 @@ function Search() {
                         {page * STUDENT_LIST_PAGE_SIZE + index + 1}
                       </TableCell>
                       <TableCell>{item.maSV}</TableCell>
-                      <TableCell>{item.tenSV}</TableCell>
+                      <TableCell>
+                        <StyledRouterLink to={`/students/${item.maSV}`}>
+                          {item.tenSV}
+                        </StyledRouterLink>
+                      </TableCell>
                       <TableCell>{item.tenCN || 'Chưa có'}</TableCell>
                       <TableCell>{item.tinhTrang}</TableCell>
                       <TableCell>{item.gpa4 || 'Chưa có'}</TableCell>
