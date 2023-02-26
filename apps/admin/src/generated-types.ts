@@ -195,7 +195,7 @@ export type HomeroomFailListSubject = {
 
 export type HomeroomFinalResultList = {
   __typename?: 'HomeroomFinalResultList';
-  data: Array<HomeroomFinalResultListItem>;
+  formatted: Array<HomeroomFinalResultListItem>;
   total: Scalars['Int'];
 };
 
@@ -1461,7 +1461,7 @@ export type HomeroomFinalResultListByTermQuery = {
   homeroomFinalResultListByTerm: {
     __typename?: 'HomeroomFinalResultList';
     total: number;
-    data: Array<{
+    formatted: Array<{
       __typename?: 'HomeroomFinalResultListItem';
       maSV: string;
       tenSV: string;
@@ -3779,7 +3779,7 @@ export const HomeroomFinalResultListByTermDocument = gql`
       size: $size
     ) {
       total
-      data {
+      formatted {
         maSV
         tenSV
         dtb

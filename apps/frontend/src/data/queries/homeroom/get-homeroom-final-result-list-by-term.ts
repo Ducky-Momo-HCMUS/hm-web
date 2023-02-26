@@ -14,7 +14,7 @@ export const GET_HOMEROOM_FINAL_RESULT_LIST_BY_TERM = gql`
       size: $size
     ) {
       total
-      data {
+      formatted {
         maSV
         tenSV
         dtb

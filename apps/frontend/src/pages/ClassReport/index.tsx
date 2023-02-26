@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Document, Packer, Paragraph, Header, Footer } from 'docx';
+import { Packer } from 'docx';
 import { saveAs } from 'file-saver';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
@@ -28,6 +28,7 @@ import { FINAL_RESULT_LIST_PAGE_SIZE } from '../../constants';
 import {
   HomeroomOverviewReport,
   StudentTerm,
+  useHomeroomDetailQuery,
   useHomeroomExamAbsentListByTermLazyQuery,
   useHomeroomFinalResultListByTermLazyQuery,
   useHomeroomOverviewReportByTermLazyQuery,
@@ -39,12 +40,7 @@ import { groupTermsByYear } from '../../utils';
 import ClassOverview from './ClassOverview';
 import PostponeExam from './PostponeExam';
 import { StyledFormControl } from './styles';
-import DocumentCreator, {
-  achievements,
-  education,
-  experiences,
-  skills,
-} from './document-creator';
+import DocumentCreator, { ExamAbsentListItem } from './document-creator';
 
 interface State {
   year: string;
@@ -138,8 +134,10 @@ function ClassReport() {
   ] = useHomeroomFinalResultListByTermLazyQuery();
 
   const homeroomFinalResultList = useMemo(
-    () => homeroomFinalResultListData?.homeroomFinalResultListByTerm.data || [],
-    [homeroomFinalResultListData?.homeroomFinalResultListByTerm.data]
+    () =>
+      homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted ||
+      [],
+    [homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted]
   );
 
   const [
@@ -158,7 +156,7 @@ function ClassReport() {
       maSV: item.sinhVien.maSV,
       tenSV: item.sinhVien.tenSV,
       tenMH: item.monHoc.tenMH,
-    }));
+    })) as ExamAbsentListItem[];
   }, [homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data]);
 
   const [
@@ -177,7 +175,7 @@ function ClassReport() {
       maSV: item.sinhVien.maSV,
       tenSV: item.sinhVien.tenSV,
       tenMH: item.monHoc.tenMH,
-    }));
+    })) as ExamAbsentListItem[];
   }, [homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data]);
 
   useEffect(() => {
@@ -277,23 +275,65 @@ function ClassReport() {
     ]
   );
 
+  const { loading: homeroomDetailLoading, data: homeroomDetailData } =
+    useHomeroomDetailQuery({
+      variables: {
+        homeroomId: id,
+      },
+    });
+
+  const homeroomDetail = useMemo(
+    () =>
+      homeroomDetailData?.homeroomDetail || {
+        giaoVien: {
+          tenGV: '',
+        },
+        siSo: '',
+      },
+    [homeroomDetailData?.homeroomDetail]
+  );
+
   function saveDocumentToFile(doc, fileName) {
     Packer.toBlob(doc).then((blob) => {
       saveAs(blob, fileName);
     });
   }
 
-  const handleExportDocument = useCallback((event) => {
-    event.preventDefault();
-    const documentCreator = new DocumentCreator();
-    const doc = documentCreator.create([
-      experiences,
-      education,
-      skills,
-      achievements,
-    ]);
-    saveDocumentToFile(doc, 'New Document.docx');
-  }, []);
+  const handleExportDocument = useCallback(
+    (event) => {
+      event.preventDefault();
+      const documentCreator = new DocumentCreator();
+      const selectedTerm = values.term || initialTerm;
+
+      const doc = documentCreator.create({
+        hocKy:
+          terms
+            .find((item) => item.maHK.toString() === selectedTerm)
+            ?.hocKy.toString() || '',
+        namHocBD: values.year || initialYear,
+        tenGVCN: homeroomDetail?.giaoVien.tenGV,
+        lopChuNhiem: id,
+        homeroomOverviewReport,
+        homeroomExamAbsentList,
+        homeroomPostponeExamList,
+        homeroomFinalResultList,
+      });
+      saveDocumentToFile(doc, 'New Document.docx');
+    },
+    [
+      homeroomDetail?.giaoVien.tenGV,
+      homeroomExamAbsentList,
+      homeroomFinalResultList,
+      homeroomOverviewReport,
+      homeroomPostponeExamList,
+      id,
+      initialTerm,
+      initialYear,
+      terms,
+      values.term,
+      values.year,
+    ]
+  );
 
   return (
     <>
@@ -351,13 +391,18 @@ function ClassReport() {
               </StyledFormControl>
             </Box>
           </AsyncDataRenderer>
-          <Button
-            sx={{ textTransform: 'uppercase' }}
-            variant="contained"
-            onClick={handleExportDocument}
+          <AsyncDataRenderer
+            loading={homeroomDetailLoading}
+            data={homeroomDetailData}
           >
-            Xuất báo cáo
-          </Button>
+            <Button
+              sx={{ textTransform: 'uppercase' }}
+              variant="contained"
+              onClick={handleExportDocument}
+            >
+              Xuất báo cáo
+            </Button>
+          </AsyncDataRenderer>
         </Box>
         <Box sx={{ marginTop: '1rem' }}>
           <AppBar position="static">

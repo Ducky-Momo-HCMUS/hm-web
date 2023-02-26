@@ -214,7 +214,7 @@ const homeroomTypeDefs = gql`
 
   type HomeroomFinalResultList {
     total: Int!
-    data: [HomeroomFinalResultListItem!]!
+    formatted: [HomeroomFinalResultListItem!]!
   }
 
   type HomeroomFinalResultListItem {
