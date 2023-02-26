@@ -80,8 +80,6 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
       return new ApolloError('Internal Server Error');
     }
 
-    console.log('error', error.extensions.response.body);
-
     // Possible exeptions from RESTDataSource:
     // - AuthenticationError (401)
     // - ForbiddenError (403)

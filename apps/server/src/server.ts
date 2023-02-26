@@ -39,7 +39,5 @@ export async function startServer() {
   // app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
 
   server.applyMiddleware({ app });
-  app.listen({ host: '0.0.0.0', port: '5000' }, () => {
-    console.log(`Server ready at http://localhost:5000${server.graphqlPath}`);
-  });
+  app.listen({ host: '0.0.0.0', port: '5000' });
 }
