@@ -200,7 +200,7 @@ export type HomeroomFailListSubject = {
 
 export type HomeroomFinalResultList = {
   __typename?: 'HomeroomFinalResultList';
-  data: Array<HomeroomFinalResultListItem>;
+  formatted: Array<HomeroomFinalResultListItem>;
   total: Scalars['Int'];
 };
 
@@ -1549,7 +1549,7 @@ export type HomeroomFinalResultListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['HomeroomFinalResultList'] = ResolversParentTypes['HomeroomFinalResultList']
 > = {
-  data?: Resolver<
+  formatted?: Resolver<
     Array<ResolversTypes['HomeroomFinalResultListItem']>,
     ParentType,
     ContextType
