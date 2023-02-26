@@ -12,10 +12,17 @@ interface NoteItemProps {
   data: StudentNote;
   onClick: any;
   onClickDelete: any;
+  tags: string[];
 }
 
-function NoteItem({ selected, data, onClick, onClickDelete }: NoteItemProps) {
-  const { maGC, tieuDe, thoiGianSua, thoiGianTao, ghiChuTag = [] } = data;
+function NoteItem({
+  selected,
+  data,
+  onClick,
+  onClickDelete,
+  tags = [],
+}: NoteItemProps) {
+  const { maGC, tieuDe, thoiGianSua, thoiGianTao } = data;
   const isActive = useMemo(() => maGC === selected, [maGC, selected]);
 
   return (
@@ -28,8 +35,8 @@ function NoteItem({ selected, data, onClick, onClickDelete }: NoteItemProps) {
             : format(new Date(thoiGianTao), 'dd/MM/yyyy HH:mm:ss')}
         </Typography>
         <Box>
-          {ghiChuTag?.map((item) => (
-            <StyledTag key={item.tag?.maTag} label={item.tag?.tenTag} />
+          {tags.map((item) => (
+            <StyledTag key={item} label={item} />
           ))}
         </Box>
       </StyledContent>

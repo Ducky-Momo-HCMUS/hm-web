@@ -788,7 +788,7 @@ export type StudentEditParentInfoInput = {
 
 export type StudentNote = {
   __typename?: 'StudentNote';
-  ghiChuTag: Array<StudentTagListItem>;
+  ghiChuTag: Array<StudentTag>;
   maGC: Scalars['Int'];
   noiDung: Scalars['String'];
   thoiGianSua: Scalars['String'];
@@ -851,12 +851,6 @@ export type StudentSubject = {
 export type StudentTag = {
   __typename?: 'StudentTag';
   maTag: Scalars['Int'];
-  tenTag: Scalars['String'];
-};
-
-export type StudentTagListItem = {
-  __typename?: 'StudentTagListItem';
-  tag?: Maybe<StudentTag>;
 };
 
 export type StudentTerm = {
@@ -1779,13 +1773,7 @@ export type StudentNoteListQuery = {
     noiDung: string;
     thoiGianTao: string;
     thoiGianSua: string;
-    ghiChuTag: Array<{
-      __typename?: 'StudentTagListItem';
-      tag?:
-        | { __typename?: 'StudentTag'; maTag: number; tenTag: string }
-        | null
-        | undefined;
-    }>;
+    ghiChuTag: Array<{ __typename?: 'StudentTag'; maTag: number }>;
   }>;
 };
 
@@ -4729,10 +4717,7 @@ export const StudentNoteListDocument = gql`
     studentNoteList(studentId: $studentId) {
       maGC
       ghiChuTag {
-        tag {
-          maTag
-          tenTag
-        }
+        maTag
       }
       tieuDe
       noiDung

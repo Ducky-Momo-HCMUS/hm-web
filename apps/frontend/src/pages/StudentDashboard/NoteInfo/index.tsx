@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, {
   ChangeEvent,
   useCallback,
@@ -322,6 +323,11 @@ function NoteInfo() {
                         data={item}
                         onClick={() => handleSelectValue('selected', item.maGC)}
                         onClickDelete={() => handleClickDelete(item.maGC)}
+                        tags={item.ghiChuTag.map(
+                          (item) =>
+                            tagList.find((tag) => item.maTag === tag.maTag)
+                              ?.tenTag || ''
+                        )}
                       />
                     ))}
                 </AsyncDataRenderer>
