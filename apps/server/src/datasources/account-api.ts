@@ -7,6 +7,7 @@ import {
   MutationAccountEditArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -21,7 +22,7 @@ class AccountAPI extends BaseDataSource {
       const res = await this.get('v1/admin');
       return res;
     } catch (error) {
-      console.error('Error: cannot fetch account list');
+      logger.error('Error: cannot fetch account list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -31,7 +32,7 @@ class AccountAPI extends BaseDataSource {
       const res = await this.post('v1/admin/account', payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot add new account');
+      logger.error('Error: cannot add new account');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -41,7 +42,7 @@ class AccountAPI extends BaseDataSource {
       const res = await this.post('v1/admin/edit-role', payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot edit account');
+      logger.error('Error: cannot edit account');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -51,7 +52,7 @@ class AccountAPI extends BaseDataSource {
       const res = await this.post('v1/admin/deactivate', payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete account');
+      logger.error('Error: cannot delete account');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -61,7 +62,7 @@ class AccountAPI extends BaseDataSource {
       const res = await this.post('v1/admin/activate', payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot activate account');
+      logger.error('Error: cannot activate account');
       throw this.handleError(error as ApolloError);
     }
   }

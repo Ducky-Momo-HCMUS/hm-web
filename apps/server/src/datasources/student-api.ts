@@ -18,6 +18,7 @@ import {
   QueryStudentTrainingPointByTermArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -37,7 +38,7 @@ class StudentAPI extends BaseDataSource {
       );
       return subjectList;
     } catch (error) {
-      console.error('Error: cannot fetch subject list by term');
+      logger.error('Error: cannot fetch subject list by term');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -52,7 +53,7 @@ class StudentAPI extends BaseDataSource {
       );
       return trainingPoint;
     } catch (error) {
-      console.error('Error: cannot fetch training point by term');
+      logger.error('Error: cannot fetch training point by term');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -67,7 +68,7 @@ class StudentAPI extends BaseDataSource {
       );
       return averagePoint;
     } catch (error) {
-      console.error('Error: cannot fetch average point by term');
+      logger.error('Error: cannot fetch average point by term');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -77,7 +78,7 @@ class StudentAPI extends BaseDataSource {
       const termList = await this.get(`v1/students/${studentId}/terms`);
       return termList;
     } catch (error) {
-      console.error('Error: cannot fetch all terms');
+      logger.error('Error: cannot fetch all terms');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -87,7 +88,7 @@ class StudentAPI extends BaseDataSource {
       const studentDetail = await this.get(`v1/students/${studentId}`);
       return studentDetail;
     } catch (error) {
-      console.error('Error: cannot fetch student detail');
+      logger.error('Error: cannot fetch student detail');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -103,7 +104,7 @@ class StudentAPI extends BaseDataSource {
       );
       return studentParentInfoList;
     } catch (error) {
-      console.error('Error: cannot fetch student parent info list');
+      logger.error('Error: cannot fetch student parent info list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -119,7 +120,7 @@ class StudentAPI extends BaseDataSource {
       );
       return addedContact;
     } catch (error) {
-      console.error('Error: cannot add student contact');
+      logger.error('Error: cannot add student contact');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -132,7 +133,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.patch(`v1/student/contacts/${contactId}`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot edit student contact');
+      logger.error('Error: cannot edit student contact');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -144,7 +145,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.delete(`v1/student/contacts/${contactId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete student contact');
+      logger.error('Error: cannot delete student contact');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -156,7 +157,7 @@ class StudentAPI extends BaseDataSource {
       const overviewResult = await this.get(`v1/students/${studentId}/general`);
       return overviewResult;
     } catch (error) {
-      console.error('Error: cannot fetch student overview result');
+      logger.error('Error: cannot fetch student overview result');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -169,7 +170,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.post(`v1/students/${studentId}/parents`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot add student parent info');
+      logger.error('Error: cannot add student parent info');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -182,7 +183,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.patch(`v1/students/parents/${parentId}`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot edit student parent info');
+      logger.error('Error: cannot edit student parent info');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -194,7 +195,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.delete(`v1/students/parents/${parentId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete student parent info');
+      logger.error('Error: cannot delete student parent info');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -204,7 +205,7 @@ class StudentAPI extends BaseDataSource {
       const res = await this.get(`v1/notes?maSV=${studentId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot fetch student note list');
+      logger.error('Error: cannot fetch student note list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -219,7 +220,7 @@ class StudentAPI extends BaseDataSource {
       );
       return detailSubjectsResult;
     } catch (error) {
-      console.error('Error: cannot fetch student detail subjects result');
+      logger.error('Error: cannot fetch student detail subjects result');
       throw this.handleError(error as ApolloError);
     }
   }

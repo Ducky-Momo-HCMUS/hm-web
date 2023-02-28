@@ -8,6 +8,7 @@ import {
 } from '../generated-types';
 import { YEAR_LIST } from '../mocks/teacher';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -22,7 +23,7 @@ class TeacherAPI extends BaseDataSource {
       // const res = await this.get('v1/school-years'`);
       return YEAR_LIST;
     } catch (error) {
-      console.error('Error: cannot fetch year list');
+      logger.error('Error: cannot fetch year list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -32,7 +33,7 @@ class TeacherAPI extends BaseDataSource {
       const teacherList = await this.get(`v1/teachers?school-year=${year}`);
       return teacherList;
     } catch (error) {
-      console.error('Error: cannot fetch teacher list');
+      logger.error('Error: cannot fetch teacher list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -42,7 +43,7 @@ class TeacherAPI extends BaseDataSource {
       const res = await this.get('v1/teachers/all');
       return res;
     } catch (error) {
-      console.error('Error: cannot fetch all teacher list');
+      logger.error('Error: cannot fetch all teacher list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -52,7 +53,7 @@ class TeacherAPI extends BaseDataSource {
       const res = await this.patch(`v1/teachers/${teacherId}`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot update teacher');
+      logger.error('Error: cannot update teacher');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -62,7 +63,7 @@ class TeacherAPI extends BaseDataSource {
       const res = await this.delete(`v1/teachers/${teacherId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete teacher');
+      logger.error('Error: cannot delete teacher');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -80,7 +81,7 @@ class TeacherAPI extends BaseDataSource {
       const res = await this.get(`v1/search/students`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete teacher');
+      logger.error('Error: cannot delete teacher');
       throw this.handleError(error as ApolloError);
     }
   }

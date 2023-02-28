@@ -6,7 +6,7 @@ export const logger = createLogger({
     new transports.Console({
       format:
         process.env.NODE_ENV === 'development'
-          ? format.simple()
+          ? format.combine(format.colorize(), format.simple())
           : format.combine(format.timestamp(), format.json()),
     }),
   ],

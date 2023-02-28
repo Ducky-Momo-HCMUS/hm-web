@@ -3,6 +3,7 @@ import FormData from 'form-data';
 
 import { MutationUploadDocumentArgs } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -44,8 +45,7 @@ class FileAPI extends BaseDataSource {
         documentUniqueId: 'DOC1',
       };
     } catch (error) {
-      console.error('errorrr', error);
-      console.error('Error: cannot upload document');
+      logger.error('Error: cannot upload document', error);
       throw this.handleError(error as ApolloError);
     }
   }

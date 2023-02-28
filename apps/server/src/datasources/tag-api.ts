@@ -6,6 +6,7 @@ import {
   MutationTagEditArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -20,7 +21,7 @@ class TagAPI extends BaseDataSource {
       const tagList = await this.get('v1/tags');
       return tagList;
     } catch (error) {
-      console.error('Error: cannot fetch tag list');
+      logger.error('Error: cannot fetch tag list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -30,7 +31,7 @@ class TagAPI extends BaseDataSource {
       const tag = await this.post('v1/tags', payload);
       return tag;
     } catch (error) {
-      console.error('Error: cannot add new tag');
+      logger.error('Error: cannot add new tag');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -40,7 +41,7 @@ class TagAPI extends BaseDataSource {
       const tag = await this.patch(`v1/tags/${tagId}`, payload);
       return tag;
     } catch (error) {
-      console.error('Error: cannot edit tag');
+      logger.error('Error: cannot edit tag');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -50,7 +51,7 @@ class TagAPI extends BaseDataSource {
       const tag = await this.delete(`v1/tags/${tagId}`);
       return tag;
     } catch (error) {
-      console.error('Error: cannot delete tag');
+      logger.error('Error: cannot delete tag');
       throw this.handleError(error as ApolloError);
     }
   }

@@ -7,6 +7,7 @@ import {
   QueryNoteDetailArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -21,7 +22,7 @@ class NoteAPI extends BaseDataSource {
       const res = await this.get(`v1/notes/${noteId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot fetch note detail');
+      logger.error('Error: cannot fetch note detail');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -31,7 +32,7 @@ class NoteAPI extends BaseDataSource {
       const res = await this.get('v1/notes');
       return res;
     } catch (error) {
-      console.error('Error: cannot fetch note list');
+      logger.error('Error: cannot fetch note list');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -41,7 +42,7 @@ class NoteAPI extends BaseDataSource {
       const res = await this.post(`v1/notes`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot add new note');
+      logger.error('Error: cannot add new note');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -51,7 +52,7 @@ class NoteAPI extends BaseDataSource {
       const res = await this.put(`v1/notes/${noteId}`, payload);
       return res;
     } catch (error) {
-      console.error('Error: cannot edit note');
+      logger.error('Error: cannot edit note');
       throw this.handleError(error as ApolloError);
     }
   }
@@ -61,7 +62,7 @@ class NoteAPI extends BaseDataSource {
       const res = await this.delete(`v1/notes/${noteId}`);
       return res;
     } catch (error) {
-      console.error('Error: cannot delete note');
+      logger.error('Error: cannot delete note');
       throw this.handleError(error as ApolloError);
     }
   }
