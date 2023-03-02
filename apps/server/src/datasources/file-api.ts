@@ -15,35 +15,17 @@ class FileAPI extends BaseDataSource {
 
   public async uploadDocument(payload: MutationUploadDocumentArgs) {
     const { file, input } = payload;
-
-    const { createReadStream, filename, mimetype, size } = await file.file;
-
-    const stream = createReadStream();
-
-    await new Promise((resolve) => {
-      stream.on('data', (data: any) => {
-        console.log('DATA**********************');
-        console.log(data);
-        resolve(() => {
-          console.log('done');
-        });
-      });
-    });
-
+    const { createReadStream, filename } = await file.file;
     const formData = new FormData();
-    formData.append('file', createReadStream(), filename);
+    formData.append('file', createReadStream(), { filename });
 
     try {
-      const uploadedPhoto = await this.post(
-        'http://localhost:3001/v1/actors/files/upload',
-        formData
+      const uploadedDocument = await this.post(
+        `v1/files/${input.type}`,
+        formData,
+        {}
       );
-      return {
-        code: '200',
-        success: true,
-        message: 'Upload document successfully',
-        documentUniqueId: 'DOC1',
-      };
+      return uploadedDocument;
     } catch (error) {
       logger.error('Error: cannot upload document', error);
       throw this.handleError(error as ApolloError);

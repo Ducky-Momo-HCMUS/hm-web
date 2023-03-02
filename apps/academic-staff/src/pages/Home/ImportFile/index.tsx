@@ -46,7 +46,7 @@ interface State {
 
 function ImportFile() {
   const [values, setValues] = useState<State>({
-    type: TYPES[0],
+    type: TYPES[0].label,
     year: '',
     term: '',
     subject: '',
@@ -111,22 +111,6 @@ function ImportFile() {
     if (file) await handleAB(file);
   }
 
-  /* method is called when one of the save buttons is clicked */
-  // function saveFile(ext: string): void {
-  //   console.log(rows);
-  //   /* update current worksheet in case changes were made */
-  //   workBook[current] = utils.aoa_to_sheet(arrayify(rows));
-
-  //   /* construct workbook and loop through worksheets */
-  //   const wb = utils.book_new();
-  //   sheets.forEach((n) => {
-  //     utils.book_append_sheet(wb, workBook[n], n);
-  //   });
-
-  //   /* generate a file and download it */
-  //   writeFile(wb, `SheetJSRDG.${ext}`);
-  // }
-
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onError: (error) => {
@@ -143,13 +127,15 @@ function ImportFile() {
           variables: {
             file,
             input: {
-              name: 'example.xlsx',
+              type:
+                TYPES.find((item) => item.label === values.type)?.endpoint ||
+                '',
             },
           },
         });
       }
     },
-    [file, uploadDocument]
+    [file, uploadDocument, values.type]
   );
 
   return (
@@ -168,7 +154,7 @@ function ImportFile() {
             MenuProps={MenuProps}
           >
             {TYPES.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem value={item.label}>{item.label}</MenuItem>
             ))}
           </Select>
         </StyledFormControl>
@@ -192,7 +178,7 @@ function ImportFile() {
           </StyledFormControl>
         )} */}
 
-        {TYPES.findIndex((item) => item === values.type) > 4 && (
+        {TYPES.findIndex((item) => item.label === values.type) > 4 && (
           <StyledFormControl>
             <InputLabel id="term-select-label">Học kỳ</InputLabel>
             <Select
@@ -251,7 +237,9 @@ function ImportFile() {
             </Typography>
             <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
               Cập nhật{' '}
-              {TYPES.find((item) => item === values.type)?.toLowerCase()}
+              {TYPES.find(
+                (item) => item.label === values.type
+              )?.label.toLowerCase()}
             </Typography>
             <Box mt={3}>
               <FilePond

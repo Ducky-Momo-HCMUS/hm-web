@@ -7,18 +7,19 @@ export type RowCol = { rows: Row[]; columns: GridColDef[] };
 
 export const YEARS = [2017, 2018, 2019];
 export const TYPES = [
-  'Danh sách giáo viên chủ nhiệm',
-  'Danh sách hồ sơ sinh viên',
-  'Danh sách môn học',
-  'Danh sách chuyên ngành',
-  'Danh sách kết quả chuyên ngành',
-  'Thời khoá biểu',
-  'Danh sách đăng ký học phần',
-  'Danh sách không đăng ký học phần',
-  'Bảng điểm tổng hợp',
-  'Bảng điểm lớp học phần',
-  'Danh sách hoãn thi',
-  'Danh sách vắng thi',
+  { label: 'Danh sách giáo viên chủ nhiệm', endpoint: 'teachers' },
+  { label: 'Danh sách hồ sơ sinh viên', endpoint: 'students-info' },
+  { label: 'Danh sách môn học', endpoint: 'courses' },
+  { label: 'Danh sách chuyên ngành', endpoint: 'majors' },
+  { label: 'Danh sách kết quả chuyên ngành', endpoint: 'major-result' },
+  // 'Danh sách đăng ký học phần',
+  { label: 'Danh sách không đăng ký học phần', endpoint: 'unregister' },
+  { label: 'Điểm rèn luyện', endpoint: 'training-point' },
+  { label: 'Bảng điểm lớp học phần', endpoint: 'score' },
+  { label: 'Danh sách hoãn thi', endpoint: 'postpone' },
+  { label: 'Danh sách vắng thi', endpoint: 'absent' },
+  { label: 'Tình trạng sinh viên', endpoint: 'student-status' },
+  { label: 'Thống kê đăng ký học phần', endpoint: 'registration-statistic' },
 ];
 export const TERMS = [1, 2, 3];
 export const SUBJECTS = [

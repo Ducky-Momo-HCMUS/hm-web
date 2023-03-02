@@ -15,7 +15,7 @@ const fileTypeDefs = gql`
   }
 
   input UploadDocumentInput {
-    name: String!
+    type: String!
   }
 
   type Document {
@@ -25,10 +25,7 @@ const fileTypeDefs = gql`
   }
 
   type UploadDocumentResponse {
-    code: String!
-    success: Boolean!
-    message: String!
-    documentUniqueId: String!
+    status: Int!
   }
 `;
 

@@ -939,15 +939,12 @@ export type TeacherStudentList = {
 };
 
 export type UploadDocumentInput = {
-  name: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UploadDocumentResponse = {
   __typename?: 'UploadDocumentResponse';
-  code: Scalars['String'];
-  documentUniqueId: Scalars['String'];
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
+  status: Scalars['Int'];
 };
 
 export type YearList = {
@@ -962,13 +959,7 @@ export type UploadDocumentMutationVariables = Exact<{
 
 export type UploadDocumentMutation = {
   __typename?: 'Mutation';
-  uploadDocument: {
-    __typename?: 'UploadDocumentResponse';
-    code: string;
-    success: boolean;
-    message: string;
-    documentUniqueId: string;
-  };
+  uploadDocument: { __typename?: 'UploadDocumentResponse'; status: number };
 };
 
 export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
@@ -1885,10 +1876,7 @@ export type TeacherSearchStudentListQuery = {
 export const UploadDocumentDocument = gql`
   mutation UploadDocument($file: UploadFile!, $input: UploadDocumentInput!) {
     uploadDocument(file: $file, input: $input) {
-      code
-      success
-      message
-      documentUniqueId
+      status
     }
   }
 `;

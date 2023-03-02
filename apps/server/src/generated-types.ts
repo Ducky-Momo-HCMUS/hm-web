@@ -944,15 +944,12 @@ export type TeacherStudentList = {
 };
 
 export type UploadDocumentInput = {
-  name: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UploadDocumentResponse = {
   __typename?: 'UploadDocumentResponse';
-  code: Scalars['String'];
-  documentUniqueId: Scalars['String'];
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
+  status: Scalars['Int'];
 };
 
 export type YearList = {
@@ -2537,14 +2534,7 @@ export type UploadDocumentResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['UploadDocumentResponse'] = ResolversParentTypes['UploadDocumentResponse']
 > = {
-  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  documentUniqueId?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType
-  >;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

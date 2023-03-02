@@ -1,6 +1,6 @@
 import express from 'express';
 import { ApolloServer, IResolvers } from 'apollo-server-express';
-// import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { GraphQLError } from 'graphql';
 import cors from 'cors';
 
@@ -35,7 +35,7 @@ export async function startServer() {
 
   app.use(cors());
 
-  // app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
 
   server.applyMiddleware({ app });
   app.listen({ host: '0.0.0.0', port: '5000' }, () => {
