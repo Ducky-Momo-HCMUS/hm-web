@@ -15,14 +15,17 @@ class FileAPI extends BaseDataSource {
 
   public async uploadDocument(payload: MutationUploadDocumentArgs) {
     const { file, input } = payload;
-    const { createReadStream, filename } = await file;
+    const awaitedFile = await file;
+    const { createReadStream, filename } = awaitedFile;
+    console.log(awaitedFile);
     const formData = new FormData();
-    formData.append('file', createReadStream(), { filename });
+    console.log('input', input);
+    formData.append('file', createReadStream(), filename);
     formData.append('namHoc', input.namHoc);
     formData.append('hocKy', input.hocKy);
     formData.append('maMH', input.maMH);
     formData.append('tenLopHP', input.tenLopHP);
-
+    console.log('create form data completed');
     try {
       const uploadedDocument = await this.post(
         `v1/files/${input.type}`,
