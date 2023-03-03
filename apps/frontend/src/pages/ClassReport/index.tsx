@@ -20,7 +20,7 @@ import AppHeader from '../../components/Header';
 import {
   StyledBreadCrumbs,
   StyledContentWrapper,
-  StyledScrollableBox,
+  StyledStickyBox,
   StyledTitle,
 } from '../../components/styles';
 import TabPanel from '../../components/TabPanel';
@@ -339,98 +339,100 @@ function ClassReport() {
     <>
       <AppHeader isAuthenticated />
       <StyledContentWrapper>
-        <StyledTitle variant="h1">Báo cáo lớp học</StyledTitle>
-        <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link to="/">Trang chủ</Link>
-          <Link to={`/classes/${id}`}>Tổng quan lớp học</Link>
-          <Typography color="text.primary">Báo cáo lớp học</Typography>
-        </StyledBreadCrumbs>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <AsyncDataRenderer
-            loading={homeroomTermListLoading}
-            data={homeroomTermListData}
+        <StyledStickyBox>
+          <StyledTitle variant="h1">Báo cáo lớp học</StyledTitle>
+          <StyledBreadCrumbs aria-label="breadcrumb">
+            <Link to="/">Trang chủ</Link>
+            <Link to={`/classes/${id}`}>Tổng quan lớp học</Link>
+            <Typography color="text.primary">Báo cáo lớp học</Typography>
+          </StyledBreadCrumbs>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
-            <Box>
-              <StyledFormControl sx={{ marginRight: '1rem' }}>
-                <InputLabel id="year-select-label">Năm học</InputLabel>
-                <Select
-                  labelId="year-select-label"
-                  id="year-select"
-                  value={values.year || initialYear}
-                  label="Năm học"
-                  onChange={handleChange('year')}
-                >
-                  {years.map((item) => (
-                    <MenuItem value={item}>
-                      {item} - {Number(item) + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
-              <StyledFormControl>
-                <InputLabel id="term-select-label">Học kỳ</InputLabel>
-                <Select
-                  labelId="term-select-label"
-                  id="term-select"
-                  value={values.term || initialTerm}
-                  label="Học kỳ"
-                  onChange={handleChange('term')}
-                >
-                  {terms.map((item) => (
-                    <MenuItem key={item.maHK} value={item.maHK.toString()}>
-                      {item.hocKy}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
-            </Box>
-          </AsyncDataRenderer>
-          <AsyncDataRenderer
-            loading={homeroomDetailLoading}
-            data={homeroomDetailData}
-          >
-            <Button
-              sx={{ textTransform: 'uppercase' }}
-              variant="contained"
-              onClick={handleExportDocument}
+            <AsyncDataRenderer
+              loading={homeroomTermListLoading}
+              data={homeroomTermListData}
             >
-              Xuất báo cáo
-            </Button>
-          </AsyncDataRenderer>
-        </Box>
+              <Box>
+                <StyledFormControl sx={{ marginRight: '1rem' }}>
+                  <InputLabel id="year-select-label">Năm học</InputLabel>
+                  <Select
+                    labelId="year-select-label"
+                    id="year-select"
+                    value={values.year || initialYear}
+                    label="Năm học"
+                    onChange={handleChange('year')}
+                  >
+                    {years.map((item) => (
+                      <MenuItem value={item}>
+                        {item} - {Number(item) + 1}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+                <StyledFormControl>
+                  <InputLabel id="term-select-label">Học kỳ</InputLabel>
+                  <Select
+                    labelId="term-select-label"
+                    id="term-select"
+                    value={values.term || initialTerm}
+                    label="Học kỳ"
+                    onChange={handleChange('term')}
+                  >
+                    {terms.map((item) => (
+                      <MenuItem key={item.maHK} value={item.maHK.toString()}>
+                        {item.hocKy}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+              </Box>
+            </AsyncDataRenderer>
+            <AsyncDataRenderer
+              loading={homeroomDetailLoading}
+              data={homeroomDetailData}
+            >
+              <Button
+                sx={{ textTransform: 'uppercase' }}
+                variant="contained"
+                onClick={handleExportDocument}
+              >
+                Xuất báo cáo
+              </Button>
+            </AsyncDataRenderer>
+          </Box>
+          <Box sx={{ marginTop: '1rem' }}>
+            <AppBar position="static">
+              <Tabs
+                value={selectedTab}
+                onChange={handleChangeTab}
+                textColor="inherit"
+                variant="fullWidth"
+                aria-label="full width tabs example"
+                TabIndicatorProps={{
+                  style: { display: 'none' },
+                }}
+              >
+                <Tab label="Tổng kết lớp" />
+                <Tab label="Hoãn/vắng thi" />
+              </Tabs>
+            </AppBar>
+          </Box>
+        </StyledStickyBox>
         <Box sx={{ marginTop: '1rem' }}>
-          <AppBar position="static">
-            <Tabs
-              value={selectedTab}
-              onChange={handleChangeTab}
-              indicatorColor="secondary"
-              textColor="inherit"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <Tab label="Tổng kết lớp" />
-              <Tab label="Hoãn/vắng thi" />
-            </Tabs>
-          </AppBar>
           <TabPanel index={0} value={selectedTab}>
-            <StyledScrollableBox
-              sx={{ padding: '0!important', height: '25rem' }}
-            >
-              <ClassOverview
-                homeroomOverviewReport={homeroomOverviewReport}
-                homeroomFinalResultList={homeroomFinalResultList}
-                homeroomOverviewReportLoading={homeroomOverviewReportLoading}
-                homeroomFinalResultListLoading={homeroomFinalResultListLoading}
-                page={page}
-                handleChangePage={handleChangePage}
-              />
-            </StyledScrollableBox>
+            <ClassOverview
+              homeroomOverviewReport={homeroomOverviewReport}
+              homeroomFinalResultList={homeroomFinalResultList}
+              homeroomOverviewReportLoading={homeroomOverviewReportLoading}
+              homeroomFinalResultListLoading={homeroomFinalResultListLoading}
+              page={page}
+              handleChangePage={handleChangePage}
+            />
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
             <AsyncDataRenderer
@@ -439,14 +441,10 @@ function ClassReport() {
               }
               data={homeroomExamAbsentListData && homeroomPostponeExamListData}
             >
-              <StyledScrollableBox
-                sx={{ padding: '0!important', height: '25rem' }}
-              >
-                <PostponeExam
-                  homeroomExamAbsentList={homeroomExamAbsentList}
-                  homeroomExamPostponedList={homeroomPostponeExamList}
-                />
-              </StyledScrollableBox>
+              <PostponeExam
+                homeroomExamAbsentList={homeroomExamAbsentList}
+                homeroomExamPostponedList={homeroomPostponeExamList}
+              />
             </AsyncDataRenderer>
           </TabPanel>
         </Box>
