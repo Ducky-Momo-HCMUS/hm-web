@@ -939,6 +939,10 @@ export type TeacherStudentList = {
 };
 
 export type UploadDocumentInput = {
+  hocKy?: InputMaybe<Scalars['Int']>;
+  maMH?: InputMaybe<Scalars['String']>;
+  namHoc?: InputMaybe<Scalars['Int']>;
+  tenLopHP?: InputMaybe<Scalars['String']>;
   type: Scalars['String'];
 };
 

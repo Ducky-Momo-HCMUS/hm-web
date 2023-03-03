@@ -34,6 +34,7 @@ import {
   SUBJECTS,
   TERMS,
   TYPES,
+  YEARS,
 } from './utils';
 
 interface State {
@@ -130,12 +131,24 @@ function ImportFile() {
               type:
                 TYPES.find((item) => item.label === values.type)?.endpoint ||
                 '',
+              namHoc: Number(values.year),
+              hocKy: Number(values.term),
+              maMH: values.subject,
+              tenLopHP: values.class,
             },
           },
         });
       }
     },
-    [file, uploadDocument, values.type]
+    [
+      file,
+      uploadDocument,
+      values.class,
+      values.subject,
+      values.term,
+      values.type,
+      values.year,
+    ]
   );
 
   return (
@@ -158,42 +171,41 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        {/* {values.type && (
-          <StyledFormControl>
-            <InputLabel id="year-select-label">Năm học</InputLabel>
-            <Select
-              labelId="year-select-label"
-              id="year-select"
-              value={values.year}
-              label="Năm học"
-              onChange={handleChange('year')}
-              MenuProps={MenuProps}
-            >
-              {YEARS.map((item) => (
-                <MenuItem value={item.toString()}>
-                  {item} - {item + 1}
-                </MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
-        )} */}
-
-        {TYPES.findIndex((item) => item.label === values.type) > 4 && (
-          <StyledFormControl>
-            <InputLabel id="term-select-label">Học kỳ</InputLabel>
-            <Select
-              labelId="term-select-label"
-              id="term-select"
-              value={values.term}
-              label="Học kỳ"
-              onChange={handleChange('term')}
-              MenuProps={MenuProps}
-            >
-              {TERMS.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
+        {TYPES.findIndex((item) => item.label === values.type) >= 4 && (
+          <>
+            <StyledFormControl>
+              <InputLabel id="year-select-label">Năm học</InputLabel>
+              <Select
+                labelId="year-select-label"
+                id="year-select"
+                value={values.year}
+                label="Năm học"
+                onChange={handleChange('year')}
+                MenuProps={MenuProps}
+              >
+                {YEARS.map((item) => (
+                  <MenuItem value={item.toString()}>
+                    {item} - {item + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+            <StyledFormControl>
+              <InputLabel id="term-select-label">Học kỳ</InputLabel>
+              <Select
+                labelId="term-select-label"
+                id="term-select"
+                value={values.term}
+                label="Học kỳ"
+                onChange={handleChange('term')}
+                MenuProps={MenuProps}
+              >
+                {TERMS.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+          </>
         )}
         {values.type === 'Bảng điểm lớp học phần' && (
           <>

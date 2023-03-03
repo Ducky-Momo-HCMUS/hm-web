@@ -8,26 +8,21 @@ export type RowCol = { rows: Row[]; columns: GridColDef[] };
 export const YEARS = [2017, 2018, 2019];
 export const TYPES = [
   { label: 'Danh sách giáo viên chủ nhiệm', endpoint: 'teachers' },
-  { label: 'Danh sách hồ sơ sinh viên', endpoint: 'students-info' },
   { label: 'Danh sách môn học', endpoint: 'courses' },
   { label: 'Danh sách chuyên ngành', endpoint: 'majors' },
   { label: 'Danh sách kết quả chuyên ngành', endpoint: 'major-result' },
+  { label: 'Danh sách hồ sơ sinh viên', endpoint: 'students-info' },
   // 'Danh sách đăng ký học phần',
   { label: 'Danh sách không đăng ký học phần', endpoint: 'unregister' },
-  { label: 'Điểm rèn luyện', endpoint: 'training-point' },
-  { label: 'Bảng điểm lớp học phần', endpoint: 'score' },
   { label: 'Danh sách hoãn thi', endpoint: 'postpone' },
   { label: 'Danh sách vắng thi', endpoint: 'absent' },
-  { label: 'Tình trạng sinh viên', endpoint: 'student-status' },
+  { label: 'Điểm rèn luyện', endpoint: 'training-point' },
   { label: 'Thống kê đăng ký học phần', endpoint: 'registration-statistic' },
+  { label: 'Tình trạng sinh viên', endpoint: 'student-status' },
+  { label: 'Bảng điểm lớp học phần', endpoint: 'score' },
 ];
 export const TERMS = [1, 2, 3];
-export const SUBJECTS = [
-  'Cơ sở dữ liệu',
-  'Nhập môn lập trình',
-  'Hệ quản trị cơ sở dữ liệu',
-  'Kỹ thuật lập trình',
-];
+export const SUBJECTS = ['CSC10006', 'CSC10001', 'CSC10003', 'CSC10002'];
 export const CLASSES = ['19KTPM1', '19KTPM2', '19HTTT1', '19HTTT2'];
 
 const ITEM_HEIGHT = 48;

@@ -16,6 +16,10 @@ const fileTypeDefs = gql`
 
   input UploadDocumentInput {
     type: String!
+    namHoc: Int
+    hocKy: Int
+    maMH: String
+    tenLopHP: String
   }
 
   type Document {

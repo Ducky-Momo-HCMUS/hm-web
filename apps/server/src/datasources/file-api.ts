@@ -18,12 +18,15 @@ class FileAPI extends BaseDataSource {
     const { createReadStream, filename } = await file.file;
     const formData = new FormData();
     formData.append('file', createReadStream(), { filename });
+    formData.append('namHoc', input.namHoc);
+    formData.append('hocKy', input.hocKy);
+    formData.append('maMH', input.maMH);
+    formData.append('tenLopHP', input.tenLopHP);
 
     try {
       const uploadedDocument = await this.post(
         `v1/files/${input.type}`,
-        formData,
-        {}
+        formData
       );
       return uploadedDocument;
     } catch (error) {
