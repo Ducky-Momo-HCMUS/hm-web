@@ -27,6 +27,7 @@ import {
   Item,
   StyledBreadCrumbs,
   StyledDivider,
+  StyledStickyBox,
   StyledTitle,
 } from '../../../components/styles';
 import { ROWS_PER_PAGE } from '../../../mocks';
@@ -268,12 +269,14 @@ function NoteInfo() {
 
   return (
     <>
-      <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
-      <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link to="/">Trang chủ</Link>
-        <Typography color="text.primary">{id}</Typography>
-        <Typography color="text.primary">Ghi chú sinh viên</Typography>
-      </StyledBreadCrumbs>
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
+        <StyledBreadCrumbs aria-label="breadcrumb">
+          <Link to="/">Trang chủ</Link>
+          <Typography color="text.primary">{id}</Typography>
+          <Typography color="text.primary">Ghi chú sinh viên</Typography>
+        </StyledBreadCrumbs>
+      </StyledStickyBox>
       <StyledGridContainer
         sx={{ marginTop: '1.5rem' }}
         container
@@ -281,7 +284,7 @@ function NoteInfo() {
         columns={20}
       >
         <Grid sx={{ paddingTop: '0!important' }} item xs={8}>
-          <Item sx={{ height: 'fit-content' }}>
+          <Item sx={{ height: '100%' }}>
             <Box sx={{ padding: '1rem 1rem 0 1rem' }}>
               <StyledHeader>
                 <Typography component="p" variant="h5">
@@ -306,7 +309,7 @@ function NoteInfo() {
                 </Box>
               </StyledHeader>
               <StyledDivider />
-              <List sx={{ overflowY: 'auto', height: '24rem' }}>
+              <List>
                 <AsyncDataRenderer
                   loading={studentNoteListLoading}
                   data={studentNoteListData}
@@ -347,15 +350,7 @@ function NoteInfo() {
           loading={noteDetailLoading || tagListLoading}
           data={values.selected >= 0 ? noteDetailData : tagListData}
         >
-          <Grid
-            item
-            xs={12}
-            sx={{
-              overflowY: 'scroll',
-              height: '32.5rem',
-              paddingTop: '0!important',
-            }}
-          >
+          <Grid item xs={12} sx={{ paddingTop: '0!important' }}>
             <Item>
               <NoteEditor
                 tagList={tagList}

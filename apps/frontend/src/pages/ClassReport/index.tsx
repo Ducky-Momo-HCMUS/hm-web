@@ -357,7 +357,7 @@ function ClassReport() {
               loading={homeroomTermListLoading}
               data={homeroomTermListData}
             >
-              <Box>
+              <Box sx={{ zIndex: 15 }}>
                 <StyledFormControl sx={{ marginRight: '1rem' }}>
                   <InputLabel id="year-select-label">Năm học</InputLabel>
                   <Select

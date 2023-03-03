@@ -803,7 +803,7 @@ export type StudentNote = {
 
 export type StudentOverviewResult = {
   __typename?: 'StudentOverviewResult';
-  chuyenNganh: Scalars['Int'];
+  batBuocChuyenNganh: Scalars['Int'];
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
@@ -2347,7 +2347,7 @@ export type StudentOverviewResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentOverviewResult'] = ResolversParentTypes['StudentOverviewResult']
 > = {
-  chuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  batBuocChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   coSoNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   daiCuong?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;

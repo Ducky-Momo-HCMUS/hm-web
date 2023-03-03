@@ -178,7 +178,7 @@ const studentTypeDefs = gql`
     tenCN: String!
     daiCuong: Int!
     coSoNganh: Int!
-    chuyenNganh: Int!
+    batBuocChuyenNganh: Int!
     tuChonTuDo: Int!
     tuChonChuyenNganh: Int!
     totNghiep: Int!

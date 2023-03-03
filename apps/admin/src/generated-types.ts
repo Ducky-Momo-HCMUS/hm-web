@@ -798,7 +798,7 @@ export type StudentNote = {
 
 export type StudentOverviewResult = {
   __typename?: 'StudentOverviewResult';
-  chuyenNganh: Scalars['Int'];
+  batBuocChuyenNganh: Scalars['Int'];
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
@@ -1784,7 +1784,7 @@ export type StudentOverviewResultQuery = {
         tenCN: string;
         daiCuong: number;
         coSoNganh: number;
-        chuyenNganh: number;
+        batBuocChuyenNganh: number;
         tuChonTuDo: number;
         tuChonChuyenNganh: number;
         totNghiep: number;
@@ -4775,7 +4775,7 @@ export const StudentOverviewResultDocument = gql`
       tenCN
       daiCuong
       coSoNganh
-      chuyenNganh
+      batBuocChuyenNganh
       tuChonTuDo
       tuChonChuyenNganh
       totNghiep

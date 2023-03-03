@@ -19,6 +19,7 @@ import {
   StyledContainer,
   StyledContentWrapper,
   StyledRouterLink,
+  StyledStickyBox,
   StyledTitle,
 } from '../../components/styles';
 import { STUDENT_LIST_PAGE_SIZE } from '../../constants';
@@ -101,11 +102,13 @@ function Search() {
     <StyledContainer>
       <Header isAuthenticated />
       <StyledContentWrapper>
-        <StyledTitle>Kết quả tìm kiếm</StyledTitle>
-        <StyledBreadCrumbs aria-label="breadcrumb">
-          <Link to="/">Trang chủ</Link>
-          <Typography color="text.primary">Kết quả tìm kiếm</Typography>
-        </StyledBreadCrumbs>
+        <StyledStickyBox>
+          <StyledTitle>Kết quả tìm kiếm</StyledTitle>
+          <StyledBreadCrumbs aria-label="breadcrumb">
+            <Link to="/">Trang chủ</Link>
+            <Typography color="text.primary">Kết quả tìm kiếm</Typography>
+          </StyledBreadCrumbs>
+        </StyledStickyBox>
         <AsyncDataRenderer loading={searchStudentsLoading} data={studentsList}>
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
             <TableContainer sx={{ maxHeight: 350 }}>

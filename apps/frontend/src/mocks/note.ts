@@ -76,7 +76,7 @@ export const NOTES_LIST: NoteItemData[] = [
 ];
 export const API_KEY = '0yf7s1ygposevnas5ey2boi88rautg60xy9zjtwyecbyz0nx';
 export const NOTE_EDITOR_CONFIG = {
-  height: 400,
+  height: 600,
   menubar: false,
   plugins: [
     'advlist',
