@@ -40,7 +40,7 @@ export async function startServer() {
 
   app.use(cors());
 
-  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 5000000, maxFiles: 5 }));
 
   server.applyMiddleware({ app });
   app.listen({ host: '0.0.0.0', port: '5000' }, () => {

@@ -49,7 +49,7 @@ class NoteAPI extends BaseDataSource {
 
   public async editNote({ noteId, payload }: MutationNoteEditArgs) {
     try {
-      const res = await this.put(`v1/notes/${noteId}`, payload);
+      const res = await this.patch(`v1/notes/${noteId}`, payload);
       return res;
     } catch (error) {
       logger.error('Error: cannot edit note');

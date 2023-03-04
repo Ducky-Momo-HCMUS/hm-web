@@ -6,7 +6,7 @@ export const noteResolver: Resolvers<ResolverContext> = {
   Query: {
     noteDetail: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.getNoteDetail(args);
-      return res.data.note;
+      return res.data;
     },
     noteList: async (_, __, { dataSources }) => {
       const res = await dataSources.noteAPI.getNoteList();
@@ -16,11 +16,11 @@ export const noteResolver: Resolvers<ResolverContext> = {
   Mutation: {
     noteAdd: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.addNote(args);
-      return res.data.note;
+      return res.data;
     },
     noteEdit: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.editNote(args);
-      return res.data.note;
+      return res.data;
     },
     noteDelete: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.deleteNote(args);
