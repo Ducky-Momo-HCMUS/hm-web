@@ -472,7 +472,7 @@ class DocumentCreator {
                   }),
                   new TableCell({
                     width: {
-                      size: 5000,
+                      size: 4000,
                       type: WidthType.DXA,
                     },
                     children: [
@@ -489,7 +489,7 @@ class DocumentCreator {
                   }),
                   new TableCell({
                     width: {
-                      size: 6000,
+                      size: 7000,
                       type: WidthType.DXA,
                     },
                     children: [
