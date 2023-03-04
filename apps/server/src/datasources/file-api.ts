@@ -1,9 +1,8 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { ApolloError } from 'apollo-server-express';
 import FormData from 'form-data';
 
 import { MutationUploadDocumentArgs } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
-import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
