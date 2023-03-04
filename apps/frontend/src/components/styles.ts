@@ -22,7 +22,6 @@ export const StyledStickyBox = styled(Box)`
 
 export const StyledContainer = styled(Box)`
   background: ${grey[100]};
-  height: 100vh;
 `;
 
 export const StyledContentWrapper = styled(Box)`
