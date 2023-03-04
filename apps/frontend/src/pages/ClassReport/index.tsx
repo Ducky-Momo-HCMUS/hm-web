@@ -299,18 +299,35 @@ function ClassReport() {
     });
   }
 
+  function convertName(tenGVCN: string) {
+    const words = tenGVCN.split(' ');
+    let name = '';
+    words.forEach((word, index) => {
+      if (index === words.length - 1) {
+        name += word;
+        return;
+      }
+
+      name += word[0];
+    });
+
+    return name;
+  }
+
   const handleExportDocument = useCallback(
     (event) => {
       event.preventDefault();
       const documentCreator = new DocumentCreator();
       const selectedTerm = values.term || initialTerm;
+      const namHocBD = values.year || initialYear;
+      const hocKy =
+        terms
+          .find((item) => item.maHK.toString() === selectedTerm)
+          ?.hocKy.toString() || '';
 
       const doc = documentCreator.create({
-        hocKy:
-          terms
-            .find((item) => item.maHK.toString() === selectedTerm)
-            ?.hocKy.toString() || '',
-        namHocBD: values.year || initialYear,
+        hocKy,
+        namHocBD,
         tenGVCN: homeroomDetail?.giaoVien.tenGV,
         lopChuNhiem: id,
         homeroomOverviewReport,
@@ -318,7 +335,14 @@ function ClassReport() {
         homeroomPostponeExamList,
         homeroomFinalResultList,
       });
-      saveDocumentToFile(doc, 'New Document.docx');
+      saveDocumentToFile(
+        doc,
+        `${namHocBD.slice(2)}${String(Number(namHocBD) + 1).slice(
+          2
+        )}_HK${hocKy}_Bao cao Cong tac GVCN_${id.toUpperCase()}_${convertName(
+          homeroomDetail?.giaoVien.tenGV
+        )}.docx`
+      );
     },
     [
       homeroomDetail?.giaoVien.tenGV,
