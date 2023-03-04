@@ -114,6 +114,16 @@ function ImportFile() {
 
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
+      onCompleted: () => {
+        toast.success('Cập nhật thông tin thành công');
+        setValues((v) => ({
+          ...v,
+          type: TYPES[0].label,
+        }));
+        if (filePondRef.current) {
+          filePondRef.current.removeFile();
+        }
+      },
       onError: (error) => {
         // TODO: lấy error từ BE
         toast.error('Đã có  lỗi xảy ra');
