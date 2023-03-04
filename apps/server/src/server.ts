@@ -21,16 +21,18 @@ export async function startServer() {
     resolvers: resolvers as IResolvers,
     dataSources,
     context,
+    debug: true,
     formatError: (error: GraphQLError) => {
-      const e = error;
-      if (error.extensions?.exception) {
-        const stacktrace = e.extensions.exception;
-        logger.warn(e.message, stacktrace);
-        delete e.extensions?.exception;
+      const { extensions } = error;
+      const code = extensions?.code;
+      const stacktrace = extensions?.exception;
+      delete extensions?.exception;
+      if (stacktrace && code === 'INTERNAL_SERVER_ERROR') {
+        logger.error(error.message, stacktrace);
       }
       const formattedError = {
-        message: e.message,
-        errorId: (e.extensions && e.extensions.code) || 'INTERNAL_SERVER_ERROR',
+        message: error.message,
+        errorId: (extensions && code) || 'INTERNAL_SERVER_ERROR',
       };
       return formattedError;
     },
