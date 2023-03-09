@@ -19,6 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   UploadFile: any;
 };
 
@@ -547,6 +548,13 @@ export type NoteListItem = {
   tieuDe: Scalars['String'];
 };
 
+export type NoteSearch = {
+  __typename?: 'NoteSearch';
+  data: Array<NoteListItem>;
+  lastPage: Scalars['Int'];
+  total: Scalars['Int'];
+};
+
 export type NoteTag = {
   __typename?: 'NoteTag';
   maTag: Scalars['Int'];
@@ -572,6 +580,7 @@ export type Query = {
   homeroomWatchList: HomeroomWatchList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
+  noteSearch: NoteSearch;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -651,6 +660,16 @@ export type QueryHomeroomWatchListArgs = {
 
 export type QueryNoteDetailArgs = {
   noteId: Scalars['Int'];
+};
+
+export type QueryNoteSearchArgs = {
+  end?: InputMaybe<Scalars['Date']>;
+  maSV?: InputMaybe<Scalars['String']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentAllTermsArgs = {
@@ -1669,6 +1688,34 @@ export type NoteListQuery = {
     thoiGianSua?: string | null | undefined;
     maSV?: string | null | undefined;
   }>;
+};
+
+export type NoteSearchQueryVariables = Exact<{
+  tieuDe?: InputMaybe<Scalars['String']>;
+  maSV?: InputMaybe<Scalars['String']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type NoteSearchQuery = {
+  __typename?: 'Query';
+  noteSearch: {
+    __typename?: 'NoteSearch';
+    total: number;
+    lastPage: number;
+    data: Array<{
+      __typename?: 'NoteListItem';
+      maGC: number;
+      tieuDe: string;
+      noiDung: string;
+      thoiGianTao: string;
+      thoiGianSua?: string | null | undefined;
+      maSV?: string | null | undefined;
+    }>;
+  };
 };
 
 export type StudentAllTermsQueryVariables = Exact<{
@@ -4440,6 +4487,93 @@ export type NoteListLazyQueryHookResult = ReturnType<
 export type NoteListQueryResult = Apollo.QueryResult<
   NoteListQuery,
   NoteListQueryVariables
+>;
+export const NoteSearchDocument = gql`
+  query NoteSearch(
+    $tieuDe: String
+    $maSV: String
+    $tenSV: String
+    $start: Date
+    $end: Date
+    $page: Int!
+    $size: Int!
+  ) {
+    noteSearch(
+      tieuDe: $tieuDe
+      maSV: $maSV
+      tenSV: $tenSV
+      start: $start
+      end: $end
+      page: $page
+      size: $size
+    ) {
+      total
+      lastPage
+      data {
+        maGC
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
+        maSV
+      }
+    }
+  }
+`;
+
+/**
+ * __useNoteSearchQuery__
+ *
+ * To run a query within a React component, call `useNoteSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNoteSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNoteSearchQuery({
+ *   variables: {
+ *      tieuDe: // value for 'tieuDe'
+ *      maSV: // value for 'maSV'
+ *      tenSV: // value for 'tenSV'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useNoteSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    NoteSearchQuery,
+    NoteSearchQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<NoteSearchQuery, NoteSearchQueryVariables>(
+    NoteSearchDocument,
+    options
+  );
+}
+export function useNoteSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    NoteSearchQuery,
+    NoteSearchQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<NoteSearchQuery, NoteSearchQueryVariables>(
+    NoteSearchDocument,
+    options
+  );
+}
+export type NoteSearchQueryHookResult = ReturnType<typeof useNoteSearchQuery>;
+export type NoteSearchLazyQueryHookResult = ReturnType<
+  typeof useNoteSearchLazyQuery
+>;
+export type NoteSearchQueryResult = Apollo.QueryResult<
+  NoteSearchQuery,
+  NoteSearchQueryVariables
 >;
 export const StudentAllTermsDocument = gql`
   query StudentAllTerms($studentId: String!) {

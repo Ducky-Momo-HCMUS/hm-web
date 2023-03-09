@@ -62,6 +62,7 @@ function NoteEditor({
   handleReset,
   isAdding,
 }: NoteEditorProps) {
+  console.log('<<< tags', tags);
   return (
     <>
       <Box sx={{ padding: '1rem' }}>

@@ -1,4 +1,4 @@
-import { Card, Dialog, Grid, styled, TextField } from '@mui/material';
+import { Box, Card, Dialog, Grid, styled, TextField } from '@mui/material';
 
 export const StyledTextField = styled(TextField)`
   & label {
@@ -6,8 +6,11 @@ export const StyledTextField = styled(TextField)`
   }
 `;
 
-export const StyledFilterBar = styled(Card)`
+export const StyledCard = styled(Card)`
   padding: 2rem;
+`;
+
+export const StyledFilterBox = styled(Box)`
   display: flex;
   justify-content: space-between;
   align-items: center;

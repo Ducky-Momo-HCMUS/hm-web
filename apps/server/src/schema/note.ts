@@ -1,15 +1,32 @@
 import { gql } from 'apollo-server-express';
 
 const noteTypeDefs = gql`
+  scalar Date
+
   extend type Query {
     noteDetail(noteId: Int!): NoteDetail!
     noteList: [NoteListItem!]!
+    noteSearch(
+      tieuDe: String
+      maSV: String
+      tenSV: String
+      start: Date
+      end: Date
+      page: Int!
+      size: Int!
+    ): NoteSearch!
   }
 
   extend type Mutation {
     noteAdd(payload: NoteAddInput!): NoteAddResponse!
     noteEdit(noteId: Int!, payload: NoteEditInput!): NoteEditResponse!
     noteDelete(noteId: Int!): NoteDeleteResponse!
+  }
+
+  type NoteSearch {
+    total: Int!
+    lastPage: Int!
+    data: [NoteListItem!]!
   }
 
   type NoteDetail {
