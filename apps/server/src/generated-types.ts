@@ -864,8 +864,12 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  gvlt: Scalars['String'];
-  gvth: Scalars['String'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
@@ -2451,8 +2455,12 @@ export type StudentSubjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
 > = {
-  gvlt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  gvth?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  diemCK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemCong?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemGK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemKhac?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

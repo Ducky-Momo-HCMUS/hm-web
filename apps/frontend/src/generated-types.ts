@@ -859,8 +859,12 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  gvlt: Scalars['String'];
-  gvth: Scalars['String'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
@@ -1882,9 +1886,13 @@ export type StudentSubjectsByTermQuery = {
     maMH: string;
     tenMH: string;
     tenLopHP: string;
-    gvlt: string;
-    gvth: string;
     tinhTrang: string;
+    diemGK?: number | null | undefined;
+    diemTH?: number | null | undefined;
+    diemCong?: number | null | undefined;
+    diemKhac?: number | null | undefined;
+    diemCK?: number | null | undefined;
+    dtb?: number | null | undefined;
   }>;
 };
 
@@ -5047,9 +5055,13 @@ export const StudentSubjectsByTermDocument = gql`
       maMH
       tenMH
       tenLopHP
-      gvlt
-      gvth
       tinhTrang
+      diemGK
+      diemTH
+      diemCong
+      diemKhac
+      diemCK
+      dtb
     }
   }
 `;

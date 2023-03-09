@@ -9,7 +9,18 @@ interface AcademicTableRowProps {
   index: number;
 }
 function AcademicTableRow({ data, index }: AcademicTableRowProps) {
-  const { maMH, tenMH, tenLopHP, gvlt, gvth, tinhTrang } = data;
+  const {
+    maMH,
+    tenMH,
+    tenLopHP,
+    tinhTrang,
+    diemGK,
+    diemTH,
+    diemCong,
+    diemKhac,
+    diemCK,
+    dtb,
+  } = data;
 
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
@@ -44,8 +55,12 @@ function AcademicTableRow({ data, index }: AcademicTableRowProps) {
       <TableCell>{tenMH}</TableCell>
       <TableCell>{tenLopHP}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{gvlt}</TableCell>
-      <TableCell>{gvth}</TableCell>
+      <TableCell>{diemGK}</TableCell>
+      <TableCell>{diemTH}</TableCell>
+      <TableCell>{diemCong}</TableCell>
+      <TableCell>{diemKhac}</TableCell>
+      <TableCell>{diemCK}</TableCell>
+      <TableCell>{dtb}</TableCell>
     </TableRow>
   );
 }
