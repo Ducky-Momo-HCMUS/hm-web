@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
 import {
@@ -133,19 +134,20 @@ function ImportFile() {
   const handleUploadDocument = useCallback(
     async (event) => {
       event.preventDefault();
+      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const input = Object.assign(
+        {},
+        type && { type },
+        values.year && { namHoc: values.year },
+        values.term && { hocKy: values.term },
+        values.subject && { maMH: values.subject },
+        values.class && { tenLopHP: values.class }
+      );
       if (file) {
         await uploadDocument({
           variables: {
             file,
-            input: {
-              type:
-                TYPES.find((item) => item.label === values.type)?.endpoint ||
-                '',
-              namHoc: Number(values.year),
-              hocKy: Number(values.term),
-              maMH: values.subject,
-              tenLopHP: values.class,
-            },
+            input,
           },
         });
       }

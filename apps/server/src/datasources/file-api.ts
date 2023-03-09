@@ -38,17 +38,11 @@ class FileAPI extends BaseDataSource {
   // TODO add typing for file
   private createFormData(input: UploadDocumentInput) {
     const formData = new FormData();
-    const inputMap = {
-      namHoc: input.namHoc,
-      hocKy: input.hocKy,
-      maMH: input.maMH,
-      tenLopHP: input.tenLopHP,
-    };
-    Object.keys(inputMap).forEach((key) => {
-      if (!inputMap[key]) {
+    Object.keys(input).forEach((key) => {
+      if (!input[key]) {
         throw new UserInputError(`Missing ${key}`);
       }
-      formData.append(key, inputMap[key]);
+      formData.append(key, input[key]);
     });
     return formData;
   }
