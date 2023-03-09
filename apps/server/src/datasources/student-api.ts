@@ -64,7 +64,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentAveragePointByTermArgs) {
     try {
       const averagePoint = await this.get(
-        `v1/students/${studentId}/point?term=${term}`
+        `v1/students/${studentId}/score?term=${term}`
       );
       return averagePoint;
     } catch (error) {
