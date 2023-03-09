@@ -29,6 +29,7 @@ import { StyledDialog } from './styles';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 interface NoteEditorProps {
+  filePondRef: any;
   tagList: Tag[];
   imageList: NoteImage[];
   editorRef: any;
@@ -53,16 +54,8 @@ const MenuProps = {
   },
 };
 
-const divStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundSize: 'cover',
-  height: '164px',
-  width: '164px',
-};
-
 function NoteEditor({
+  filePondRef,
   tagList,
   imageList,
   editorRef,
@@ -157,6 +150,7 @@ function NoteEditor({
         )}
 
         <FilePond
+          ref={filePondRef}
           allowMultiple
           onupdatefiles={async (files) => {
             if (files.length > 0) {

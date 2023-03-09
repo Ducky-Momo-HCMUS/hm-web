@@ -25,6 +25,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import { Link } from 'react-router-dom';
+import { FilePond } from 'react-filepond';
 
 import Header from '../../components/Header';
 import {
@@ -49,8 +50,8 @@ import {
   useTagListQuery,
 } from '../../generated-types';
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
-import { GET_NOTE_LIST } from '../../data/queries/note/get-note-list';
 import { NOTE_STORE_LIST_PAGE_SIZE } from '../../constants';
+import { SEARCH_NOTE } from '../../data/queries/note/search-note';
 
 import NoteCardItem from './NoteCardItem';
 import {
@@ -205,12 +206,38 @@ function NoteStore() {
       variables: {
         noteId: values.deleteIndex,
       },
-      refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+      refetchQueries: [
+        {
+          query: SEARCH_NOTE,
+          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+        },
+        'NoteSearch',
+      ],
     });
   }, [deleteNote, values.deleteIndex]);
 
   const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
   const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+
+  const filePondRef = useRef<FilePond | null>(null);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      isAdding: true,
+      title: '',
+      tags: [],
+      images: [],
+    }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+    if (filePondRef.current) {
+      filePondRef.current.removeFile();
+    }
+  }, []);
 
   const handleClickSave = useCallback(async () => {
     if (values.isAdding) {
@@ -220,27 +247,41 @@ function NoteStore() {
           (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
         ),
         noiDung: editorRef.current?.getContent() || '',
-        url: ['https://picsum.photos/200'],
+        images: files,
       } as NoteAddInput;
 
       await addNote({
         variables: {
           payload,
         },
-        refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+        refetchQueries: [
+          {
+            query: SEARCH_NOTE,
+            variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+          },
+          'NoteSearch',
+        ],
       });
 
-      setValues((v) => ({ ...v, selected: -1 }));
+      handleReset();
       return;
     }
 
     const payload = {
       tieuDe: values.title,
       noiDung: editorRef.current?.getContent() || '',
-      maTag: values.tags.map(
-        (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
-      ),
-      url: ['https://picsum.photos/200'],
+      removeTagIds:
+        noteDetail?.ghiChuTag
+          .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
+          .map((ghiChuTag) => ghiChuTag.maTag) || [],
+      addTagIds:
+        values.tags
+          .filter(
+            (tag) => !noteDetail?.ghiChuTag.find((item) => item.tenTag === tag)
+          )
+          .map((ghiChuTag) => tagList.find((item) => item.tenTag === ghiChuTag))
+          .map((addTag) => addTag?.maTag) || [],
+      images: files,
     } as NoteEditInput;
 
     await editNote({
@@ -248,33 +289,28 @@ function NoteStore() {
         noteId: values.selected,
         payload,
       },
-      refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+      refetchQueries: [
+        {
+          query: SEARCH_NOTE,
+          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+        },
+        'NoteSearch',
+      ],
     });
 
-    setValues((v) => ({ ...v, selected: -1 }));
+    handleReset();
   }, [
     addNote,
     editNote,
+    files,
+    handleReset,
+    noteDetail?.ghiChuTag,
     tagList,
     values.isAdding,
     values.selected,
     values.tags,
     values.title,
   ]);
-
-  const handleReset = useCallback(() => {
-    setValues((v) => ({
-      ...v,
-      selected: 0,
-      isAdding: true,
-      title: '',
-      tags: [],
-    }));
-    setFiles([]);
-    if (editorRef.current) {
-      editorRef.current.setContent('');
-    }
-  }, [editorRef]);
 
   const [page, setPage] = useState(1);
   const handleChangePage = (event: ChangeEvent<unknown>, value: number) => {
@@ -532,6 +568,7 @@ function NoteStore() {
           onClose={() => setValues({ ...values, selected: -1 })}
         >
           <NoteEditor
+            filePondRef={filePondRef}
             tagList={tagList}
             imageList={values.images}
             editorRef={editorRef}

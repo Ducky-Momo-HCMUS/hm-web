@@ -69,8 +69,10 @@ const noteTypeDefs = gql`
   input NoteEditInput {
     tieuDe: String!
     noiDung: String!
-    maTag: [Int!]!
-    url: [String!]!
+    removeTagIds: [Int]
+    addTagIds: [Int]
+    removeImageIds: [String]
+    images: [UploadFile]
   }
 
   type NoteAddResponse {

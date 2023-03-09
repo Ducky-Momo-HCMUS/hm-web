@@ -525,10 +525,12 @@ export type NoteDetail = {
 };
 
 export type NoteEditInput = {
-  maTag: Array<Scalars['Int']>;
+  addTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   noiDung: Scalars['String'];
+  removeImageIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  removeTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteEditResponse = {

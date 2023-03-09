@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import SortIcon from '@mui/icons-material/Sort';
+import { FilePond } from 'react-filepond';
 
 import NoteEditor from '../../../components/Note/NoteEditor';
 import {
@@ -41,6 +42,7 @@ import {
   useStudentNoteListQuery,
   useNoteEditMutation,
   useTagListQuery,
+  NoteImage,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { GET_STUDENT_NOTE_LIST } from '../../../data/queries/student/get-student-note-list';
@@ -50,6 +52,7 @@ import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 
 interface State {
   selected: number;
+  images: NoteImage[];
   page: number;
   title: string;
   tags: string[];
@@ -87,6 +90,7 @@ function NoteInfo() {
     tags: [],
     deleteIndex: -1,
     isAdding: true,
+    images: [],
   });
 
   const [files, setFiles] = useState<File[]>();
@@ -110,6 +114,7 @@ function NoteInfo() {
         ...v,
         title: noteDetail.tieuDe,
         tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
+        images: noteDetail.ghiChuHinhAnh,
       }));
       if (editorRef.current) {
         editorRef.current.setContent(noteDetail.noiDung);
@@ -125,6 +130,26 @@ function NoteInfo() {
     () => tagListData?.tagList.tags || [],
     [tagListData?.tagList.tags]
   );
+
+  const filePondRef = useRef<FilePond | null>(null);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      title: '',
+      tags: [],
+      isAdding: true,
+      images: [],
+    }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+    if (filePondRef.current) {
+      filePondRef.current.removeFile();
+    }
+  }, []);
 
   const handleClickSave = useCallback(async () => {
     if (values.isAdding) {
@@ -153,16 +178,24 @@ function NoteInfo() {
         ],
       });
 
+      handleReset();
+
       return;
     }
 
     const payload = {
       tieuDe: values.title,
       noiDung: editorRef.current?.getContent() || '',
-      maTag: values.tags.map(
-        (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
-      ),
-      url: ['https://picsum.photos/200'],
+      removeTagIds: noteDetail?.ghiChuTag
+        .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
+        .map((ghiChuTag) => ghiChuTag.maTag),
+      addTagIds: values.tags
+        .filter(
+          (tag) => !noteDetail?.ghiChuTag.find((item) => item.tenTag === tag)
+        )
+        .map((ghiChuTag) => tagList.find((item) => item.tenTag === ghiChuTag))
+        .map((addTag) => addTag?.maTag),
+      images: files,
     } as NoteEditInput;
 
     await editNote({
@@ -180,11 +213,15 @@ function NoteInfo() {
         'StudentNoteList',
       ],
     });
+
+    handleReset();
   }, [
     addNote,
     editNote,
     files,
+    handleReset,
     id,
+    noteDetail?.ghiChuTag,
     tagList,
     values.isAdding,
     values.selected,
@@ -220,20 +257,6 @@ function NoteInfo() {
   const handleSelectValue = useCallback((prop: keyof State, value: any) => {
     setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
   }, []);
-
-  const handleReset = useCallback(() => {
-    setValues((v) => ({
-      ...v,
-      selected: -1,
-      title: '',
-      tags: [],
-      isAdding: true,
-    }));
-    setFiles([]);
-    if (editorRef.current) {
-      editorRef.current.setContent('');
-    }
-  }, [editorRef]);
 
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
@@ -351,8 +374,9 @@ function NoteInfo() {
           <Grid item xs={12} sx={{ paddingTop: '0!important' }}>
             <Item>
               <NoteEditor
+                filePondRef={filePondRef}
                 tagList={tagList}
-                imageList={noteDetail?.ghiChuHinhAnh || []}
+                imageList={values.images}
                 editorRef={editorRef}
                 initialValue={noteDetail?.noiDung || ''}
                 setFiles={setFiles}

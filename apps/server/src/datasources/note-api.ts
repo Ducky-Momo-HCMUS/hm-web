@@ -7,6 +7,7 @@ import {
   MutationNoteDeleteArgs,
   MutationNoteEditArgs,
   NoteAddInput,
+  NoteEditInput,
   QueryNoteDetailArgs,
   QueryNoteSearchArgs,
 } from '../generated-types';
@@ -101,7 +102,9 @@ class NoteAPI extends BaseDataSource {
     }
   }
 
-  private createFormData(input: Omit<NoteAddInput, 'images'>) {
+  private createFormData(
+    input: Omit<NoteAddInput, 'images'> | Omit<NoteEditInput, 'images'>
+  ) {
     const formData = new FormData();
     Object.keys(input).forEach((key) => {
       if (!input[key]) {
@@ -112,16 +115,51 @@ class NoteAPI extends BaseDataSource {
         input[key].forEach((tag) => {
           formData.append('maTag[]', tag);
         });
-      } else {
-        formData.append(key, input[key]);
+        return;
       }
+
+      if (key === 'removeTagIds') {
+        input[key].forEach((tag) => {
+          formData.append('removeTagIds[]', tag);
+        });
+        return;
+      }
+
+      if (key === 'addTagIds') {
+        input[key].forEach((tag) => {
+          formData.append('addTagIds[]', tag);
+        });
+        return;
+      }
+
+      if (key === 'removeImageIds') {
+        input[key].forEach((image) => {
+          formData.append('removeImageIds[]', image);
+        });
+        return;
+      }
+
+      formData.append(key, input[key]);
     });
     return formData;
   }
 
   public async editNote({ noteId, payload }: MutationNoteEditArgs) {
+    const { images, ...other } = payload;
+    const formData = this.createFormData(other);
+    if (images) {
+      const awaitedImages = await Promise.all(images as any);
+      awaitedImages.forEach((image) => {
+        const { createReadStream, filename } = image;
+        if (!filename) {
+          throw new UserInputError('Missing file');
+        }
+        formData.append('images', createReadStream(), filename);
+      });
+    }
+
     try {
-      const res = await this.patch(`v1/notes/${noteId}`, payload);
+      const res = await this.patch(`v1/notes/${noteId}`, formData);
       return res;
     } catch (error) {
       logger.error('Error: cannot edit note');
