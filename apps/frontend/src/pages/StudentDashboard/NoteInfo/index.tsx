@@ -31,8 +31,6 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import { ROWS_PER_PAGE } from '../../../mocks';
-import { mapImageUrlToFile } from '../../../utils';
-import { File } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 import {
   NoteAddInput,
@@ -116,9 +114,6 @@ function NoteInfo() {
       if (editorRef.current) {
         editorRef.current.setContent(noteDetail.noiDung);
       }
-      setFiles(
-        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
-      );
     }
   }, [noteDetail]);
 
@@ -140,7 +135,7 @@ function NoteInfo() {
         ),
         noiDung: editorRef.current?.getContent() || '',
         maSV: id,
-        url: ['https://picsum.photos/200'],
+        images: files,
       } as NoteAddInput;
 
       await addNote({
@@ -188,6 +183,7 @@ function NoteInfo() {
   }, [
     addNote,
     editNote,
+    files,
     id,
     tagList,
     values.isAdding,
@@ -334,15 +330,17 @@ function NoteInfo() {
                       />
                     ))}
                 </AsyncDataRenderer>
+                {!!studentNoteList.length && (
+                  <TablePagination
+                    rowsPerPageOptions={[ROWS_PER_PAGE]}
+                    component="div"
+                    count={studentNoteList.length}
+                    rowsPerPage={ROWS_PER_PAGE}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
+                )}
               </List>
-              <TablePagination
-                rowsPerPageOptions={[ROWS_PER_PAGE]}
-                component="div"
-                count={studentNoteList.length}
-                rowsPerPage={ROWS_PER_PAGE}
-                page={page}
-                onPageChange={handleChangePage}
-              />
             </Box>
           </Item>
         </Grid>
@@ -354,9 +352,9 @@ function NoteInfo() {
             <Item>
               <NoteEditor
                 tagList={tagList}
+                imageList={noteDetail?.ghiChuHinhAnh || []}
                 editorRef={editorRef}
                 initialValue={noteDetail?.noiDung || ''}
-                files={files}
                 setFiles={setFiles}
                 onClickSave={handleClickSave}
                 title={values.title}

@@ -495,11 +495,11 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteAddResponse = {
@@ -539,7 +539,7 @@ export type NoteEditResponse = {
 
 export type NoteImage = {
   __typename?: 'NoteImage';
-  stt: Scalars['Int'];
+  id: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -2064,7 +2064,7 @@ export type NoteImageResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NoteImage'] = ResolversParentTypes['NoteImage']
 > = {
-  stt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

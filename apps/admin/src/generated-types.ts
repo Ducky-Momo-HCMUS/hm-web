@@ -490,11 +490,11 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteAddResponse = {
@@ -534,7 +534,7 @@ export type NoteEditResponse = {
 
 export type NoteImage = {
   __typename?: 'NoteImage';
-  stt: Scalars['Int'];
+  id: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -1671,11 +1671,7 @@ export type NoteDetailQuery = {
     thoiGianTao: string;
     thoiGianSua?: string | null | undefined;
     ghiChuTag: Array<{ __typename?: 'NoteTag'; maTag: number; tenTag: string }>;
-    ghiChuHinhAnh: Array<{
-      __typename?: 'NoteImage';
-      stt: number;
-      url: string;
-    }>;
+    ghiChuHinhAnh: Array<{ __typename?: 'NoteImage'; id: string; url: string }>;
   };
 };
 
@@ -4384,7 +4380,7 @@ export const NoteDetailDocument = gql`
       thoiGianTao
       thoiGianSua
       ghiChuHinhAnh {
-        stt
+        id
         url
       }
     }

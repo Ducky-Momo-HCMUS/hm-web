@@ -36,12 +36,11 @@ import {
 } from '../../components/styles';
 import { CLASS_OPTIONS } from '../../mocks';
 import DeleteDialog from '../../components/DeleteDialog';
-import { File } from '../../types';
 import NoteEditor from '../../components/Note/NoteEditor';
-import { mapImageUrlToFile } from '../../utils';
 import {
   NoteAddInput,
   NoteEditInput,
+  NoteImage,
   useNoteAddMutation,
   useNoteDeleteMutation,
   useNoteDetailLazyQuery,
@@ -68,6 +67,7 @@ interface State {
   title: string;
   tags: string[];
   isAdding: boolean;
+  images: NoteImage[];
 }
 
 interface FilterState {
@@ -97,6 +97,7 @@ function NoteStore() {
     title: '',
     tags: [],
     isAdding: false,
+    images: [],
   });
 
   const [filterValues, setFilterValues] = useState<FilterState>({
@@ -192,12 +193,10 @@ function NoteStore() {
         ...v,
         title: noteDetail.tieuDe,
         tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
+        images: noteDetail.ghiChuHinhAnh || [],
       }));
-      setFiles(
-        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
-      );
     }
-  }, [noteDetail, values.isAdding, values.selected]);
+  }, [noteDetail, values.isAdding]);
 
   const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
   const handleDeleteNote = useCallback(async () => {
@@ -534,11 +533,11 @@ function NoteStore() {
         >
           <NoteEditor
             tagList={tagList}
+            imageList={values.images}
             editorRef={editorRef}
             initialValue={
               values.isAdding ? '' : (noteDetail?.noiDung as string)
             }
-            files={files}
             setFiles={setFiles}
             onClickSave={handleClickSave}
             title={values.title}

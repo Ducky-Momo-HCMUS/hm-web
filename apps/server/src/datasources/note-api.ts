@@ -1,10 +1,12 @@
 /* eslint-disable prefer-object-spread */
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError, UserInputError } from 'apollo-server-express';
+import FormData from 'form-data';
 
 import {
   MutationNoteAddArgs,
   MutationNoteDeleteArgs,
   MutationNoteEditArgs,
+  NoteAddInput,
   QueryNoteDetailArgs,
   QueryNoteSearchArgs,
 } from '../generated-types';
@@ -79,13 +81,42 @@ class NoteAPI extends BaseDataSource {
   }
 
   public async addNote({ payload }: MutationNoteAddArgs) {
+    const { images, ...other } = payload;
+    const awaitedImages = await Promise.all(images as any);
+    const formData = this.createFormData(other);
+    awaitedImages.forEach((image) => {
+      const { createReadStream, filename } = image;
+      if (!filename) {
+        throw new UserInputError('Missing file');
+      }
+      formData.append('images', createReadStream(), filename);
+    });
+
     try {
-      const res = await this.post(`v1/notes`, payload);
+      const res = await this.post(`v1/notes`, formData);
       return res;
     } catch (error) {
       logger.error('Error: cannot add new note');
       throw this.handleError(error as ApolloError);
     }
+  }
+
+  private createFormData(input: Omit<NoteAddInput, 'images'>) {
+    const formData = new FormData();
+    Object.keys(input).forEach((key) => {
+      if (!input[key]) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+
+      if (key === 'maTag') {
+        input[key].forEach((tag) => {
+          formData.append('maTag[]', tag);
+        });
+      } else {
+        formData.append(key, input[key]);
+      }
+    });
+    return formData;
   }
 
   public async editNote({ noteId, payload }: MutationNoteEditArgs) {

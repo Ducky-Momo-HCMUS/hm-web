@@ -4,11 +4,18 @@ import { useParams } from 'react-router-dom';
 
 import TabPanel from '../../../../components/TabPanel';
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
-import { useStudentDetailSubjectsResultLazyQuery } from '../../../../generated-types';
+import {
+  StudentOverviewResult,
+  useStudentDetailSubjectsResultLazyQuery,
+} from '../../../../generated-types';
 
 import AcademicTable from './AcademicTable';
 
-function AcademicResult() {
+interface AcademicResultProps {
+  studentOverviewResult: Omit<StudentOverviewResult, 'tenCN | dtb'>;
+}
+
+function AcademicResult({ studentOverviewResult }: AcademicResultProps) {
   const { id = '' } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
 
@@ -86,12 +93,16 @@ function AcademicResult() {
           indicatorColor="secondary"
           textColor="inherit"
         >
-          <Tab label="Giáo dục đại cương" />
-          <Tab label="Cơ sở ngành" />
-          <Tab label="Bắt buộc ngành" />
-          <Tab label="Tự chọn ngành" />
-          <Tab label="Tự chọn tự do" />
-          <Tab label="Tốt nghiệp" />
+          <Tab
+            label={`Giáo dục đại cương (${studentOverviewResult.daiCuong}/56)`}
+          />
+          <Tab label={`Cơ sở ngành (${studentOverviewResult.coSoNganh}/38)`} />
+          <Tab
+            label={`Bắt buộc ngành (${studentOverviewResult.batBuocChuyenNganh}/16)`}
+          />
+          <Tab label={`Tự chọn ngành (${studentOverviewResult.daiCuong}/8)`} />
+          <Tab label={`Tự chọn tự do (${studentOverviewResult.tuChonTuDo})`} />
+          <Tab label={`Tốt nghiệp (${studentOverviewResult.totNghiep}/10)`} />
         </Tabs>
       </AppBar>
       <AsyncDataRenderer
@@ -101,38 +112,38 @@ function AcademicResult() {
         <TabPanel index={0} value={selectedTab}>
           <AcademicTable
             header="Giáo dục đại cương"
-            description={`Tích lũy: ${tichLuy}/56`}
+            description={`Tích lũy: ${studentOverviewResult.daiCuong}/56`}
             data={data}
           />
         </TabPanel>
         <TabPanel index={1} value={selectedTab}>
           <AcademicTable
             header="Kiến thức cơ sở ngành"
-            description={`Tích lũy: ${tichLuy}/38`}
+            description={`Tích lũy: ${studentOverviewResult.coSoNganh}/38`}
             data={data}
           />
         </TabPanel>
         <TabPanel index={2} value={selectedTab}>
           <AcademicTable
             header="Kiến thức bắt buộc ngành"
-            description={`Tích lũy: ${tichLuy}/16`}
+            description={`Tích lũy: ${studentOverviewResult.batBuocChuyenNganh}/16`}
             data={data}
           />
         </TabPanel>
         <TabPanel index={3} value={selectedTab}>
           <AcademicTable
             header="Kiến thức tự chọn ngành"
-            description={`Tích lũy: ${tichLuy}/8`}
+            description={`Tích lũy: ${studentOverviewResult.tuChonChuyenNganh}/8`}
             data={data}
           />
         </TabPanel>
         <TabPanel index={4} value={selectedTab}>
           <AcademicTable header="Kiến thức tự chọn tự do" data={data} />
         </TabPanel>
-        <TabPanel index={5} value={selectedTab}>
+        <TabPanel index={5} value={studentOverviewResult.tuChonTuDo}>
           <AcademicTable
             header="Kiến thức tốt nghiệp"
-            description={`Tích lũy: ${tichLuy}/10`}
+            description={`Tích lũy: ${studentOverviewResult.totNghiep}/10`}
             data={data}
           />
         </TabPanel>

@@ -7,7 +7,10 @@ import {
   StyledStickyBox,
   StyledTitle,
 } from '../../../components/styles';
-import { useStudentOverviewResultQuery } from '../../../generated-types';
+import {
+  StudentOverviewResult,
+  useStudentOverviewResultQuery,
+} from '../../../generated-types';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -31,6 +34,18 @@ function AcademicOverview() {
       studentId: id,
     },
   });
+
+  const studentOverviewResult = useMemo(() => {
+    const data = studentOverviewResultData?.studentOverviewResult;
+    return {
+      daiCuong: data?.daiCuong || 0,
+      coSoNganh: data?.coSoNganh || 0,
+      batBuocChuyenNganh: data?.batBuocChuyenNganh || 0,
+      tuChonChuyenNganh: data?.tuChonChuyenNganh || 0,
+      tuChonTuDo: data?.tuChonTuDo || 0,
+      totNghiep: data?.totNghiep || 0,
+    } as Omit<StudentOverviewResult, 'tenCN | dtb'>;
+  }, [studentOverviewResultData?.studentOverviewResult]);
 
   const mappedData = useMemo(() => {
     const data = studentOverviewResultData?.studentOverviewResult;
@@ -76,7 +91,7 @@ function AcademicOverview() {
       </StyledStickyBox>
       <Box mt={3}>
         <AcademicInfo infoList={mappedData} />
-        <AcademicResult />
+        <AcademicResult studentOverviewResult={studentOverviewResult} />
       </Box>
     </>
   );

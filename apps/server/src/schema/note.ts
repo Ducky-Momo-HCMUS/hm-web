@@ -45,7 +45,7 @@ const noteTypeDefs = gql`
   }
 
   type NoteImage {
-    stt: Int!
+    id: String!
     url: String!
   }
 
@@ -63,7 +63,7 @@ const noteTypeDefs = gql`
     maTag: [Int!]!
     noiDung: String!
     maSV: String
-    url: [String!]!
+    images: [UploadFile]
   }
 
   input NoteEditInput {
