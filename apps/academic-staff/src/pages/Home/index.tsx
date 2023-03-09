@@ -24,6 +24,11 @@ import {
 } from './styles';
 import HomeroomTeacherList from './HomeroomTeacherList';
 import StudentList from './StudentList';
+import MajorCourseList from './MajorCourseList';
+import CourseRegisterList from './CourseRegisterList';
+import CourseScoreList from './CourseScoreList';
+import TrainingPointList from './TrainingPointList';
+import PostponeAbsentList from './PostponeAbsentList';
 
 function Home() {
   const [selected, setSelected] = useState(0);
@@ -59,6 +64,41 @@ function Home() {
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 2}
+              onClick={() => setSelected(2)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Môn học và chuyên ngành" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 3}
+              onClick={() => setSelected(3)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Đăng ký học phần" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 4}
+              onClick={() => setSelected(4)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Điểm học phần" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 5}
+              onClick={() => setSelected(5)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Điểm rèn luyện" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 6}
+              onClick={() => setSelected(6)}
+            >
+              <ListAltIcon color="action" />
+              <StyledListItemText primary="Hoãn/Vắng thi" />
+            </StyledListItemButton>
+            <StyledListItemButton
+              active={selected === 7}
               onClick={handleClickOpen}
             >
               <PublishIcon color="action" />
@@ -69,7 +109,12 @@ function Home() {
         <StyledContent component="main">
           {selected === 0 && <HomeroomTeacherList />}
           {selected === 1 && <StudentList />}
-          {selected === 2 && <ImportFile />}
+          {selected === 2 && <MajorCourseList />}
+          {selected === 3 && <CourseRegisterList />}
+          {selected === 4 && <CourseScoreList />}
+          {selected === 5 && <TrainingPointList />}
+          {selected === 6 && <PostponeAbsentList />}
+          {selected === 7 && <ImportFile />}
         </StyledContent>
         <Dialog
           open={open}
