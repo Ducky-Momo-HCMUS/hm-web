@@ -4,7 +4,7 @@
 - Copy `.env.template` file and rename to `.env`
 - Run `pnpm watch`
 
-4. To start the web app
+3. To start the web app
 
 - For teacher: access `apps/frontend`, copy `.env.template` file, rename it to `.env` then run `pnpm start`
 - For academic staff: access `apps/academic-staff`, copy `.env.template` file, rename it to `.env` then run `pnpm start`
