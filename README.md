@@ -1,12 +1,11 @@
-## Push to ECR
+1. Run `pnpm install` at root folder to install all dependencies
+2. Access `apps/server`
 
-```console
-# Connect docker with ECR
-aws ecr get-login-password --region <your-ecr-region> | docker login -u AWS --password-stdin <your-ecr-domain>
+- Copy `.env.template` file and rename to `.env`
+- Run `pnpm watch`
 
-# Optional
-docker compose build
+4. To start the web app
 
-# Push image to ECR
-docker compose push
-```
+- For teacher: access `apps/frontend`, copy `.env.template` file, rename it to `.env` then run `pnpm start`
+- For academic staff: access `apps/academic-staff`, copy `.env.template` file, rename it to `.env` then run `pnpm start`
+- For admin: access `apps/admin`, copy `.env.template` file, rename it to `.env` then run `pnpm start`
