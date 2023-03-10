@@ -11,6 +11,12 @@ import {
 import PublishIcon from '@mui/icons-material/Publish';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import WarningIcon from '@mui/icons-material/Warning';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 import Header from '../../components/Header';
 
@@ -52,14 +58,14 @@ function Home() {
               active={selected === 0}
               onClick={() => setSelected(0)}
             >
-              <ListAltIcon color="action" />
+              <CoPresentIcon color="action" />
               <StyledListItemText primary="Danh sách GVCN" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 1}
               onClick={() => setSelected(1)}
             >
-              <ListAltIcon color="action" />
+              <GroupsIcon color="action" />
               <StyledListItemText primary="Danh sách sinh viên" />
             </StyledListItemButton>
             <StyledListItemButton
@@ -73,28 +79,28 @@ function Home() {
               active={selected === 3}
               onClick={() => setSelected(3)}
             >
-              <ListAltIcon color="action" />
+              <CheckBoxIcon color="action" />
               <StyledListItemText primary="Đăng ký học phần" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 4}
               onClick={() => setSelected(4)}
             >
-              <ListAltIcon color="action" />
+              <TextIncreaseIcon color="action" />
               <StyledListItemText primary="Điểm học phần" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 5}
               onClick={() => setSelected(5)}
             >
-              <ListAltIcon color="action" />
+              <EventAvailableIcon color="action" />
               <StyledListItemText primary="Điểm rèn luyện" />
             </StyledListItemButton>
             <StyledListItemButton
               active={selected === 6}
               onClick={() => setSelected(6)}
             >
-              <ListAltIcon color="action" />
+              <PersonOffIcon color="action" />
               <StyledListItemText primary="Hoãn/Vắng thi" />
             </StyledListItemButton>
             <StyledListItemButton
