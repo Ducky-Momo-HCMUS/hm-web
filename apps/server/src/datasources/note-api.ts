@@ -48,6 +48,8 @@ class NoteAPI extends BaseDataSource {
     tenSV,
     start,
     end,
+    maSH,
+    maTag,
     page,
     size,
   }: QueryNoteSearchArgs) {
@@ -59,6 +61,8 @@ class NoteAPI extends BaseDataSource {
         tenSV && { tenSV },
         start && { start },
         end && { end },
+        maSH && { maSH },
+        maTag && { maTag },
         { page },
         { size }
       );

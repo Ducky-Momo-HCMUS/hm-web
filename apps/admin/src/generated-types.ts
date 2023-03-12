@@ -666,7 +666,9 @@ export type QueryNoteDetailArgs = {
 
 export type QueryNoteSearchArgs = {
   end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
   maSV?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
   start?: InputMaybe<Scalars['Date']>;
@@ -1677,27 +1679,14 @@ export type NoteDetailQuery = {
   };
 };
 
-export type NoteListQueryVariables = Exact<{ [key: string]: never }>;
-
-export type NoteListQuery = {
-  __typename?: 'Query';
-  noteList: Array<{
-    __typename?: 'NoteListItem';
-    maGC: number;
-    tieuDe: string;
-    noiDung: string;
-    thoiGianTao: string;
-    thoiGianSua?: string | null | undefined;
-    maSV?: string | null | undefined;
-  }>;
-};
-
 export type NoteSearchQueryVariables = Exact<{
   tieuDe?: InputMaybe<Scalars['String']>;
   maSV?: InputMaybe<Scalars['String']>;
   tenSV?: InputMaybe<Scalars['String']>;
   start?: InputMaybe<Scalars['Date']>;
   end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
 }>;
@@ -4437,63 +4426,6 @@ export type NoteDetailQueryResult = Apollo.QueryResult<
   NoteDetailQuery,
   NoteDetailQueryVariables
 >;
-export const NoteListDocument = gql`
-  query NoteList {
-    noteList {
-      maGC
-      tieuDe
-      noiDung
-      thoiGianTao
-      thoiGianSua
-      maSV
-    }
-  }
-`;
-
-/**
- * __useNoteListQuery__
- *
- * To run a query within a React component, call `useNoteListQuery` and pass it any options that fit your needs.
- * When your component renders, `useNoteListQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNoteListQuery({
- *   variables: {
- *   },
- * });
- */
-export function useNoteListQuery(
-  baseOptions?: Apollo.QueryHookOptions<NoteListQuery, NoteListQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<NoteListQuery, NoteListQueryVariables>(
-    NoteListDocument,
-    options
-  );
-}
-export function useNoteListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    NoteListQuery,
-    NoteListQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<NoteListQuery, NoteListQueryVariables>(
-    NoteListDocument,
-    options
-  );
-}
-export type NoteListQueryHookResult = ReturnType<typeof useNoteListQuery>;
-export type NoteListLazyQueryHookResult = ReturnType<
-  typeof useNoteListLazyQuery
->;
-export type NoteListQueryResult = Apollo.QueryResult<
-  NoteListQuery,
-  NoteListQueryVariables
->;
 export const NoteSearchDocument = gql`
   query NoteSearch(
     $tieuDe: String
@@ -4501,6 +4433,8 @@ export const NoteSearchDocument = gql`
     $tenSV: String
     $start: Date
     $end: Date
+    $maSH: String
+    $maTag: Int
     $page: Int!
     $size: Int!
   ) {
@@ -4510,6 +4444,8 @@ export const NoteSearchDocument = gql`
       tenSV: $tenSV
       start: $start
       end: $end
+      maSH: $maSH
+      maTag: $maTag
       page: $page
       size: $size
     ) {
@@ -4544,6 +4480,8 @@ export const NoteSearchDocument = gql`
  *      tenSV: // value for 'tenSV'
  *      start: // value for 'start'
  *      end: // value for 'end'
+ *      maSH: // value for 'maSH'
+ *      maTag: // value for 'maTag'
  *      page: // value for 'page'
  *      size: // value for 'size'
  *   },

@@ -671,7 +671,9 @@ export type QueryNoteDetailArgs = {
 
 export type QueryNoteSearchArgs = {
   end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
   maSV?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
   start?: InputMaybe<Scalars['Date']>;
