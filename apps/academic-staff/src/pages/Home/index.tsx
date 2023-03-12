@@ -150,7 +150,7 @@ function Home() {
               color="primary"
               onClick={() => {
                 setOpen(false);
-                setSelected(2);
+                setSelected(7);
               }}
               autoFocus
             >

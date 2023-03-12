@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import { Box, Stack } from '@mui/material';
 
 import { GenericObject } from '../../types';
 
@@ -31,7 +31,11 @@ function AsyncDataRenderer({
     return <StyledInfoAlert severity="info">Không có dữ liệu</StyledInfoAlert>;
   }
 
-  return <>{children}</>;
+  return (
+    <Stack direction="row" spacing={3}>
+      {children}
+    </Stack>
+  );
 }
 
 AsyncDataRenderer.defaultProps = {
