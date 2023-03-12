@@ -12,17 +12,29 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { useState, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
+import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
-import { useUploadDocumentMutation } from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import {
+  FileType,
+  useImportHistoryLazyQuery,
+  useUploadDocumentMutation,
+} from '../../../generated-types';
 
 import { StyledFormControl } from './styles';
 import {
@@ -163,6 +175,32 @@ function ImportFile() {
     ]
   );
 
+  const [
+    getImportHistory,
+    { loading: importHistoryLoading, data: importHistoryData },
+  ] = useImportHistoryLazyQuery();
+
+  const { thoiGian, tenGV } = useMemo(() => {
+    return {
+      thoiGian: importHistoryData?.importHistory.thoiGian,
+      tenGV: importHistoryData?.importHistory.taiKhoan.giaoVien.tenGV,
+    };
+  }, [
+    importHistoryData?.importHistory.taiKhoan.giaoVien.tenGV,
+    importHistoryData?.importHistory.thoiGian,
+  ]);
+
+  useEffect(() => {
+    const fileType =
+      TYPES.find((item) => item.label === values.type)?.value ||
+      FileType.DanhSachGvcn;
+    getImportHistory({
+      variables: {
+        fileType,
+      },
+    });
+  }, [getImportHistory, values.type]);
+
   return (
     <>
       <ToastContainer />
@@ -257,10 +295,18 @@ function ImportFile() {
       <Box component="form">
         {values.type.length > 0 && (
           <>
-            <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
-              Cập nhật lần cuối bởi <b>Hoàng Thanh Tú</b> vào 12/12/2021
-              00:00:00 am
-            </Typography>
+            {importHistoryData && (
+              <AsyncDataRenderer
+                loading={importHistoryLoading}
+                data={importHistoryData}
+              >
+                <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
+                  Cập nhật lần cuối bởi <b>{tenGV}</b> vào{' '}
+                  {thoiGian &&
+                    format(new Date(thoiGian), 'dd/MM/yyyy HH:mm:ss')}
+                </Typography>
+              </AsyncDataRenderer>
+            )}
             <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
               Cập nhật{' '}
               {TYPES.find(
