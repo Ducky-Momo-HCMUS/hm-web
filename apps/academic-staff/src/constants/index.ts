@@ -5,3 +5,5 @@ export const TRAINING_POINT_PAGE_SIZE = 10;
 export const COURSE_PAGE_SIZE = 10;
 export const MAJOR_PAGE_SIZE = 10;
 export const MAJOR_RESULT_PAGE_SIZE = 10;
+export const ENROLLED_PAGE_SIZE = 10;
+export const NOT_ENROLLED_PAGE_SIZE = 10;

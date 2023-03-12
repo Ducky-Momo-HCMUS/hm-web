@@ -1,17 +1,28 @@
 import React, { useCallback, useState } from 'react';
 import {
+  AppBar,
   Box,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
+  Tabs,
+  useTheme,
 } from '@mui/material';
 
+import {
+  a11yProps,
+  StyledTab,
+  TabPanel,
+} from '../../../components/TabsContainer';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { MOCK_SCHOOL_YEARS } from '../mock/year';
+
+import EnrolledList from './EnrolledList';
+import NotEnrolledList from './NotEnrolledList';
 
 interface State {
   year: string;
@@ -19,6 +30,12 @@ interface State {
 }
 
 function CourseRegisterList() {
+  const theme = useTheme();
+  const [tabValue, setTabValue] = React.useState(0);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
   const [values, setValues] = useState<State>({
     year: '',
     semester: '',
@@ -33,7 +50,7 @@ function CourseRegisterList() {
 
   return (
     <Box>
-      <StyledTitle>Điểm rèn luyện</StyledTitle>
+      <StyledTitle>Tình hình đăng ký học phần</StyledTitle>
       <AsyncDataRenderer loading={false} data={[{}]}>
         <StyledFormControl>
           <InputLabel id="year-select-label">Năm học</InputLabel>
@@ -68,7 +85,24 @@ function CourseRegisterList() {
       </AsyncDataRenderer>
       <AsyncDataRenderer loading={false} data={[{}]}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-          something
+          <AppBar position="static">
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              indicatorColor="secondary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+            >
+              <StyledTab label="Danh sách ĐKHP" {...a11yProps(0)} />
+              <StyledTab label="Danh sách không ĐKHP" {...a11yProps(1)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={tabValue} index={0} dir={theme.direction}>
+            <EnrolledList />
+          </TabPanel>
+          <TabPanel value={tabValue} index={1} dir={theme.direction}>
+            <NotEnrolledList />
+          </TabPanel>
         </Paper>
       </AsyncDataRenderer>
     </Box>
