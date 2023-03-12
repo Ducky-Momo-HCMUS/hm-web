@@ -110,6 +110,21 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseList = {
+  __typename?: 'CourseList';
+  data: Array<CourseListItem>;
+  total: Scalars['Int'];
+};
+
+export type CourseListItem = {
+  __typename?: 'CourseListItem';
+  loaiMonHoc: Scalars['String'];
+  maCN?: Maybe<Scalars['String']>;
+  maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
+  tenMH: Scalars['String'];
+};
+
 export type Document = {
   __typename?: 'Document';
   id: Scalars['ID'];
@@ -601,6 +616,7 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   allTeacherList: AllTeacherList;
+  courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
@@ -639,6 +655,11 @@ export type QueryAccountListArgs = {
 };
 
 export type QueryAllTeacherListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+};
+
+export type QueryCourseListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
 };
@@ -1034,6 +1055,27 @@ export type UploadDocumentMutationVariables = Exact<{
 export type UploadDocumentMutation = {
   __typename?: 'Mutation';
   uploadDocument: { __typename?: 'UploadDocumentResponse'; status: number };
+};
+
+export type CourseListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type CourseListQuery = {
+  __typename?: 'Query';
+  courseList: {
+    __typename?: 'CourseList';
+    total: number;
+    data: Array<{
+      __typename?: 'CourseListItem';
+      maMH: string;
+      tenMH: string;
+      soTinChi: number;
+      maCN?: string | null | undefined;
+      loaiMonHoc: string;
+    }>;
+  };
 };
 
 export type ImportHistoryQueryVariables = Exact<{
@@ -2032,6 +2074,70 @@ export type UploadDocumentMutationResult =
 export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
+>;
+export const CourseListDocument = gql`
+  query CourseList($page: Int!, $size: Int!) {
+    courseList(page: $page, size: $size) {
+      total
+      data {
+        maMH
+        tenMH
+        soTinChi
+        maCN
+        loaiMonHoc
+      }
+    }
+  }
+`;
+
+/**
+ * __useCourseListQuery__
+ *
+ * To run a query within a React component, call `useCourseListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCourseListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCourseListQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useCourseListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CourseListQuery,
+    CourseListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CourseListQuery, CourseListQueryVariables>(
+    CourseListDocument,
+    options
+  );
+}
+export function useCourseListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CourseListQuery,
+    CourseListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CourseListQuery, CourseListQueryVariables>(
+    CourseListDocument,
+    options
+  );
+}
+export type CourseListQueryHookResult = ReturnType<typeof useCourseListQuery>;
+export type CourseListLazyQueryHookResult = ReturnType<
+  typeof useCourseListLazyQuery
+>;
+export type CourseListQueryResult = Apollo.QueryResult<
+  CourseListQuery,
+  CourseListQueryVariables
 >;
 export const ImportHistoryDocument = gql`
   query ImportHistory($fileType: FileType!) {

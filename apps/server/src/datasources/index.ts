@@ -1,5 +1,6 @@
 import AccountAPI from './account-api';
 import AuthAPI from './auth-api';
+import CourseAPI from './course-api';
 import FileAPI from './file-api';
 import HomeroomAPI from './homeroom-api';
 import NoteAPI from './note-api';
@@ -16,6 +17,7 @@ export interface DataSources {
   accountAPI: AccountAPI;
   fileAPI: FileAPI;
   teacherAPI: TeacherAPI;
+  courseAPI: CourseAPI;
 }
 
 function dataSources() {
@@ -28,6 +30,7 @@ function dataSources() {
     accountAPI: new AccountAPI(),
     fileAPI: new FileAPI(),
     teacherAPI: new TeacherAPI(),
+    courseAPI: new CourseAPI(),
   };
 }
 

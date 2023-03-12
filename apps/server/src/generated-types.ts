@@ -115,6 +115,21 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseList = {
+  __typename?: 'CourseList';
+  data: Array<CourseListItem>;
+  total: Scalars['Int'];
+};
+
+export type CourseListItem = {
+  __typename?: 'CourseListItem';
+  loaiMonHoc: Scalars['String'];
+  maCN?: Maybe<Scalars['String']>;
+  maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
+  tenMH: Scalars['String'];
+};
+
 export type Document = {
   __typename?: 'Document';
   id: Scalars['ID'];
@@ -606,6 +621,7 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   allTeacherList: AllTeacherList;
+  courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
   homeroomDetail: HomeroomDetail;
@@ -644,6 +660,11 @@ export type QueryAccountListArgs = {
 };
 
 export type QueryAllTeacherListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+};
+
+export type QueryCourseListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
 };
@@ -1153,6 +1174,8 @@ export type ResolversTypes = {
   AuthorInfo: ResolverTypeWrapper<AuthorInfo>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
+  CourseList: ResolverTypeWrapper<CourseList>;
+  CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
   FileType: FileType;
@@ -1268,6 +1291,8 @@ export type ResolversParentTypes = {
   AuthorInfo: AuthorInfo;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
+  CourseList: CourseList;
+  CourseListItem: CourseListItem;
   Date: Scalars['Date'];
   Document: Document;
   Float: Scalars['Float'];
@@ -1469,6 +1494,31 @@ export type ContactResolvers<
 > = {
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CourseListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CourseList'] = ResolversParentTypes['CourseList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['CourseListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CourseListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CourseListItem'] = ResolversParentTypes['CourseListItem']
+> = {
+  loaiMonHoc?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2204,6 +2254,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryAllTeacherListArgs, 'page' | 'size'>
   >;
+  courseList?: Resolver<
+    ResolversTypes['CourseList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryCourseListArgs, 'page' | 'size'>
+  >;
   documents?: Resolver<
     Array<ResolversTypes['Document']>,
     ParentType,
@@ -2711,6 +2767,8 @@ export type Resolvers<ContextType = any> = {
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   AuthorInfo?: AuthorInfoResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
+  CourseList?: CourseListResolvers<ContextType>;
+  CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
