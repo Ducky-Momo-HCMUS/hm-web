@@ -669,6 +669,8 @@ export type Query = {
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
+  studentEnrolledList: StudentEnrolledList;
+  studentNotEnrolledList: StudentNotEnrolledList;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
@@ -801,6 +803,18 @@ export type QueryStudentDetailSubjectsResultArgs = {
   subject: Scalars['String'];
 };
 
+export type QueryStudentEnrolledListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
+export type QueryStudentNotEnrolledListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
 export type QueryStudentNoteListArgs = {
   studentId: Scalars['String'];
 };
@@ -914,6 +928,33 @@ export type StudentEditParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
+};
+
+export type StudentEnrolledList = {
+  __typename?: 'StudentEnrolledList';
+  data: Array<StudentEnrolledListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentEnrolledListItem = {
+  __typename?: 'StudentEnrolledListItem';
+  maMH: Scalars['String'];
+  maSV: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
+export type StudentNotEnrolledList = {
+  __typename?: 'StudentNotEnrolledList';
+  data: Array<StudentNotEnrolledListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentNotEnrolledListItem = {
+  __typename?: 'StudentNotEnrolledListItem';
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
 };
 
 export type StudentNote = {
@@ -1287,6 +1328,10 @@ export type ResolversTypes = {
   StudentDetailSubjectsResult: ResolverTypeWrapper<StudentDetailSubjectsResult>;
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
+  StudentEnrolledList: ResolverTypeWrapper<StudentEnrolledList>;
+  StudentEnrolledListItem: ResolverTypeWrapper<StudentEnrolledListItem>;
+  StudentNotEnrolledList: ResolverTypeWrapper<StudentNotEnrolledList>;
+  StudentNotEnrolledListItem: ResolverTypeWrapper<StudentNotEnrolledListItem>;
   StudentNote: ResolverTypeWrapper<StudentNote>;
   StudentOverviewResult: ResolverTypeWrapper<StudentOverviewResult>;
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
@@ -1406,6 +1451,10 @@ export type ResolversParentTypes = {
   StudentDetailSubjectsResult: StudentDetailSubjectsResult;
   StudentEditContactInput: StudentEditContactInput;
   StudentEditParentInfoInput: StudentEditParentInfoInput;
+  StudentEnrolledList: StudentEnrolledList;
+  StudentEnrolledListItem: StudentEnrolledListItem;
+  StudentNotEnrolledList: StudentNotEnrolledList;
+  StudentNotEnrolledListItem: StudentNotEnrolledListItem;
   StudentNote: StudentNote;
   StudentOverviewResult: StudentOverviewResult;
   StudentParentContact: StudentParentContact;
@@ -2484,6 +2533,18 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentDetailSubjectsResultArgs, 'studentId' | 'subject'>
   >;
+  studentEnrolledList?: Resolver<
+    ResolversTypes['StudentEnrolledList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentEnrolledListArgs, 'page' | 'size' | 'termId'>
+  >;
+  studentNotEnrolledList?: Resolver<
+    ResolversTypes['StudentNotEnrolledList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentNotEnrolledListArgs, 'page' | 'size' | 'termId'>
+  >;
   studentNoteList?: Resolver<
     Array<ResolversTypes['StudentNote']>,
     ParentType,
@@ -2612,6 +2673,53 @@ export type StudentDetailSubjectsResultResolvers<
     ContextType
   >;
   tichLuy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentEnrolledListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentEnrolledList'] = ResolversParentTypes['StudentEnrolledList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentEnrolledListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentEnrolledListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentEnrolledListItem'] = ResolversParentTypes['StudentEnrolledListItem']
+> = {
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentNotEnrolledListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentNotEnrolledList'] = ResolversParentTypes['StudentNotEnrolledList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentNotEnrolledListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentNotEnrolledListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentNotEnrolledListItem'] = ResolversParentTypes['StudentNotEnrolledListItem']
+> = {
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2925,6 +3033,10 @@ export type Resolvers<ContextType = any> = {
   StudentDeleteParentInfoResponse?: StudentDeleteParentInfoResponseResolvers<ContextType>;
   StudentDetail?: StudentDetailResolvers<ContextType>;
   StudentDetailSubjectsResult?: StudentDetailSubjectsResultResolvers<ContextType>;
+  StudentEnrolledList?: StudentEnrolledListResolvers<ContextType>;
+  StudentEnrolledListItem?: StudentEnrolledListItemResolvers<ContextType>;
+  StudentNotEnrolledList?: StudentNotEnrolledListResolvers<ContextType>;
+  StudentNotEnrolledListItem?: StudentNotEnrolledListItemResolvers<ContextType>;
   StudentNote?: StudentNoteResolvers<ContextType>;
   StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;

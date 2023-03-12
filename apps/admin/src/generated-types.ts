@@ -664,6 +664,8 @@ export type Query = {
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
+  studentEnrolledList: StudentEnrolledList;
+  studentNotEnrolledList: StudentNotEnrolledList;
   studentNoteList: Array<StudentNote>;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
@@ -796,6 +798,18 @@ export type QueryStudentDetailSubjectsResultArgs = {
   subject: Scalars['String'];
 };
 
+export type QueryStudentEnrolledListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
+export type QueryStudentNotEnrolledListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
 export type QueryStudentNoteListArgs = {
   studentId: Scalars['String'];
 };
@@ -909,6 +923,33 @@ export type StudentEditParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
+};
+
+export type StudentEnrolledList = {
+  __typename?: 'StudentEnrolledList';
+  data: Array<StudentEnrolledListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentEnrolledListItem = {
+  __typename?: 'StudentEnrolledListItem';
+  maMH: Scalars['String'];
+  maSV: Scalars['String'];
+  tenLopHP: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
+export type StudentNotEnrolledList = {
+  __typename?: 'StudentNotEnrolledList';
+  data: Array<StudentNotEnrolledListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentNotEnrolledListItem = {
+  __typename?: 'StudentNotEnrolledListItem';
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
 };
 
 export type StudentNote = {
@@ -1179,6 +1220,47 @@ export type HomeroomAllListQuery = {
   homeroomAllList: {
     __typename?: 'HomeroomAllList';
     danhSachLopSH: Array<string>;
+  };
+};
+
+export type StudentEnrolledListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentEnrolledListQuery = {
+  __typename?: 'Query';
+  studentEnrolledList: {
+    __typename?: 'StudentEnrolledList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentEnrolledListItem';
+      maSV: string;
+      tenSV: string;
+      maMH: string;
+      tenMH: string;
+      tenLopHP: string;
+    }>;
+  };
+};
+
+export type StudentNotEnrolledListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentNotEnrolledListQuery = {
+  __typename?: 'Query';
+  studentNotEnrolledList: {
+    __typename?: 'StudentNotEnrolledList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentNotEnrolledListItem';
+      maSV: string;
+      tenSV: string;
+    }>;
   };
 };
 
@@ -2467,6 +2549,137 @@ export type HomeroomAllListLazyQueryHookResult = ReturnType<
 export type HomeroomAllListQueryResult = Apollo.QueryResult<
   HomeroomAllListQuery,
   HomeroomAllListQueryVariables
+>;
+export const StudentEnrolledListDocument = gql`
+  query StudentEnrolledList($termId: Int!, $page: Int!, $size: Int!) {
+    studentEnrolledList(termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        maMH
+        tenMH
+        tenLopHP
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentEnrolledListQuery__
+ *
+ * To run a query within a React component, call `useStudentEnrolledListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentEnrolledListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentEnrolledListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentEnrolledListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentEnrolledListQuery,
+    StudentEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentEnrolledListQuery,
+    StudentEnrolledListQueryVariables
+  >(StudentEnrolledListDocument, options);
+}
+export function useStudentEnrolledListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentEnrolledListQuery,
+    StudentEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentEnrolledListQuery,
+    StudentEnrolledListQueryVariables
+  >(StudentEnrolledListDocument, options);
+}
+export type StudentEnrolledListQueryHookResult = ReturnType<
+  typeof useStudentEnrolledListQuery
+>;
+export type StudentEnrolledListLazyQueryHookResult = ReturnType<
+  typeof useStudentEnrolledListLazyQuery
+>;
+export type StudentEnrolledListQueryResult = Apollo.QueryResult<
+  StudentEnrolledListQuery,
+  StudentEnrolledListQueryVariables
+>;
+export const StudentNotEnrolledListDocument = gql`
+  query StudentNotEnrolledList($termId: Int!, $page: Int!, $size: Int!) {
+    studentNotEnrolledList(termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentNotEnrolledListQuery__
+ *
+ * To run a query within a React component, call `useStudentNotEnrolledListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentNotEnrolledListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentNotEnrolledListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentNotEnrolledListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentNotEnrolledListQuery,
+    StudentNotEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentNotEnrolledListQuery,
+    StudentNotEnrolledListQueryVariables
+  >(StudentNotEnrolledListDocument, options);
+}
+export function useStudentNotEnrolledListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentNotEnrolledListQuery,
+    StudentNotEnrolledListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentNotEnrolledListQuery,
+    StudentNotEnrolledListQueryVariables
+  >(StudentNotEnrolledListDocument, options);
+}
+export type StudentNotEnrolledListQueryHookResult = ReturnType<
+  typeof useStudentNotEnrolledListQuery
+>;
+export type StudentNotEnrolledListLazyQueryHookResult = ReturnType<
+  typeof useStudentNotEnrolledListLazyQuery
+>;
+export type StudentNotEnrolledListQueryResult = Apollo.QueryResult<
+  StudentNotEnrolledListQuery,
+  StudentNotEnrolledListQueryVariables
 >;
 export const TeacherListDocument = gql`
   query TeacherList($year: Int!, $page: Int!, $size: Int!) {

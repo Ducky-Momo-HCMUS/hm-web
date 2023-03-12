@@ -4,6 +4,14 @@ import { ResolverContext } from './types';
 
 export const studentResolver: Resolvers<ResolverContext> = {
   Query: {
+    studentEnrolledList: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentEnrolledList(args);
+      return res;
+    },
+    studentNotEnrolledList: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentNotEnrolledList(args);
+      return res;
+    },
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentSubjectsByTerm(args);
       return res.data;
