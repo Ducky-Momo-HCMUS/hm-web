@@ -71,10 +71,10 @@ function CourseScoreList() {
       <StyledTitle>Điểm học phần</StyledTitle>
       <AsyncDataRenderer loading={false} data={[{}]}>
         <StyledFormControl>
-          <InputLabel id="class-select-label">Năm học</InputLabel>
+          <InputLabel id="year-select-label">Năm học</InputLabel>
           <Select
-            labelId="class-select-label"
-            id="class-select"
+            labelId="year-select-label"
+            id="year-select"
             value={values.year || ''}
             label="Năm học"
             onChange={handleChange('year')}
@@ -87,10 +87,10 @@ function CourseScoreList() {
           </Select>
         </StyledFormControl>
         <StyledFormControl>
-          <InputLabel id="class-select-label">Học kỳ</InputLabel>
+          <InputLabel id="semester-select-label">Học kỳ</InputLabel>
           <Select
-            labelId="class-select-label"
-            id="class-select"
+            labelId="semester-select-label"
+            id="semester-select"
             value={values.semester || ''}
             label="Học kỳ"
             onChange={handleChange('semester')}
@@ -102,10 +102,10 @@ function CourseScoreList() {
         </StyledFormControl>
         {values.year && values.semester && (
           <StyledFormControl>
-            <InputLabel id="class-select-label">Môn học</InputLabel>
+            <InputLabel id="course-select-label">Môn học</InputLabel>
             <Select
-              labelId="class-select-label"
-              id="class-select"
+              labelId="course-select-label"
+              id="course-select"
               value={values.courseId || ''}
               label="Môn học"
               onChange={handleChange('courseId')}
