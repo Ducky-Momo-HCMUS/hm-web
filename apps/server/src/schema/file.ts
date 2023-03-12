@@ -6,6 +6,8 @@ const fileTypeDefs = gql`
   extend type Query {
     documents: [Document!]!
     importHistory(fileType: FileType!): ImportHistory!
+    # Danh sách năm học
+    termList: [TermListItem!]!
   }
 
   extend type Mutation {
@@ -13,6 +15,12 @@ const fileTypeDefs = gql`
       input: UploadDocumentInput!
       file: UploadFile!
     ): UploadDocumentResponse!
+  }
+
+  type TermListItem {
+    maHK: Int!
+    namHocBD: Int!
+    hocKy: Int!
   }
 
   enum FileType {

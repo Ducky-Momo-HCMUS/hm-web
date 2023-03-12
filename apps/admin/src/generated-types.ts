@@ -677,6 +677,7 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
+  termList: Array<TermListItem>;
   yearList: Array<YearListItem>;
 };
 
@@ -703,8 +704,8 @@ export type QueryClassroomScoreListArgs = {
 };
 
 export type QueryCourseListArgs = {
-  page: Scalars['Int'];
-  size: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -1171,6 +1172,13 @@ export type TeacherStudentList = {
   total: Scalars['Int'];
 };
 
+export type TermListItem = {
+  __typename?: 'TermListItem';
+  hocKy: Scalars['Int'];
+  maHK: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+};
+
 export type UploadDocumentInput = {
   hocKy?: InputMaybe<Scalars['Int']>;
   maMH?: InputMaybe<Scalars['String']>;
@@ -1240,8 +1248,8 @@ export type ClassroomScoreListQuery = {
 };
 
 export type CourseListQueryVariables = Exact<{
-  page: Scalars['Int'];
-  size: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type CourseListQuery = {
@@ -1277,6 +1285,18 @@ export type ImportHistoryQuery = {
       | null
       | undefined;
   };
+};
+
+export type TermListQueryVariables = Exact<{ [key: string]: never }>;
+
+export type TermListQuery = {
+  __typename?: 'Query';
+  termList: Array<{
+    __typename?: 'TermListItem';
+    maHK: number;
+    namHocBD: number;
+    hocKy: number;
+  }>;
 };
 
 export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
@@ -2493,7 +2513,7 @@ export type ClassroomScoreListQueryResult = Apollo.QueryResult<
   ClassroomScoreListQueryVariables
 >;
 export const CourseListDocument = gql`
-  query CourseList($page: Int!, $size: Int!) {
+  query CourseList($page: Int, $size: Int) {
     courseList(page: $page, size: $size) {
       total
       data {
@@ -2525,7 +2545,7 @@ export const CourseListDocument = gql`
  * });
  */
 export function useCourseListQuery(
-  baseOptions: Apollo.QueryHookOptions<
+  baseOptions?: Apollo.QueryHookOptions<
     CourseListQuery,
     CourseListQueryVariables
   >
@@ -2618,6 +2638,60 @@ export type ImportHistoryLazyQueryHookResult = ReturnType<
 export type ImportHistoryQueryResult = Apollo.QueryResult<
   ImportHistoryQuery,
   ImportHistoryQueryVariables
+>;
+export const TermListDocument = gql`
+  query TermList {
+    termList {
+      maHK
+      namHocBD
+      hocKy
+    }
+  }
+`;
+
+/**
+ * __useTermListQuery__
+ *
+ * To run a query within a React component, call `useTermListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTermListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTermListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTermListQuery(
+  baseOptions?: Apollo.QueryHookOptions<TermListQuery, TermListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TermListQuery, TermListQueryVariables>(
+    TermListDocument,
+    options
+  );
+}
+export function useTermListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TermListQuery,
+    TermListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TermListQuery, TermListQueryVariables>(
+    TermListDocument,
+    options
+  );
+}
+export type TermListQueryHookResult = ReturnType<typeof useTermListQuery>;
+export type TermListLazyQueryHookResult = ReturnType<
+  typeof useTermListLazyQuery
+>;
+export type TermListQueryResult = Apollo.QueryResult<
+  TermListQuery,
+  TermListQueryVariables
 >;
 export const HomeroomAllListDocument = gql`
   query HomeroomAllList {

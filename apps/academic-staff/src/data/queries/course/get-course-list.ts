@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_COURSE_LIST = gql`
-  query CourseList($page: Int!, $size: Int!) {
+  query CourseList($page: Int, $size: Int) {
     courseList(page: $page, size: $size) {
       total
       data {

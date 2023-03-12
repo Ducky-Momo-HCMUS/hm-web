@@ -682,6 +682,7 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
+  termList: Array<TermListItem>;
   yearList: Array<YearListItem>;
 };
 
@@ -708,8 +709,8 @@ export type QueryClassroomScoreListArgs = {
 };
 
 export type QueryCourseListArgs = {
-  page: Scalars['Int'];
-  size: Scalars['Int'];
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryHomeroomDetailArgs = {
@@ -1176,6 +1177,13 @@ export type TeacherStudentList = {
   total: Scalars['Int'];
 };
 
+export type TermListItem = {
+  __typename?: 'TermListItem';
+  hocKy: Scalars['Int'];
+  maHK: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+};
+
 export type UploadDocumentInput = {
   hocKy?: InputMaybe<Scalars['Int']>;
   maMH?: InputMaybe<Scalars['String']>;
@@ -1423,6 +1431,7 @@ export type ResolversTypes = {
   TeacherListItem: ResolverTypeWrapper<TeacherListItem>;
   TeacherSearchStudentListItem: ResolverTypeWrapper<TeacherSearchStudentListItem>;
   TeacherStudentList: ResolverTypeWrapper<TeacherStudentList>;
+  TermListItem: ResolverTypeWrapper<TermListItem>;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
   UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
@@ -1552,6 +1561,7 @@ export type ResolversParentTypes = {
   TeacherListItem: TeacherListItem;
   TeacherSearchStudentListItem: TeacherSearchStudentListItem;
   TeacherStudentList: TeacherStudentList;
+  TermListItem: TermListItem;
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: UploadDocumentResponse;
   UploadFile: Scalars['UploadFile'];
@@ -2478,7 +2488,7 @@ export type QueryResolvers<
     ResolversTypes['CourseList'],
     ParentType,
     ContextType,
-    RequireFields<QueryCourseListArgs, 'page' | 'size'>
+    Partial<QueryCourseListArgs>
   >;
   documents?: Resolver<
     Array<ResolversTypes['Document']>,
@@ -2680,6 +2690,11 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     Partial<QueryTeacherSearchStudentListArgs>
+  >;
+  termList?: Resolver<
+    Array<ResolversTypes['TermListItem']>,
+    ParentType,
+    ContextType
   >;
   yearList?: Resolver<
     Array<ResolversTypes['YearListItem']>,
@@ -3104,6 +3119,16 @@ export type TeacherStudentListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TermListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TermListItem'] = ResolversParentTypes['TermListItem']
+> = {
+  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  maHK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  namHocBD?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UploadDocumentResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['UploadDocumentResponse'] = ResolversParentTypes['UploadDocumentResponse']
@@ -3226,6 +3251,7 @@ export type Resolvers<ContextType = any> = {
   TeacherListItem?: TeacherListItemResolvers<ContextType>;
   TeacherSearchStudentListItem?: TeacherSearchStudentListItemResolvers<ContextType>;
   TeacherStudentList?: TeacherStudentListResolvers<ContextType>;
+  TermListItem?: TermListItemResolvers<ContextType>;
   UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;
   UploadFile?: GraphQLScalarType;
   YearListItem?: YearListItemResolvers<ContextType>;
