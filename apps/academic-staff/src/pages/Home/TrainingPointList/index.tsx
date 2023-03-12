@@ -18,7 +18,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import { STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
+import { TRAINING_POINT_PAGE_SIZE } from '../../../constants';
 
 import { MOCK_SCHOOL_YEARS, MOCK_TRAINING_POINT_DATA } from './mock';
 
@@ -121,7 +121,7 @@ function TrainingPointList() {
           <TablePagination
             component="div"
             count={trainingPointListLength}
-            rowsPerPage={STUDENT_SCORE_PAGE_SIZE}
+            rowsPerPage={TRAINING_POINT_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
