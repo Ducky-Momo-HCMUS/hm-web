@@ -4,7 +4,7 @@ const teacherTypeDefs = gql`
   extend type Query {
     teacherList(year: Int!, page: Int!, size: Int!): TeacherList!
     allTeacherList(page: Int!, size: Int!): AllTeacherList!
-    yearList: YearList!
+    yearList: [YearListItem!]!
     teacherSearchStudentList(maSV: String, tenSV: String): TeacherStudentList!
   }
 
@@ -61,8 +61,8 @@ const teacherTypeDefs = gql`
     email: String!
   }
 
-  type YearList {
-    danhSachKhoa: [Int!]!
+  type YearListItem {
+    khoa: Int!
   }
 `;
 

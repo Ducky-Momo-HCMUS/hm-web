@@ -8,6 +8,8 @@ import studentTypeDefs from './student';
 import tagTypeDefs from './tag';
 import accountTypeDefs from './account';
 import teacherTypeDefs from './teacher';
+import courseTypeDefs from './course';
+import classroomTypeDefs from './classroom';
 
 const typeDefs = gql`
   #=============#
@@ -35,4 +37,6 @@ export default [
   accountTypeDefs,
   fileTypeDefs,
   teacherTypeDefs,
+  courseTypeDefs,
+  classroomTypeDefs,
 ];

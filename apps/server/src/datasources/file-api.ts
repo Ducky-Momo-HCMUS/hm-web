@@ -17,6 +17,16 @@ class FileAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
+  public async getTermList() {
+    try {
+      const res = await this.get('v1/terms');
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot fetch term list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
       const res = await this.get(`v1/history-import/${fileType}`);
