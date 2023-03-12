@@ -100,38 +100,40 @@ function CourseScoreList() {
             <MenuItem value={3}>3</MenuItem>
           </Select>
         </StyledFormControl>
-        <StyledFormControl>
-          <InputLabel id="class-select-label">Môn học</InputLabel>
-          <Select
-            labelId="class-select-label"
-            id="class-select"
-            value={values.courseId || ''}
-            label="Môn học"
-            onChange={handleChange('courseId')}
-            disabled={!(values.year && values.semester)}
-            sx={{ minWidth: '250px' }}
-          >
-            {MOCK_COURSE_IN_1_TERM.data.map((item) => (
-              <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-        <StyledFormControl>
-          <InputLabel id="class-select-label">Lớp học phần</InputLabel>
-          <Select
-            labelId="class-select-label"
-            id="class-select"
-            value={values.classroomName || ''}
-            label="Lớp học phần"
-            onChange={handleChange('classroomName')}
-            disabled={!values.courseId}
-            sx={{ minWidth: '150px' }}
-          >
-            {MOCK_CLASSROOM_1_COURSE_1_TERM.data.map((item) => (
-              <MenuItem value={item.tenLopHP}>{item.tenLopHP}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
+        {values.year && values.semester && (
+          <StyledFormControl>
+            <InputLabel id="class-select-label">Môn học</InputLabel>
+            <Select
+              labelId="class-select-label"
+              id="class-select"
+              value={values.courseId || ''}
+              label="Môn học"
+              onChange={handleChange('courseId')}
+              sx={{ minWidth: '250px' }}
+            >
+              {MOCK_COURSE_IN_1_TERM.data.map((item) => (
+                <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        )}
+        {values.courseId && (
+          <StyledFormControl>
+            <InputLabel id="class-select-label">Lớp học phần</InputLabel>
+            <Select
+              labelId="class-select-label"
+              id="class-select"
+              value={values.classroomName || ''}
+              label="Lớp học phần"
+              onChange={handleChange('classroomName')}
+              sx={{ minWidth: '150px' }}
+            >
+              {MOCK_CLASSROOM_1_COURSE_1_TERM.data.map((item) => (
+                <MenuItem value={item.tenLopHP}>{item.tenLopHP}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        )}
       </AsyncDataRenderer>
       <AsyncDataRenderer loading={false} data={studentScoreListData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
