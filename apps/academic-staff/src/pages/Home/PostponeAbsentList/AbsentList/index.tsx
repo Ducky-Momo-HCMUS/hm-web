@@ -13,25 +13,25 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { NOT_ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_NOT_ENROLLED } from '../../mock/not-enrolled';
+import { MOCK_ABSENT_DATA } from '../../mock/absent';
 
-function NotEnrolledList() {
+function AbsentList() {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { notEnrolledListLength, notEnrolledListData } = useMemo(() => {
+  const { absentListLength, absentListData } = useMemo(() => {
     return {
-      notEnrolledListLength: MOCK_NOT_ENROLLED.data.length,
-      notEnrolledListData: MOCK_NOT_ENROLLED.data,
+      absentListLength: MOCK_ABSENT_DATA.data.length,
+      absentListData: MOCK_ABSENT_DATA.data,
     };
   }, []);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={notEnrolledListData}>
+      <AsyncDataRenderer loading={false} data={absentListData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
@@ -40,16 +40,18 @@ function NotEnrolledList() {
                   <TableCell key="index">STT</TableCell>
                   <TableCell key="maMH">MSSV</TableCell>
                   <TableCell key="tenMH">Họ và tên</TableCell>
-                  <TableCell key="tenMH">Lớp sinh hoạt</TableCell>
+                  <TableCell key="tenMH">Mã môn</TableCell>
+                  <TableCell key="tenMH">Tên môn học</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {notEnrolledListData.map((row, index) => (
+                {absentListData.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.maSH  }</TableCell>
+                    <TableCell>{row.maMH}</TableCell>
+                    <TableCell>{row.tenMH}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -57,7 +59,7 @@ function NotEnrolledList() {
           </TableContainer>
           <TablePagination
             component="div"
-            count={notEnrolledListLength}
+            count={absentListLength}
             rowsPerPage={NOT_ENROLLED_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
@@ -68,4 +70,4 @@ function NotEnrolledList() {
   );
 }
 
-export default NotEnrolledList;
+export default AbsentList;

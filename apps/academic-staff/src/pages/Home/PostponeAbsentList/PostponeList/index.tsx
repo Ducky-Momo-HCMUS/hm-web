@@ -12,26 +12,26 @@ import {
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
-import { NOT_ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_NOT_ENROLLED } from '../../mock/not-enrolled';
+import { ENROLLED_PAGE_SIZE } from '../../../../constants';
+import { MOCK_POSTPONE_DATA } from '../../mock/postpone';
 
-function NotEnrolledList() {
+function PostponeList() {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { notEnrolledListLength, notEnrolledListData } = useMemo(() => {
+  const { postponeListLength, postponeListData } = useMemo(() => {
     return {
-      notEnrolledListLength: MOCK_NOT_ENROLLED.data.length,
-      notEnrolledListData: MOCK_NOT_ENROLLED.data,
+      postponeListLength: MOCK_POSTPONE_DATA.data.length,
+      postponeListData: MOCK_POSTPONE_DATA.data,
     };
   }, []);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={notEnrolledListData}>
+      <AsyncDataRenderer loading={false} data={postponeListData}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
@@ -40,16 +40,18 @@ function NotEnrolledList() {
                   <TableCell key="index">STT</TableCell>
                   <TableCell key="maMH">MSSV</TableCell>
                   <TableCell key="tenMH">Họ và tên</TableCell>
-                  <TableCell key="tenMH">Lớp sinh hoạt</TableCell>
+                  <TableCell key="tenMH">Mã môn</TableCell>
+                  <TableCell key="tenMH">Tên môn học</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {notEnrolledListData.map((row, index) => (
+                {postponeListData.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.maSH  }</TableCell>
+                    <TableCell>{row.maMH}</TableCell>
+                    <TableCell>{row.tenMH}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -57,8 +59,8 @@ function NotEnrolledList() {
           </TableContainer>
           <TablePagination
             component="div"
-            count={notEnrolledListLength}
-            rowsPerPage={NOT_ENROLLED_PAGE_SIZE}
+            count={postponeListLength}
+            rowsPerPage={ENROLLED_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
@@ -68,4 +70,4 @@ function NotEnrolledList() {
   );
 }
 
-export default NotEnrolledList;
+export default PostponeList;
