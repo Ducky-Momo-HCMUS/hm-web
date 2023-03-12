@@ -2,6 +2,7 @@ import merge from 'lodash.merge';
 
 import { accountResolver } from './account-resolvers';
 import { authResolvers } from './auth-resolvers';
+import { classroomResolver } from './classroom-resolvers';
 import { courseResolver } from './course-resolvers';
 import { fileResolver } from './file-resolvers';
 import { homeroomResolver } from './homeroom-resolvers';
@@ -19,5 +20,6 @@ export default merge(
   accountResolver,
   fileResolver,
   teacherResolver,
-  courseResolver
+  courseResolver,
+  classroomResolver
 );

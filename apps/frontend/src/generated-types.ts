@@ -104,6 +104,30 @@ export type AuthorInfo = {
   tenGV: Scalars['String'];
 };
 
+export type ClassroomListItem = {
+  __typename?: 'ClassroomListItem';
+  maHP: Scalars['Int'];
+  tenLopHP: Scalars['String'];
+};
+
+export type ClassroomScoreList = {
+  __typename?: 'ClassroomScoreList';
+  data: Array<ClassroomScoreListItem>;
+  total: Scalars['Int'];
+};
+
+export type ClassroomScoreListItem = {
+  __typename?: 'ClassroomScoreListItem';
+  diemCK: Scalars['Float'];
+  diemCong: Scalars['Float'];
+  diemGK: Scalars['Float'];
+  diemKhac: Scalars['Float'];
+  diemTH: Scalars['Float'];
+  dtb: Scalars['Float'];
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -616,6 +640,8 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   allTeacherList: AllTeacherList;
+  classroomList: Array<ClassroomListItem>;
+  classroomScoreList: ClassroomScoreList;
   courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
@@ -657,6 +683,18 @@ export type QueryAccountListArgs = {
 export type QueryAllTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
+};
+
+export type QueryClassroomListArgs = {
+  courseId?: InputMaybe<Scalars['String']>;
+  termId: Scalars['Int'];
+};
+
+export type QueryClassroomScoreListArgs = {
+  id: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
 };
 
 export type QueryCourseListArgs = {
@@ -1055,6 +1093,46 @@ export type UploadDocumentMutationVariables = Exact<{
 export type UploadDocumentMutation = {
   __typename?: 'Mutation';
   uploadDocument: { __typename?: 'UploadDocumentResponse'; status: number };
+};
+
+export type ClassroomListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  courseId?: InputMaybe<Scalars['String']>;
+}>;
+
+export type ClassroomListQuery = {
+  __typename?: 'Query';
+  classroomList: Array<{
+    __typename?: 'ClassroomListItem';
+    maHP: number;
+    tenLopHP: string;
+  }>;
+};
+
+export type ClassroomScoreListQueryVariables = Exact<{
+  id: Scalars['Int'];
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type ClassroomScoreListQuery = {
+  __typename?: 'Query';
+  classroomScoreList: {
+    __typename?: 'ClassroomScoreList';
+    total: number;
+    data: Array<{
+      __typename?: 'ClassroomScoreListItem';
+      maSV: string;
+      tenSV: string;
+      diemCK: number;
+      diemCong: number;
+      diemGK: number;
+      diemKhac: number;
+      diemTH: number;
+      dtb: number;
+    }>;
+  };
 };
 
 export type CourseListQueryVariables = Exact<{
@@ -2074,6 +2152,137 @@ export type UploadDocumentMutationResult =
 export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
+>;
+export const ClassroomListDocument = gql`
+  query ClassroomList($termId: Int!, $courseId: String) {
+    classroomList(termId: $termId, courseId: $courseId) {
+      maHP
+      tenLopHP
+    }
+  }
+`;
+
+/**
+ * __useClassroomListQuery__
+ *
+ * To run a query within a React component, call `useClassroomListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClassroomListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClassroomListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      courseId: // value for 'courseId'
+ *   },
+ * });
+ */
+export function useClassroomListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ClassroomListQuery,
+    ClassroomListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ClassroomListQuery, ClassroomListQueryVariables>(
+    ClassroomListDocument,
+    options
+  );
+}
+export function useClassroomListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ClassroomListQuery,
+    ClassroomListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ClassroomListQuery, ClassroomListQueryVariables>(
+    ClassroomListDocument,
+    options
+  );
+}
+export type ClassroomListQueryHookResult = ReturnType<
+  typeof useClassroomListQuery
+>;
+export type ClassroomListLazyQueryHookResult = ReturnType<
+  typeof useClassroomListLazyQuery
+>;
+export type ClassroomListQueryResult = Apollo.QueryResult<
+  ClassroomListQuery,
+  ClassroomListQueryVariables
+>;
+export const ClassroomScoreListDocument = gql`
+  query ClassroomScoreList($id: Int!, $termId: Int!, $page: Int!, $size: Int!) {
+    classroomScoreList(id: $id, termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        diemCK
+        diemCong
+        diemGK
+        diemKhac
+        diemTH
+        dtb
+      }
+    }
+  }
+`;
+
+/**
+ * __useClassroomScoreListQuery__
+ *
+ * To run a query within a React component, call `useClassroomScoreListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClassroomScoreListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClassroomScoreListQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useClassroomScoreListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ClassroomScoreListQuery,
+    ClassroomScoreListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ClassroomScoreListQuery,
+    ClassroomScoreListQueryVariables
+  >(ClassroomScoreListDocument, options);
+}
+export function useClassroomScoreListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ClassroomScoreListQuery,
+    ClassroomScoreListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ClassroomScoreListQuery,
+    ClassroomScoreListQueryVariables
+  >(ClassroomScoreListDocument, options);
+}
+export type ClassroomScoreListQueryHookResult = ReturnType<
+  typeof useClassroomScoreListQuery
+>;
+export type ClassroomScoreListLazyQueryHookResult = ReturnType<
+  typeof useClassroomScoreListLazyQuery
+>;
+export type ClassroomScoreListQueryResult = Apollo.QueryResult<
+  ClassroomScoreListQuery,
+  ClassroomScoreListQueryVariables
 >;
 export const CourseListDocument = gql`
   query CourseList($page: Int!, $size: Int!) {

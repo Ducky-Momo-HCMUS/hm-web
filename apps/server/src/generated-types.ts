@@ -109,6 +109,30 @@ export type AuthorInfo = {
   tenGV: Scalars['String'];
 };
 
+export type ClassroomListItem = {
+  __typename?: 'ClassroomListItem';
+  maHP: Scalars['Int'];
+  tenLopHP: Scalars['String'];
+};
+
+export type ClassroomScoreList = {
+  __typename?: 'ClassroomScoreList';
+  data: Array<ClassroomScoreListItem>;
+  total: Scalars['Int'];
+};
+
+export type ClassroomScoreListItem = {
+  __typename?: 'ClassroomScoreListItem';
+  diemCK: Scalars['Float'];
+  diemCong: Scalars['Float'];
+  diemGK: Scalars['Float'];
+  diemKhac: Scalars['Float'];
+  diemTH: Scalars['Float'];
+  dtb: Scalars['Float'];
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -621,6 +645,8 @@ export type Query = {
   __typename?: 'Query';
   accountList: AccountList;
   allTeacherList: AllTeacherList;
+  classroomList: Array<ClassroomListItem>;
+  classroomScoreList: ClassroomScoreList;
   courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: HomeroomAllList;
@@ -662,6 +688,18 @@ export type QueryAccountListArgs = {
 export type QueryAllTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
+};
+
+export type QueryClassroomListArgs = {
+  courseId?: InputMaybe<Scalars['String']>;
+  termId: Scalars['Int'];
+};
+
+export type QueryClassroomScoreListArgs = {
+  id: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
 };
 
 export type QueryCourseListArgs = {
@@ -1173,6 +1211,9 @@ export type ResolversTypes = {
   AllTeacherListItem: ResolverTypeWrapper<AllTeacherListItem>;
   AuthorInfo: ResolverTypeWrapper<AuthorInfo>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ClassroomListItem: ResolverTypeWrapper<ClassroomListItem>;
+  ClassroomScoreList: ResolverTypeWrapper<ClassroomScoreList>;
+  ClassroomScoreListItem: ResolverTypeWrapper<ClassroomScoreListItem>;
   Contact: ResolverTypeWrapper<Contact>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
@@ -1290,6 +1331,9 @@ export type ResolversParentTypes = {
   AllTeacherListItem: AllTeacherListItem;
   AuthorInfo: AuthorInfo;
   Boolean: Scalars['Boolean'];
+  ClassroomListItem: ClassroomListItem;
+  ClassroomScoreList: ClassroomScoreList;
+  ClassroomScoreListItem: ClassroomScoreListItem;
   Contact: Contact;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
@@ -1485,6 +1529,43 @@ export type AuthorInfoResolvers<
   ParentType extends ResolversParentTypes['AuthorInfo'] = ResolversParentTypes['AuthorInfo']
 > = {
   tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassroomListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ClassroomListItem'] = ResolversParentTypes['ClassroomListItem']
+> = {
+  maHP?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassroomScoreListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ClassroomScoreList'] = ResolversParentTypes['ClassroomScoreList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['ClassroomScoreListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassroomScoreListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ClassroomScoreListItem'] = ResolversParentTypes['ClassroomScoreListItem']
+> = {
+  diemCK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemCong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemGK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemKhac?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemTH?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2254,6 +2335,21 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryAllTeacherListArgs, 'page' | 'size'>
   >;
+  classroomList?: Resolver<
+    Array<ResolversTypes['ClassroomListItem']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryClassroomListArgs, 'termId'>
+  >;
+  classroomScoreList?: Resolver<
+    ResolversTypes['ClassroomScoreList'],
+    ParentType,
+    ContextType,
+    RequireFields<
+      QueryClassroomScoreListArgs,
+      'id' | 'page' | 'size' | 'termId'
+    >
+  >;
   courseList?: Resolver<
     ResolversTypes['CourseList'],
     ParentType,
@@ -2766,6 +2862,9 @@ export type Resolvers<ContextType = any> = {
   AllTeacherList?: AllTeacherListResolvers<ContextType>;
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   AuthorInfo?: AuthorInfoResolvers<ContextType>;
+  ClassroomListItem?: ClassroomListItemResolvers<ContextType>;
+  ClassroomScoreList?: ClassroomScoreListResolvers<ContextType>;
+  ClassroomScoreListItem?: ClassroomScoreListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;
