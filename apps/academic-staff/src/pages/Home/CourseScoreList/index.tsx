@@ -18,10 +18,6 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import {
-  useHomeroomAllListQuery,
-  useHomeroomStudentListLazyQuery,
-} from '../../../generated-types';
 import { STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
 
 import {
@@ -142,14 +138,14 @@ function CourseScoreList() {
               <TableHead>
                 <TableRow>
                   <TableCell key="index">STT</TableCell>
-                  <TableCell key="index">MSSV</TableCell>
-                  <TableCell key="index">Họ và tên</TableCell>
-                  <TableCell key="index">GK</TableCell>
-                  <TableCell key="index">TH</TableCell>
-                  <TableCell key="index">Cộng</TableCell>
-                  <TableCell key="index">Khác</TableCell>
-                  <TableCell key="index">CK</TableCell>
-                  <TableCell key="index">Tổng</TableCell>
+                  <TableCell key="maSV">MSSV</TableCell>
+                  <TableCell key="tenSV">Họ và tên</TableCell>
+                  <TableCell key="gk">GK</TableCell>
+                  <TableCell key="th">TH</TableCell>
+                  <TableCell key="ck">Cộng</TableCell>
+                  <TableCell key="khac">Khác</TableCell>
+                  <TableCell key="ck">CK</TableCell>
+                  <TableCell key="dtr">Tổng</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
