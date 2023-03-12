@@ -235,7 +235,12 @@ function ImportFile() {
   }, [mappedData, years]);
 
   const { loading: courseListLoading, data: courseListData } =
-    useCourseListQuery({});
+    useCourseListQuery({
+      variables: {
+        page: 1,
+        size: 1000,
+      },
+    });
   const courseList = useMemo(
     () => courseListData?.courseList.data || [],
     [courseListData?.courseList.data]

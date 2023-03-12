@@ -174,17 +174,6 @@ function NoteEditor({
               duration={0}
             />
           )}
-
-          {/* <img
-            style={{
-              display: 'block',
-              maxWidth: '100%',
-            }}
-            src={url}
-            srcSet={url}
-            alt="selected"
-            loading="lazy"
-          /> */}
         </Box>
       </StyledDialog>
       <Box>

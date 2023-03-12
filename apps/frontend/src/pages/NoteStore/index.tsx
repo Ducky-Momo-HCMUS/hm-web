@@ -223,7 +223,7 @@ function NoteStore() {
     setValues((v) => ({
       ...v,
       selected: -1,
-      isAdding: true,
+      isAdding: false,
       title: '',
       tags: [],
       images: [],
@@ -415,7 +415,13 @@ function NoteStore() {
               }}
             >
               <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
-              <Button variant="contained" onClick={handleReset}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleReset();
+                  setValues((v) => ({ ...v, isAdding: true }));
+                }}
+              >
                 Tạo ghi chú mới
               </Button>
             </Box>
@@ -603,30 +609,28 @@ function NoteStore() {
           </AsyncDataRenderer>
         </StyledContentWrapper>
       </StyledContainer>
-      {values.selected >= 0 && (
-        <StyledDialog
-          open={values.selected >= 0}
-          onClose={() => setValues({ ...values, selected: -1 })}
-        >
-          <NoteEditor
-            filePondRef={filePondRef}
-            tagList={tagList}
-            imageList={values.images}
-            editorRef={editorRef}
-            initialValue={
-              values.isAdding ? '' : (noteDetail?.noiDung as string)
-            }
-            setFiles={setFiles}
-            onClickSave={handleClickSave}
-            title={values.title}
-            tags={values.tags}
-            handleChangeValue={handleChangeValue}
-            handleSelectTags={handleSelectTags}
-            handleReset={handleReset}
-            isAdding={values.isAdding}
-          />
-        </StyledDialog>
-      )}
+      <StyledDialog
+        open={values.selected >= 0 || values.isAdding}
+        onClose={() => {
+          setValues({ ...values, selected: -1, isAdding: false });
+        }}
+      >
+        <NoteEditor
+          filePondRef={filePondRef}
+          tagList={tagList}
+          imageList={values.images}
+          editorRef={editorRef}
+          initialValue={values.isAdding ? '' : (noteDetail?.noiDung as string)}
+          setFiles={setFiles}
+          onClickSave={handleClickSave}
+          title={values.title}
+          tags={values.tags}
+          handleChangeValue={handleChangeValue}
+          handleSelectTags={handleSelectTags}
+          handleReset={handleReset}
+          isAdding={values.isAdding}
+        />
+      </StyledDialog>
       {values.deleteIndex >= 0 && (
         <DeleteDialog
           open={values.deleteIndex >= 0}
