@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import SearchBar from '../SearchBar';
@@ -22,8 +22,9 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
         }}
         component={Link}
         to="/"
+        variant="h6"
       >
-        <Avatar sx={{ marginRight: '1rem' }} src="/img/fit-logo.png" />{' '}
+        Homeroom management
       </Typography>
       {isAuthenticated && (
         <>
@@ -39,8 +40,9 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
           sx={{ textDecoration: 'none', fontSize: '1.1rem', color: 'inherit' }}
           component={Link}
           to="/"
+          variant="h6"
         >
-          <Avatar sx={{ marginRight: '1rem' }} src="/img/fit-logo.png" />{' '}
+          Homeroom management
         </Typography>
         {isAuthenticated && (
           <>

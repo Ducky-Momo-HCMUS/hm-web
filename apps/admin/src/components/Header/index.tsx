@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import ActionsBar from '../ActionsBar';
@@ -19,10 +19,11 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
           fontSize: '1.1rem',
           color: 'inherit',
         }}
+        variant="h6"
         component={Link}
         to="/"
       >
-        <Avatar sx={{ marginRight: '1rem' }} src="/img/fit-logo.png" />{' '}
+        Homeroom management
       </Typography>
       {isAuthenticated && (
         <>
@@ -35,10 +36,11 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
       <StyledBox>
         <Typography
           sx={{ textDecoration: 'none', fontSize: '1.1rem', color: 'inherit' }}
+          variant="h6"
           component={Link}
           to="/"
         >
-          <Avatar sx={{ marginRight: '1rem' }} src="/img/fit-logo.png" />{' '}
+          Homeroom management
         </Typography>
         {isAuthenticated && (
           <>
