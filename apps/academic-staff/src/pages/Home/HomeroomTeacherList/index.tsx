@@ -19,7 +19,7 @@ import {
   useYearListQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { Order, TeacherProperty } from '../../../types';
 import { TEACHER_LIST_PAGE_SIZE } from '../../../constants';
 
@@ -93,23 +93,25 @@ function HomeroomTeacherList() {
 
   return (
     <Box>
-      <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
-      <AsyncDataRenderer loading={yearListLoading} data={yearListData}>
-        <StyledFormControl>
-          <InputLabel id="year-select-label">Khoá</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.year || yearList[0]}
-            label="Khoá"
-            onChange={handleChange('year')}
-          >
-            {yearList.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
+        <AsyncDataRenderer loading={yearListLoading} data={yearListData}>
+          <StyledFormControl>
+            <InputLabel id="year-select-label">Khoá</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={values.year || yearList[0]}
+              label="Khoá"
+              onChange={handleChange('year')}
+            >
+              {yearList.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      </StyledStickyBox>
       <AsyncDataRenderer loading={teacherListLoading} data={teacherList}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>

@@ -1,26 +1,39 @@
 import React, { useCallback, useState } from 'react';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
+  IconButton,
   List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
 } from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import WarningIcon from '@mui/icons-material/Warning';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import Header from '../../components/Header';
 
 import ImportFile from './ImportFile';
 import {
+  AppBar,
   Drawer,
   StyledContent,
   StyledListItemButton,
   StyledListItemText,
   StyledContainer,
+  StyledToolbar,
+  DrawerHeader,
 } from './styles';
 import HomeroomTeacherList from './HomeroomTeacherList';
 import StudentList from './StudentList';
@@ -37,33 +50,94 @@ function Home() {
     setOpen(false);
   }, []);
 
+  const theme = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpenDrawer(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpenDrawer(false);
+  };
+
   return (
     <>
-      <Header isAuthenticated />
+      <AppBar position="fixed" open={openDrawer}>
+        <StyledToolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(openDrawer && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ width: '100%' }}
+          >
+            <Header isAuthenticated isDashboard />
+          </Box>
+        </StyledToolbar>
+      </AppBar>
       <StyledContainer>
-        <Drawer variant="permanent" open PaperProps={{ elevation: 8 }}>
-          <List component="nav">
-            <StyledListItemButton
-              active={selected === 0}
-              onClick={() => setSelected(0)}
-            >
-              <ListAltIcon color="action" />
-              <StyledListItemText primary="Danh sách GVCN" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 1}
-              onClick={() => setSelected(1)}
-            >
-              <ListAltIcon color="action" />
-              <StyledListItemText primary="Danh sách sinh viên" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 2}
-              onClick={handleClickOpen}
-            >
-              <PublishIcon color="action" />
-              <StyledListItemText primary="Nhập thông tin" />
-            </StyledListItemButton>
+        <Drawer variant="permanent" open={openDrawer}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {['Danh sách GVCN', 'Danh sách sinh viên', 'Nhập thông tin'].map(
+              (text, index) => (
+                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                  <StyledListItemButton
+                    active={selected === index}
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: openDrawer ? 'initial' : 'center',
+                      px: 2.5,
+                    }}
+                    onClick={() => {
+                      if (index === 2) {
+                        handleClickOpen();
+                        return;
+                      }
+
+                      setSelected(index);
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: openDrawer ? 3 : 'auto',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {index === 0 && <ListAltIcon />}
+                      {index === 1 && <ListAltIcon />}
+                      {index === 2 && <PublishIcon />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={text}
+                      sx={{ opacity: openDrawer ? 1 : 0 }}
+                    />
+                  </StyledListItemButton>
+                </ListItem>
+              )
+            )}
           </List>
         </Drawer>
         <StyledContent component="main">

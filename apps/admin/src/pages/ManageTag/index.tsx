@@ -2,7 +2,7 @@ import { Button, Box, Backdrop, CircularProgress } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
-import { StyledTitle } from '../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../components/styles';
 import {
   TagAddInput,
   useTagAddMutation,
@@ -49,23 +49,25 @@ function ManageTag() {
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="baseline"
-        >
-          <StyledTitle variant="h1">Quản lý tag</StyledTitle>
-          <Box display="flex" gap={1}>
-            <Button
-              sx={{ textTransform: 'uppercase' }}
-              variant="contained"
-              onClick={handleOpenAddTagInfoDialog}
-            >
-              <AddIcon />
-              Thêm tag
-            </Button>
+        <StyledStickyBox>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="baseline"
+          >
+            <StyledTitle variant="h1">Quản lý tag</StyledTitle>
+            <Box display="flex" gap={1}>
+              <Button
+                sx={{ textTransform: 'uppercase' }}
+                variant="contained"
+                onClick={handleOpenAddTagInfoDialog}
+              >
+                <AddIcon />
+                Thêm tag
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </StyledStickyBox>
         <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
           <TagTable data={tagList} />
         </AsyncDataRenderer>

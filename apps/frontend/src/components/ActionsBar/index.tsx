@@ -36,6 +36,16 @@ function ActionsBar() {
     <>
       <Box>
         <IconButton
+          sx={{ marginRight: '0.5rem' }}
+          size="large"
+          color="inherit"
+          aria-label="notes"
+          component="label"
+          onClick={() => navigate('/notes')}
+        >
+          <StickyNote2OutlinedIcon fontSize="inherit" />
+        </IconButton>
+        <IconButton
           sx={{ paddingRight: 0 }}
           size="large"
           color="inherit"
@@ -81,17 +91,6 @@ function ActionsBar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <ListItemButton
-            sx={{ padding: 0 }}
-            onClick={() => navigate('/notes')}
-          >
-            <ListItemIcon>
-              <StickyNote2OutlinedIcon fontSize="small" />
-            </ListItemIcon>
-            Ghi chú của tôi
-          </ListItemButton>
-        </MenuItem>
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}

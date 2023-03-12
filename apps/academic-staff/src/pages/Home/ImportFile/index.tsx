@@ -20,7 +20,7 @@ import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
 import { useUploadDocumentMutation } from '../../../generated-types';
 
@@ -166,8 +166,8 @@ function ImportFile() {
   return (
     <>
       <ToastContainer />
-      <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
-      <Box component="form">
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
         <StyledFormControl sx={{ minWidth: '18.5rem' }}>
           <InputLabel id="type-select-label">Loại thông tin</InputLabel>
           <Select
@@ -253,6 +253,8 @@ function ImportFile() {
             </StyledFormControl>
           </>
         )}
+      </StyledStickyBox>
+      <Box component="form">
         {values.type.length > 0 && (
           <>
             <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
