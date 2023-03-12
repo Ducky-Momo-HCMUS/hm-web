@@ -30,6 +30,16 @@ interface State {
   year: string;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+export const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function HomeroomTeacherList() {
   const [values, setValues] = useState<State>({
     year: '',
@@ -62,9 +72,8 @@ function HomeroomTeacherList() {
   const { loading: yearListLoading, data: yearListData } = useYearListQuery({});
 
   const yearList = useMemo(
-    () =>
-      yearListData?.yearList.danhSachKhoa.map((item) => item.toString()) || [],
-    [yearListData?.yearList.danhSachKhoa]
+    () => yearListData?.yearList.map((item) => item.khoa.toString()) || [],
+    [yearListData?.yearList]
   );
 
   const [
@@ -104,6 +113,7 @@ function HomeroomTeacherList() {
               value={values.year || yearList[0]}
               label="Khoá"
               onChange={handleChange('year')}
+              MenuProps={MenuProps}
             >
               {yearList.map((item) => (
                 <MenuItem value={item}>{item}</MenuItem>

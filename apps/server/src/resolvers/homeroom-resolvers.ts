@@ -10,7 +10,7 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
     },
     homeroomAllList: async (_, __, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomAllList();
-      return res;
+      return res.data;
     },
     homeroomStudentList: async (_, args, { dataSources }) => {
       const res = await dataSources.homeroomAPI.getHomeroomStudentList(args);

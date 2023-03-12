@@ -82,6 +82,7 @@ importers:
       filepond-plugin-file-validate-type: ^1.2.8
       graphql: ^15.3.0
       jest: ^29.2.0
+      lodash: ^4.17.21
       postcss: ^8.1.0
       react: ^17.0.2
       react-admin: ^4.6.2
@@ -113,6 +114,7 @@ importers:
       filepond: 4.30.4
       filepond-plugin-file-validate-type: 1.2.8_filepond@4.30.4
       graphql: 15.8.0
+      lodash: 4.17.21
       react: 17.0.2
       react-admin: 4.6.2_5vlckyktntgwvvslyodwngbpz4
       react-dom: 17.0.2_react@17.0.2

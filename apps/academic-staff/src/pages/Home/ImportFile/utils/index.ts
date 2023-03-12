@@ -1,5 +1,8 @@
 import { GridColDef } from '@mui/x-data-grid';
 import { utils, WorkSheet } from 'xlsx';
+import _groupBy from 'lodash/groupBy';
+
+import { FileType, TermListItem } from '../../../../generated-types';
 
 import { FileType } from '../../../../generated-types';
 
@@ -7,7 +10,6 @@ export type DataSet = { [index: string]: WorkSheet };
 export type Row = any[];
 export type RowCol = { rows: Row[]; columns: GridColDef[] };
 
-export const YEARS = [2017, 2018, 2019];
 export const TYPES = [
   {
     label: 'Danh sách giáo viên chủ nhiệm',
@@ -71,9 +73,6 @@ export const TYPES = [
     endpoint: 'score',
   },
 ];
-export const TERMS = [1, 2, 3];
-export const SUBJECTS = ['CSC10006', 'CSC10001', 'CSC10003', 'CSC10002'];
-export const CLASSES = ['19KTPM1', '19KTPM2', '19HTTT1', '19HTTT2'];
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -118,4 +117,8 @@ export const getRowsCols = (data: DataSet, sheetName: string): RowCol => {
       })
     ),
   };
+};
+
+export const groupTermsByYear = (termList: TermListItem[]) => {
+  return _groupBy(termList, (term) => term.namHocBD);
 };

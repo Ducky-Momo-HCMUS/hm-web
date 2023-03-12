@@ -16,6 +16,11 @@ import {
   QueryStudentOverviewResultArgs,
   QueryStudentSubjectsByTermArgs,
   QueryStudentTrainingPointByTermArgs,
+  QueryStudentEnrolledListArgs,
+  QueryStudentNotEnrolledListArgs,
+  QueryStudentTrainingPointListArgs,
+  QueryStudentPostponeListArgs,
+  QueryStudentAbsentListArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -26,6 +31,86 @@ class StudentAPI extends BaseDataSource {
   constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
+  }
+
+  public async getStudentEnrolledList({
+    termId,
+    page,
+    size,
+  }: QueryStudentEnrolledListArgs) {
+    try {
+      const studentList = await this.get(
+        `v1/students/enrolled?termId=${termId}&page=${page}&size=${size}`
+      );
+      return studentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch student enrolled list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentNotEnrolledList({
+    termId,
+    page,
+    size,
+  }: QueryStudentNotEnrolledListArgs) {
+    try {
+      const studentList = await this.get(
+        `v1/students/not-enrolled?termId=${termId}&page=${page}&size=${size}`
+      );
+      return studentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch student not enrolled list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentTrainingPointList({
+    termId,
+    page,
+    size,
+  }: QueryStudentTrainingPointListArgs) {
+    try {
+      const studentList = await this.get(
+        `v1/students/training-points?termId=${termId}&page=${page}&size=${size}`
+      );
+      return studentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch student training point list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentPostponeList({
+    termId,
+    page,
+    size,
+  }: QueryStudentPostponeListArgs) {
+    try {
+      const studentList = await this.get(
+        `v1/students/postpone?termId=${termId}&page=${page}&size=${size}`
+      );
+      return studentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch student postpone list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentAbsentList({
+    termId,
+    page,
+    size,
+  }: QueryStudentAbsentListArgs) {
+    try {
+      const studentList = await this.get(
+        `v1/students/postpone?termId=${termId}&page=${page}&size=${size}`
+      );
+      return studentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch student postpone list');
+      throw this.handleError(error as ApolloError);
+    }
   }
 
   public async getStudentSubjectsByTerm({

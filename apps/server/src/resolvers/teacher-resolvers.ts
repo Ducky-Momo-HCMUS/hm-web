@@ -14,7 +14,7 @@ export const teacherResolver: Resolvers<ResolverContext> = {
     },
     yearList: async (_, __, { dataSources }) => {
       const res = await dataSources.teacherAPI.getYearList();
-      return res;
+      return res.data;
     },
     teacherSearchStudentList: async (_, args, { dataSources }) => {
       const res = await dataSources.teacherAPI.getSearchStudentList(args);
