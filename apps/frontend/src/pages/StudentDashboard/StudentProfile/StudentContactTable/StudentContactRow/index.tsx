@@ -25,7 +25,7 @@ function StudentContactRow({
     <>
       <TableRow key={index}>
         <TableCell>
-          {mxh === 'Facebook' ? (
+          {url.match('^https?://') ? (
             <Tooltip title={url} placement="top">
               <StyledMuiLink href={url} target="_blank">
                 {mxh}
