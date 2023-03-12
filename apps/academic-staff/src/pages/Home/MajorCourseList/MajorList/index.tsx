@@ -13,8 +13,7 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { MAJOR_PAGE_SIZE } from '../../../../constants';
-
-import { MOCK_MAJOR_DATA } from './mock';
+import { MOCK_MAJOR_DATA } from '../../mock/major';
 
 function MajorList() {
   const [page, setPage] = useState(0);

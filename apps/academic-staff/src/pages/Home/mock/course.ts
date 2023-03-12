@@ -1,3 +1,97 @@
+export const MOCK_DATA_STUDENT_SCORES = {
+  page: 1,
+  size: 25,
+  lastPage: 1,
+  total: 2,
+  data: [
+    {
+      maSV: '19127100',
+      lopHP: 12,
+      diemGK: 3,
+      diemTH: 2,
+      diemCK: 4,
+      diemCong: 5,
+      diemKhac: 7,
+      dtb: 3,
+      loaiDiem: 'L1',
+      vang: false,
+      xepLoai: 'Y',
+      tenSV: 'Nguyễn 1',
+    },
+    {
+      maSV: '19127101',
+      lopHP: 12,
+      diemGK: 5,
+      diemTH: 5,
+      diemCK: 3,
+      diemCong: 0,
+      diemKhac: null,
+      dtb: 4,
+      loaiDiem: 'L1',
+      vang: false,
+      xepLoai: 'Y',
+      tenSV: 'Nguyễn 2',
+    },
+  ],
+};
+
+export const MOCK_COURSE_IN_1_TERM = {
+  data: [
+    {
+      maHP: 14,
+      tenLopHP: '20CLC01',
+      batDau: null,
+      ketThuc: null,
+      maMH: 'MTH00008',
+      maHK: 20,
+      tenMH: 'Đại số tuyến tính',
+      soTinChi: 4,
+      maCN: null,
+      loaiMonHoc: 'GD_DAI_CUONG',
+    },
+    {
+      maHP: 16,
+      tenLopHP: '20CLC01',
+      batDau: null,
+      ketThuc: null,
+      maMH: 'CSC10009',
+      maHK: 20,
+      tenMH: 'Hệ thống máy tính',
+      soTinChi: 4,
+      maCN: null,
+      loaiMonHoc: 'KT_CO_SO_NGANH',
+    },
+  ],
+};
+export const MOCK_CLASSROOM_1_COURSE_1_TERM = {
+  data: [
+    {
+      maHP: 16,
+      tenLopHP: '20CLC01',
+      batDau: null,
+      ketThuc: null,
+      maMH: 'CSC10009',
+      maHK: 20,
+      tenMH: 'Hệ thống máy tính',
+      soTinChi: 4,
+      maCN: null,
+      loaiMonHoc: 'KT_CO_SO_NGANH',
+    },
+    {
+      maHP: 17,
+      tenLopHP: '20CLC02',
+      batDau: null,
+      ketThuc: null,
+      maMH: 'CSC10009',
+      maHK: 20,
+      tenMH: 'Hệ thống máy tính',
+      soTinChi: 4,
+      maCN: null,
+      loaiMonHoc: 'KT_CO_SO_NGANH',
+    },
+  ],
+};
+
 export const MOCK_COURSE_DATA = {
   page: 1,
   size: 25,

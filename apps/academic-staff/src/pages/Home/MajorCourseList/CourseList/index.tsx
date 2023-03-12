@@ -13,8 +13,7 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { COURSE_PAGE_SIZE } from '../../../../constants';
-
-import { MOCK_COURSE_DATA } from './mock';
+import { MOCK_COURSE_DATA } from '../../mock/course';
 
 function CourseList() {
   const [page, setPage] = useState(0);

@@ -19,13 +19,12 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
-
 import {
   MOCK_CLASSROOM_1_COURSE_1_TERM,
   MOCK_COURSE_IN_1_TERM,
   MOCK_DATA_STUDENT_SCORES,
-  MOCK_SCHOOL_YEARS,
-} from './mock';
+} from '../mock/course';
+import { MOCK_SCHOOL_YEARS } from '../mock/year';
 
 interface State {
   year: string;

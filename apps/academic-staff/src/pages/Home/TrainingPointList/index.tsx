@@ -19,22 +19,18 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { TRAINING_POINT_PAGE_SIZE } from '../../../constants';
-
-import { MOCK_SCHOOL_YEARS, MOCK_TRAINING_POINT_DATA } from './mock';
+import { MOCK_TRAINING_POINT_DATA } from '../mock/training-point';
+import { MOCK_SCHOOL_YEARS } from '../mock/year';
 
 interface State {
   year: string;
   semester: string;
-  courseId: string;
-  classroomName: string;
 }
 
 function TrainingPointList() {
   const [values, setValues] = useState<State>({
     year: '',
     semester: '',
-    courseId: '',
-    classroomName: '',
   });
 
   const [page, setPage] = useState(0);
