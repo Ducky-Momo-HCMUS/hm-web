@@ -404,8 +404,8 @@ export type ImportAuthor = {
 
 export type ImportHistory = {
   __typename?: 'ImportHistory';
-  taiKhoan: ImportAuthor;
-  thoiGian: Scalars['String'];
+  taiKhoan?: Maybe<ImportAuthor>;
+  thoiGian?: Maybe<Scalars['String']>;
 };
 
 export type LoginResponse = {
@@ -660,6 +660,7 @@ export type Query = {
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
+  studentAbsentList: StudentAbsentList;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -669,8 +670,10 @@ export type Query = {
   studentNoteList: Array<StudentNote>;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
+  studentPostponeList: StudentPostponeList;
   studentSubjectsByTerm: Array<StudentSubject>;
   studentTrainingPointByTerm: StudentTrainingPoint;
+  studentTrainingPointList: StudentTrainingPointList;
   tagList: TagList;
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
@@ -780,6 +783,12 @@ export type QueryNoteSearchArgs = {
   tieuDe?: InputMaybe<Scalars['String']>;
 };
 
+export type QueryStudentAbsentListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
 export type QueryStudentAllTermsArgs = {
   studentId: Scalars['String'];
 };
@@ -824,6 +833,12 @@ export type QueryStudentParentInfoListArgs = {
   studentId: Scalars['String'];
 };
 
+export type QueryStudentPostponeListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
+};
+
 export type QueryStudentSubjectsByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
@@ -832,6 +847,12 @@ export type QueryStudentSubjectsByTermArgs = {
 export type QueryStudentTrainingPointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryStudentTrainingPointListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  termId: Scalars['Int'];
 };
 
 export type QueryTeacherListArgs = {
@@ -843,6 +864,20 @@ export type QueryTeacherListArgs = {
 export type QueryTeacherSearchStudentListArgs = {
   maSV?: InputMaybe<Scalars['String']>;
   tenSV?: InputMaybe<Scalars['String']>;
+};
+
+export type StudentAbsentList = {
+  __typename?: 'StudentAbsentList';
+  data: Array<StudentAbsentListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentAbsentListItem = {
+  __typename?: 'StudentAbsentListItem';
+  maMH: Scalars['String'];
+  maSV: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
 };
 
 export type StudentAddContactInput = {
@@ -1004,6 +1039,20 @@ export type StudentParentInfoList = {
   total: Scalars['Int'];
 };
 
+export type StudentPostponeList = {
+  __typename?: 'StudentPostponeList';
+  data: Array<StudentPostponeListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentPostponeListItem = {
+  __typename?: 'StudentPostponeListItem';
+  maMH: Scalars['String'];
+  maSV: Scalars['String'];
+  tenMH: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   diemCK?: Maybe<Scalars['Float']>;
@@ -1033,6 +1082,20 @@ export type StudentTerm = {
 export type StudentTrainingPoint = {
   __typename?: 'StudentTrainingPoint';
   drl: Scalars['Int'];
+  xepLoai: Scalars['String'];
+};
+
+export type StudentTrainingPointList = {
+  __typename?: 'StudentTrainingPointList';
+  data: Array<StudentTrainingPointListItem>;
+  total: Scalars['Int'];
+};
+
+export type StudentTrainingPointListItem = {
+  __typename?: 'StudentTrainingPointListItem';
+  drl: Scalars['Int'];
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
   xepLoai: Scalars['String'];
 };
 
@@ -1205,11 +1268,14 @@ export type ImportHistoryQuery = {
   __typename?: 'Query';
   importHistory: {
     __typename?: 'ImportHistory';
-    thoiGian: string;
-    taiKhoan: {
-      __typename?: 'ImportAuthor';
-      giaoVien: { __typename?: 'AuthorInfo'; tenGV: string };
-    };
+    thoiGian?: string | null | undefined;
+    taiKhoan?:
+      | {
+          __typename?: 'ImportAuthor';
+          giaoVien: { __typename?: 'AuthorInfo'; tenGV: string };
+        }
+      | null
+      | undefined;
   };
 };
 
@@ -1220,6 +1286,27 @@ export type HomeroomAllListQuery = {
   homeroomAllList: {
     __typename?: 'HomeroomAllList';
     danhSachLopSH: Array<string>;
+  };
+};
+
+export type StudentAbsentListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentAbsentListQuery = {
+  __typename?: 'Query';
+  studentAbsentList: {
+    __typename?: 'StudentAbsentList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentAbsentListItem';
+      maSV: string;
+      tenSV: string;
+      maMH: string;
+      tenMH: string;
+    }>;
   };
 };
 
@@ -1260,6 +1347,48 @@ export type StudentNotEnrolledListQuery = {
       __typename?: 'StudentNotEnrolledListItem';
       maSV: string;
       tenSV: string;
+    }>;
+  };
+};
+
+export type StudentPostponeListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentPostponeListQuery = {
+  __typename?: 'Query';
+  studentPostponeList: {
+    __typename?: 'StudentPostponeList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentPostponeListItem';
+      maSV: string;
+      tenSV: string;
+      maMH: string;
+      tenMH: string;
+    }>;
+  };
+};
+
+export type StudentTrainingPointListQueryVariables = Exact<{
+  termId: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentTrainingPointListQuery = {
+  __typename?: 'Query';
+  studentTrainingPointList: {
+    __typename?: 'StudentTrainingPointList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentTrainingPointListItem';
+      maSV: string;
+      tenSV: string;
+      drl: number;
+      xepLoai: string;
     }>;
   };
 };
@@ -2550,6 +2679,72 @@ export type HomeroomAllListQueryResult = Apollo.QueryResult<
   HomeroomAllListQuery,
   HomeroomAllListQueryVariables
 >;
+export const StudentAbsentListDocument = gql`
+  query StudentAbsentList($termId: Int!, $page: Int!, $size: Int!) {
+    studentAbsentList(termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        maMH
+        tenMH
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentAbsentListQuery__
+ *
+ * To run a query within a React component, call `useStudentAbsentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAbsentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAbsentListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentAbsentListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAbsentListQuery,
+    StudentAbsentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAbsentListQuery,
+    StudentAbsentListQueryVariables
+  >(StudentAbsentListDocument, options);
+}
+export function useStudentAbsentListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAbsentListQuery,
+    StudentAbsentListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAbsentListQuery,
+    StudentAbsentListQueryVariables
+  >(StudentAbsentListDocument, options);
+}
+export type StudentAbsentListQueryHookResult = ReturnType<
+  typeof useStudentAbsentListQuery
+>;
+export type StudentAbsentListLazyQueryHookResult = ReturnType<
+  typeof useStudentAbsentListLazyQuery
+>;
+export type StudentAbsentListQueryResult = Apollo.QueryResult<
+  StudentAbsentListQuery,
+  StudentAbsentListQueryVariables
+>;
 export const StudentEnrolledListDocument = gql`
   query StudentEnrolledList($termId: Int!, $page: Int!, $size: Int!) {
     studentEnrolledList(termId: $termId, page: $page, size: $size) {
@@ -2680,6 +2875,138 @@ export type StudentNotEnrolledListLazyQueryHookResult = ReturnType<
 export type StudentNotEnrolledListQueryResult = Apollo.QueryResult<
   StudentNotEnrolledListQuery,
   StudentNotEnrolledListQueryVariables
+>;
+export const StudentPostponeListDocument = gql`
+  query StudentPostponeList($termId: Int!, $page: Int!, $size: Int!) {
+    studentPostponeList(termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        maMH
+        tenMH
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentPostponeListQuery__
+ *
+ * To run a query within a React component, call `useStudentPostponeListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentPostponeListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentPostponeListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentPostponeListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentPostponeListQuery,
+    StudentPostponeListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentPostponeListQuery,
+    StudentPostponeListQueryVariables
+  >(StudentPostponeListDocument, options);
+}
+export function useStudentPostponeListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentPostponeListQuery,
+    StudentPostponeListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentPostponeListQuery,
+    StudentPostponeListQueryVariables
+  >(StudentPostponeListDocument, options);
+}
+export type StudentPostponeListQueryHookResult = ReturnType<
+  typeof useStudentPostponeListQuery
+>;
+export type StudentPostponeListLazyQueryHookResult = ReturnType<
+  typeof useStudentPostponeListLazyQuery
+>;
+export type StudentPostponeListQueryResult = Apollo.QueryResult<
+  StudentPostponeListQuery,
+  StudentPostponeListQueryVariables
+>;
+export const StudentTrainingPointListDocument = gql`
+  query StudentTrainingPointList($termId: Int!, $page: Int!, $size: Int!) {
+    studentTrainingPointList(termId: $termId, page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        drl
+        xepLoai
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentTrainingPointListQuery__
+ *
+ * To run a query within a React component, call `useStudentTrainingPointListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentTrainingPointListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentTrainingPointListQuery({
+ *   variables: {
+ *      termId: // value for 'termId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentTrainingPointListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentTrainingPointListQuery,
+    StudentTrainingPointListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentTrainingPointListQuery,
+    StudentTrainingPointListQueryVariables
+  >(StudentTrainingPointListDocument, options);
+}
+export function useStudentTrainingPointListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentTrainingPointListQuery,
+    StudentTrainingPointListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentTrainingPointListQuery,
+    StudentTrainingPointListQueryVariables
+  >(StudentTrainingPointListDocument, options);
+}
+export type StudentTrainingPointListQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointListQuery
+>;
+export type StudentTrainingPointListLazyQueryHookResult = ReturnType<
+  typeof useStudentTrainingPointListLazyQuery
+>;
+export type StudentTrainingPointListQueryResult = Apollo.QueryResult<
+  StudentTrainingPointListQuery,
+  StudentTrainingPointListQueryVariables
 >;
 export const TeacherListDocument = gql`
   query TeacherList($year: Int!, $page: Int!, $size: Int!) {

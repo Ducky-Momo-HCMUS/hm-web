@@ -34,6 +34,17 @@ const studentTypeDefs = gql`
       page: Int!
       size: Int!
     ): StudentNotEnrolledList!
+    studentTrainingPointList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentTrainingPointList!
+    studentPostponeList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentPostponeList!
+    studentAbsentList(termId: Int!, page: Int!, size: Int!): StudentAbsentList!
   }
 
   extend type Mutation {
@@ -55,6 +66,42 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+  }
+
+  type StudentAbsentList {
+    total: Int!
+    data: [StudentAbsentListItem!]!
+  }
+
+  type StudentAbsentListItem {
+    maSV: String!
+    tenSV: String!
+    maMH: String!
+    tenMH: String!
+  }
+
+  type StudentPostponeList {
+    total: Int!
+    data: [StudentPostponeListItem!]!
+  }
+
+  type StudentPostponeListItem {
+    maSV: String!
+    tenSV: String!
+    maMH: String!
+    tenMH: String!
+  }
+
+  type StudentTrainingPointList {
+    total: Int!
+    data: [StudentTrainingPointListItem!]!
+  }
+
+  type StudentTrainingPointListItem {
+    maSV: String!
+    tenSV: String!
+    drl: Int!
+    xepLoai: String!
   }
 
   type StudentEnrolledList {

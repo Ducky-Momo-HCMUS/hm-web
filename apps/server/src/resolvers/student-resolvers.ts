@@ -12,6 +12,20 @@ export const studentResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.studentAPI.getStudentNotEnrolledList(args);
       return res;
     },
+    studentTrainingPointList: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentTrainingPointList(
+        args
+      );
+      return res;
+    },
+    studentPostponeList: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentPostponeList(args);
+      return res;
+    },
+    studentAbsentList: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentAbsentList(args);
+      return res;
+    },
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentSubjectsByTerm(args);
       return res.data;

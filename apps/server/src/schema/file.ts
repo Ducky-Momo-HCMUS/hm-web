@@ -33,8 +33,8 @@ const fileTypeDefs = gql`
   }
 
   type ImportHistory {
-    thoiGian: String!
-    taiKhoan: ImportAuthor!
+    thoiGian: String
+    taiKhoan: ImportAuthor
   }
 
   type ImportAuthor {

@@ -183,10 +183,10 @@ function ImportFile() {
   const { thoiGian, tenGV } = useMemo(() => {
     return {
       thoiGian: importHistoryData?.importHistory.thoiGian,
-      tenGV: importHistoryData?.importHistory.taiKhoan.giaoVien.tenGV,
+      tenGV: importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
     };
   }, [
-    importHistoryData?.importHistory.taiKhoan.giaoVien.tenGV,
+    importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
     importHistoryData?.importHistory.thoiGian,
   ]);
 
