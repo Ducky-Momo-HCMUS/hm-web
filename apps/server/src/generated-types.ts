@@ -188,9 +188,9 @@ export type HomeroomAddWatchlistResponse = {
   status: Scalars['Int'];
 };
 
-export type HomeroomAllList = {
-  __typename?: 'HomeroomAllList';
-  danhSachLopSH: Array<Scalars['String']>;
+export type HomeroomAllListItem = {
+  __typename?: 'HomeroomAllListItem';
+  maSH: Scalars['String'];
 };
 
 export type HomeroomDeleteWatchlistInput = {
@@ -649,7 +649,7 @@ export type Query = {
   classroomScoreList: ClassroomScoreList;
   courseList: CourseList;
   documents: Array<Document>;
-  homeroomAllList: HomeroomAllList;
+  homeroomAllList: Array<HomeroomAllListItem>;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomFailListByTerm: HomeroomFailList;
@@ -682,7 +682,7 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
-  yearList: YearList;
+  yearList: Array<YearListItem>;
 };
 
 export type QueryAccountListArgs = {
@@ -1189,9 +1189,9 @@ export type UploadDocumentResponse = {
   status: Scalars['Int'];
 };
 
-export type YearList = {
-  __typename?: 'YearList';
-  danhSachKhoa: Array<Scalars['Int']>;
+export type YearListItem = {
+  __typename?: 'YearListItem';
+  khoa: Scalars['Int'];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -1327,7 +1327,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: ResolverTypeWrapper<HomeroomAddWatchlistResponse>;
-  HomeroomAllList: ResolverTypeWrapper<HomeroomAllList>;
+  HomeroomAllListItem: ResolverTypeWrapper<HomeroomAllListItem>;
   HomeroomDeleteWatchlistInput: HomeroomDeleteWatchlistInput;
   HomeroomDeleteWatchlistResponse: ResolverTypeWrapper<HomeroomDeleteWatchlistResponse>;
   HomeroomDetail: ResolverTypeWrapper<HomeroomDetail>;
@@ -1426,7 +1426,7 @@ export type ResolversTypes = {
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
   UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
-  YearList: ResolverTypeWrapper<YearList>;
+  YearListItem: ResolverTypeWrapper<YearListItem>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1456,7 +1456,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
-  HomeroomAllList: HomeroomAllList;
+  HomeroomAllListItem: HomeroomAllListItem;
   HomeroomDeleteWatchlistInput: HomeroomDeleteWatchlistInput;
   HomeroomDeleteWatchlistResponse: HomeroomDeleteWatchlistResponse;
   HomeroomDetail: HomeroomDetail;
@@ -1555,7 +1555,7 @@ export type ResolversParentTypes = {
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: UploadDocumentResponse;
   UploadFile: Scalars['UploadFile'];
-  YearList: YearList;
+  YearListItem: YearListItem;
 };
 
 export type AccountActivateResponseResolvers<
@@ -1750,15 +1750,11 @@ export type HomeroomAddWatchlistResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type HomeroomAllListResolvers<
+export type HomeroomAllListItemResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['HomeroomAllList'] = ResolversParentTypes['HomeroomAllList']
+  ParentType extends ResolversParentTypes['HomeroomAllListItem'] = ResolversParentTypes['HomeroomAllListItem']
 > = {
-  danhSachLopSH?: Resolver<
-    Array<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
+  maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2490,7 +2486,7 @@ export type QueryResolvers<
     ContextType
   >;
   homeroomAllList?: Resolver<
-    ResolversTypes['HomeroomAllList'],
+    Array<ResolversTypes['HomeroomAllListItem']>,
     ParentType,
     ContextType
   >;
@@ -2685,7 +2681,11 @@ export type QueryResolvers<
     ContextType,
     Partial<QueryTeacherSearchStudentListArgs>
   >;
-  yearList?: Resolver<ResolversTypes['YearList'], ParentType, ContextType>;
+  yearList?: Resolver<
+    Array<ResolversTypes['YearListItem']>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type StudentAbsentListResolvers<
@@ -3117,15 +3117,11 @@ export interface UploadFileScalarConfig
   name: 'UploadFile';
 }
 
-export type YearListResolvers<
+export type YearListItemResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['YearList'] = ResolversParentTypes['YearList']
+  ParentType extends ResolversParentTypes['YearListItem'] = ResolversParentTypes['YearListItem']
 > = {
-  danhSachKhoa?: Resolver<
-    Array<ResolversTypes['Int']>,
-    ParentType,
-    ContextType
-  >;
+  khoa?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3148,7 +3144,7 @@ export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
-  HomeroomAllList?: HomeroomAllListResolvers<ContextType>;
+  HomeroomAllListItem?: HomeroomAllListItemResolvers<ContextType>;
   HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;
   HomeroomDetail?: HomeroomDetailResolvers<ContextType>;
   HomeroomExamAbsentList?: HomeroomExamAbsentListResolvers<ContextType>;
@@ -3232,5 +3228,5 @@ export type Resolvers<ContextType = any> = {
   TeacherStudentList?: TeacherStudentListResolvers<ContextType>;
   UploadDocumentResponse?: UploadDocumentResponseResolvers<ContextType>;
   UploadFile?: GraphQLScalarType;
-  YearList?: YearListResolvers<ContextType>;
+  YearListItem?: YearListItemResolvers<ContextType>;
 };

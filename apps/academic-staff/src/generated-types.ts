@@ -183,9 +183,9 @@ export type HomeroomAddWatchlistResponse = {
   status: Scalars['Int'];
 };
 
-export type HomeroomAllList = {
-  __typename?: 'HomeroomAllList';
-  danhSachLopSH: Array<Scalars['String']>;
+export type HomeroomAllListItem = {
+  __typename?: 'HomeroomAllListItem';
+  maSH: Scalars['String'];
 };
 
 export type HomeroomDeleteWatchlistInput = {
@@ -644,7 +644,7 @@ export type Query = {
   classroomScoreList: ClassroomScoreList;
   courseList: CourseList;
   documents: Array<Document>;
-  homeroomAllList: HomeroomAllList;
+  homeroomAllList: Array<HomeroomAllListItem>;
   homeroomDetail: HomeroomDetail;
   homeroomExamAbsentListByTerm: HomeroomExamAbsentList;
   homeroomFailListByTerm: HomeroomFailList;
@@ -677,7 +677,7 @@ export type Query = {
   tagList: TagList;
   teacherList: TeacherList;
   teacherSearchStudentList: TeacherStudentList;
-  yearList: YearList;
+  yearList: Array<YearListItem>;
 };
 
 export type QueryAccountListArgs = {
@@ -1184,9 +1184,9 @@ export type UploadDocumentResponse = {
   status: Scalars['Int'];
 };
 
-export type YearList = {
-  __typename?: 'YearList';
-  danhSachKhoa: Array<Scalars['Int']>;
+export type YearListItem = {
+  __typename?: 'YearListItem';
+  khoa: Scalars['Int'];
 };
 
 export type UploadDocumentMutationVariables = Exact<{
@@ -1283,10 +1283,7 @@ export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type HomeroomAllListQuery = {
   __typename?: 'Query';
-  homeroomAllList: {
-    __typename?: 'HomeroomAllList';
-    danhSachLopSH: Array<string>;
-  };
+  homeroomAllList: Array<{ __typename?: 'HomeroomAllListItem'; maSH: string }>;
 };
 
 export type StudentAbsentListQueryVariables = Exact<{
@@ -1417,7 +1414,7 @@ export type YearListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type YearListQuery = {
   __typename?: 'Query';
-  yearList: { __typename?: 'YearList'; danhSachKhoa: Array<number> };
+  yearList: Array<{ __typename?: 'YearListItem'; khoa: number }>;
 };
 
 export type AccountActivateMutationVariables = Exact<{
@@ -2625,7 +2622,7 @@ export type ImportHistoryQueryResult = Apollo.QueryResult<
 export const HomeroomAllListDocument = gql`
   query HomeroomAllList {
     homeroomAllList {
-      danhSachLopSH
+      maSH
     }
   }
 `;
@@ -3074,7 +3071,7 @@ export type TeacherListQueryResult = Apollo.QueryResult<
 export const YearListDocument = gql`
   query YearList {
     yearList {
-      danhSachKhoa
+      khoa
     }
   }
 `;

@@ -30,6 +30,16 @@ interface State {
   class: string;
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+export const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function StudentList() {
   const [values, setValues] = useState<State>({
     class: '',
@@ -63,8 +73,8 @@ function StudentList() {
     useHomeroomAllListQuery({});
 
   const homeroomAllList = useMemo(
-    () => homeroomAllListData?.homeroomAllList.danhSachLopSH || [],
-    [homeroomAllListData?.homeroomAllList.danhSachLopSH]
+    () => homeroomAllListData?.homeroomAllList.map((item) => item.maSH) || [],
+    [homeroomAllListData?.homeroomAllList]
   );
 
   const [
@@ -116,6 +126,7 @@ function StudentList() {
               value={values.class || homeroomAllList[0] || ''}
               label="Lớp"
               onChange={handleChange('class')}
+              MenuProps={MenuProps}
             >
               {homeroomAllList &&
                 homeroomAllList.map((item) => (
