@@ -87,15 +87,17 @@ class NoteAPI extends BaseDataSource {
 
   public async addNote({ payload }: MutationNoteAddArgs) {
     const { images, ...other } = payload;
-    const awaitedImages = await Promise.all(images as any);
     const formData = this.createFormData(other);
-    awaitedImages.forEach((image) => {
-      const { createReadStream, filename } = image;
-      if (!filename) {
-        throw new UserInputError('Missing file');
-      }
-      formData.append('images', createReadStream(), filename);
-    });
+    if (images) {
+      const awaitedImages = await Promise.all(images as any);
+      awaitedImages.forEach((image) => {
+        const { createReadStream, filename } = image;
+        if (!filename) {
+          throw new UserInputError('Missing file');
+        }
+        formData.append('images', createReadStream(), filename);
+      });
+    }
 
     try {
       const res = await this.post(`v1/notes`, formData);
