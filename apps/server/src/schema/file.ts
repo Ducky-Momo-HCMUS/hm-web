@@ -5,6 +5,7 @@ const fileTypeDefs = gql`
 
   extend type Query {
     documents: [Document!]!
+    importHistory(fileType: FileType!): ImportHistory!
   }
 
   extend type Mutation {
@@ -12,6 +13,36 @@ const fileTypeDefs = gql`
       input: UploadDocumentInput!
       file: UploadFile!
     ): UploadDocumentResponse!
+  }
+
+  enum FileType {
+    TAI_KHOAN
+    DANH_SACH_GVCN
+    BANG_DIEM_TOAN_BO_SINH_VIEN
+    DANH_SACH_CHUYEN_NGANH
+    KET_QUA_CHUYEN_NGANH
+    THONG_KE_DKHP
+    DANH_SACH_MON_HOC
+    DANH_SACH_SINH_VIEN_HOAN_THI
+    DANH_SACH_SINH_VIEN_KHONG_DKHP
+    DANH_SACH_SINH_VIEN_VANG_THI
+    DIEM_REN_LUYEN
+    DIEM_THI_THEO_LOP_HOC_PHAN
+    THOI_KHOA_BIEU
+    HO_SO_SINH_VIEN
+  }
+
+  type ImportHistory {
+    thoiGian: String!
+    taiKhoan: ImportAuthor!
+  }
+
+  type ImportAuthor {
+    giaoVien: AuthorInfo!
+  }
+
+  type AuthorInfo {
+    tenGV: String!
   }
 
   input UploadDocumentInput {

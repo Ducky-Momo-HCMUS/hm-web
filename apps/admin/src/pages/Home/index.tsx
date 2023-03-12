@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Avatar,
   Box,
   Divider,
   IconButton,
@@ -73,7 +74,8 @@ function Home() {
       <StyledContainer>
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
+            <Avatar sx={{ marginLeft: '0.5rem' }} src="/img/fit-logo.png" />
+            <IconButton sx={{ color: 'white' }} onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? (
                 <ChevronRightIcon />
               ) : (

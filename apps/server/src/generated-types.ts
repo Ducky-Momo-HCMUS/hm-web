@@ -104,6 +104,11 @@ export type AllTeacherListItem = {
   tenGV: Scalars['String'];
 };
 
+export type AuthorInfo = {
+  __typename?: 'AuthorInfo';
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -117,6 +122,24 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export const FileType = {
+  BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
+  DanhSachChuyenNganh: 'DANH_SACH_CHUYEN_NGANH',
+  DanhSachGvcn: 'DANH_SACH_GVCN',
+  DanhSachMonHoc: 'DANH_SACH_MON_HOC',
+  DanhSachSinhVienHoanThi: 'DANH_SACH_SINH_VIEN_HOAN_THI',
+  DanhSachSinhVienKhongDkhp: 'DANH_SACH_SINH_VIEN_KHONG_DKHP',
+  DanhSachSinhVienVangThi: 'DANH_SACH_SINH_VIEN_VANG_THI',
+  DiemRenLuyen: 'DIEM_REN_LUYEN',
+  DiemThiTheoLopHocPhan: 'DIEM_THI_THEO_LOP_HOC_PHAN',
+  HoSoSinhVien: 'HO_SO_SINH_VIEN',
+  KetQuaChuyenNganh: 'KET_QUA_CHUYEN_NGANH',
+  TaiKhoan: 'TAI_KHOAN',
+  ThoiKhoaBieu: 'THOI_KHOA_BIEU',
+  ThongKeDkhp: 'THONG_KE_DKHP',
+} as const;
+
+export type FileType = typeof FileType[keyof typeof FileType];
 export type HomeroomAddWatchlistInput = {
   maSV: Array<Scalars['String']>;
 };
@@ -338,6 +361,17 @@ export type HomeroomWatchList = {
 export type HomeroomWatchListItem = {
   __typename?: 'HomeroomWatchListItem';
   sinhVien: HomeroomStudentListItem;
+};
+
+export type ImportAuthor = {
+  __typename?: 'ImportAuthor';
+  giaoVien: AuthorInfo;
+};
+
+export type ImportHistory = {
+  __typename?: 'ImportHistory';
+  taiKhoan: ImportAuthor;
+  thoiGian: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -585,6 +619,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
+  importHistory: ImportHistory;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
@@ -663,6 +698,14 @@ export type QueryHomeroomTermListArgs = {
 
 export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
+};
+
+export type QueryImportHistoryArgs = {
+  fileType: FileType;
 };
 
 export type QueryNoteDetailArgs = {
@@ -1107,10 +1150,12 @@ export type ResolversTypes = {
   AccountListItem: ResolverTypeWrapper<AccountListItem>;
   AllTeacherList: ResolverTypeWrapper<AllTeacherList>;
   AllTeacherListItem: ResolverTypeWrapper<AllTeacherListItem>;
+  AuthorInfo: ResolverTypeWrapper<AuthorInfo>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
+  FileType: FileType;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: ResolverTypeWrapper<HomeroomAddWatchlistResponse>;
@@ -1149,6 +1194,8 @@ export type ResolversTypes = {
   HomeroomWatchList: ResolverTypeWrapper<HomeroomWatchList>;
   HomeroomWatchListItem: ResolverTypeWrapper<HomeroomWatchListItem>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  ImportAuthor: ResolverTypeWrapper<ImportAuthor>;
+  ImportHistory: ResolverTypeWrapper<ImportHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -1218,6 +1265,7 @@ export type ResolversParentTypes = {
   AccountListItem: AccountListItem;
   AllTeacherList: AllTeacherList;
   AllTeacherListItem: AllTeacherListItem;
+  AuthorInfo: AuthorInfo;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
   Date: Scalars['Date'];
@@ -1260,6 +1308,8 @@ export type ResolversParentTypes = {
   HomeroomWatchList: HomeroomWatchList;
   HomeroomWatchListItem: HomeroomWatchListItem;
   ID: Scalars['ID'];
+  ImportAuthor: ImportAuthor;
+  ImportHistory: ImportHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
   Mutation: {};
@@ -1401,6 +1451,14 @@ export type AllTeacherListItemResolvers<
     ContextType
   >;
   maGV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AuthorInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AuthorInfo'] = ResolversParentTypes['AuthorInfo']
+> = {
   tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1834,6 +1892,23 @@ export type HomeroomWatchListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ImportAuthorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ImportAuthor'] = ResolversParentTypes['ImportAuthor']
+> = {
+  giaoVien?: Resolver<ResolversTypes['AuthorInfo'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImportHistoryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ImportHistory'] = ResolversParentTypes['ImportHistory']
+> = {
+  taiKhoan?: Resolver<ResolversTypes['ImportAuthor'], ParentType, ContextType>;
+  thoiGian?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LoginResponseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LoginResponse'] = ResolversParentTypes['LoginResponse']
@@ -2208,7 +2283,13 @@ export type QueryResolvers<
     ResolversTypes['HomeroomWatchList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomWatchListArgs, 'homeroomId'>
+    RequireFields<QueryHomeroomWatchListArgs, 'homeroomId' | 'page' | 'size'>
+  >;
+  importHistory?: Resolver<
+    ResolversTypes['ImportHistory'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryImportHistoryArgs, 'fileType'>
   >;
   noteDetail?: Resolver<
     ResolversTypes['NoteDetail'],
@@ -2628,6 +2709,7 @@ export type Resolvers<ContextType = any> = {
   AccountListItem?: AccountListItemResolvers<ContextType>;
   AllTeacherList?: AllTeacherListResolvers<ContextType>;
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
+  AuthorInfo?: AuthorInfoResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
@@ -2665,6 +2747,8 @@ export type Resolvers<ContextType = any> = {
   HomeroomTrainingPointOverview?: HomeroomTrainingPointOverviewResolvers<ContextType>;
   HomeroomWatchList?: HomeroomWatchListResolvers<ContextType>;
   HomeroomWatchListItem?: HomeroomWatchListItemResolvers<ContextType>;
+  ImportAuthor?: ImportAuthorResolvers<ContextType>;
+  ImportHistory?: ImportHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;

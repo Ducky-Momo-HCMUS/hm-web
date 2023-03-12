@@ -99,6 +99,11 @@ export type AllTeacherListItem = {
   tenGV: Scalars['String'];
 };
 
+export type AuthorInfo = {
+  __typename?: 'AuthorInfo';
+  tenGV: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -112,6 +117,24 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export const FileType = {
+  BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
+  DanhSachChuyenNganh: 'DANH_SACH_CHUYEN_NGANH',
+  DanhSachGvcn: 'DANH_SACH_GVCN',
+  DanhSachMonHoc: 'DANH_SACH_MON_HOC',
+  DanhSachSinhVienHoanThi: 'DANH_SACH_SINH_VIEN_HOAN_THI',
+  DanhSachSinhVienKhongDkhp: 'DANH_SACH_SINH_VIEN_KHONG_DKHP',
+  DanhSachSinhVienVangThi: 'DANH_SACH_SINH_VIEN_VANG_THI',
+  DiemRenLuyen: 'DIEM_REN_LUYEN',
+  DiemThiTheoLopHocPhan: 'DIEM_THI_THEO_LOP_HOC_PHAN',
+  HoSoSinhVien: 'HO_SO_SINH_VIEN',
+  KetQuaChuyenNganh: 'KET_QUA_CHUYEN_NGANH',
+  TaiKhoan: 'TAI_KHOAN',
+  ThoiKhoaBieu: 'THOI_KHOA_BIEU',
+  ThongKeDkhp: 'THONG_KE_DKHP',
+} as const;
+
+export type FileType = typeof FileType[keyof typeof FileType];
 export type HomeroomAddWatchlistInput = {
   maSV: Array<Scalars['String']>;
 };
@@ -333,6 +356,17 @@ export type HomeroomWatchList = {
 export type HomeroomWatchListItem = {
   __typename?: 'HomeroomWatchListItem';
   sinhVien: HomeroomStudentListItem;
+};
+
+export type ImportAuthor = {
+  __typename?: 'ImportAuthor';
+  giaoVien: AuthorInfo;
+};
+
+export type ImportHistory = {
+  __typename?: 'ImportHistory';
+  taiKhoan: ImportAuthor;
+  thoiGian: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -580,6 +614,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
+  importHistory: ImportHistory;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
@@ -658,6 +693,14 @@ export type QueryHomeroomTermListArgs = {
 
 export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
+};
+
+export type QueryImportHistoryArgs = {
+  fileType: FileType;
 };
 
 export type QueryNoteDetailArgs = {
@@ -991,6 +1034,22 @@ export type UploadDocumentMutationVariables = Exact<{
 export type UploadDocumentMutation = {
   __typename?: 'Mutation';
   uploadDocument: { __typename?: 'UploadDocumentResponse'; status: number };
+};
+
+export type ImportHistoryQueryVariables = Exact<{
+  fileType: FileType;
+}>;
+
+export type ImportHistoryQuery = {
+  __typename?: 'Query';
+  importHistory: {
+    __typename?: 'ImportHistory';
+    thoiGian: string;
+    taiKhoan: {
+      __typename?: 'ImportAuthor';
+      giaoVien: { __typename?: 'AuthorInfo'; tenGV: string };
+    };
+  };
 };
 
 export type HomeroomAllListQueryVariables = Exact<{ [key: string]: never }>;
@@ -1630,6 +1689,10 @@ export type HomeroomTermListQuery = {
 
 export type HomeroomWatchListQueryVariables = Exact<{
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 }>;
 
 export type HomeroomWatchListQuery = {
@@ -1969,6 +2032,69 @@ export type UploadDocumentMutationResult =
 export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutation,
   UploadDocumentMutationVariables
+>;
+export const ImportHistoryDocument = gql`
+  query ImportHistory($fileType: FileType!) {
+    importHistory(fileType: $fileType) {
+      thoiGian
+      taiKhoan {
+        giaoVien {
+          tenGV
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useImportHistoryQuery__
+ *
+ * To run a query within a React component, call `useImportHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImportHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImportHistoryQuery({
+ *   variables: {
+ *      fileType: // value for 'fileType'
+ *   },
+ * });
+ */
+export function useImportHistoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ImportHistoryQuery,
+    ImportHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ImportHistoryQuery, ImportHistoryQueryVariables>(
+    ImportHistoryDocument,
+    options
+  );
+}
+export function useImportHistoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ImportHistoryQuery,
+    ImportHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ImportHistoryQuery, ImportHistoryQueryVariables>(
+    ImportHistoryDocument,
+    options
+  );
+}
+export type ImportHistoryQueryHookResult = ReturnType<
+  typeof useImportHistoryQuery
+>;
+export type ImportHistoryLazyQueryHookResult = ReturnType<
+  typeof useImportHistoryLazyQuery
+>;
+export type ImportHistoryQueryResult = Apollo.QueryResult<
+  ImportHistoryQuery,
+  ImportHistoryQueryVariables
 >;
 export const HomeroomAllListDocument = gql`
   query HomeroomAllList {
@@ -4285,8 +4411,20 @@ export type HomeroomTermListQueryResult = Apollo.QueryResult<
   HomeroomTermListQueryVariables
 >;
 export const HomeroomWatchListDocument = gql`
-  query HomeroomWatchList($homeroomId: String!) {
-    homeroomWatchList(homeroomId: $homeroomId) {
+  query HomeroomWatchList(
+    $homeroomId: String!
+    $page: Int!
+    $size: Int!
+    $sortBy: String
+    $sortOrder: String
+  ) {
+    homeroomWatchList(
+      homeroomId: $homeroomId
+      page: $page
+      size: $size
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+    ) {
       total
       data {
         sinhVien {
@@ -4321,6 +4459,10 @@ export const HomeroomWatchListDocument = gql`
  * const { data, loading, error } = useHomeroomWatchListQuery({
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
