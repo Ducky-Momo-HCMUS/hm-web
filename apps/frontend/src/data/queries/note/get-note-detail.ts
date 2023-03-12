@@ -13,7 +13,7 @@ export const GET_NOTE_DETAIL = gql`
       thoiGianTao
       thoiGianSua
       ghiChuHinhAnh {
-        stt
+        id
         url
       }
     }

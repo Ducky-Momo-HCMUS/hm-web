@@ -6,7 +6,7 @@ export const GET_STUDENT_OVERVIEW_RESULT = gql`
       tenCN
       daiCuong
       coSoNganh
-      chuyenNganh
+      batBuocChuyenNganh
       tuChonTuDo
       tuChonChuyenNganh
       totNghiep

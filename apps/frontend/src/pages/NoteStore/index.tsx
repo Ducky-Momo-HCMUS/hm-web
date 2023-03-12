@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 import React, {
   ChangeEvent,
   useCallback,
@@ -9,10 +10,8 @@ import React, {
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
   InputLabel,
-  ListItemText,
   MenuItem,
   Pagination,
   Select,
@@ -26,50 +25,59 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import { Link } from 'react-router-dom';
+import { FilePond } from 'react-filepond';
 
 import Header from '../../components/Header';
 import {
   StyledBreadCrumbs,
   StyledContainer,
   StyledContentWrapper,
+  StyledStickyBox,
   StyledTitle,
 } from '../../components/styles';
-import { CLASS_OPTIONS } from '../../mocks';
 import DeleteDialog from '../../components/DeleteDialog';
-import { File } from '../../types';
 import NoteEditor from '../../components/Note/NoteEditor';
-import { mapImageUrlToFile } from '../../utils';
 import {
   NoteAddInput,
   NoteEditInput,
+  NoteImage,
+  useHomeroomListQuery,
   useNoteAddMutation,
   useNoteDeleteMutation,
   useNoteDetailLazyQuery,
   useNoteEditMutation,
-  useNoteListQuery,
+  useNoteSearchLazyQuery,
   useTagListQuery,
 } from '../../generated-types';
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
-import { GET_NOTE_LIST } from '../../data/queries/note/get-note-list';
+import { NOTE_STORE_LIST_PAGE_SIZE } from '../../constants';
+import { SEARCH_NOTE } from '../../data/queries/note/search-note';
 
 import NoteCardItem from './NoteCardItem';
 import {
+  StyledCard,
   StyledDialog,
-  StyledFilterBar,
+  StyledFilterBox,
   StyledGridContainer,
   StyledTextField,
 } from './styles';
 
 interface State {
-  classes: string[];
   selected: number;
   deleteIndex: number;
-  startDate: Dayjs | null;
-  endDate: Dayjs | null;
   title: string;
   tags: string[];
-  filterTags: string[];
   isAdding: boolean;
+  images: NoteImage[];
+}
+
+interface FilterState {
+  title: string;
+  student: string;
+  tag: string;
+  class: string;
+  start: Dayjs | null;
+  end: Dayjs | null;
 }
 
 const ITEM_HEIGHT = 48;
@@ -84,15 +92,21 @@ const MenuProps = {
 
 function NoteStore() {
   const [values, setValues] = useState<State>({
-    classes: [],
     selected: -1,
     deleteIndex: -1,
-    startDate: null,
-    endDate: null,
     title: '',
     tags: [],
-    filterTags: [],
     isAdding: false,
+    images: [],
+  });
+
+  const [filterValues, setFilterValues] = useState<FilterState>({
+    title: '',
+    student: '',
+    tag: '',
+    class: '',
+    start: null,
+    end: null,
   });
 
   const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
@@ -101,27 +115,7 @@ function NoteStore() {
     [tagListData?.tagList.tags]
   );
 
-  const { data: noteListData, loading: noteListLoading } = useNoteListQuery({});
-  const noteList = useMemo(
-    () => noteListData?.noteList || [],
-    [noteListData?.noteList]
-  );
-
-  const handleSelectClasses = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      const {
-        target: { value },
-      } = event;
-      setValues((v) => ({
-        ...v,
-        classes: typeof value === 'string' ? value.split(',') : value,
-      }));
-    },
-    []
-  );
-
   const [files, setFiles] = useState<File[]>();
-
   const editorRef = useRef<TinyMCEEditor | null>(null);
 
   const handleChangeValue = useCallback(
@@ -131,15 +125,9 @@ function NoteStore() {
     []
   );
 
-  const handleSelectFilterTags = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      const {
-        target: { value },
-      } = event;
-      setValues((v) => ({
-        ...v,
-        filterTags: typeof value === 'string' ? value.split(',') : value,
-      }));
+  const handleChangeFilterValue = useCallback(
+    (prop: keyof FilterState) => (event: ChangeEvent<HTMLInputElement>) => {
+      setFilterValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
   );
@@ -154,8 +142,33 @@ function NoteStore() {
     }));
   }, []);
 
-  const [getNoteDetail, { data: noteDetailData, loading: noteDetailLoading }] =
-    useNoteDetailLazyQuery();
+  const handleSelectFilterClass = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      const {
+        target: { value },
+      } = event;
+      setFilterValues((v) => ({
+        ...v,
+        class: value,
+      }));
+    },
+    []
+  );
+
+  const handleSelectFilterTag = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      const {
+        target: { value },
+      } = event;
+      setFilterValues((v) => ({
+        ...v,
+        tag: value,
+      }));
+    },
+    []
+  );
+
+  const [getNoteDetail, { data: noteDetailData }] = useNoteDetailLazyQuery();
 
   const noteDetail = useMemo(
     () => noteDetailData?.noteDetail,
@@ -179,12 +192,10 @@ function NoteStore() {
         ...v,
         title: noteDetail.tieuDe,
         tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
+        images: noteDetail.ghiChuHinhAnh || [],
       }));
-      setFiles(
-        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
-      );
     }
-  }, [noteDetail, values.isAdding, values.selected]);
+  }, [noteDetail, values.isAdding]);
 
   const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
   const handleDeleteNote = useCallback(async () => {
@@ -193,12 +204,38 @@ function NoteStore() {
       variables: {
         noteId: values.deleteIndex,
       },
-      refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+      refetchQueries: [
+        {
+          query: SEARCH_NOTE,
+          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+        },
+        'NoteSearch',
+      ],
     });
   }, [deleteNote, values.deleteIndex]);
 
   const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
   const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+
+  const filePondRef = useRef<FilePond | null>(null);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      isAdding: true,
+      title: '',
+      tags: [],
+      images: [],
+    }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+    if (filePondRef.current) {
+      filePondRef.current.removeFile();
+    }
+  }, []);
 
   const handleClickSave = useCallback(async () => {
     if (values.isAdding) {
@@ -208,27 +245,41 @@ function NoteStore() {
           (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
         ),
         noiDung: editorRef.current?.getContent() || '',
-        url: ['https://picsum.photos/200'],
+        images: files,
       } as NoteAddInput;
 
       await addNote({
         variables: {
           payload,
         },
-        refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+        refetchQueries: [
+          {
+            query: SEARCH_NOTE,
+            variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+          },
+          'NoteSearch',
+        ],
       });
 
-      setValues((v) => ({ ...v, selected: -1 }));
+      handleReset();
       return;
     }
 
     const payload = {
       tieuDe: values.title,
       noiDung: editorRef.current?.getContent() || '',
-      maTag: values.tags.map(
-        (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
-      ),
-      url: ['https://picsum.photos/200'],
+      removeTagIds:
+        noteDetail?.ghiChuTag
+          .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
+          .map((ghiChuTag) => ghiChuTag.maTag) || [],
+      addTagIds:
+        values.tags
+          .filter(
+            (tag) => !noteDetail?.ghiChuTag.find((item) => item.tenTag === tag)
+          )
+          .map((ghiChuTag) => tagList.find((item) => item.tenTag === ghiChuTag))
+          .map((addTag) => addTag?.maTag) || [],
+      images: files,
     } as NoteEditInput;
 
     await editNote({
@@ -236,13 +287,22 @@ function NoteStore() {
         noteId: values.selected,
         payload,
       },
-      refetchQueries: [{ query: GET_NOTE_LIST }, 'NoteList'],
+      refetchQueries: [
+        {
+          query: SEARCH_NOTE,
+          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+        },
+        'NoteSearch',
+      ],
     });
 
-    setValues((v) => ({ ...v, selected: -1 }));
+    handleReset();
   }, [
     addNote,
     editNote,
+    files,
+    handleReset,
+    noteDetail?.ghiChuTag,
     tagList,
     values.isAdding,
     values.selected,
@@ -250,174 +310,267 @@ function NoteStore() {
     values.title,
   ]);
 
-  const handleReset = useCallback(() => {
-    setValues((v) => ({
-      ...v,
-      selected: 0,
-      isAdding: true,
-      title: '',
-      tags: [],
-    }));
-    setFiles([]);
-    if (editorRef.current) {
-      editorRef.current.setContent('');
+  const [page, setPage] = useState(1);
+  const handleChangePage = (event: ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const args = useMemo(() => {
+    let params = Object.assign(
+      {},
+      { page },
+      { size: NOTE_STORE_LIST_PAGE_SIZE },
+      filterValues.title && { tieuDe: filterValues.title },
+      filterValues.start && { start: filterValues.start },
+      filterValues.end && { end: filterValues.end },
+      filterValues.tag && { maTag: filterValues.tag },
+      filterValues.class && { maSH: filterValues.class }
+    );
+
+    if (filterValues.student) {
+      if (Number.isNaN(Number(filterValues.student))) {
+        params = {
+          ...params,
+          tenSV: filterValues.student,
+        };
+      } else {
+        params = {
+          ...params,
+          maSV: filterValues.student,
+        };
+      }
     }
-  }, [editorRef]);
+
+    return params;
+  }, [
+    filterValues.class,
+    filterValues.end,
+    filterValues.start,
+    filterValues.student,
+    filterValues.tag,
+    filterValues.title,
+    page,
+  ]);
+
+  const [searchNote, { loading: searchNoteLoading, data: searchNoteData }] =
+    useNoteSearchLazyQuery();
+
+  useEffect(() => {
+    searchNote({ variables: args, fetchPolicy: 'no-cache' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchNote, page]);
+
+  const lastPage = useMemo(
+    () => searchNoteData?.noteSearch.lastPage,
+    [searchNoteData?.noteSearch.lastPage]
+  );
+
+  const noteList = useMemo(() => {
+    return searchNoteData?.noteSearch.data || [];
+  }, [searchNoteData?.noteSearch.data]);
+
+  const handleSearchNote = useCallback(() => {
+    searchNote({
+      variables: args,
+      fetchPolicy: 'no-cache',
+    });
+  }, [args, searchNote]);
+
+  const handleResetFilter = useCallback(() => {
+    setFilterValues({
+      title: '',
+      student: '',
+      tag: '',
+      class: '',
+      start: null,
+      end: null,
+    });
+    searchNote({
+      variables: {
+        page: 1,
+        size: NOTE_STORE_LIST_PAGE_SIZE,
+      },
+    });
+  }, [searchNote]);
+
+  const { loading: homeroomListLoading, data: homeroomListData } =
+    useHomeroomListQuery();
+  const homeroomList = useMemo(
+    () => homeroomListData?.homeroomList.lopChuNhiem || [],
+    [homeroomListData?.homeroomList.lopChuNhiem]
+  );
 
   return (
     <>
       <StyledContainer>
         <Header isAuthenticated />
         <StyledContentWrapper>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '0.5rem',
-            }}
-          >
-            <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
-            <Button variant="contained" onClick={handleReset}>
-              Tạo ghi chú mới
-            </Button>
-          </Box>
-          <StyledBreadCrumbs aria-label="breadcrumb">
-            <Link to="/">Trang chủ</Link>
-            <Typography color="text.primary">Ghi chú của tôi</Typography>
-          </StyledBreadCrumbs>
-          <StyledFilterBar>
-            <StyledTextField
-              sx={{ width: '20%' }}
-              id="title-keyword"
-              variant="standard"
-              label="Tiêu đề"
-              placeholder="Nhập tiêu đề..."
-              InputLabelProps={{
-                shrink: true,
+          <StyledStickyBox>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '0.5rem',
               }}
-            />
-            <StyledTextField
-              sx={{ width: '15%' }}
-              id="student-keyword"
-              variant="standard"
-              label="Sinh viên"
-              placeholder="Nhập họ tên/MSSV..."
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Ngày bắt đầu"
-                inputFormat="DD/MM/YYYY"
-                value={values.startDate}
-                onChange={(newValue) => {
-                  setValues((v) => ({ ...v, startDate: newValue }));
+            >
+              <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
+              <Button variant="contained" onClick={handleReset}>
+                Tạo ghi chú mới
+              </Button>
+            </Box>
+            <StyledBreadCrumbs aria-label="breadcrumb">
+              <Link to="/">Trang chủ</Link>
+              <Typography color="text.primary">Ghi chú của tôi</Typography>
+            </StyledBreadCrumbs>
+          </StyledStickyBox>
+          <StyledCard>
+            <StyledFilterBox>
+              <StyledTextField
+                sx={{ width: '20%' }}
+                id="title-keyword"
+                variant="standard"
+                label="Tiêu đề"
+                placeholder="Nhập tiêu đề..."
+                InputLabelProps={{
+                  shrink: true,
                 }}
-                renderInput={(params) => (
-                  <StyledTextField
-                    {...params}
-                    variant="standard"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                )}
+                onChange={handleChangeFilterValue('title')}
+                value={filterValues.title}
               />
-              <DatePicker
-                label="Ngày kết thúc"
-                inputFormat="DD/MM/YYYY"
-                value={values.endDate}
-                onChange={(newValue) => {
-                  setValues((v) => ({ ...v, endDate: newValue }));
+              <StyledTextField
+                sx={{ width: '15%' }}
+                id="student-keyword"
+                variant="standard"
+                label="Sinh viên"
+                placeholder="Nhập họ tên/MSSV..."
+                InputLabelProps={{
+                  shrink: true,
                 }}
-                renderInput={(params) => (
-                  <StyledTextField
-                    {...params}
-                    variant="standard"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                )}
+                onChange={handleChangeFilterValue('student')}
+                value={filterValues.student}
               />
-            </LocalizationProvider>
-            <FormControl variant="standard" sx={{ width: '10%' }}>
-              <InputLabel
-                sx={{ fontWeight: 'bold' }}
-                shrink
-                id="class-select-label"
-              >
-                Lớp
-              </InputLabel>
-              <Select
-                sx={{
-                  '& .MuiSelect-select .notranslate::after':
-                    values.classes.length === 0
-                      ? {
-                          content: `"Chọn lớp..."`,
-                          opacity: 0.42,
-                        }
-                      : {},
-                }}
-                multiple
-                renderValue={(selected) => selected.join(', ')}
-                labelId="class-select-label"
-                id="class-select"
-                value={values.classes}
-                label="Lớp"
-                onChange={handleSelectClasses}
-              >
-                {CLASS_OPTIONS.map((item) => (
-                  <MenuItem value={item}>
-                    <Checkbox checked={values.classes.indexOf(item) > -1} />
-                    <ListItemText primary={item} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
-              <FormControl variant="standard" sx={{ width: '15%' }}>
-                <InputLabel
-                  sx={{ fontWeight: 'bold' }}
-                  shrink
-                  id="class-select-label"
-                >
-                  Tag
-                </InputLabel>
-                <Select
-                  sx={{
-                    '& .MuiSelect-select .notranslate::after':
-                      values.filterTags.length === 0
-                        ? {
-                            content: `"Chọn tag..."`,
-                            opacity: 0.42,
-                          }
-                        : {},
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Ngày bắt đầu"
+                  inputFormat="DD/MM/YYYY"
+                  value={filterValues.start}
+                  onChange={(newValue) => {
+                    setFilterValues((v) => ({ ...v, start: newValue }));
                   }}
-                  multiple
-                  renderValue={(selected) => selected.join(', ')}
-                  labelId="tag-select-label"
-                  id="tag-select"
-                  value={values.filterTags}
-                  MenuProps={MenuProps}
-                  label="Tag"
-                  onChange={handleSelectFilterTags}
-                >
-                  {tagList.map((item) => (
-                    <MenuItem value={item.tenTag}>
-                      <Checkbox
-                        checked={values.tags.indexOf(item.tenTag) > -1}
-                      />
-                      <ListItemText primary={item.tenTag} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </AsyncDataRenderer>
-          </StyledFilterBar>
-          <AsyncDataRenderer loading={noteListLoading} data={noteListData}>
+                  renderInput={(params) => (
+                    <StyledTextField
+                      {...params}
+                      variant="standard"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+                <DatePicker
+                  label="Ngày kết thúc"
+                  inputFormat="DD/MM/YYYY"
+                  value={filterValues.end}
+                  onChange={(newValue) => {
+                    setFilterValues((v) => ({ ...v, end: newValue }));
+                  }}
+                  renderInput={(params) => (
+                    <StyledTextField
+                      {...params}
+                      variant="standard"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+              <AsyncDataRenderer
+                loading={homeroomListLoading}
+                data={homeroomListData}
+              >
+                <FormControl variant="standard" sx={{ width: '10%' }}>
+                  <InputLabel
+                    sx={{ fontWeight: 'bold' }}
+                    shrink
+                    id="class-select-label"
+                  >
+                    Lớp
+                  </InputLabel>
+                  <Select
+                    sx={{
+                      '& .MuiSelect-select .notranslate::after':
+                        filterValues.class.length === 0
+                          ? {
+                              content: `"Chọn lớp..."`,
+                              opacity: 0.42,
+                            }
+                          : {},
+                    }}
+                    labelId="class-select-label"
+                    id="class-select"
+                    label="Lớp"
+                    onChange={handleSelectFilterClass}
+                    value={filterValues.class}
+                  >
+                    {homeroomList.map((item) => (
+                      <MenuItem value={item.maSH}>{item.maSH}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </AsyncDataRenderer>
+              <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
+                <FormControl variant="standard" sx={{ width: '15%' }}>
+                  <InputLabel
+                    sx={{ fontWeight: 'bold' }}
+                    shrink
+                    id="class-select-label"
+                  >
+                    Tag
+                  </InputLabel>
+                  <Select
+                    sx={{
+                      '& .MuiSelect-select .notranslate::after':
+                        filterValues.tag.length === 0
+                          ? {
+                              content: `"Chọn tag..."`,
+                              opacity: 0.42,
+                            }
+                          : {},
+                    }}
+                    labelId="tag-select-label"
+                    id="tag-select"
+                    MenuProps={MenuProps}
+                    label="Tag"
+                    onChange={handleSelectFilterTag}
+                    value={filterValues.tag}
+                  >
+                    {tagList.map((item) => (
+                      <MenuItem value={item.maTag}>{item.tenTag}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </AsyncDataRenderer>
+            </StyledFilterBox>
+            <Button
+              sx={{ marginTop: '1rem' }}
+              variant="contained"
+              color="primary"
+              onClick={handleSearchNote}
+            >
+              Lọc
+            </Button>
+            <Button
+              sx={{ marginTop: '1rem', marginLeft: '1rem' }}
+              variant="outlined"
+              color="primary"
+              onClick={handleResetFilter}
+            >
+              Reset
+            </Button>
+          </StyledCard>
+          <AsyncDataRenderer loading={searchNoteLoading} data={noteList}>
             <StyledGridContainer
               sx={{ overflowY: 'auto', height: '20rem', padding: '1rem 0' }}
               container
@@ -440,38 +593,39 @@ function NoteStore() {
                 />
               ))}
             </StyledGridContainer>
+            <Pagination
+              sx={{ width: 'fit-content', margin: '1rem auto 0' }}
+              page={page}
+              count={lastPage}
+              color="primary"
+              onChange={handleChangePage}
+            />
           </AsyncDataRenderer>
-          <Pagination
-            sx={{ width: 'fit-content', margin: '1rem auto 0' }}
-            count={10}
-            color="primary"
-          />
         </StyledContentWrapper>
       </StyledContainer>
       {values.selected >= 0 && (
-        <AsyncDataRenderer loading={noteDetailLoading} data={noteDetailData}>
-          <StyledDialog
-            open={values.selected >= 0}
-            onClose={() => setValues({ ...values, selected: -1 })}
-          >
-            <NoteEditor
-              tagList={tagList}
-              editorRef={editorRef}
-              initialValue={
-                values.isAdding ? '' : (noteDetail?.noiDung as string)
-              }
-              files={files}
-              setFiles={setFiles}
-              onClickSave={handleClickSave}
-              title={values.title}
-              tags={values.tags}
-              handleChangeValue={handleChangeValue}
-              handleSelectTags={handleSelectTags}
-              handleReset={handleReset}
-              isAdding={values.isAdding}
-            />
-          </StyledDialog>
-        </AsyncDataRenderer>
+        <StyledDialog
+          open={values.selected >= 0}
+          onClose={() => setValues({ ...values, selected: -1 })}
+        >
+          <NoteEditor
+            filePondRef={filePondRef}
+            tagList={tagList}
+            imageList={values.images}
+            editorRef={editorRef}
+            initialValue={
+              values.isAdding ? '' : (noteDetail?.noiDung as string)
+            }
+            setFiles={setFiles}
+            onClickSave={handleClickSave}
+            title={values.title}
+            tags={values.tags}
+            handleChangeValue={handleChangeValue}
+            handleSelectTags={handleSelectTags}
+            handleReset={handleReset}
+            isAdding={values.isAdding}
+          />
+        </StyledDialog>
       )}
       {values.deleteIndex >= 0 && (
         <DeleteDialog

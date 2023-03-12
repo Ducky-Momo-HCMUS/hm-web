@@ -51,9 +51,13 @@ const studentTypeDefs = gql`
     maMH: String!
     tenMH: String!
     tenLopHP: String!
-    gvlt: String!
-    gvth: String!
     tinhTrang: String!
+    diemGK: Float
+    diemTH: Float
+    diemCong: Float
+    diemKhac: Float
+    diemCK: Float
+    dtb: Float
   }
 
   type StudentTrainingPoint {
@@ -178,7 +182,7 @@ const studentTypeDefs = gql`
     tenCN: String!
     daiCuong: Int!
     coSoNganh: Int!
-    chuyenNganh: Int!
+    batBuocChuyenNganh: Int!
     tuChonTuDo: Int!
     tuChonChuyenNganh: Int!
     totNghiep: Int!

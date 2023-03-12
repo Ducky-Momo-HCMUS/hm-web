@@ -1,8 +1,0 @@
-{
-  "name": "frontend-e2e",
-  "version": "1.0.0",
-  "license": "MIT",
-  "dependencies": {
-    "cypress": "^10.10.0"
-  }
-}

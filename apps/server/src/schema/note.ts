@@ -1,15 +1,34 @@
 import { gql } from 'apollo-server-express';
 
 const noteTypeDefs = gql`
+  scalar Date
+
   extend type Query {
     noteDetail(noteId: Int!): NoteDetail!
     noteList: [NoteListItem!]!
+    noteSearch(
+      tieuDe: String
+      maSV: String
+      tenSV: String
+      start: Date
+      maSH: String
+      maTag: Int
+      end: Date
+      page: Int!
+      size: Int!
+    ): NoteSearch!
   }
 
   extend type Mutation {
     noteAdd(payload: NoteAddInput!): NoteAddResponse!
     noteEdit(noteId: Int!, payload: NoteEditInput!): NoteEditResponse!
     noteDelete(noteId: Int!): NoteDeleteResponse!
+  }
+
+  type NoteSearch {
+    total: Int!
+    lastPage: Int!
+    data: [NoteListItem!]!
   }
 
   type NoteDetail {
@@ -28,7 +47,7 @@ const noteTypeDefs = gql`
   }
 
   type NoteImage {
-    stt: Int!
+    id: String!
     url: String!
   }
 
@@ -46,14 +65,16 @@ const noteTypeDefs = gql`
     maTag: [Int!]!
     noiDung: String!
     maSV: String
-    url: [String!]!
+    images: [UploadFile]
   }
 
   input NoteEditInput {
     tieuDe: String!
     noiDung: String!
-    maTag: [Int!]!
-    url: [String!]!
+    removeTagIds: [Int]
+    addTagIds: [Int]
+    removeImageIds: [String]
+    images: [UploadFile]
   }
 
   type NoteAddResponse {

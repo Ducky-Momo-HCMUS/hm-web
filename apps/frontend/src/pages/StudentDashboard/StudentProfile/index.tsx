@@ -192,9 +192,9 @@ function StudentProfile() {
           data={studentDetailsData}
         >
           <StyledGridContainer
+            sx={{ width: '65%' }}
             spacing={2}
             container
-            width="28vw"
             marginRight="3rem"
           >
             <Grid item xs={12}>
@@ -242,7 +242,7 @@ function StudentProfile() {
           loading={studentDetailsLoading}
           data={studentDetailsData}
         >
-          <StyledGridContainer spacing={2} container width="50vw">
+          <StyledGridContainer spacing={2} container>
             <Grid item xs={12}>
               <StyledHeader>
                 <Typography component="p" variant="h5">
@@ -313,7 +313,7 @@ function StudentProfile() {
           <StyledGridContainer
             spacing={2}
             container
-            width="28vw"
+            sx={{ width: '65%' }}
             marginRight="3rem"
           >
             <Grid item xs={12}>
@@ -356,8 +356,7 @@ function StudentProfile() {
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
-
-        <StyledGridContainer spacing={2} container width="50vw">
+        <StyledGridContainer spacing={2} container>
           <Grid item xs={12}>
             <StyledHeader>
               <Typography component="p" variant="h5">

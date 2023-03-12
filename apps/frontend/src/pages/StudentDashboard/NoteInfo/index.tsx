@@ -21,17 +21,17 @@ import {
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import SortIcon from '@mui/icons-material/Sort';
+import { FilePond } from 'react-filepond';
 
 import NoteEditor from '../../../components/Note/NoteEditor';
 import {
   Item,
   StyledBreadCrumbs,
   StyledDivider,
+  StyledStickyBox,
   StyledTitle,
 } from '../../../components/styles';
 import { ROWS_PER_PAGE } from '../../../mocks';
-import { mapImageUrlToFile } from '../../../utils';
-import { File } from '../../../types';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 import {
   NoteAddInput,
@@ -42,6 +42,7 @@ import {
   useStudentNoteListQuery,
   useNoteEditMutation,
   useTagListQuery,
+  NoteImage,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { GET_STUDENT_NOTE_LIST } from '../../../data/queries/student/get-student-note-list';
@@ -51,6 +52,7 @@ import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
 
 interface State {
   selected: number;
+  images: NoteImage[];
   page: number;
   title: string;
   tags: string[];
@@ -88,6 +90,7 @@ function NoteInfo() {
     tags: [],
     deleteIndex: -1,
     isAdding: true,
+    images: [],
   });
 
   const [files, setFiles] = useState<File[]>();
@@ -111,13 +114,11 @@ function NoteInfo() {
         ...v,
         title: noteDetail.tieuDe,
         tags: noteDetail.ghiChuTag.map((item) => item.tenTag),
+        images: noteDetail.ghiChuHinhAnh,
       }));
       if (editorRef.current) {
         editorRef.current.setContent(noteDetail.noiDung);
       }
-      setFiles(
-        mapImageUrlToFile(noteDetail.ghiChuHinhAnh.map((item) => item.url))
-      );
     }
   }, [noteDetail]);
 
@@ -130,6 +131,26 @@ function NoteInfo() {
     [tagListData?.tagList.tags]
   );
 
+  const filePondRef = useRef<FilePond | null>(null);
+
+  const handleReset = useCallback(() => {
+    setValues((v) => ({
+      ...v,
+      selected: -1,
+      title: '',
+      tags: [],
+      isAdding: true,
+      images: [],
+    }));
+    setFiles([]);
+    if (editorRef.current) {
+      editorRef.current.setContent('');
+    }
+    if (filePondRef.current) {
+      filePondRef.current.removeFile();
+    }
+  }, []);
+
   const handleClickSave = useCallback(async () => {
     if (values.isAdding) {
       const payload = {
@@ -139,7 +160,7 @@ function NoteInfo() {
         ),
         noiDung: editorRef.current?.getContent() || '',
         maSV: id,
-        url: ['https://picsum.photos/200'],
+        images: files,
       } as NoteAddInput;
 
       await addNote({
@@ -157,16 +178,24 @@ function NoteInfo() {
         ],
       });
 
+      handleReset();
+
       return;
     }
 
     const payload = {
       tieuDe: values.title,
       noiDung: editorRef.current?.getContent() || '',
-      maTag: values.tags.map(
-        (tenTag) => tagList.find((tag) => tag.tenTag === tenTag)?.maTag
-      ),
-      url: ['https://picsum.photos/200'],
+      removeTagIds: noteDetail?.ghiChuTag
+        .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
+        .map((ghiChuTag) => ghiChuTag.maTag),
+      addTagIds: values.tags
+        .filter(
+          (tag) => !noteDetail?.ghiChuTag.find((item) => item.tenTag === tag)
+        )
+        .map((ghiChuTag) => tagList.find((item) => item.tenTag === ghiChuTag))
+        .map((addTag) => addTag?.maTag),
+      images: files,
     } as NoteEditInput;
 
     await editNote({
@@ -184,10 +213,15 @@ function NoteInfo() {
         'StudentNoteList',
       ],
     });
+
+    handleReset();
   }, [
     addNote,
     editNote,
+    files,
+    handleReset,
     id,
+    noteDetail?.ghiChuTag,
     tagList,
     values.isAdding,
     values.selected,
@@ -224,20 +258,6 @@ function NoteInfo() {
     setValues((v) => ({ ...v, [prop]: value, isAdding: false }));
   }, []);
 
-  const handleReset = useCallback(() => {
-    setValues((v) => ({
-      ...v,
-      selected: -1,
-      title: '',
-      tags: [],
-      isAdding: true,
-    }));
-    setFiles([]);
-    if (editorRef.current) {
-      editorRef.current.setContent('');
-    }
-  }, [editorRef]);
-
   const handleClickDelete = useCallback((index: number) => {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
@@ -268,12 +288,14 @@ function NoteInfo() {
 
   return (
     <>
-      <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
-      <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link to="/">Trang chủ</Link>
-        <Typography color="text.primary">{id}</Typography>
-        <Typography color="text.primary">Ghi chú sinh viên</Typography>
-      </StyledBreadCrumbs>
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
+        <StyledBreadCrumbs aria-label="breadcrumb">
+          <Link to="/">Trang chủ</Link>
+          <Typography color="text.primary">{id}</Typography>
+          <Typography color="text.primary">Ghi chú sinh viên</Typography>
+        </StyledBreadCrumbs>
+      </StyledStickyBox>
       <StyledGridContainer
         sx={{ marginTop: '1.5rem' }}
         container
@@ -281,7 +303,7 @@ function NoteInfo() {
         columns={20}
       >
         <Grid sx={{ paddingTop: '0!important' }} item xs={8}>
-          <Item sx={{ height: 'fit-content' }}>
+          <Item sx={{ height: '100%' }}>
             <Box sx={{ padding: '1rem 1rem 0 1rem' }}>
               <StyledHeader>
                 <Typography component="p" variant="h5">
@@ -306,7 +328,7 @@ function NoteInfo() {
                 </Box>
               </StyledHeader>
               <StyledDivider />
-              <List sx={{ overflowY: 'auto', height: '24rem' }}>
+              <List>
                 <AsyncDataRenderer
                   loading={studentNoteListLoading}
                   data={studentNoteListData}
@@ -331,15 +353,17 @@ function NoteInfo() {
                       />
                     ))}
                 </AsyncDataRenderer>
+                {!!studentNoteList.length && (
+                  <TablePagination
+                    rowsPerPageOptions={[ROWS_PER_PAGE]}
+                    component="div"
+                    count={studentNoteList.length}
+                    rowsPerPage={ROWS_PER_PAGE}
+                    page={page}
+                    onPageChange={handleChangePage}
+                  />
+                )}
               </List>
-              <TablePagination
-                rowsPerPageOptions={[ROWS_PER_PAGE]}
-                component="div"
-                count={studentNoteList.length}
-                rowsPerPage={ROWS_PER_PAGE}
-                page={page}
-                onPageChange={handleChangePage}
-              />
             </Box>
           </Item>
         </Grid>
@@ -347,21 +371,14 @@ function NoteInfo() {
           loading={noteDetailLoading || tagListLoading}
           data={values.selected >= 0 ? noteDetailData : tagListData}
         >
-          <Grid
-            item
-            xs={12}
-            sx={{
-              overflowY: 'scroll',
-              height: '32.5rem',
-              paddingTop: '0!important',
-            }}
-          >
+          <Grid item xs={12} sx={{ paddingTop: '0!important' }}>
             <Item>
               <NoteEditor
+                filePondRef={filePondRef}
                 tagList={tagList}
+                imageList={values.images}
                 editorRef={editorRef}
                 initialValue={noteDetail?.noiDung || ''}
-                files={files}
                 setFiles={setFiles}
                 onClickSave={handleClickSave}
                 title={values.title}

@@ -2,8 +2,15 @@ import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import { StyledBreadCrumbs, StyledTitle } from '../../../components/styles';
-import { useStudentOverviewResultQuery } from '../../../generated-types';
+import {
+  StyledBreadCrumbs,
+  StyledStickyBox,
+  StyledTitle,
+} from '../../../components/styles';
+import {
+  StudentOverviewResult,
+  useStudentOverviewResultQuery,
+} from '../../../generated-types';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -28,13 +35,25 @@ function AcademicOverview() {
     },
   });
 
+  const studentOverviewResult = useMemo(() => {
+    const data = studentOverviewResultData?.studentOverviewResult;
+    return {
+      daiCuong: data?.daiCuong || 0,
+      coSoNganh: data?.coSoNganh || 0,
+      batBuocChuyenNganh: data?.batBuocChuyenNganh || 0,
+      tuChonChuyenNganh: data?.tuChonChuyenNganh || 0,
+      tuChonTuDo: data?.tuChonTuDo || 0,
+      totNghiep: data?.totNghiep || 0,
+    } as Omit<StudentOverviewResult, 'tenCN | dtb'>;
+  }, [studentOverviewResultData?.studentOverviewResult]);
+
   const mappedData = useMemo(() => {
     const data = studentOverviewResultData?.studentOverviewResult;
     const result = [
       data?.tenCN || 'Chưa có',
       data?.daiCuong || 0,
       data?.coSoNganh || 0,
-      data?.chuyenNganh || 0,
+      data?.batBuocChuyenNganh || 0,
       data?.tuChonChuyenNganh || 0,
       data?.tuChonTuDo || 0,
       data?.totNghiep || 0,
@@ -53,24 +72,26 @@ function AcademicOverview() {
 
   return (
     <>
-      <StyledTitle variant="h1">Kết quả học tập</StyledTitle>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <StyledBreadCrumbs sx={{ marginBottom: 0 }} aria-label="breadcrumb">
-          <Link to="/">Trang chủ</Link>
-          <Typography color="text.primary">{id}</Typography>
-          <Typography color="text.primary">Kết quả học tập</Typography>
-        </StyledBreadCrumbs>
-        <Button variant="contained">Xuất phiếu điểm</Button>
-      </Box>
-      <Box sx={{ overflowY: 'scroll', height: '30rem' }} mt={3}>
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Kết quả học tập</StyledTitle>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <StyledBreadCrumbs sx={{ marginBottom: 0 }} aria-label="breadcrumb">
+            <Link to="/">Trang chủ</Link>
+            <Typography color="text.primary">{id}</Typography>
+            <Typography color="text.primary">Kết quả học tập</Typography>
+          </StyledBreadCrumbs>
+          <Button variant="contained">Xuất phiếu điểm</Button>
+        </Box>
+      </StyledStickyBox>
+      <Box mt={3}>
         <AcademicInfo infoList={mappedData} />
-        <AcademicResult />
+        <AcademicResult studentOverviewResult={studentOverviewResult} />
       </Box>
     </>
   );

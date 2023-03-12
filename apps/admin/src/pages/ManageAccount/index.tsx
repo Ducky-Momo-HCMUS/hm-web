@@ -2,7 +2,7 @@ import { Button, Box, Backdrop, CircularProgress } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
-import { StyledTitle } from '../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../components/styles';
 import { AccountAddInput, useAccountAddMutation } from '../../generated-types';
 import { GET_ACCOUNT_LIST } from '../../data/queries/account/get-account-list';
 import { ACCOUNT_LIST_PAGE_SIZE } from '../../constants';
@@ -59,30 +59,32 @@ function ManageAccount() {
   return (
     <>
       <Box display="flex" flexDirection="column" gap={1}>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="baseline"
-        >
-          <StyledTitle variant="h1">Quản lý tài khoản</StyledTitle>
-          <Box display="flex" gap={1}>
-            <Button
-              sx={{ textTransform: 'uppercase' }}
-              variant="text"
-              onClick={handleOpenAddAccountInfoDialog}
-            >
-              <AddIcon />
-              Thêm tài khoản
-            </Button>
-            <Button
-              sx={{ textTransform: 'uppercase' }}
-              variant="contained"
-              onClick={handleOpenImportAccountInfoDialog}
-            >
-              Import tài khoản
-            </Button>
+        <StyledStickyBox>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="baseline"
+          >
+            <StyledTitle variant="h1">Quản lý tài khoản</StyledTitle>
+            <Box display="flex" gap={1}>
+              <Button
+                sx={{ textTransform: 'uppercase' }}
+                variant="text"
+                onClick={handleOpenAddAccountInfoDialog}
+              >
+                <AddIcon />
+                Thêm tài khoản
+              </Button>
+              <Button
+                sx={{ textTransform: 'uppercase' }}
+                variant="contained"
+                onClick={handleOpenImportAccountInfoDialog}
+              >
+                Import tài khoản
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </StyledStickyBox>
         <AccountTable />
         {openAddAccountInfoDialog && (
           <AddOrEditAccountInfoDialog

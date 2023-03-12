@@ -4,6 +4,7 @@ import { ForbiddenError, ApolloError } from 'apollo-server-errors';
 
 import { RequestContext, RolesContext } from '../types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { getACL } from './access-control';
 
@@ -74,12 +75,10 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
    */
   protected handleError(error: unknown) {
     // ApolloError has been replaced with GraphQLError in v4
-
     if (!(error instanceof ApolloError)) {
-      // TODO add log
+      logger.error('Stacktrace', error);
       return new ApolloError('Internal Server Error');
     }
-
     // Possible exeptions from RESTDataSource:
     // - AuthenticationError (401)
     // - ForbiddenError (403)

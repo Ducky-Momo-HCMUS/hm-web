@@ -24,6 +24,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   UploadFile: any;
 };
 
@@ -494,11 +495,11 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteAddResponse = {
@@ -524,10 +525,12 @@ export type NoteDetail = {
 };
 
 export type NoteEditInput = {
-  maTag: Array<Scalars['Int']>;
+  addTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   noiDung: Scalars['String'];
+  removeImageIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  removeTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteEditResponse = {
@@ -538,7 +541,7 @@ export type NoteEditResponse = {
 
 export type NoteImage = {
   __typename?: 'NoteImage';
-  stt: Scalars['Int'];
+  id: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -550,6 +553,13 @@ export type NoteListItem = {
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type NoteSearch = {
+  __typename?: 'NoteSearch';
+  data: Array<NoteListItem>;
+  lastPage: Scalars['Int'];
+  total: Scalars['Int'];
 };
 
 export type NoteTag = {
@@ -577,6 +587,7 @@ export type Query = {
   homeroomWatchList: HomeroomWatchList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
+  noteSearch: NoteSearch;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -656,6 +667,18 @@ export type QueryHomeroomWatchListArgs = {
 
 export type QueryNoteDetailArgs = {
   noteId: Scalars['Int'];
+};
+
+export type QueryNoteSearchArgs = {
+  end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
+  maSV?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentAllTermsArgs = {
@@ -803,7 +826,7 @@ export type StudentNote = {
 
 export type StudentOverviewResult = {
   __typename?: 'StudentOverviewResult';
-  chuyenNganh: Scalars['Int'];
+  batBuocChuyenNganh: Scalars['Int'];
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
@@ -845,8 +868,12 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  gvlt: Scalars['String'];
-  gvth: Scalars['String'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
@@ -1082,6 +1109,7 @@ export type ResolversTypes = {
   AllTeacherListItem: ResolverTypeWrapper<AllTeacherListItem>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Contact: ResolverTypeWrapper<Contact>;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1133,6 +1161,7 @@ export type ResolversTypes = {
   NoteEditResponse: ResolverTypeWrapper<NoteEditResponse>;
   NoteImage: ResolverTypeWrapper<NoteImage>;
   NoteListItem: ResolverTypeWrapper<NoteListItem>;
+  NoteSearch: ResolverTypeWrapper<NoteSearch>;
   NoteTag: ResolverTypeWrapper<NoteTag>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -1191,6 +1220,7 @@ export type ResolversParentTypes = {
   AllTeacherListItem: AllTeacherListItem;
   Boolean: Scalars['Boolean'];
   Contact: Contact;
+  Date: Scalars['Date'];
   Document: Document;
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1242,6 +1272,7 @@ export type ResolversParentTypes = {
   NoteEditResponse: NoteEditResponse;
   NoteImage: NoteImage;
   NoteListItem: NoteListItem;
+  NoteSearch: NoteSearch;
   NoteTag: NoteTag;
   Query: {};
   String: Scalars['String'];
@@ -1382,6 +1413,11 @@ export type ContactResolvers<
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface DateScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type DocumentResolvers<
   ContextType = any,
@@ -2032,7 +2068,7 @@ export type NoteImageResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['NoteImage'] = ResolversParentTypes['NoteImage']
 > = {
-  stt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2051,6 +2087,20 @@ export type NoteListItemResolvers<
   >;
   thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type NoteSearchResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NoteSearch'] = ResolversParentTypes['NoteSearch']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['NoteListItem']>,
+    ParentType,
+    ContextType
+  >;
+  lastPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2170,6 +2220,12 @@ export type QueryResolvers<
     Array<ResolversTypes['NoteListItem']>,
     ParentType,
     ContextType
+  >;
+  noteSearch?: Resolver<
+    ResolversTypes['NoteSearch'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryNoteSearchArgs, 'page' | 'size'>
   >;
   studentAllTerms?: Resolver<
     Array<ResolversTypes['StudentTerm']>,
@@ -2347,7 +2403,7 @@ export type StudentOverviewResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentOverviewResult'] = ResolversParentTypes['StudentOverviewResult']
 > = {
-  chuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  batBuocChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   coSoNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   daiCuong?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
@@ -2403,8 +2459,12 @@ export type StudentSubjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
 > = {
-  gvlt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  gvth?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  diemCK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemCong?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemGK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemKhac?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2569,6 +2629,7 @@ export type Resolvers<ContextType = any> = {
   AllTeacherList?: AllTeacherListResolvers<ContextType>;
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllList?: HomeroomAllListResolvers<ContextType>;
@@ -2613,6 +2674,7 @@ export type Resolvers<ContextType = any> = {
   NoteEditResponse?: NoteEditResponseResolvers<ContextType>;
   NoteImage?: NoteImageResolvers<ContextType>;
   NoteListItem?: NoteListItemResolvers<ContextType>;
+  NoteSearch?: NoteSearchResolvers<ContextType>;
   NoteTag?: NoteTagResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;

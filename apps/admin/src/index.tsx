@@ -7,9 +7,9 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  createHttpLink,
   from,
 } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 
@@ -17,7 +17,8 @@ import { theme } from './theme';
 import App from './App';
 import { REACT_APP_GRAPHQL_URL } from './utils/config';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
+  headers: { 'Apollo-Require-Preflight': 'true' },
   uri: `${REACT_APP_GRAPHQL_URL}/graphql`,
 });
 

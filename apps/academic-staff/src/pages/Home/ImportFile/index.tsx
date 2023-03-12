@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
 import {
@@ -19,7 +20,7 @@ import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
 import { useUploadDocumentMutation } from '../../../generated-types';
 
@@ -114,6 +115,16 @@ function ImportFile() {
 
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
+      onCompleted: () => {
+        toast.success('Cập nhật thông tin thành công');
+        setValues((v) => ({
+          ...v,
+          type: TYPES[0].label,
+        }));
+        if (filePondRef.current) {
+          filePondRef.current.removeFile();
+        }
+      },
       onError: (error) => {
         // TODO: lấy error từ BE
         toast.error('Đã có  lỗi xảy ra');
@@ -123,19 +134,20 @@ function ImportFile() {
   const handleUploadDocument = useCallback(
     async (event) => {
       event.preventDefault();
+      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const input = Object.assign(
+        {},
+        type && { type },
+        values.year && { namHoc: values.year },
+        values.term && { hocKy: values.term },
+        values.subject && { maMH: values.subject },
+        values.class && { tenLopHP: values.class }
+      );
       if (file) {
         await uploadDocument({
           variables: {
             file,
-            input: {
-              type:
-                TYPES.find((item) => item.label === values.type)?.endpoint ||
-                '',
-              namHoc: Number(values.year),
-              hocKy: Number(values.term),
-              maMH: values.subject,
-              tenLopHP: values.class,
-            },
+            input,
           },
         });
       }
@@ -154,8 +166,8 @@ function ImportFile() {
   return (
     <>
       <ToastContainer />
-      <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
-      <Box component="form">
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
         <StyledFormControl sx={{ minWidth: '18.5rem' }}>
           <InputLabel id="type-select-label">Loại thông tin</InputLabel>
           <Select
@@ -241,6 +253,8 @@ function ImportFile() {
             </StyledFormControl>
           </>
         )}
+      </StyledStickyBox>
+      <Box component="form">
         {values.type.length > 0 && (
           <>
             <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>

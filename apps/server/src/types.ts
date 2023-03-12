@@ -1,5 +1,3 @@
-import { JwtPayload as _JwtPayload } from 'jsonwebtoken';
-
 export interface RolesContext {
   admin?: boolean;
   gvcn?: boolean;
@@ -14,17 +12,6 @@ export interface UserContext extends RolesContext {
 export interface RequestContext {
   authorization?: string;
   user?: UserContext;
-}
-
-export interface JwtPayload extends _JwtPayload {
-  iss?: string | undefined;
-  sub: string;
-  aud?: string | string[] | undefined;
-  exp?: number | undefined;
-  nbf?: number | undefined;
-  iat?: number | undefined;
-  jti?: string | undefined;
-  email: string;
 }
 
 export interface DataSourceResponse<T = object> {

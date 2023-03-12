@@ -7,8 +7,12 @@ interface Column {
     | 'subjectName'
     | 'class'
     | 'status'
-    | 'theoryTeacher'
-    | 'practiceTeacher';
+    | 'diemGK'
+    | 'diemTH'
+    | 'diemCong'
+    | 'diemKhac'
+    | 'diemCK'
+    | 'dtb';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -32,16 +36,12 @@ const columns: readonly Column[] = [
     label: 'Tình trạng',
     minWidth: 120,
   },
-  {
-    id: 'theoryTeacher',
-    label: 'GV lý thuyết',
-    minWidth: 80,
-  },
-  {
-    id: 'practiceTeacher',
-    label: 'GV thực hành',
-    minWidth: 80,
-  },
+  { id: 'diemGK', label: 'GK', minWidth: 60 },
+  { id: 'diemTH', label: 'TH', minWidth: 60 },
+  { id: 'diemCong', label: 'Cộng', minWidth: 60 },
+  { id: 'diemKhac', label: 'Khác', minWidth: 60 },
+  { id: 'diemCK', label: 'CK', minWidth: 60 },
+  { id: 'dtb', label: 'Tổng', minWidth: 60 },
 ];
 
 function AcademicTableHead() {

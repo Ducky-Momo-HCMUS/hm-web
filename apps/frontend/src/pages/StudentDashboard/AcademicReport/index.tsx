@@ -18,6 +18,7 @@ import {
   StyledBreadCrumbs,
   StyledTitle,
   StyledHeader,
+  StyledStickyBox,
 } from '../../../components/styles';
 import {
   useStudentAllTermsQuery,
@@ -143,72 +144,74 @@ function AcademicReport() {
 
   return (
     <>
-      <StyledTitle variant="h1">Tình hình học tập</StyledTitle>
-      <StyledBreadCrumbs aria-label="breadcrumb">
-        <Link to="/">Trang chủ</Link>
-        <Typography color="text.primary">{id}</Typography>
-        <Typography color="text.primary">Tình hình học tập</Typography>
-      </StyledBreadCrumbs>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Box>
-          <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
-            <StyledFormControl sx={{ marginRight: '1rem' }}>
-              <InputLabel id="year-select-label">Năm học</InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={values.year || initialYear}
-                label="Năm học"
-                onChange={handleChange('year')}
-              >
-                {years.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item} - {Number(item) + 1}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl>
-              <InputLabel id="term-select-label">Học kỳ</InputLabel>
-              <Select
-                labelId="term-select-label"
-                id="term-select"
-                value={values.term || initialTerm}
-                label="Học kỳ"
-                onChange={handleChange('term')}
-              >
-                {terms.map((item) => (
-                  <MenuItem key={item.maHK} value={item.maHK.toString()}>
-                    {item.hocKy}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-          </AsyncDataRenderer>
-        </Box>
-        <StyledStatusBox>
-          <Button disabled sx={{ color: '#fff!important' }}>
-            ĐRL:{' '}
-            {trainingPoint
-              ? `${trainingPoint.drl} | ${trainingPoint.xepLoai}`
-              : 'Chưa có'}
-          </Button>
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Tình hình học tập</StyledTitle>
+        <StyledBreadCrumbs aria-label="breadcrumb">
+          <Link to="/">Trang chủ</Link>
+          <Typography color="text.primary">{id}</Typography>
+          <Typography color="text.primary">Tình hình học tập</Typography>
+        </StyledBreadCrumbs>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Box>
+            <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+              <StyledFormControl sx={{ marginRight: '1rem' }}>
+                <InputLabel id="year-select-label">Năm học</InputLabel>
+                <Select
+                  labelId="year-select-label"
+                  id="year-select"
+                  value={values.year || initialYear}
+                  label="Năm học"
+                  onChange={handleChange('year')}
+                >
+                  {years.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item} - {Number(item) + 1}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="term-select-label">Học kỳ</InputLabel>
+                <Select
+                  labelId="term-select-label"
+                  id="term-select"
+                  value={values.term || initialTerm}
+                  label="Học kỳ"
+                  onChange={handleChange('term')}
+                >
+                  {terms.map((item) => (
+                    <MenuItem key={item.maHK} value={item.maHK.toString()}>
+                      {item.hocKy}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </AsyncDataRenderer>
+          </Box>
+          <StyledStatusBox>
+            <Button disabled sx={{ color: '#fff!important' }}>
+              ĐRL:{' '}
+              {trainingPoint
+                ? `${trainingPoint.drl} | ${trainingPoint.xepLoai}`
+                : 'Chưa có'}
+            </Button>
 
-          <Button disabled sx={{ color: '#fff!important' }}>
-            ĐTB:{' '}
-            {averagePoint
-              ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
-              : 'Chưa có'}
-          </Button>
-        </StyledStatusBox>
-        <Button variant="contained">Xuất phiếu điểm</Button>
-      </Box>
+            <Button disabled sx={{ color: '#fff!important' }}>
+              ĐTB:{' '}
+              {averagePoint
+                ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
+                : 'Chưa có'}
+            </Button>
+          </StyledStatusBox>
+          <Button variant="contained">Xuất phiếu điểm</Button>
+        </Box>
+      </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
         <StyledHeader>Các môn đã đăng ký</StyledHeader>
         <AsyncDataRenderer loading={subjectsByTermLoading} data={subjectsData}>

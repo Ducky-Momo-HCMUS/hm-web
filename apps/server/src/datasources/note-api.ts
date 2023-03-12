@@ -1,10 +1,15 @@
-import { ApolloError } from 'apollo-server-express';
+/* eslint-disable prefer-object-spread */
+import { ApolloError, UserInputError } from 'apollo-server-express';
+import FormData from 'form-data';
 
 import {
   MutationNoteAddArgs,
   MutationNoteDeleteArgs,
   MutationNoteEditArgs,
+  NoteAddInput,
+  NoteEditInput,
   QueryNoteDetailArgs,
+  QueryNoteSearchArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -37,9 +42,63 @@ class NoteAPI extends BaseDataSource {
     }
   }
 
-  public async addNote({ payload }: MutationNoteAddArgs) {
+  public async searchNote({
+    tieuDe,
+    maSV,
+    tenSV,
+    start,
+    end,
+    maSH,
+    maTag,
+    page,
+    size,
+  }: QueryNoteSearchArgs) {
     try {
-      const res = await this.post(`v1/notes`, payload);
+      const args = Object.assign(
+        {},
+        tieuDe && { tieuDe },
+        maSV && { maSV },
+        tenSV && { tenSV },
+        start && { start },
+        end && { end },
+        maSH && { maSH },
+        maTag && { maTag },
+        { page },
+        { size }
+      );
+      let queryString = '';
+      Object.keys(args).forEach((arg, index) => {
+        queryString += `${arg}=${args[arg]}`;
+
+        if (index !== Object.keys(args).length - 1) {
+          queryString += '&';
+        }
+      });
+
+      const res = await this.get(
+        `v1/notes${queryString ? `?${queryString}` : ''}`
+      );
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot search note');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async addNote({ payload }: MutationNoteAddArgs) {
+    const { images, ...other } = payload;
+    const awaitedImages = await Promise.all(images as any);
+    const formData = this.createFormData(other);
+    awaitedImages.forEach((image) => {
+      const { createReadStream, filename } = image;
+      if (!filename) {
+        throw new UserInputError('Missing file');
+      }
+      formData.append('images', createReadStream(), filename);
+    });
+
+    try {
+      const res = await this.post(`v1/notes`, formData);
       return res;
     } catch (error) {
       logger.error('Error: cannot add new note');
@@ -47,9 +106,64 @@ class NoteAPI extends BaseDataSource {
     }
   }
 
+  private createFormData(
+    input: Omit<NoteAddInput, 'images'> | Omit<NoteEditInput, 'images'>
+  ) {
+    const formData = new FormData();
+    Object.keys(input).forEach((key) => {
+      if (!input[key]) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+
+      if (key === 'maTag') {
+        input[key].forEach((tag) => {
+          formData.append('maTag[]', tag);
+        });
+        return;
+      }
+
+      if (key === 'removeTagIds') {
+        input[key].forEach((tag) => {
+          formData.append('removeTagIds[]', tag);
+        });
+        return;
+      }
+
+      if (key === 'addTagIds') {
+        input[key].forEach((tag) => {
+          formData.append('addTagIds[]', tag);
+        });
+        return;
+      }
+
+      if (key === 'removeImageIds') {
+        input[key].forEach((image) => {
+          formData.append('removeImageIds[]', image);
+        });
+        return;
+      }
+
+      formData.append(key, input[key]);
+    });
+    return formData;
+  }
+
   public async editNote({ noteId, payload }: MutationNoteEditArgs) {
+    const { images, ...other } = payload;
+    const formData = this.createFormData(other);
+    if (images) {
+      const awaitedImages = await Promise.all(images as any);
+      awaitedImages.forEach((image) => {
+        const { createReadStream, filename } = image;
+        if (!filename) {
+          throw new UserInputError('Missing file');
+        }
+        formData.append('images', createReadStream(), filename);
+      });
+    }
+
     try {
-      const res = await this.put(`v1/notes/${noteId}`, payload);
+      const res = await this.patch(`v1/notes/${noteId}`, formData);
       return res;
     } catch (error) {
       logger.error('Error: cannot edit note');

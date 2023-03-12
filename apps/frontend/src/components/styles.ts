@@ -17,11 +17,11 @@ export const StyledStickyBox = styled(Box)`
   position: sticky;
   top: 66px;
   background-color: #f5f5f5;
+  z-index: 10;
 `;
 
 export const StyledContainer = styled(Box)`
   background: ${grey[100]};
-  height: 100vh;
 `;
 
 export const StyledContentWrapper = styled(Box)`

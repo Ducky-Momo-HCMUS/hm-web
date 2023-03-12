@@ -108,7 +108,7 @@ function ChangePassword() {
   return (
     <>
       <StyledContainer>
-        <Header />
+        <Header isAuthenticated />
         <StyledContentWrapper>
           <StyledTitle>Thay đổi mật khẩu</StyledTitle>
           <StyledBreadCrumbs aria-label="breadcrumb">

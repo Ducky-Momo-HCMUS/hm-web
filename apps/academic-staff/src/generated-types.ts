@@ -19,6 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   UploadFile: any;
 };
 
@@ -489,11 +490,11 @@ export type MutationStatusReponse = {
 };
 
 export type NoteAddInput = {
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   maSV?: InputMaybe<Scalars['String']>;
   maTag: Array<Scalars['Int']>;
   noiDung: Scalars['String'];
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteAddResponse = {
@@ -519,10 +520,12 @@ export type NoteDetail = {
 };
 
 export type NoteEditInput = {
-  maTag: Array<Scalars['Int']>;
+  addTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['UploadFile']>>>;
   noiDung: Scalars['String'];
+  removeImageIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  removeTagIds?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
   tieuDe: Scalars['String'];
-  url: Array<Scalars['String']>;
 };
 
 export type NoteEditResponse = {
@@ -533,7 +536,7 @@ export type NoteEditResponse = {
 
 export type NoteImage = {
   __typename?: 'NoteImage';
-  stt: Scalars['Int'];
+  id: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -545,6 +548,13 @@ export type NoteListItem = {
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type NoteSearch = {
+  __typename?: 'NoteSearch';
+  data: Array<NoteListItem>;
+  lastPage: Scalars['Int'];
+  total: Scalars['Int'];
 };
 
 export type NoteTag = {
@@ -572,6 +582,7 @@ export type Query = {
   homeroomWatchList: HomeroomWatchList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
+  noteSearch: NoteSearch;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -651,6 +662,18 @@ export type QueryHomeroomWatchListArgs = {
 
 export type QueryNoteDetailArgs = {
   noteId: Scalars['Int'];
+};
+
+export type QueryNoteSearchArgs = {
+  end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
+  maSV?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentAllTermsArgs = {
@@ -798,7 +821,7 @@ export type StudentNote = {
 
 export type StudentOverviewResult = {
   __typename?: 'StudentOverviewResult';
-  chuyenNganh: Scalars['Int'];
+  batBuocChuyenNganh: Scalars['Int'];
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
@@ -840,8 +863,12 @@ export type StudentParentInfoList = {
 
 export type StudentSubject = {
   __typename?: 'StudentSubject';
-  gvlt: Scalars['String'];
-  gvth: Scalars['String'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
@@ -1648,27 +1675,38 @@ export type NoteDetailQuery = {
     thoiGianTao: string;
     thoiGianSua?: string | null | undefined;
     ghiChuTag: Array<{ __typename?: 'NoteTag'; maTag: number; tenTag: string }>;
-    ghiChuHinhAnh: Array<{
-      __typename?: 'NoteImage';
-      stt: number;
-      url: string;
-    }>;
+    ghiChuHinhAnh: Array<{ __typename?: 'NoteImage'; id: string; url: string }>;
   };
 };
 
-export type NoteListQueryVariables = Exact<{ [key: string]: never }>;
+export type NoteSearchQueryVariables = Exact<{
+  tieuDe?: InputMaybe<Scalars['String']>;
+  maSV?: InputMaybe<Scalars['String']>;
+  tenSV?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  maSH?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
 
-export type NoteListQuery = {
+export type NoteSearchQuery = {
   __typename?: 'Query';
-  noteList: Array<{
-    __typename?: 'NoteListItem';
-    maGC: number;
-    tieuDe: string;
-    noiDung: string;
-    thoiGianTao: string;
-    thoiGianSua?: string | null | undefined;
-    maSV?: string | null | undefined;
-  }>;
+  noteSearch: {
+    __typename?: 'NoteSearch';
+    total: number;
+    lastPage: number;
+    data: Array<{
+      __typename?: 'NoteListItem';
+      maGC: number;
+      tieuDe: string;
+      noiDung: string;
+      thoiGianTao: string;
+      thoiGianSua?: string | null | undefined;
+      maSV?: string | null | undefined;
+    }>;
+  };
 };
 
 export type StudentAllTermsQueryVariables = Exact<{
@@ -1784,7 +1822,7 @@ export type StudentOverviewResultQuery = {
         tenCN: string;
         daiCuong: number;
         coSoNganh: number;
-        chuyenNganh: number;
+        batBuocChuyenNganh: number;
         tuChonTuDo: number;
         tuChonChuyenNganh: number;
         totNghiep: number;
@@ -1835,9 +1873,13 @@ export type StudentSubjectsByTermQuery = {
     maMH: string;
     tenMH: string;
     tenLopHP: string;
-    gvlt: string;
-    gvth: string;
     tinhTrang: string;
+    diemGK?: number | null | undefined;
+    diemTH?: number | null | undefined;
+    diemCong?: number | null | undefined;
+    diemKhac?: number | null | undefined;
+    diemCK?: number | null | undefined;
+    dtb?: number | null | undefined;
   }>;
 };
 
@@ -4329,7 +4371,7 @@ export const NoteDetailDocument = gql`
       thoiGianTao
       thoiGianSua
       ghiChuHinhAnh {
-        stt
+        id
         url
       }
     }
@@ -4384,62 +4426,98 @@ export type NoteDetailQueryResult = Apollo.QueryResult<
   NoteDetailQuery,
   NoteDetailQueryVariables
 >;
-export const NoteListDocument = gql`
-  query NoteList {
-    noteList {
-      maGC
-      tieuDe
-      noiDung
-      thoiGianTao
-      thoiGianSua
-      maSV
+export const NoteSearchDocument = gql`
+  query NoteSearch(
+    $tieuDe: String
+    $maSV: String
+    $tenSV: String
+    $start: Date
+    $end: Date
+    $maSH: String
+    $maTag: Int
+    $page: Int!
+    $size: Int!
+  ) {
+    noteSearch(
+      tieuDe: $tieuDe
+      maSV: $maSV
+      tenSV: $tenSV
+      start: $start
+      end: $end
+      maSH: $maSH
+      maTag: $maTag
+      page: $page
+      size: $size
+    ) {
+      total
+      lastPage
+      data {
+        maGC
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
+        maSV
+      }
     }
   }
 `;
 
 /**
- * __useNoteListQuery__
+ * __useNoteSearchQuery__
  *
- * To run a query within a React component, call `useNoteListQuery` and pass it any options that fit your needs.
- * When your component renders, `useNoteListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useNoteSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNoteSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNoteListQuery({
+ * const { data, loading, error } = useNoteSearchQuery({
  *   variables: {
+ *      tieuDe: // value for 'tieuDe'
+ *      maSV: // value for 'maSV'
+ *      tenSV: // value for 'tenSV'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *      maSH: // value for 'maSH'
+ *      maTag: // value for 'maTag'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
-export function useNoteListQuery(
-  baseOptions?: Apollo.QueryHookOptions<NoteListQuery, NoteListQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<NoteListQuery, NoteListQueryVariables>(
-    NoteListDocument,
-    options
-  );
-}
-export function useNoteListLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    NoteListQuery,
-    NoteListQueryVariables
+export function useNoteSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    NoteSearchQuery,
+    NoteSearchQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<NoteListQuery, NoteListQueryVariables>(
-    NoteListDocument,
+  return Apollo.useQuery<NoteSearchQuery, NoteSearchQueryVariables>(
+    NoteSearchDocument,
     options
   );
 }
-export type NoteListQueryHookResult = ReturnType<typeof useNoteListQuery>;
-export type NoteListLazyQueryHookResult = ReturnType<
-  typeof useNoteListLazyQuery
+export function useNoteSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    NoteSearchQuery,
+    NoteSearchQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<NoteSearchQuery, NoteSearchQueryVariables>(
+    NoteSearchDocument,
+    options
+  );
+}
+export type NoteSearchQueryHookResult = ReturnType<typeof useNoteSearchQuery>;
+export type NoteSearchLazyQueryHookResult = ReturnType<
+  typeof useNoteSearchLazyQuery
 >;
-export type NoteListQueryResult = Apollo.QueryResult<
-  NoteListQuery,
-  NoteListQueryVariables
+export type NoteSearchQueryResult = Apollo.QueryResult<
+  NoteSearchQuery,
+  NoteSearchQueryVariables
 >;
 export const StudentAllTermsDocument = gql`
   query StudentAllTerms($studentId: String!) {
@@ -4775,7 +4853,7 @@ export const StudentOverviewResultDocument = gql`
       tenCN
       daiCuong
       coSoNganh
-      chuyenNganh
+      batBuocChuyenNganh
       tuChonTuDo
       tuChonChuyenNganh
       totNghiep
@@ -4913,9 +4991,13 @@ export const StudentSubjectsByTermDocument = gql`
       maMH
       tenMH
       tenLopHP
-      gvlt
-      gvth
       tinhTrang
+      diemGK
+      diemTH
+      diemCong
+      diemKhac
+      diemCK
+      dtb
     }
   }
 `;

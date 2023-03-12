@@ -1,9 +1,13 @@
-import React, { SetStateAction } from 'react';
+/* eslint-disable @typescript-eslint/no-shadow */
+import React, { SetStateAction, useCallback, useState } from 'react';
 import {
   Box,
   Button,
   Checkbox,
+  Dialog,
   FormControl,
+  ImageList,
+  ImageListItem,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -17,17 +21,19 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 import { API_KEY, NOTE_EDITOR_CONFIG } from '../../../mocks';
-import { File } from '../../../types';
 import { StyledTextField } from '../../styles';
-import { Tag } from '../../../generated-types';
+import { NoteImage, Tag } from '../../../generated-types';
+
+import { StyledDialog } from './styles';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 interface NoteEditorProps {
+  filePondRef: any;
   tagList: Tag[];
+  imageList: NoteImage[];
   editorRef: any;
   initialValue: string;
-  files: File[] | undefined;
   setFiles: React.Dispatch<SetStateAction<File[] | undefined>>;
   onClickSave: any;
   title: string;
@@ -49,10 +55,11 @@ const MenuProps = {
 };
 
 function NoteEditor({
+  filePondRef,
   tagList,
+  imageList,
   editorRef,
   initialValue,
-  files,
   setFiles,
   onClickSave,
   title,
@@ -62,6 +69,11 @@ function NoteEditor({
   handleReset,
   isAdding,
 }: NoteEditorProps) {
+  const [url, setUrl] = useState('');
+  const handleShowImage = useCallback((imageUrl: string) => {
+    setUrl(imageUrl);
+  }, []);
+
   return (
     <>
       <Box sx={{ padding: '1rem' }}>
@@ -118,25 +130,53 @@ function NoteEditor({
           initialValue={initialValue}
           init={NOTE_EDITOR_CONFIG}
         />
+        {!!imageList.length && (
+          <ImageList cols={2} rowHeight={200}>
+            {imageList.map((item) => (
+              <ImageListItem
+                key={item.id}
+                onClick={() => handleShowImage(item.url)}
+              >
+                <img
+                  style={{ objectFit: 'contain', cursor: 'pointer' }}
+                  src={`${item.url}`}
+                  srcSet={`${item.url}`}
+                  alt={item.id}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}
+
         <FilePond
+          ref={filePondRef}
           allowMultiple
-          files={files as any}
-          onupdatefiles={setFiles as any}
-          server={{
-            load: (source, load) => {
-              const myRequest = new Request(source);
-              fetch(myRequest).then((response) => {
-                response.blob().then((myBlob) => {
-                  load(myBlob);
-                });
-              });
-            },
+          onupdatefiles={async (files) => {
+            if (files.length > 0) {
+              setFiles(files.map((image) => image.file) as File[]);
+            }
+          }}
+          onremovefile={() => {
+            setFiles([]);
           }}
           name="files"
           labelIdle="Kéo thả hoặc đính kèm ảnh tại đây"
         />
       </Box>
-
+      <StyledDialog open={!!url.length} onClose={() => setUrl('')}>
+        <Box>
+          <img
+            style={{
+              display: 'block',
+            }}
+            src={url}
+            srcSet={url}
+            alt="selected"
+            loading="lazy"
+          />
+        </Box>
+      </StyledDialog>
       <Box>
         {isAdding && (
           <Button
@@ -147,7 +187,6 @@ function NoteEditor({
             Hủy ghi chú
           </Button>
         )}
-
         <Button
           sx={{ width: isAdding ? '50%' : '100%', borderRadius: 0 }}
           variant="contained"

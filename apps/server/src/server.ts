@@ -21,21 +21,26 @@ export async function startServer() {
     resolvers: resolvers as IResolvers,
     dataSources,
     context,
+    debug: true,
     formatError: (error: GraphQLError) => {
+      const { extensions } = error;
+      const code = extensions?.code;
+      const stacktrace = extensions?.exception;
+      delete extensions?.exception;
+      if (stacktrace && code === 'INTERNAL_SERVER_ERROR') {
+        logger.error(error.message, stacktrace);
+      }
       const formattedError = {
         message: error.message,
-        errorId:
-          (error.extensions && error.extensions.code) ||
-          'INTERNAL_SERVER_ERROR',
+        errorId: (extensions && code) || 'INTERNAL_SERVER_ERROR',
       };
-
       return formattedError;
     },
   });
 
   app.use(cors());
 
-  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 1 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 5000000, maxFiles: 5 }));
 
   server.applyMiddleware({ app });
   app.listen({ host: '0.0.0.0', port: '5000' }, () => {

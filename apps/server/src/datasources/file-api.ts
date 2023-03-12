@@ -1,9 +1,11 @@
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError, UserInputError } from 'apollo-server-express';
 import FormData from 'form-data';
 
-import { MutationUploadDocumentArgs } from '../generated-types';
+import {
+  MutationUploadDocumentArgs,
+  UploadDocumentInput,
+} from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
-import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -15,14 +17,13 @@ class FileAPI extends BaseDataSource {
 
   public async uploadDocument(payload: MutationUploadDocumentArgs) {
     const { file, input } = payload;
-    const { createReadStream, filename } = await file;
-    const formData = new FormData();
-    formData.append('file', createReadStream(), { filename });
-    formData.append('namHoc', input.namHoc);
-    formData.append('hocKy', input.hocKy);
-    formData.append('maMH', input.maMH);
-    formData.append('tenLopHP', input.tenLopHP);
-
+    const awaitedFile = await file;
+    const { createReadStream, filename } = awaitedFile;
+    const formData = this.createFormData(input);
+    if (!filename) {
+      throw new UserInputError('Missing file');
+    }
+    formData.append('file', createReadStream(), filename);
     try {
       const uploadedDocument = await this.post(
         `v1/files/${input.type}`,
@@ -30,9 +31,20 @@ class FileAPI extends BaseDataSource {
       );
       return uploadedDocument;
     } catch (error) {
-      logger.error('Error: cannot upload document', error);
       throw this.handleError(error as ApolloError);
     }
+  }
+
+  // TODO add typing for file
+  private createFormData(input: UploadDocumentInput) {
+    const formData = new FormData();
+    Object.keys(input).forEach((key) => {
+      if (!input[key]) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+      formData.append(key, input[key]);
+    });
+    return formData;
   }
 }
 

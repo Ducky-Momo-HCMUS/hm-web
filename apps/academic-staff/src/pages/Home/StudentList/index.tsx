@@ -16,7 +16,7 @@ import {
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { Order, StudentProperty } from '../../../types';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
   useHomeroomAllListQuery,
@@ -102,27 +102,29 @@ function StudentList() {
 
   return (
     <Box>
-      <StyledTitle>Danh sách sinh viên</StyledTitle>
-      <AsyncDataRenderer
-        loading={homeroomAllListLoading}
-        data={homeroomAllListData}
-      >
-        <StyledFormControl>
-          <InputLabel id="class-select-label">Lớp</InputLabel>
-          <Select
-            labelId="class-select-label"
-            id="class-select"
-            value={values.class || homeroomAllList[0] || ''}
-            label="Lớp"
-            onChange={handleChange('class')}
-          >
-            {homeroomAllList &&
-              homeroomAllList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
-              ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Danh sách sinh viên</StyledTitle>
+        <AsyncDataRenderer
+          loading={homeroomAllListLoading}
+          data={homeroomAllListData}
+        >
+          <StyledFormControl>
+            <InputLabel id="class-select-label">Lớp</InputLabel>
+            <Select
+              labelId="class-select-label"
+              id="class-select"
+              value={values.class || homeroomAllList[0] || ''}
+              label="Lớp"
+              onChange={handleChange('class')}
+            >
+              {homeroomAllList &&
+                homeroomAllList.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      </StyledStickyBox>
       <AsyncDataRenderer
         loading={homeroomStudentListLoading}
         data={studentListData}
