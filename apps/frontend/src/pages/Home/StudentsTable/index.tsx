@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import _isEqual from 'lodash/isEqual';
@@ -29,12 +30,8 @@ import {
   StyledContentWrapper,
   StyledTitle,
 } from '../../../components/styles';
-import { Order, Property } from '../../../types';
-import {
-  // getComparator,
-  groupClassesByYear,
-  mapStudentDataToTable,
-} from '../../../utils';
+import { Order } from '../../../types';
+import { groupClassesByYear, mapStudentDataToTable } from '../../../utils';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { STUDENT_LIST_PAGE_SIZE } from '../../../constants';
 import { GET_HOMEROOM_WATCH_LIST } from '../../../data/queries/homeroom/get-homeroom-watch-list';
@@ -49,6 +46,8 @@ interface State {
   year: string;
   class: string;
   type: string;
+  sortBy: 'chuY' | 'maSV' | 'tenSV' | 'gpa4' | 'gpa10';
+  sortOrder: Order;
   selected: string[];
 }
 
@@ -57,11 +56,11 @@ function StudentsTable() {
     year: '',
     class: '',
     type: TYPES[0],
+    sortBy: 'chuY',
+    sortOrder: 'asc',
     selected: [],
   });
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<Property>('maSV');
 
   const { loading: homeroomListLoading, data: homeroomListData } =
     useHomeroomListQuery();
@@ -79,15 +78,6 @@ function StudentsTable() {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
-  );
-
-  const handleRequestSort = useCallback(
-    (property: Property) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    },
-    [order, orderBy]
   );
 
   const mappedData = useMemo(
@@ -144,21 +134,60 @@ function StudentsTable() {
     homeroomWatchListData?.homeroomWatchList.total,
   ]);
 
+  const initialSelected = useMemo(
+    () => watchListData.map((item) => item.maSV),
+    [watchListData]
+  );
+
   const { homeroomLoading, homeroomData, homeroomLength } = useMemo(
     () => ({
       homeroomLoading:
         values.type === 'Tất cả'
           ? homeroomStudentListLoading
           : homeroomWatchListLoading,
-      homeroomData: values.type === 'Tất cả' ? studentListData : watchListData,
+      homeroomData:
+        values.type === 'Tất cả'
+          ? values.sortBy === 'chuY'
+            ? studentListData.sort((firstStudent, secondStudent) => {
+                if (
+                  !initialSelected.includes(firstStudent.maSV) &&
+                  initialSelected.includes(secondStudent.maSV)
+                ) {
+                  return 1;
+                }
+
+                if (
+                  !initialSelected.includes(firstStudent.maSV) &&
+                  !initialSelected.includes(secondStudent.maSV)
+                ) {
+                  return 0;
+                }
+
+                if (
+                  initialSelected.includes(firstStudent.maSV) &&
+                  initialSelected.includes(secondStudent.maSV)
+                ) {
+                  if (Number(firstStudent.maSV) > Number(secondStudent.maSV)) {
+                    return 1;
+                  }
+
+                  return -1;
+                }
+
+                return -1;
+              })
+            : studentListData
+          : watchListData,
       homeroomLength:
         values.type === 'Tất cả' ? studentListLength : watchListLength,
     }),
     [
       homeroomStudentListLoading,
       homeroomWatchListLoading,
+      initialSelected,
       studentListData,
       studentListLength,
+      values.sortBy,
       values.type,
       watchListData,
       watchListLength,
@@ -172,8 +201,8 @@ function StudentsTable() {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
           page: page + 1,
           size: STUDENT_LIST_PAGE_SIZE,
-          sortOrder: order,
-          sortBy: orderBy,
+          sortOrder: values.sortOrder,
+          sortBy: values.sortBy,
         },
         fetchPolicy: 'no-cache',
       });
@@ -181,6 +210,10 @@ function StudentsTable() {
       getHomeroomWatchList({
         variables: {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
+          page: page + 1,
+          size: STUDENT_LIST_PAGE_SIZE,
+          sortOrder: values.sortOrder,
+          sortBy: values.sortBy,
         },
         fetchPolicy: 'no-cache',
       });
@@ -189,17 +222,12 @@ function StudentsTable() {
     getHomeroomStudentList,
     getHomeroomWatchList,
     initialClass,
-    order,
-    orderBy,
     page,
     values.class,
+    values.sortBy,
+    values.sortOrder,
     values.type,
   ]);
-
-  const initialSelected = useMemo(
-    () => watchListData.map((item) => item.maSV),
-    [watchListData]
-  );
 
   useEffect(() => {
     setValues((v) => ({
@@ -286,6 +314,28 @@ function StudentsTable() {
     values.selected,
   ]);
 
+  useEffect(() => {
+    if (values.type === 'Cần chú ý') {
+      setValues((v) => ({
+        ...v,
+        sortBy: 'maSV',
+      }));
+    }
+  }, [values.type]);
+
+  const sortByOptions = useMemo(() => {
+    const availableOptions = [
+      { label: 'MSSV', value: 'maSV' },
+      { label: 'Họ tên', value: 'tenSV' },
+      { label: 'GPA hệ 4', value: 'gpa4' },
+      { label: 'GPA hệ 10', value: 'gpa10' },
+    ];
+
+    return values.type === 'Tất cả'
+      ? [{ label: 'Chú ý', value: 'chuY' }, ...availableOptions]
+      : availableOptions;
+  }, [values.type]);
+
   return (
     <>
       <StyledContentWrapper>
@@ -344,6 +394,43 @@ function StudentsTable() {
                   ))}
                 </Select>
               </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="sort-by-select-label">Sắp xếp theo</InputLabel>
+                <Select
+                  labelId="sort-by-select-label"
+                  id="sort-by-select"
+                  value={values.sortBy}
+                  label="Sắp xếp theo"
+                  onChange={handleChange('sortBy')}
+                >
+                  {sortByOptions.map((item) => (
+                    <MenuItem key={item.value} value={item.value}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              {values.sortBy !== 'chuY' && (
+                <StyledFormControl>
+                  <InputLabel id="sort-order-select-label">
+                    Thứ tự sắp xếp
+                  </InputLabel>
+                  <Select
+                    labelId="sort-order-select-label"
+                    id="sort-order-select"
+                    value={values.sortOrder}
+                    label="Thứ tự sắp xếp"
+                    onChange={handleChange('sortOrder')}
+                  >
+                    <MenuItem key="asc" value="asc">
+                      Tăng dần
+                    </MenuItem>
+                    <MenuItem key="desc" value="desc">
+                      Giảm dần
+                    </MenuItem>
+                  </Select>
+                </StyledFormControl>
+              )}
             </Box>
             <Button
               component={Link}
@@ -361,11 +448,7 @@ function StudentsTable() {
             >
               <TableContainer sx={{ maxHeight: 350 }}>
                 <Table stickyHeader>
-                  <StudentTableHead
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={handleRequestSort}
-                  />
+                  <StudentTableHead />
                   <TableBody>
                     {homeroomData.map((row, index) => (
                       <StudentTableRow

@@ -11,7 +11,13 @@ const homeroomTypeDefs = gql`
       sortBy: String
       sortOrder: String
     ): HomeroomStudentList!
-    homeroomWatchList(homeroomId: String!): HomeroomWatchList!
+    homeroomWatchList(
+      homeroomId: String!
+      page: Int!
+      size: Int!
+      sortBy: String
+      sortOrder: String
+    ): HomeroomWatchList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): [HomeroomTermListItem!]!
     homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!

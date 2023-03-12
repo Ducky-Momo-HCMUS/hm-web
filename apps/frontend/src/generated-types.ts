@@ -693,6 +693,10 @@ export type QueryHomeroomTermListArgs = {
 
 export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryImportHistoryArgs = {
@@ -1685,6 +1689,10 @@ export type HomeroomTermListQuery = {
 
 export type HomeroomWatchListQueryVariables = Exact<{
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 }>;
 
 export type HomeroomWatchListQuery = {
@@ -4403,8 +4411,20 @@ export type HomeroomTermListQueryResult = Apollo.QueryResult<
   HomeroomTermListQueryVariables
 >;
 export const HomeroomWatchListDocument = gql`
-  query HomeroomWatchList($homeroomId: String!) {
-    homeroomWatchList(homeroomId: $homeroomId) {
+  query HomeroomWatchList(
+    $homeroomId: String!
+    $page: Int!
+    $size: Int!
+    $sortBy: String
+    $sortOrder: String
+  ) {
+    homeroomWatchList(
+      homeroomId: $homeroomId
+      page: $page
+      size: $size
+      sortBy: $sortBy
+      sortOrder: $sortOrder
+    ) {
       total
       data {
         sinhVien {
@@ -4439,6 +4459,10 @@ export const HomeroomWatchListDocument = gql`
  * const { data, loading, error } = useHomeroomWatchListQuery({
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *      sortBy: // value for 'sortBy'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */

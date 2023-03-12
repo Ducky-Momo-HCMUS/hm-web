@@ -698,6 +698,10 @@ export type QueryHomeroomTermListArgs = {
 
 export type QueryHomeroomWatchListArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  sortBy?: InputMaybe<Scalars['String']>;
+  sortOrder?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryImportHistoryArgs = {
@@ -2279,7 +2283,7 @@ export type QueryResolvers<
     ResolversTypes['HomeroomWatchList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomWatchListArgs, 'homeroomId'>
+    RequireFields<QueryHomeroomWatchListArgs, 'homeroomId' | 'page' | 'size'>
   >;
   importHistory?: Resolver<
     ResolversTypes['ImportHistory'],
