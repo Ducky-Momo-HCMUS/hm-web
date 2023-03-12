@@ -7,6 +7,8 @@ export const SEARCH_NOTE = gql`
     $tenSV: String
     $start: Date
     $end: Date
+    $maSH: String
+    $maTag: Int
     $page: Int!
     $size: Int!
   ) {
@@ -16,6 +18,8 @@ export const SEARCH_NOTE = gql`
       tenSV: $tenSV
       start: $start
       end: $end
+      maSH: $maSH
+      maTag: $maTag
       page: $page
       size: $size
     ) {

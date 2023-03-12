@@ -2,7 +2,7 @@ import { Button, Box } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
-import { StyledTitle } from '../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../components/styles';
 import { TEACHER_LIST_PAGE_SIZE } from '../../constants';
 import { useAllTeacherListLazyQuery } from '../../generated-types';
 import { TeacherListItem } from '../../types';
@@ -64,18 +64,24 @@ function ManageHomeroomTeacher() {
 
   return (
     <Box display="flex" flexDirection="column" gap={1}>
-      <Box display="flex" justifyContent="space-between" alignItems="baseline">
-        <StyledTitle variant="h1">Quản lý GVCN</StyledTitle>
-        <Box display="flex" gap={1}>
-          <Button
-            sx={{ textTransform: 'uppercase' }}
-            variant="contained"
-            onClick={handleOpenImportHomeroomTeacherInfoDialog}
-          >
-            Import danh sách GVCN
-          </Button>
+      <StyledStickyBox>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="baseline"
+        >
+          <StyledTitle variant="h1">Quản lý GVCN</StyledTitle>
+          <Box display="flex" gap={1}>
+            <Button
+              sx={{ textTransform: 'uppercase' }}
+              variant="contained"
+              onClick={handleOpenImportHomeroomTeacherInfoDialog}
+            >
+              Import danh sách GVCN
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      </StyledStickyBox>
       <AsyncDataRenderer
         loading={allTeacherListLoading}
         data={allTeacherListData}

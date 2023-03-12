@@ -1,12 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import {
+  Avatar,
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
+  IconButton,
   List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
 } from '@mui/material';
 import PublishIcon from '@mui/icons-material/Publish';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -17,16 +25,21 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import Header from '../../components/Header';
 
 import ImportFile from './ImportFile';
 import {
+  AppBar,
   Drawer,
   StyledContent,
   StyledListItemButton,
-  StyledListItemText,
   StyledContainer,
+  StyledToolbar,
+  DrawerHeader,
 } from './styles';
 import HomeroomTeacherList from './HomeroomTeacherList';
 import StudentList from './StudentList';
@@ -48,68 +61,107 @@ function Home() {
     setOpen(false);
   }, []);
 
+  const theme = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpenDrawer(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpenDrawer(false);
+  };
+
   return (
     <>
-      <Header isAuthenticated />
+      <AppBar position="fixed" open={openDrawer}>
+        <StyledToolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(openDrawer && { display: 'none' }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ width: '100%' }}
+          >
+            <Header isAuthenticated isDashboard />
+          </Box>
+        </StyledToolbar>
+      </AppBar>
       <StyledContainer>
-        <Drawer variant="permanent" open PaperProps={{ elevation: 8 }}>
-          <List component="nav">
-            <StyledListItemButton
-              active={selected === 0}
-              onClick={() => setSelected(0)}
-            >
-              <CoPresentIcon color="action" />
-              <StyledListItemText primary="Danh sách GVCN" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 1}
-              onClick={() => setSelected(1)}
-            >
-              <GroupsIcon color="action" />
-              <StyledListItemText primary="Danh sách sinh viên" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 2}
-              onClick={() => setSelected(2)}
-            >
-              <ListAltIcon color="action" />
-              <StyledListItemText primary="Môn học và chuyên ngành" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 3}
-              onClick={() => setSelected(3)}
-            >
-              <CheckBoxIcon color="action" />
-              <StyledListItemText primary="Đăng ký học phần" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 4}
-              onClick={() => setSelected(4)}
-            >
-              <TextIncreaseIcon color="action" />
-              <StyledListItemText primary="Điểm học phần" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 5}
-              onClick={() => setSelected(5)}
-            >
-              <EventAvailableIcon color="action" />
-              <StyledListItemText primary="Điểm rèn luyện" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 6}
-              onClick={() => setSelected(6)}
-            >
-              <PersonOffIcon color="action" />
-              <StyledListItemText primary="Hoãn/Vắng thi" />
-            </StyledListItemButton>
-            <StyledListItemButton
-              active={selected === 7}
-              onClick={handleClickOpen}
-            >
-              <PublishIcon color="action" />
-              <StyledListItemText primary="Nhập thông tin" />
-            </StyledListItemButton>
+        <Drawer variant="permanent" open={openDrawer}>
+          <DrawerHeader>
+            <Avatar sx={{ marginLeft: '0.5rem' }} src="/img/fit-logo.png" />
+            <IconButton sx={{ color: 'white' }} onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {[
+              'Danh sách GVCN',
+              'Danh sách sinh viên',
+              'Môn học và chuyên ngành',
+              'Đăng ký học phần',
+              'Điểm học phần',
+              'Điểm rèn luyện',
+              'Hoãn/Vắng thi',
+              'Nhập thông tin',
+            ].map((text, index) => (
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <StyledListItemButton
+                  active={selected === index}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: openDrawer ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  onClick={() => {
+                    if (index === 7) {
+                      handleClickOpen();
+                      return;
+                    }
+
+                    setSelected(index);
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: openDrawer ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {index === 0 && <CoPresentIcon />}
+                    {index === 1 && <GroupsIcon />}
+                    {index === 2 && <ListAltIcon />}
+                    {index === 3 && <CheckBoxIcon />}
+                    {index === 4 && <TextIncreaseIcon />}
+                    {index === 5 && <EventAvailableIcon />}
+                    {index === 6 && <PersonOffIcon />}
+                    {index === 7 && <PublishIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{ opacity: openDrawer ? 1 : 0 }}
+                  />
+                </StyledListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Drawer>
         <StyledContent component="main">

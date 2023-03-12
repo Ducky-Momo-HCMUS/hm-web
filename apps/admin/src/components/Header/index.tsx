@@ -8,9 +8,30 @@ import { StyledBox } from './styles';
 
 interface HeaderProps {
   isAuthenticated?: boolean;
+  isDashboard?: boolean;
 }
-function Header({ isAuthenticated }: HeaderProps) {
-  return (
+function Header({ isAuthenticated, isDashboard }: HeaderProps) {
+  return isDashboard ? (
+    <>
+      <Typography
+        sx={{
+          textDecoration: 'none',
+          fontSize: '1.1rem',
+          color: 'inherit',
+        }}
+        variant="h6"
+        component={Link}
+        to="/"
+      >
+        Homeroom management
+      </Typography>
+      {isAuthenticated && (
+        <>
+          <ActionsBar />
+        </>
+      )}
+    </>
+  ) : (
     <Box sx={{ position: 'fixed', top: 0, zIndex: 9999, width: '100%' }}>
       <StyledBox>
         <Typography

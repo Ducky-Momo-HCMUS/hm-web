@@ -24,6 +24,27 @@ const studentTypeDefs = gql`
       studentId: String!
       subject: String!
     ): StudentDetailSubjectsResult!
+    studentEnrolledList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentEnrolledList!
+    studentNotEnrolledList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentNotEnrolledList!
+    studentTrainingPointList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentTrainingPointList!
+    studentPostponeList(
+      termId: Int!
+      page: Int!
+      size: Int!
+    ): StudentPostponeList!
+    studentAbsentList(termId: Int!, page: Int!, size: Int!): StudentAbsentList!
   }
 
   extend type Mutation {
@@ -45,6 +66,65 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+  }
+
+  type StudentAbsentList {
+    total: Int!
+    data: [StudentAbsentListItem!]!
+  }
+
+  type StudentAbsentListItem {
+    maSV: String!
+    tenSV: String!
+    maMH: String!
+    tenMH: String!
+  }
+
+  type StudentPostponeList {
+    total: Int!
+    data: [StudentPostponeListItem!]!
+  }
+
+  type StudentPostponeListItem {
+    maSV: String!
+    tenSV: String!
+    maMH: String!
+    tenMH: String!
+  }
+
+  type StudentTrainingPointList {
+    total: Int!
+    data: [StudentTrainingPointListItem!]!
+  }
+
+  type StudentTrainingPointListItem {
+    maSV: String!
+    tenSV: String!
+    drl: Int!
+    xepLoai: String!
+  }
+
+  type StudentEnrolledList {
+    total: Int!
+    data: [StudentEnrolledListItem!]!
+  }
+
+  type StudentEnrolledListItem {
+    maSV: String!
+    tenSV: String!
+    maMH: String!
+    tenMH: String!
+    tenLopHP: String!
+  }
+
+  type StudentNotEnrolledList {
+    total: Int!
+    data: [StudentNotEnrolledListItem!]!
+  }
+
+  type StudentNotEnrolledListItem {
+    maSV: String!
+    tenSV: String!
   }
 
   type StudentSubject {

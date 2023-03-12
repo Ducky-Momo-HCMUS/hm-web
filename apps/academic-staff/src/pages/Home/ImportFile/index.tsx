@@ -12,30 +12,42 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { useState, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
+import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
-import { useUploadDocumentMutation } from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import {
+  FileType,
+  useClassroomListLazyQuery,
+  useCourseListQuery,
+  useImportHistoryLazyQuery,
+  useTermListQuery,
+  useUploadDocumentMutation,
+} from '../../../generated-types';
 
 import { StyledFormControl } from './styles';
 import {
   arrayify,
-  CLASSES,
   DataSet,
   getRowsCols,
+  groupTermsByYear,
   MenuProps,
   Row,
-  SUBJECTS,
-  TERMS,
   TYPES,
-  YEARS,
 } from './utils';
 
 interface State {
@@ -43,7 +55,7 @@ interface State {
   type: string;
   term: string;
   subject: string;
-  class: string;
+  class: number;
 }
 
 function ImportFile() {
@@ -52,7 +64,7 @@ function ImportFile() {
     year: '',
     term: '',
     subject: '',
-    class: '',
+    class: 0,
   });
 
   const [error, setError] = useState<string>('');
@@ -163,11 +175,109 @@ function ImportFile() {
     ]
   );
 
+  const [
+    getImportHistory,
+    { loading: importHistoryLoading, data: importHistoryData },
+  ] = useImportHistoryLazyQuery();
+
+  const { thoiGian, tenGV } = useMemo(() => {
+    return {
+      thoiGian: importHistoryData?.importHistory.thoiGian,
+      tenGV: importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
+    };
+  }, [
+    importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
+    importHistoryData?.importHistory.thoiGian,
+  ]);
+
+  useEffect(() => {
+    const fileType =
+      TYPES.find((item) => item.label === values.type)?.value ||
+      FileType.DanhSachGvcn;
+    getImportHistory({
+      variables: {
+        fileType,
+      },
+    });
+  }, [getImportHistory, values.type]);
+
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+
+  const termsData = useMemo(
+    () => allTermsData?.termList || [],
+    [allTermsData?.termList]
+  );
+
+  const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { terms } = useMemo(() => {
+    const termsByYear = mappedData[values.year || years[years.length - 1]]?.map(
+      (data) => ({
+        maHK: data.maHK,
+        hocKy: data.hocKy,
+      })
+    );
+    return {
+      terms: termsByYear || [],
+    };
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
+  const { loading: courseListLoading, data: courseListData } =
+    useCourseListQuery({
+      variables: {
+        page: 1,
+        size: 1000,
+      },
+    });
+  const courseList = useMemo(
+    () => courseListData?.courseList.data || [],
+    [courseListData?.courseList.data]
+  );
+
+  const [
+    getClassroomList,
+    { loading: classroomListLoading, data: classroomListData },
+  ] = useClassroomListLazyQuery();
+  const classroomList = useMemo(
+    () => classroomListData?.classroomList || [],
+    [classroomListData?.classroomList]
+  );
+
+  useEffect(() => {
+    if (values.type === 'Bảng điểm lớp học phần') {
+      getClassroomList({
+        variables: {
+          termId: Number(values.term) || Number(initialTerm),
+          courseId: values.subject || courseList[0].maMH,
+        },
+      });
+    }
+  }, [
+    courseList,
+    getClassroomList,
+    initialTerm,
+    values.subject,
+    values.term,
+    values.type,
+  ]);
+
   return (
     <>
       <ToastContainer />
-      <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
-      <Box component="form">
+      <StyledStickyBox>
+        <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
         <StyledFormControl sx={{ minWidth: '18.5rem' }}>
           <InputLabel id="type-select-label">Loại thông tin</InputLabel>
           <Select
@@ -185,80 +295,101 @@ function ImportFile() {
         </StyledFormControl>
         {TYPES.findIndex((item) => item.label === values.type) >= 4 && (
           <>
-            <StyledFormControl>
-              <InputLabel id="year-select-label">Năm học</InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={values.year}
-                label="Năm học"
-                onChange={handleChange('year')}
-                MenuProps={MenuProps}
-              >
-                {YEARS.map((item) => (
-                  <MenuItem value={item.toString()}>
-                    {item} - {item + 1}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl>
-              <InputLabel id="term-select-label">Học kỳ</InputLabel>
-              <Select
-                labelId="term-select-label"
-                id="term-select"
-                value={values.term}
-                label="Học kỳ"
-                onChange={handleChange('term')}
-                MenuProps={MenuProps}
-              >
-                {TERMS.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
+            <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+              <StyledFormControl>
+                <InputLabel id="year-select-label">Năm học</InputLabel>
+                <Select
+                  labelId="year-select-label"
+                  id="year-select"
+                  value={values.year || initialYear}
+                  label="Năm học"
+                  onChange={handleChange('year')}
+                  MenuProps={MenuProps}
+                >
+                  {years.map((item) => (
+                    <MenuItem value={item.toString()}>
+                      {item} - {Number(item) + 1}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="term-select-label">Học kỳ</InputLabel>
+                <Select
+                  labelId="term-select-label"
+                  id="term-select"
+                  value={values.term || initialTerm}
+                  label="Học kỳ"
+                  onChange={handleChange('term')}
+                  MenuProps={MenuProps}
+                >
+                  {terms.map((item) => (
+                    <MenuItem key={item.maHK} value={item.maHK}>
+                      {item.hocKy}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </AsyncDataRenderer>
           </>
         )}
         {values.type === 'Bảng điểm lớp học phần' && (
           <>
-            <StyledFormControl sx={{ minWidth: '13rem' }}>
-              <InputLabel id="subject-select-label">Môn học</InputLabel>
-              <Select
-                labelId="subject-select-label"
-                id="subject-select"
-                value={values.subject}
-                label="Môn học"
-                onChange={handleChange('subject')}
-                MenuProps={MenuProps}
-              >
-                {SUBJECTS.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
-            <StyledFormControl sx={{ minWidth: '9rem' }}>
-              <InputLabel id="class-select-label">Lớp học phần</InputLabel>
-              <Select
-                labelId="class-select-label"
-                id="class-select"
-                value={values.class}
-                label="Lớp học phần"
-                onChange={handleChange('class')}
-                MenuProps={MenuProps}
-              >
-                {CLASSES.map((item) => (
-                  <MenuItem value={item}>{item}</MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
+            <AsyncDataRenderer loading={courseListLoading} data={courseList}>
+              <StyledFormControl sx={{ minWidth: '13rem' }}>
+                <InputLabel id="subject-select-label">Môn học</InputLabel>
+                <Select
+                  labelId="subject-select-label"
+                  id="subject-select"
+                  value={values.subject || courseList[0].maMH}
+                  label="Môn học"
+                  onChange={handleChange('subject')}
+                  MenuProps={MenuProps}
+                >
+                  {courseList.map((item) => (
+                    <MenuItem value={item.maMH}>{item.maMH}</MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </AsyncDataRenderer>
+            <AsyncDataRenderer
+              loading={classroomListLoading}
+              data={classroomListData}
+            >
+              <StyledFormControl sx={{ minWidth: '9rem' }}>
+                <InputLabel id="class-select-label">Lớp học phần</InputLabel>
+                <Select
+                  labelId="class-select-label"
+                  id="class-select"
+                  value={String(values.class) || String(classroomList[0].maHP)}
+                  label="Lớp học phần"
+                  onChange={handleChange('class')}
+                  MenuProps={MenuProps}
+                >
+                  {classroomList.map((item) => (
+                    <MenuItem value={item.maHP}>{item.tenLopHP}</MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </AsyncDataRenderer>
           </>
         )}
+      </StyledStickyBox>
+      <Box component="form">
         {values.type.length > 0 && (
           <>
-            <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
-              Cập nhật lần cuối bởi <b>Hoàng Thanh Tú</b> vào 12/12/2021
-              00:00:00 am
-            </Typography>
+            {tenGV && (
+              <AsyncDataRenderer
+                loading={importHistoryLoading}
+                data={importHistoryData}
+              >
+                <Typography sx={{ fontStyle: 'italic', marginTop: '1rem' }}>
+                  Cập nhật lần cuối bởi <b>{tenGV}</b> vào{' '}
+                  {thoiGian &&
+                    format(new Date(thoiGian), 'dd/MM/yyyy HH:mm:ss')}
+                </Typography>
+              </AsyncDataRenderer>
+            )}
             <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
               Cập nhật{' '}
               {TYPES.find(

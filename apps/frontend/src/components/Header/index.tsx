@@ -15,10 +15,14 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
   return isDashboard ? (
     <>
       <Typography
-        sx={{ textDecoration: 'none', fontSize: '1.1rem', color: 'inherit' }}
-        variant="h6"
+        sx={{
+          textDecoration: 'none',
+          fontSize: '1.1rem',
+          color: 'inherit',
+        }}
         component={Link}
         to="/"
+        variant="h6"
       >
         Homeroom management
       </Typography>
@@ -34,9 +38,9 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
       <StyledBox>
         <Typography
           sx={{ textDecoration: 'none', fontSize: '1.1rem', color: 'inherit' }}
-          variant="h6"
           component={Link}
           to="/"
+          variant="h6"
         >
           Homeroom management
         </Typography>

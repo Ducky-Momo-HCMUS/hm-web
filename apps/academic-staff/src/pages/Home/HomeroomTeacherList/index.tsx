@@ -19,7 +19,7 @@ import {
   useYearListQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { Order, TeacherProperty } from '../../../types';
 import { TEACHER_LIST_PAGE_SIZE } from '../../../constants';
 
@@ -29,6 +29,16 @@ import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
 interface State {
   year: string;
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+export const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
 
 function HomeroomTeacherList() {
   const [values, setValues] = useState<State>({
@@ -62,9 +72,8 @@ function HomeroomTeacherList() {
   const { loading: yearListLoading, data: yearListData } = useYearListQuery({});
 
   const yearList = useMemo(
-    () =>
-      yearListData?.yearList.danhSachKhoa.map((item) => item.toString()) || [],
-    [yearListData?.yearList.danhSachKhoa]
+    () => yearListData?.yearList.map((item) => item.khoa.toString()) || [],
+    [yearListData?.yearList]
   );
 
   const [
@@ -93,23 +102,26 @@ function HomeroomTeacherList() {
 
   return (
     <Box>
-      <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
-      <AsyncDataRenderer loading={yearListLoading} data={yearListData}>
-        <StyledFormControl>
-          <InputLabel id="year-select-label">Khoá</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.year || yearList[0]}
-            label="Khoá"
-            onChange={handleChange('year')}
-          >
-            {yearList.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Danh sách giáo viên chủ nhiệm</StyledTitle>
+        <AsyncDataRenderer loading={yearListLoading} data={yearListData}>
+          <StyledFormControl>
+            <InputLabel id="year-select-label">Khoá</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={values.year || yearList[0]}
+              label="Khoá"
+              onChange={handleChange('year')}
+              MenuProps={MenuProps}
+            >
+              {yearList.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      </StyledStickyBox>
       <AsyncDataRenderer loading={teacherListLoading} data={teacherList}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
           <TableContainer sx={{ maxHeight: 440 }}>

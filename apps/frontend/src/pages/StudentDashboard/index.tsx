@@ -15,6 +15,7 @@ import {
   ListItemText,
   useTheme,
   Box,
+  Avatar,
 } from '@mui/material';
 
 import Header from '../../components/Header';
@@ -75,7 +76,8 @@ function StudentDashboard() {
       <StyledContainer>
         <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
+            <Avatar sx={{ marginLeft: '0.5rem' }} src="/img/fit-logo.png" />
+            <IconButton sx={{ color: 'white' }} onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? (
                 <ChevronRightIcon />
               ) : (

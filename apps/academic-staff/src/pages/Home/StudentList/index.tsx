@@ -16,7 +16,7 @@ import {
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { Order, StudentProperty } from '../../../types';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
   useHomeroomAllListQuery,
@@ -29,6 +29,16 @@ import StudentTableHead from './StudentTableHead';
 interface State {
   class: string;
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+export const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
 
 function StudentList() {
   const [values, setValues] = useState<State>({
@@ -63,8 +73,8 @@ function StudentList() {
     useHomeroomAllListQuery({});
 
   const homeroomAllList = useMemo(
-    () => homeroomAllListData?.homeroomAllList.danhSachLopSH || [],
-    [homeroomAllListData?.homeroomAllList.danhSachLopSH]
+    () => homeroomAllListData?.homeroomAllList.map((item) => item.maSH) || [],
+    [homeroomAllListData?.homeroomAllList]
   );
 
   const [
@@ -102,27 +112,30 @@ function StudentList() {
 
   return (
     <Box>
-      <StyledTitle>Danh sách sinh viên</StyledTitle>
-      <AsyncDataRenderer
-        loading={homeroomAllListLoading}
-        data={homeroomAllListData}
-      >
-        <StyledFormControl>
-          <InputLabel id="class-select-label">Lớp</InputLabel>
-          <Select
-            labelId="class-select-label"
-            id="class-select"
-            value={values.class || homeroomAllList[0] || ''}
-            label="Lớp"
-            onChange={handleChange('class')}
-          >
-            {homeroomAllList &&
-              homeroomAllList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
-              ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Danh sách sinh viên</StyledTitle>
+        <AsyncDataRenderer
+          loading={homeroomAllListLoading}
+          data={homeroomAllListData}
+        >
+          <StyledFormControl>
+            <InputLabel id="class-select-label">Lớp</InputLabel>
+            <Select
+              labelId="class-select-label"
+              id="class-select"
+              value={values.class || homeroomAllList[0] || ''}
+              label="Lớp"
+              onChange={handleChange('class')}
+              MenuProps={MenuProps}
+            >
+              {homeroomAllList &&
+                homeroomAllList.map((item) => (
+                  <MenuItem value={item}>{item}</MenuItem>
+                ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      </StyledStickyBox>
       <AsyncDataRenderer
         loading={homeroomStudentListLoading}
         data={studentListData}

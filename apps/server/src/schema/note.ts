@@ -11,6 +11,8 @@ const noteTypeDefs = gql`
       maSV: String
       tenSV: String
       start: Date
+      maSH: String
+      maTag: Int
       end: Date
       page: Int!
       size: Int!

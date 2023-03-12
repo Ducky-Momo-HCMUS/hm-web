@@ -35,13 +35,13 @@ import {
   StyledStickyBox,
   StyledTitle,
 } from '../../components/styles';
-import { CLASS_OPTIONS } from '../../mocks';
 import DeleteDialog from '../../components/DeleteDialog';
 import NoteEditor from '../../components/Note/NoteEditor';
 import {
   NoteAddInput,
   NoteEditInput,
   NoteImage,
+  useHomeroomListQuery,
   useNoteAddMutation,
   useNoteDeleteMutation,
   useNoteDetailLazyQuery,
@@ -73,7 +73,6 @@ interface State {
 
 interface FilterState {
   title: string;
-  content: string;
   student: string;
   tag: string;
   class: string;
@@ -103,7 +102,6 @@ function NoteStore() {
 
   const [filterValues, setFilterValues] = useState<FilterState>({
     title: '',
-    content: '',
     student: '',
     tag: '',
     class: '',
@@ -225,7 +223,7 @@ function NoteStore() {
     setValues((v) => ({
       ...v,
       selected: -1,
-      isAdding: true,
+      isAdding: false,
       title: '',
       tags: [],
       images: [],
@@ -325,8 +323,8 @@ function NoteStore() {
       filterValues.title && { tieuDe: filterValues.title },
       filterValues.start && { start: filterValues.start },
       filterValues.end && { end: filterValues.end },
-      filterValues.tag && { tag: filterValues.tag },
-      filterValues.class && { class: filterValues.class }
+      filterValues.tag && { maTag: filterValues.tag },
+      filterValues.class && { maSH: filterValues.class }
     );
 
     if (filterValues.student) {
@@ -358,7 +356,7 @@ function NoteStore() {
     useNoteSearchLazyQuery();
 
   useEffect(() => {
-    searchNote({ variables: args });
+    searchNote({ variables: args, fetchPolicy: 'no-cache' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchNote, page]);
 
@@ -374,8 +372,33 @@ function NoteStore() {
   const handleSearchNote = useCallback(() => {
     searchNote({
       variables: args,
+      fetchPolicy: 'no-cache',
     });
   }, [args, searchNote]);
+
+  const handleResetFilter = useCallback(() => {
+    setFilterValues({
+      title: '',
+      student: '',
+      tag: '',
+      class: '',
+      start: null,
+      end: null,
+    });
+    searchNote({
+      variables: {
+        page: 1,
+        size: NOTE_STORE_LIST_PAGE_SIZE,
+      },
+    });
+  }, [searchNote]);
+
+  const { loading: homeroomListLoading, data: homeroomListData } =
+    useHomeroomListQuery();
+  const homeroomList = useMemo(
+    () => homeroomListData?.homeroomList.lopChuNhiem || [],
+    [homeroomListData?.homeroomList.lopChuNhiem]
+  );
 
   return (
     <>
@@ -392,7 +415,13 @@ function NoteStore() {
               }}
             >
               <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
-              <Button variant="contained" onClick={handleReset}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleReset();
+                  setValues((v) => ({ ...v, isAdding: true }));
+                }}
+              >
                 Tạo ghi chú mới
               </Button>
             </Box>
@@ -413,6 +442,7 @@ function NoteStore() {
                   shrink: true,
                 }}
                 onChange={handleChangeFilterValue('title')}
+                value={filterValues.title}
               />
               <StyledTextField
                 sx={{ width: '15%' }}
@@ -424,6 +454,7 @@ function NoteStore() {
                   shrink: true,
                 }}
                 onChange={handleChangeFilterValue('student')}
+                value={filterValues.student}
               />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -461,34 +492,40 @@ function NoteStore() {
                   )}
                 />
               </LocalizationProvider>
-              <FormControl variant="standard" sx={{ width: '10%' }}>
-                <InputLabel
-                  sx={{ fontWeight: 'bold' }}
-                  shrink
-                  id="class-select-label"
-                >
-                  Lớp
-                </InputLabel>
-                <Select
-                  sx={{
-                    '& .MuiSelect-select .notranslate::after':
-                      filterValues.class.length === 0
-                        ? {
-                            content: `"Chọn lớp..."`,
-                            opacity: 0.42,
-                          }
-                        : {},
-                  }}
-                  labelId="class-select-label"
-                  id="class-select"
-                  label="Lớp"
-                  onChange={handleSelectFilterClass}
-                >
-                  {CLASS_OPTIONS.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <AsyncDataRenderer
+                loading={homeroomListLoading}
+                data={homeroomListData}
+              >
+                <FormControl variant="standard" sx={{ width: '10%' }}>
+                  <InputLabel
+                    sx={{ fontWeight: 'bold' }}
+                    shrink
+                    id="class-select-label"
+                  >
+                    Lớp
+                  </InputLabel>
+                  <Select
+                    sx={{
+                      '& .MuiSelect-select .notranslate::after':
+                        filterValues.class.length === 0
+                          ? {
+                              content: `"Chọn lớp..."`,
+                              opacity: 0.42,
+                            }
+                          : {},
+                    }}
+                    labelId="class-select-label"
+                    id="class-select"
+                    label="Lớp"
+                    onChange={handleSelectFilterClass}
+                    value={filterValues.class}
+                  >
+                    {homeroomList.map((item) => (
+                      <MenuItem value={item.maSH}>{item.maSH}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </AsyncDataRenderer>
               <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
                 <FormControl variant="standard" sx={{ width: '15%' }}>
                   <InputLabel
@@ -513,9 +550,10 @@ function NoteStore() {
                     MenuProps={MenuProps}
                     label="Tag"
                     onChange={handleSelectFilterTag}
+                    value={filterValues.tag}
                   >
                     {tagList.map((item) => (
-                      <MenuItem value={item.tenTag}>{item.tenTag}</MenuItem>
+                      <MenuItem value={item.maTag}>{item.tenTag}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -528,6 +566,14 @@ function NoteStore() {
               onClick={handleSearchNote}
             >
               Lọc
+            </Button>
+            <Button
+              sx={{ marginTop: '1rem', marginLeft: '1rem' }}
+              variant="outlined"
+              color="primary"
+              onClick={handleResetFilter}
+            >
+              Reset
             </Button>
           </StyledCard>
           <AsyncDataRenderer loading={searchNoteLoading} data={noteList}>
@@ -555,6 +601,7 @@ function NoteStore() {
             </StyledGridContainer>
             <Pagination
               sx={{ width: 'fit-content', margin: '1rem auto 0' }}
+              page={page}
               count={lastPage}
               color="primary"
               onChange={handleChangePage}
@@ -562,30 +609,28 @@ function NoteStore() {
           </AsyncDataRenderer>
         </StyledContentWrapper>
       </StyledContainer>
-      {values.selected >= 0 && (
-        <StyledDialog
-          open={values.selected >= 0}
-          onClose={() => setValues({ ...values, selected: -1 })}
-        >
-          <NoteEditor
-            filePondRef={filePondRef}
-            tagList={tagList}
-            imageList={values.images}
-            editorRef={editorRef}
-            initialValue={
-              values.isAdding ? '' : (noteDetail?.noiDung as string)
-            }
-            setFiles={setFiles}
-            onClickSave={handleClickSave}
-            title={values.title}
-            tags={values.tags}
-            handleChangeValue={handleChangeValue}
-            handleSelectTags={handleSelectTags}
-            handleReset={handleReset}
-            isAdding={values.isAdding}
-          />
-        </StyledDialog>
-      )}
+      <StyledDialog
+        open={values.selected >= 0 || values.isAdding}
+        onClose={() => {
+          setValues({ ...values, selected: -1, isAdding: false });
+        }}
+      >
+        <NoteEditor
+          filePondRef={filePondRef}
+          tagList={tagList}
+          imageList={values.images}
+          editorRef={editorRef}
+          initialValue={values.isAdding ? '' : (noteDetail?.noiDung as string)}
+          setFiles={setFiles}
+          onClickSave={handleClickSave}
+          title={values.title}
+          tags={values.tags}
+          handleChangeValue={handleChangeValue}
+          handleSelectTags={handleSelectTags}
+          handleReset={handleReset}
+          isAdding={values.isAdding}
+        />
+      </StyledDialog>
       {values.deleteIndex >= 0 && (
         <DeleteDialog
           open={values.deleteIndex >= 0}

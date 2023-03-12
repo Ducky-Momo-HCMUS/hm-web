@@ -6,6 +6,16 @@ import { ResolverContext } from './types';
 
 export const fileResolver: Resolvers<ResolverContext> = {
   UploadFile: GraphQLUpload,
+  Query: {
+    termList: async (_, __, { dataSources }) => {
+      const res = await dataSources.fileAPI.getTermList();
+      return res.data;
+    },
+    importHistory: async (_, args, { dataSources }) => {
+      const res = await dataSources.fileAPI.getImportHistory(args);
+      return res.data;
+    },
+  },
   Mutation: {
     uploadDocument: async (_, args, { dataSources }) => {
       return (await dataSources.fileAPI.uploadDocument(args)) || null;

@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
   FormControl,
   ImageList,
   ImageListItem,
@@ -13,6 +12,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
+import { Image } from 'mui-image';
 import { Editor } from '@tinymce/tinymce-react';
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
@@ -166,15 +166,14 @@ function NoteEditor({
       </Box>
       <StyledDialog open={!!url.length} onClose={() => setUrl('')}>
         <Box>
-          <img
-            style={{
-              display: 'block',
-            }}
-            src={url}
-            srcSet={url}
-            alt="selected"
-            loading="lazy"
-          />
+          {url && (
+            <Image
+              sx={{ display: 'block', maxWidth: '100%' }}
+              src={url}
+              srcSet={url}
+              duration={0}
+            />
+          )}
         </Box>
       </StyledDialog>
       <Box>

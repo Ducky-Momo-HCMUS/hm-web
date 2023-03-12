@@ -1,6 +1,5 @@
 import { ApolloError } from 'apollo-server-express';
 
-import { HOMEROOM_ALL_LIST } from '../mocks/homeroom';
 import {
   MutationHomeroomAddWatchlistArgs,
   MutationHomeroomDeleteWatchlistArgs,
@@ -38,8 +37,8 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomAllList() {
     try {
-      // const homeroomAllList = await this.get('v1/homerooms-list');
-      return HOMEROOM_ALL_LIST;
+      const homeroomAllList = await this.get('v1/homerooms/all');
+      return homeroomAllList;
     } catch (error) {
       logger.error('Error: cannot fetch homeroom all list');
       throw this.handleError(error as ApolloError);
@@ -55,7 +54,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomStudentListArgs) {
     try {
       const homeroomStudentList = await this.get(
-        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}&sort-order=${sortOrder}&sort-by=${sortBy}`
+        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}&sortOrder=${sortOrder}&sortBy=${sortBy}`
       );
       return homeroomStudentList;
     } catch (error) {
@@ -66,10 +65,14 @@ class HomeroomAPI extends BaseDataSource {
 
   public async getHomeroomWatchList({
     homeroomId,
+    page,
+    size,
+    sortOrder,
+    sortBy,
   }: QueryHomeroomWatchListArgs) {
     try {
       const homeroomStudentList = await this.get(
-        `v1/homerooms/${homeroomId}/watchlist`
+        `v1/homerooms/${homeroomId}/watchlist?page=${page}&size=${size}&sortOrder=${sortOrder}&sortBy=${sortBy}`
       );
       return homeroomStudentList;
     } catch (error) {
