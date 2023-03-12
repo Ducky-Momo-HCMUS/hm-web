@@ -217,13 +217,6 @@ function StudentsTable() {
         },
         fetchPolicy: 'no-cache',
       });
-
-      getHomeroomWatchList({
-        variables: {
-          homeroomId: values.class.length > 0 ? values.class : initialClass,
-        },
-        fetchPolicy: 'no-cache',
-      });
     }
   }, [
     getHomeroomStudentList,
