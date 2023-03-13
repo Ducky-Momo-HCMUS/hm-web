@@ -31,6 +31,7 @@ jobs:
       - aws-ecr/build-and-push-image:
           assume-web-identity: true
           repo: hm-bff
+          workspace-root: ./apps/server
   deploy-to-eb:
     <<: *executor
     steps:
