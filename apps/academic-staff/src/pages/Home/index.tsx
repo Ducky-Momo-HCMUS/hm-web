@@ -19,6 +19,12 @@ import {
 import PublishIcon from '@mui/icons-material/Publish';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import WarningIcon from '@mui/icons-material/Warning';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
+import TextIncreaseIcon from '@mui/icons-material/TextIncrease';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -37,6 +43,11 @@ import {
 } from './styles';
 import HomeroomTeacherList from './HomeroomTeacherList';
 import StudentList from './StudentList';
+import MajorCourseList from './MajorCourseList';
+import CourseRegisterList from './CourseRegisterList';
+import CourseScoreList from './CourseScoreList';
+import TrainingPointList from './TrainingPointList';
+import PostponeAbsentList from './PostponeAbsentList';
 
 function Home() {
   const [selected, setSelected] = useState(0);
@@ -101,50 +112,67 @@ function Home() {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Danh sách GVCN', 'Danh sách sinh viên', 'Nhập thông tin'].map(
-              (text, index) => (
-                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                  <StyledListItemButton
-                    active={selected === index}
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: openDrawer ? 'initial' : 'center',
-                      px: 2.5,
-                    }}
-                    onClick={() => {
-                      if (index === 2) {
-                        handleClickOpen();
-                        return;
-                      }
+            {[
+              'Danh sách GVCN',
+              'Danh sách sinh viên',
+              'Môn học và chuyên ngành',
+              'Đăng ký học phần',
+              'Điểm học phần',
+              'Điểm rèn luyện',
+              'Hoãn/Vắng thi',
+              'Nhập thông tin',
+            ].map((text, index) => (
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <StyledListItemButton
+                  active={selected === index}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: openDrawer ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  onClick={() => {
+                    if (index === 7) {
+                      handleClickOpen();
+                      return;
+                    }
 
-                      setSelected(index);
+                    setSelected(index);
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: openDrawer ? 3 : 'auto',
+                      justifyContent: 'center',
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: openDrawer ? 3 : 'auto',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {index === 0 && <ListAltIcon />}
-                      {index === 1 && <ListAltIcon />}
-                      {index === 2 && <PublishIcon />}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{ opacity: openDrawer ? 1 : 0 }}
-                    />
-                  </StyledListItemButton>
-                </ListItem>
-              )
-            )}
+                    {index === 0 && <CoPresentIcon />}
+                    {index === 1 && <GroupsIcon />}
+                    {index === 2 && <ListAltIcon />}
+                    {index === 3 && <CheckBoxIcon />}
+                    {index === 4 && <TextIncreaseIcon />}
+                    {index === 5 && <EventAvailableIcon />}
+                    {index === 6 && <PersonOffIcon />}
+                    {index === 7 && <PublishIcon />}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    sx={{ opacity: openDrawer ? 1 : 0 }}
+                  />
+                </StyledListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Drawer>
         <StyledContent component="main">
           {selected === 0 && <HomeroomTeacherList />}
           {selected === 1 && <StudentList />}
-          {selected === 2 && <ImportFile />}
+          {selected === 2 && <MajorCourseList />}
+          {selected === 3 && <CourseRegisterList />}
+          {selected === 4 && <CourseScoreList />}
+          {selected === 5 && <TrainingPointList />}
+          {selected === 6 && <PostponeAbsentList />}
+          {selected === 7 && <ImportFile />}
         </StyledContent>
         <Dialog
           open={open}
@@ -174,7 +202,7 @@ function Home() {
               color="primary"
               onClick={() => {
                 setOpen(false);
-                setSelected(2);
+                setSelected(7);
               }}
               autoFocus
             >
