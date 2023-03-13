@@ -22,7 +22,7 @@ export const StyledToolbar = styled(Toolbar)`
   background: ${blue[900]};
 `;
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,

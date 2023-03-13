@@ -10,6 +10,8 @@ export const GET_COURSE_LIST = gql`
         soTinChi
         maCN
         loaiMonHoc
+        chuyenNganh
+        tenCN
       }
     }
   }

@@ -147,10 +147,12 @@ export type CourseList = {
 
 export type CourseListItem = {
   __typename?: 'CourseListItem';
+  chuyenNganh?: Maybe<Scalars['String']>;
   loaiMonHoc: Scalars['String'];
   maCN?: Maybe<Scalars['String']>;
   maMH: Scalars['String'];
   soTinChi: Scalars['Int'];
+  tenCN?: Maybe<Scalars['String']>;
   tenMH: Scalars['String'];
 };
 
@@ -418,6 +420,32 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorList = {
+  __typename?: 'MajorList';
+  data: Array<MajorListItem>;
+  total: Scalars['Int'];
+};
+
+export type MajorListItem = {
+  __typename?: 'MajorListItem';
+  maCN: Scalars['Int'];
+  tenCN: Scalars['String'];
+  tenVietTat: Scalars['String'];
+};
+
+export type MajorResultList = {
+  __typename?: 'MajorResultList';
+  data: Array<MajorResultListItem>;
+  total: Scalars['Int'];
+};
+
+export type MajorResultListItem = {
+  __typename?: 'MajorResultListItem';
+  chuyenNganh?: Maybe<Scalars['String']>;
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   accountActivate: AccountActivateResponse;
@@ -662,6 +690,8 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  majorList: MajorList;
+  majorResultList: MajorResultList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
@@ -771,6 +801,16 @@ export type QueryHomeroomWatchListArgs = {
 
 export type QueryImportHistoryArgs = {
   fileType: FileType;
+};
+
+export type QueryMajorListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+};
+
+export type QueryMajorResultListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryNoteDetailArgs = {
@@ -989,6 +1029,7 @@ export type StudentNotEnrolledList = {
 
 export type StudentNotEnrolledListItem = {
   __typename?: 'StudentNotEnrolledListItem';
+  maSH: Scalars['String'];
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -1374,6 +1415,10 @@ export type ResolversTypes = {
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
+  MajorList: ResolverTypeWrapper<MajorList>;
+  MajorListItem: ResolverTypeWrapper<MajorListItem>;
+  MajorResultList: ResolverTypeWrapper<MajorResultList>;
+  MajorResultListItem: ResolverTypeWrapper<MajorResultListItem>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationStatusReponse: ResolverTypeWrapper<MutationStatusReponse>;
   NoteAddInput: NoteAddInput;
@@ -1504,6 +1549,10 @@ export type ResolversParentTypes = {
   ImportHistory: ImportHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
+  MajorList: MajorList;
+  MajorListItem: MajorListItem;
+  MajorResultList: MajorResultList;
+  MajorResultListItem: MajorResultListItem;
   Mutation: {};
   MutationStatusReponse: MutationStatusReponse;
   NoteAddInput: NoteAddInput;
@@ -1729,10 +1778,16 @@ export type CourseListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['CourseListItem'] = ResolversParentTypes['CourseListItem']
 > = {
+  chuyenNganh?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   loaiMonHoc?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2182,6 +2237,56 @@ export type LoginResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MajorListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorList'] = ResolversParentTypes['MajorList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['MajorListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MajorListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorListItem'] = ResolversParentTypes['MajorListItem']
+> = {
+  maCN?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenVietTat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MajorResultListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorResultList'] = ResolversParentTypes['MajorResultList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['MajorResultListItem']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MajorResultListItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorResultListItem'] = ResolversParentTypes['MajorResultListItem']
+> = {
+  chuyenNganh?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
@@ -2577,6 +2682,18 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryImportHistoryArgs, 'fileType'>
   >;
+  majorList?: Resolver<
+    ResolversTypes['MajorList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryMajorListArgs, 'page' | 'size'>
+  >;
+  majorResultList?: Resolver<
+    ResolversTypes['MajorResultList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryMajorResultListArgs, 'page' | 'size'>
+  >;
   noteDetail?: Resolver<
     ResolversTypes['NoteDetail'],
     ParentType,
@@ -2854,6 +2971,7 @@ export type StudentNotEnrolledListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentNotEnrolledListItem'] = ResolversParentTypes['StudentNotEnrolledListItem']
 > = {
+  maSH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3205,6 +3323,10 @@ export type Resolvers<ContextType = any> = {
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
+  MajorList?: MajorListResolvers<ContextType>;
+  MajorListItem?: MajorListItemResolvers<ContextType>;
+  MajorResultList?: MajorResultListResolvers<ContextType>;
+  MajorResultListItem?: MajorResultListItemResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationStatusReponse?: MutationStatusReponseResolvers<ContextType>;
   NoteAddResponse?: NoteAddResponseResolvers<ContextType>;

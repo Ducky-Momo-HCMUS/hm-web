@@ -125,6 +125,7 @@ const studentTypeDefs = gql`
   type StudentNotEnrolledListItem {
     maSV: String!
     tenSV: String!
+    maSH: String!
   }
 
   type StudentSubject {

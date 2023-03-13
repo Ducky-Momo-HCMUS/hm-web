@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { ApolloError } from '@apollo/client';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 
 import { GenericObject } from '../../types';
 
@@ -12,12 +12,14 @@ export interface AsyncDataRendererProps {
   error?: ApolloError;
   loading: boolean;
   data?: GenericObject | GenericObject[] | null;
+  hasFullWidth?: boolean;
 }
 
 function AsyncDataRenderer({
   children,
   loading,
   data,
+  hasFullWidth = false,
 }: AsyncDataRendererProps) {
   if (loading) {
     return (
@@ -28,7 +30,13 @@ function AsyncDataRenderer({
   }
 
   if (!data || data.length === 0) {
-    return <StyledInfoAlert severity="info">Không có dữ liệu</StyledInfoAlert>;
+    return hasFullWidth ? (
+      <StyledInfoAlert sx={{ width: '100%' }} severity="info">
+        Không có dữ liệu
+      </StyledInfoAlert>
+    ) : (
+      <StyledInfoAlert severity="info">Không có dữ liệu</StyledInfoAlert>
+    );
   }
 
   return <>{children}</>;
