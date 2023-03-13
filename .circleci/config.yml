@@ -1,0 +1,83 @@
+# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/2.0/orb-intro/
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
+  aws-ecr: circleci/aws-ecr@8.2.1
+  aws-eb: circleci/aws-elastic-beanstalk@2.0.1
+  docker: circleci/docker@2.2.0
+
+aws-credentials: &aws-credentials
+  role-arn: $AWS_ROLE_ARN
+  aws-region: AWS_REGION
+
+executor: &executor
+  docker:
+    - image: cimg/base:2023.01
+  resource_class: small
+
+jobs:
+  build-and-push-to-ecr:
+    <<: *executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          # Too expensive
+          docker_layer_caching: false
+      - aws-cli/setup:
+          <<: *aws-credentials
+      - aws-ecr/build-and-push-image:
+          assume-web-identity: true
+          repo: hm-bff
+          dockerfile: ./apps/server/Dockerfile
+          workspace-root: ./apps/server
+  deploy-to-eb:
+    <<: *executor
+    steps:
+      - checkout
+      - run:
+          name: Clone hm-aws
+          command: git clone https://github.com/Ducky-Momo-HCMUS/hm-aws.git
+      - aws-cli/setup:
+          <<: *aws-credentials
+      - aws-eb/setup
+      - run:
+          command: aws elasticbeanstalk wait environment-updated --environment-names $AWS_EB_ENV
+      - run:
+          name: Deploy to Elastic Beanstalk
+          command: |
+            eb init hm -r $AWS_DEFAULT_REGION -p docker
+            rev=<<pipeline.git.revision>>
+            eb deploy $AWS_EB_ENV -l hm-bff-${rev:0:7} -m release-<<pipeline.number>>
+          working_directory: ./hm-aws
+  git-tag:
+    <<: *executor
+    steps:
+      - checkout
+      - run:
+          name: Add release tag
+          command: |
+            git tag release-<<pipeline.number>>
+            git push origin --tags
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  deploy-to-elastic-beanstalk:
+    jobs:
+      - build-and-push-to-ecr:
+          context: aws
+          filters:
+            branches:
+              only:
+                - release-bff
+                - circleci-setup
+      - deploy-to-eb:
+          context: aws
+          requires:
+            - build-and-push-to-ecr
+      - git-tag:
+          requires:
+            - build-and-push-to-ecr
