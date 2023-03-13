@@ -73,7 +73,6 @@ workflows:
             branches:
               only:
                 - release-bff
-                - circleci-setup
       - deploy-to-eb:
           context: aws
           requires:
