@@ -4,8 +4,6 @@ import _groupBy from 'lodash/groupBy';
 
 import { FileType, TermListItem } from '../../../../generated-types';
 
-import { FileType } from '../../../../generated-types';
-
 export type DataSet = { [index: string]: WorkSheet };
 export type Row = any[];
 export type RowCol = { rows: Row[]; columns: GridColDef[] };
