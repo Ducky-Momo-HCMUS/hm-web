@@ -142,10 +142,12 @@ export type CourseList = {
 
 export type CourseListItem = {
   __typename?: 'CourseListItem';
+  chuyenNganh?: Maybe<Scalars['String']>;
   loaiMonHoc: Scalars['String'];
   maCN?: Maybe<Scalars['String']>;
   maMH: Scalars['String'];
   soTinChi: Scalars['Int'];
+  tenCN?: Maybe<Scalars['String']>;
   tenMH: Scalars['String'];
 };
 
@@ -413,6 +415,32 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorList = {
+  __typename?: 'MajorList';
+  data: Array<MajorListItem>;
+  total: Scalars['Int'];
+};
+
+export type MajorListItem = {
+  __typename?: 'MajorListItem';
+  maCN: Scalars['Int'];
+  tenCN: Scalars['String'];
+  tenVietTat: Scalars['String'];
+};
+
+export type MajorResultList = {
+  __typename?: 'MajorResultList';
+  data: Array<MajorResultListItem>;
+  total: Scalars['Int'];
+};
+
+export type MajorResultListItem = {
+  __typename?: 'MajorResultListItem';
+  chuyenNganh?: Maybe<Scalars['String']>;
+  maSV: Scalars['String'];
+  tenSV: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   accountActivate: AccountActivateResponse;
@@ -657,6 +685,8 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  majorList: MajorList;
+  majorResultList: MajorResultList;
   noteDetail: NoteDetail;
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
@@ -766,6 +796,16 @@ export type QueryHomeroomWatchListArgs = {
 
 export type QueryImportHistoryArgs = {
   fileType: FileType;
+};
+
+export type QueryMajorListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+};
+
+export type QueryMajorResultListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 };
 
 export type QueryNoteDetailArgs = {
@@ -984,6 +1024,7 @@ export type StudentNotEnrolledList = {
 
 export type StudentNotEnrolledListItem = {
   __typename?: 'StudentNotEnrolledListItem';
+  maSH: Scalars['String'];
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -1264,6 +1305,46 @@ export type CourseListQuery = {
       soTinChi: number;
       maCN?: string | null | undefined;
       loaiMonHoc: string;
+      chuyenNganh?: string | null | undefined;
+      tenCN?: string | null | undefined;
+    }>;
+  };
+};
+
+export type MajorListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type MajorListQuery = {
+  __typename?: 'Query';
+  majorList: {
+    __typename?: 'MajorList';
+    total: number;
+    data: Array<{
+      __typename?: 'MajorListItem';
+      maCN: number;
+      tenCN: string;
+      tenVietTat: string;
+    }>;
+  };
+};
+
+export type MajorResultListQueryVariables = Exact<{
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type MajorResultListQuery = {
+  __typename?: 'Query';
+  majorResultList: {
+    __typename?: 'MajorResultList';
+    total: number;
+    data: Array<{
+      __typename?: 'MajorResultListItem';
+      maSV: string;
+      tenSV: string;
+      chuyenNganh?: string | null | undefined;
     }>;
   };
 };
@@ -1364,6 +1445,7 @@ export type StudentNotEnrolledListQuery = {
       __typename?: 'StudentNotEnrolledListItem';
       maSV: string;
       tenSV: string;
+      maSH: string;
     }>;
   };
 };
@@ -2522,6 +2604,8 @@ export const CourseListDocument = gql`
         soTinChi
         maCN
         loaiMonHoc
+        chuyenNganh
+        tenCN
       }
     }
   }
@@ -2575,6 +2659,129 @@ export type CourseListLazyQueryHookResult = ReturnType<
 export type CourseListQueryResult = Apollo.QueryResult<
   CourseListQuery,
   CourseListQueryVariables
+>;
+export const MajorListDocument = gql`
+  query MajorList($page: Int!, $size: Int!) {
+    majorList(page: $page, size: $size) {
+      total
+      data {
+        maCN
+        tenCN
+        tenVietTat
+      }
+    }
+  }
+`;
+
+/**
+ * __useMajorListQuery__
+ *
+ * To run a query within a React component, call `useMajorListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMajorListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMajorListQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useMajorListQuery(
+  baseOptions: Apollo.QueryHookOptions<MajorListQuery, MajorListQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MajorListQuery, MajorListQueryVariables>(
+    MajorListDocument,
+    options
+  );
+}
+export function useMajorListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MajorListQuery,
+    MajorListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MajorListQuery, MajorListQueryVariables>(
+    MajorListDocument,
+    options
+  );
+}
+export type MajorListQueryHookResult = ReturnType<typeof useMajorListQuery>;
+export type MajorListLazyQueryHookResult = ReturnType<
+  typeof useMajorListLazyQuery
+>;
+export type MajorListQueryResult = Apollo.QueryResult<
+  MajorListQuery,
+  MajorListQueryVariables
+>;
+export const MajorResultListDocument = gql`
+  query MajorResultList($page: Int!, $size: Int!) {
+    majorResultList(page: $page, size: $size) {
+      total
+      data {
+        maSV
+        tenSV
+        chuyenNganh
+      }
+    }
+  }
+`;
+
+/**
+ * __useMajorResultListQuery__
+ *
+ * To run a query within a React component, call `useMajorResultListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMajorResultListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMajorResultListQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useMajorResultListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    MajorResultListQuery,
+    MajorResultListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MajorResultListQuery, MajorResultListQueryVariables>(
+    MajorResultListDocument,
+    options
+  );
+}
+export function useMajorResultListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MajorResultListQuery,
+    MajorResultListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    MajorResultListQuery,
+    MajorResultListQueryVariables
+  >(MajorResultListDocument, options);
+}
+export type MajorResultListQueryHookResult = ReturnType<
+  typeof useMajorResultListQuery
+>;
+export type MajorResultListLazyQueryHookResult = ReturnType<
+  typeof useMajorResultListLazyQuery
+>;
+export type MajorResultListQueryResult = Apollo.QueryResult<
+  MajorResultListQuery,
+  MajorResultListQueryVariables
 >;
 export const ImportHistoryDocument = gql`
   query ImportHistory($fileType: FileType!) {
@@ -2890,6 +3097,7 @@ export const StudentNotEnrolledListDocument = gql`
       data {
         maSV
         tenSV
+        maSH
       }
     }
   }

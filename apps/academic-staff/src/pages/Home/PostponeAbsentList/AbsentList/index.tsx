@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,26 +13,50 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { NOT_ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_ABSENT_DATA } from '../../mock/absent';
+import { useStudentAbsentListLazyQuery } from '../../../../generated-types';
 
-function AbsentList() {
+interface AbsentListProps {
+  termId: number;
+}
+
+function AbsentList({ termId }: AbsentListProps) {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { absentListLength, absentListData } = useMemo(() => {
+  const [getAbsentList, { loading: absentListLoading, data: absentListData }] =
+    useStudentAbsentListLazyQuery();
+
+  const { absentListLength, absentList } = useMemo(() => {
     return {
-      absentListLength: MOCK_ABSENT_DATA.data.length,
-      absentListData: MOCK_ABSENT_DATA.data,
+      absentListLength: absentListData?.studentAbsentList.total || 0,
+      absentList: absentListData?.studentAbsentList.data || [],
     };
-  }, []);
+  }, [
+    absentListData?.studentAbsentList.data,
+    absentListData?.studentAbsentList.total,
+  ]);
+
+  useEffect(() => {
+    getAbsentList({
+      variables: {
+        termId,
+        page: page + 1,
+        size: NOT_ENROLLED_PAGE_SIZE,
+      },
+    });
+  }, [getAbsentList, page, termId]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={absentListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={absentListLoading}
+          data={absentList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -45,9 +69,11 @@ function AbsentList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {absentListData.map((row, index) => (
+                {absentList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * NOT_ENROLLED_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.maMH}</TableCell>
@@ -61,11 +87,12 @@ function AbsentList() {
             component="div"
             count={absentListLength}
             rowsPerPage={NOT_ENROLLED_PAGE_SIZE}
+            rowsPerPageOptions={[]}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

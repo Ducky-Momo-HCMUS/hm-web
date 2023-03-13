@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   InputLabel,
@@ -19,8 +19,11 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { TRAINING_POINT_PAGE_SIZE } from '../../../constants';
-import { MOCK_TRAINING_POINT_DATA } from '../mock/training-point';
-import { MOCK_SCHOOL_YEARS } from '../mock/year';
+import {
+  useStudentTrainingPointListLazyQuery,
+  useTermListQuery,
+} from '../../../generated-types';
+import { groupTermsByYear } from '../ImportFile/utils';
 
 interface State {
   year: string;
@@ -46,29 +49,83 @@ function TrainingPointList() {
     []
   );
 
-  const { trainingPointListLength, trainingPointListData } = useMemo(() => {
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+
+  const termsData = useMemo(
+    () => allTermsData?.termList || [],
+    [allTermsData?.termList]
+  );
+
+  const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { terms } = useMemo(() => {
+    const termsByYear = mappedData[values.year || years[years.length - 1]]?.map(
+      (data) => ({
+        maHK: data.maHK,
+        hocKy: data.hocKy,
+      })
+    );
     return {
-      trainingPointListLength: MOCK_TRAINING_POINT_DATA.data.length,
-      trainingPointListData: MOCK_TRAINING_POINT_DATA.data,
+      terms: termsByYear || [],
     };
-  }, []);
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
+  const [
+    getTraningPointList,
+    { loading: trainingPointListLoading, data: trainingPointListData },
+  ] = useStudentTrainingPointListLazyQuery();
+
+  const { trainingPointListLength, trainingPointList } = useMemo(() => {
+    return {
+      trainingPointListLength:
+        trainingPointListData?.studentTrainingPointList.total || 0,
+      trainingPointList:
+        trainingPointListData?.studentTrainingPointList.data || [],
+    };
+  }, [
+    trainingPointListData?.studentTrainingPointList.data,
+    trainingPointListData?.studentTrainingPointList.total,
+  ]);
+
+  useEffect(() => {
+    getTraningPointList({
+      variables: {
+        termId: values.semester ? Number(values.semester) : Number(initialTerm),
+        page: page + 1,
+        size: TRAINING_POINT_PAGE_SIZE,
+      },
+    });
+  }, [getTraningPointList, initialTerm, page, values.semester]);
 
   return (
     <Box>
       <StyledTitle>Điểm rèn luyện</StyledTitle>
-      <AsyncDataRenderer loading={false} data={[{}]}>
+      <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
         <StyledFormControl>
           <InputLabel id="year-select-label">Năm học</InputLabel>
           <Select
+            sx={{ marginRight: '1rem' }}
             labelId="year-select-label"
             id="year-select"
-            value={values.year || ''}
+            value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
           >
-            {MOCK_SCHOOL_YEARS.data.map((item) => (
-              <MenuItem value={item.namHocBD}>
-                {item.namHocBD} - {item.namHocBD + 1}
+            {years.map((item) => (
+              <MenuItem value={item}>
+                {item} - {Number(item) + 1}
               </MenuItem>
             ))}
           </Select>
@@ -78,18 +135,22 @@ function TrainingPointList() {
           <Select
             labelId="semester-select-label"
             id="semester-select"
-            value={values.semester || ''}
+            value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {terms.map((item) => (
+              <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
+            ))}
           </Select>
         </StyledFormControl>
       </AsyncDataRenderer>
-      <AsyncDataRenderer loading={false} data={trainingPointListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={trainingPointListLoading}
+          data={trainingPointList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -102,9 +163,11 @@ function TrainingPointList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {trainingPointListData.map((row, index) => (
+                {trainingPointList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maSV}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * TRAINING_POINT_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.drl}</TableCell>
@@ -117,12 +180,13 @@ function TrainingPointList() {
           <TablePagination
             component="div"
             count={trainingPointListLength}
+            rowsPerPageOptions={[]}
             rowsPerPage={TRAINING_POINT_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

@@ -8,6 +8,14 @@ export const courseResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.courseAPI.getCourseList(args);
       return res;
     },
+    majorList: async (_, args, { dataSources }) => {
+      const res = await dataSources.courseAPI.getMajorList(args);
+      return res;
+    },
+    majorResultList: async (_, args, { dataSources }) => {
+      const res = await dataSources.courseAPI.getMajorResultList(args);
+      return res;
+    },
   },
 };
 

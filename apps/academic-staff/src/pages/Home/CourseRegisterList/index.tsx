@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import {
   AppBar,
   Box,
@@ -19,7 +19,8 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import { MOCK_SCHOOL_YEARS } from '../mock/year';
+import { groupTermsByYear } from '../ImportFile/utils';
+import { useTermListQuery } from '../../../generated-types';
 
 import EnrolledList from './EnrolledList';
 import NotEnrolledList from './NotEnrolledList';
@@ -31,9 +32,9 @@ interface State {
 
 function CourseRegisterList() {
   const theme = useTheme();
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
   const [values, setValues] = useState<State>({
@@ -48,22 +49,55 @@ function CourseRegisterList() {
     []
   );
 
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+
+  const termsData = useMemo(
+    () => allTermsData?.termList || [],
+    [allTermsData?.termList]
+  );
+
+  const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { terms } = useMemo(() => {
+    const termsByYear = mappedData[values.year || years[years.length - 1]]?.map(
+      (data) => ({
+        maHK: data.maHK,
+        hocKy: data.hocKy,
+      })
+    );
+    return {
+      terms: termsByYear || [],
+    };
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
   return (
     <Box>
       <StyledTitle>Tình hình đăng ký học phần</StyledTitle>
-      <AsyncDataRenderer loading={false} data={[{}]}>
-        <StyledFormControl>
+      <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+        <StyledFormControl sx={{ marginRight: '1rem' }}>
           <InputLabel id="year-select-label">Năm học</InputLabel>
           <Select
             labelId="year-select-label"
             id="year-select"
-            value={values.year || ''}
+            value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
           >
-            {MOCK_SCHOOL_YEARS.data.map((item) => (
-              <MenuItem value={item.namHocBD}>
-                {item.namHocBD} - {item.namHocBD + 1}
+            {years.map((item) => (
+              <MenuItem value={item}>
+                {item} - {Number(item) + 1}
               </MenuItem>
             ))}
           </Select>
@@ -73,38 +107,43 @@ function CourseRegisterList() {
           <Select
             labelId="semester-select-label"
             id="semester-select"
-            value={values.semester || ''}
+            value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {terms.map((item) => (
+              <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
+            ))}
           </Select>
         </StyledFormControl>
       </AsyncDataRenderer>
-      <AsyncDataRenderer loading={false} data={[{}]}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-          <AppBar position="static">
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              indicatorColor="secondary"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-            >
-              <StyledTab label="Danh sách ĐKHP" {...a11yProps(0)} />
-              <StyledTab label="Danh sách không ĐKHP" {...a11yProps(1)} />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={tabValue} index={0} dir={theme.direction}>
-            <EnrolledList />
-          </TabPanel>
-          <TabPanel value={tabValue} index={1} dir={theme.direction}>
-            <NotEnrolledList />
-          </TabPanel>
-        </Paper>
-      </AsyncDataRenderer>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AppBar position="static">
+          <Tabs
+            value={tabValue}
+            onChange={handleTabChange}
+            indicatorColor="secondary"
+            variant="fullWidth"
+          >
+            <StyledTab label="Danh sách ĐKHP" {...a11yProps(0)} />
+            <StyledTab label="Danh sách không ĐKHP" {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={tabValue} index={0} dir={theme.direction}>
+          <EnrolledList
+            termId={
+              values.semester ? Number(values.semester) : Number(initialTerm)
+            }
+          />
+        </TabPanel>
+        <TabPanel value={tabValue} index={1} dir={theme.direction}>
+          <NotEnrolledList
+            termId={
+              values.semester ? Number(values.semester) : Number(initialTerm)
+            }
+          />
+        </TabPanel>
+      </Paper>
     </Box>
   );
 }

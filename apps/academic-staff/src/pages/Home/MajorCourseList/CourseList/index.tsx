@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,7 +13,7 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { COURSE_PAGE_SIZE } from '../../../../constants';
-import { MOCK_COURSE_DATA } from '../../mock/course';
+import { useCourseListLazyQuery } from '../../../../generated-types';
 
 function CourseList() {
   const [page, setPage] = useState(0);
@@ -22,17 +22,33 @@ function CourseList() {
     setPage(newPage);
   }, []);
 
-  const { courseListLength, courseListData } = useMemo(() => {
+  const [getCourseList, { loading: courseListLoading, data: courseListData }] =
+    useCourseListLazyQuery();
+
+  const { courseListLength, courseList } = useMemo(() => {
     return {
-      courseListLength: MOCK_COURSE_DATA.data.length,
-      courseListData: MOCK_COURSE_DATA.data,
+      courseListLength: courseListData?.courseList.total || 0,
+      courseList: courseListData?.courseList.data || [],
     };
-  }, []);
+  }, [courseListData?.courseList.data, courseListData?.courseList.total]);
+
+  useEffect(() => {
+    getCourseList({
+      variables: {
+        page: page + 1,
+        size: COURSE_PAGE_SIZE,
+      },
+    });
+  }, [getCourseList, page]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={courseListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={courseListLoading}
+          data={courseListData}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -46,13 +62,13 @@ function CourseList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {courseListData.map((row, index) => (
+                {courseList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maMH}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{page * COURSE_PAGE_SIZE + index + 1}</TableCell>
                     <TableCell>{row.maMH}</TableCell>
                     <TableCell>{row.tenMH}</TableCell>
                     <TableCell>{row.soTinChi}</TableCell>
-                    <TableCell>{row.tenCN}</TableCell>
+                    <TableCell>{row.tenCN || row.chuyenNganh}</TableCell>
                     <TableCell>{row.loaiMonHoc}</TableCell>
                   </TableRow>
                 ))}
@@ -61,13 +77,14 @@ function CourseList() {
           </TableContainer>
           <TablePagination
             component="div"
+            rowsPerPageOptions={[]}
             count={courseListLength}
             rowsPerPage={COURSE_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

@@ -136,11 +136,13 @@ function StudentList() {
           </StyledFormControl>
         </AsyncDataRenderer>
       </StyledStickyBox>
-      <AsyncDataRenderer
-        loading={homeroomStudentListLoading}
-        data={studentListData}
-      >
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={homeroomStudentListLoading}
+          data={studentListData}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <StudentTableHead
@@ -173,8 +175,8 @@ function StudentList() {
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

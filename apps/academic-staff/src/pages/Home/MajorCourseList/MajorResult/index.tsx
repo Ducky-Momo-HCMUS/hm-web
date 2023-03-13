@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,7 +13,7 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { MAJOR_RESULT_PAGE_SIZE } from '../../../../constants';
-import { MOCK_MAJOR_RESULT_DATA } from '../../mock/major';
+import { useMajorResultListLazyQuery } from '../../../../generated-types';
 
 function MajorList() {
   const [page, setPage] = useState(0);
@@ -22,17 +22,38 @@ function MajorList() {
     setPage(newPage);
   }, []);
 
-  const { majorResultListLength, majorResultListData } = useMemo(() => {
+  const [
+    getMajorResultList,
+    { loading: majorResultListLoading, data: majorResultListData },
+  ] = useMajorResultListLazyQuery();
+
+  const { majorResultListLength, majorResultList } = useMemo(() => {
     return {
-      majorResultListLength: MOCK_MAJOR_RESULT_DATA.data.length,
-      majorResultListData: MOCK_MAJOR_RESULT_DATA.data,
+      majorResultListLength: majorResultListData?.majorResultList.total || 0,
+      majorResultList: majorResultListData?.majorResultList.data || [],
     };
-  }, []);
+  }, [
+    majorResultListData?.majorResultList.data,
+    majorResultListData?.majorResultList.total,
+  ]);
+
+  useEffect(() => {
+    getMajorResultList({
+      variables: {
+        page: page + 1,
+        size: MAJOR_RESULT_PAGE_SIZE,
+      },
+    });
+  }, [getMajorResultList, page]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={majorResultListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={majorResultListLoading}
+          data={majorResultListData}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -44,12 +65,14 @@ function MajorList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {majorResultListData.map((row, index) => (
+                {majorResultList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maSV}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * MAJOR_RESULT_PAGE_SIZE + index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.tenCN}</TableCell>
+                    <TableCell>{row.chuyenNganh}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -59,11 +82,12 @@ function MajorList() {
             component="div"
             count={majorResultListLength}
             rowsPerPage={MAJOR_RESULT_PAGE_SIZE}
+            rowsPerPageOptions={[]}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

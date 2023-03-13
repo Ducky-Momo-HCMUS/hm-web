@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,26 +13,52 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_POSTPONE_DATA } from '../../mock/postpone';
+import { useStudentPostponeListLazyQuery } from '../../../../generated-types';
 
-function PostponeList() {
+interface PostponeListProps {
+  termId: number;
+}
+
+function PostponeList({ termId }: PostponeListProps) {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { postponeListLength, postponeListData } = useMemo(() => {
+  const [
+    getPostponeList,
+    { loading: postponeListLoading, data: postponeListData },
+  ] = useStudentPostponeListLazyQuery();
+
+  const { postponeListLength, postponeList } = useMemo(() => {
     return {
-      postponeListLength: MOCK_POSTPONE_DATA.data.length,
-      postponeListData: MOCK_POSTPONE_DATA.data,
+      postponeListLength: postponeListData?.studentPostponeList.total || 0,
+      postponeList: postponeListData?.studentPostponeList.data || [],
     };
-  }, []);
+  }, [
+    postponeListData?.studentPostponeList.data,
+    postponeListData?.studentPostponeList.total,
+  ]);
+
+  useEffect(() => {
+    getPostponeList({
+      variables: {
+        termId,
+        page: page + 1,
+        size: ENROLLED_PAGE_SIZE,
+      },
+    });
+  }, [getPostponeList, page, termId]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={postponeListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={postponeListLoading}
+          data={postponeList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -45,9 +71,11 @@ function PostponeList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {postponeListData.map((row, index) => (
+                {postponeList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * ENROLLED_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.maMH}</TableCell>
@@ -60,12 +88,13 @@ function PostponeList() {
           <TablePagination
             component="div"
             count={postponeListLength}
+            rowsPerPageOptions={[]}
             rowsPerPage={ENROLLED_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

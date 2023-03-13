@@ -122,8 +122,13 @@ function HomeroomTeacherList() {
           </StyledFormControl>
         </AsyncDataRenderer>
       </StyledStickyBox>
-      <AsyncDataRenderer loading={teacherListLoading} data={teacherList}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={teacherListLoading}
+          data={teacherList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <HomeroomTeacherTableHead
@@ -153,8 +158,8 @@ function HomeroomTeacherList() {
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

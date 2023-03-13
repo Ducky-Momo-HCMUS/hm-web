@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,26 +13,53 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_ENROLLED_DATA } from '../../mock/enrolled';
+import { useStudentEnrolledListLazyQuery } from '../../../../generated-types';
 
-function EnrolledList() {
+interface EnrolledListProps {
+  termId: number;
+}
+
+function EnrolledList({ termId }: EnrolledListProps) {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { enrolledListLength, enrolledListData } = useMemo(() => {
+  const [
+    getStudentEnrolledList,
+    { loading: studentEnrolledListLoading, data: studentEnrolledListData },
+  ] = useStudentEnrolledListLazyQuery();
+
+  const { enrolledListLength, enrolledList } = useMemo(() => {
     return {
-      enrolledListLength: MOCK_ENROLLED_DATA.data.length,
-      enrolledListData: MOCK_ENROLLED_DATA.data,
+      enrolledListLength:
+        studentEnrolledListData?.studentEnrolledList.total || 0,
+      enrolledList: studentEnrolledListData?.studentEnrolledList.data || [],
     };
-  }, []);
+  }, [
+    studentEnrolledListData?.studentEnrolledList.data,
+    studentEnrolledListData?.studentEnrolledList.total,
+  ]);
+
+  useEffect(() => {
+    getStudentEnrolledList({
+      variables: {
+        termId,
+        page: page + 1,
+        size: ENROLLED_PAGE_SIZE,
+      },
+    });
+  }, [getStudentEnrolledList, page, termId]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={enrolledListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={studentEnrolledListLoading}
+          data={enrolledList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -46,9 +73,11 @@ function EnrolledList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {enrolledListData.map((row, index) => (
+                {enrolledList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * ENROLLED_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.maMH}</TableCell>
@@ -63,11 +92,12 @@ function EnrolledList() {
             component="div"
             count={enrolledListLength}
             rowsPerPage={ENROLLED_PAGE_SIZE}
+            rowsPerPageOptions={[]}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

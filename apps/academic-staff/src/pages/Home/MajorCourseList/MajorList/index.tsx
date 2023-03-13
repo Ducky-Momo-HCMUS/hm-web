@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,7 +13,7 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { MAJOR_PAGE_SIZE } from '../../../../constants';
-import { MOCK_MAJOR_DATA } from '../../mock/major';
+import { useMajorListLazyQuery } from '../../../../generated-types';
 
 function MajorList() {
   const [page, setPage] = useState(0);
@@ -22,17 +22,33 @@ function MajorList() {
     setPage(newPage);
   }, []);
 
-  const { majorListLength, majorListData } = useMemo(() => {
+  const [getMajorList, { loading: majorListLoading, data: majorListData }] =
+    useMajorListLazyQuery();
+
+  const { majorListLength, majorList } = useMemo(() => {
     return {
-      majorListLength: MOCK_MAJOR_DATA.data.length,
-      majorListData: MOCK_MAJOR_DATA.data,
+      majorListLength: majorListData?.majorList.total || 0,
+      majorList: majorListData?.majorList.data || [],
     };
-  }, []);
+  }, [majorListData?.majorList.data, majorListData?.majorList.total]);
+
+  useEffect(() => {
+    getMajorList({
+      variables: {
+        page: page + 1,
+        size: MAJOR_PAGE_SIZE,
+      },
+    });
+  }, [getMajorList, page]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={majorListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={majorListLoading}
+          data={majorListData}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -43,9 +59,9 @@ function MajorList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {majorListData.map((row, index) => (
+                {majorList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maCN}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{page * MAJOR_PAGE_SIZE + index + 1}</TableCell>
                     <TableCell>{row.tenVietTat}</TableCell>
                     <TableCell>{row.tenCN}</TableCell>
                   </TableRow>
@@ -56,12 +72,13 @@ function MajorList() {
           <TablePagination
             component="div"
             count={majorListLength}
+            rowsPerPageOptions={[]}
             rowsPerPage={MAJOR_PAGE_SIZE}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

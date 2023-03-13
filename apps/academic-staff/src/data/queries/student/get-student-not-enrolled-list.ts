@@ -7,6 +7,7 @@ export const GET_STUDENT_NOT_ENROLLED_LIST = gql`
       data {
         maSV
         tenSV
+        maSH
       }
     }
   }

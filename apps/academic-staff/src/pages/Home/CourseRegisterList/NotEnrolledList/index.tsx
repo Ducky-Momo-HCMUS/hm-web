@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -13,26 +13,57 @@ import {
 
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 import { NOT_ENROLLED_PAGE_SIZE } from '../../../../constants';
-import { MOCK_NOT_ENROLLED } from '../../mock/not-enrolled';
+import { useStudentNotEnrolledListLazyQuery } from '../../../../generated-types';
 
-function NotEnrolledList() {
+interface NotEnrolledListProps {
+  termId: number;
+}
+
+function NotEnrolledList({ termId }: NotEnrolledListProps) {
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
 
-  const { notEnrolledListLength, notEnrolledListData } = useMemo(() => {
+  const [
+    getStudentNotEnrolledList,
+    {
+      loading: studentNotEnrolledListLoading,
+      data: studentNotEnrolledListData,
+    },
+  ] = useStudentNotEnrolledListLazyQuery();
+
+  const { notEnrolledListLength, notEnrolledList } = useMemo(() => {
     return {
-      notEnrolledListLength: MOCK_NOT_ENROLLED.data.length,
-      notEnrolledListData: MOCK_NOT_ENROLLED.data,
+      notEnrolledListLength:
+        studentNotEnrolledListData?.studentNotEnrolledList.total || 0,
+      notEnrolledList:
+        studentNotEnrolledListData?.studentNotEnrolledList.data || [],
     };
-  }, []);
+  }, [
+    studentNotEnrolledListData?.studentNotEnrolledList.data,
+    studentNotEnrolledListData?.studentNotEnrolledList.total,
+  ]);
+
+  useEffect(() => {
+    getStudentNotEnrolledList({
+      variables: {
+        termId,
+        page: page + 1,
+        size: NOT_ENROLLED_PAGE_SIZE,
+      },
+    });
+  }, [getStudentNotEnrolledList, page, termId]);
 
   return (
     <Box>
-      <AsyncDataRenderer loading={false} data={notEnrolledListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={studentNotEnrolledListLoading}
+          data={notEnrolledList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -44,12 +75,14 @@ function NotEnrolledList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {notEnrolledListData.map((row, index) => (
+                {notEnrolledList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * NOT_ENROLLED_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.maSH  }</TableCell>
+                    <TableCell>{row.maSH}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -59,11 +92,12 @@ function NotEnrolledList() {
             component="div"
             count={notEnrolledListLength}
             rowsPerPage={NOT_ENROLLED_PAGE_SIZE}
+            rowsPerPageOptions={[]}
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

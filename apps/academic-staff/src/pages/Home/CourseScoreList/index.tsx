@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   InputLabel,
@@ -20,17 +20,18 @@ import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
 import {
-  MOCK_CLASSROOM_1_COURSE_1_TERM,
-  MOCK_COURSE_IN_1_TERM,
-  MOCK_DATA_STUDENT_SCORES,
-} from '../mock/course';
-import { MOCK_SCHOOL_YEARS } from '../mock/year';
+  useClassroomListLazyQuery,
+  useClassroomScoreListLazyQuery,
+  useCourseListQuery,
+  useTermListQuery,
+} from '../../../generated-types';
+import { groupTermsByYear } from '../ImportFile/utils';
 
 interface State {
   year: string;
   semester: string;
   courseId: string;
-  classroomName: string;
+  classroomId: string;
 }
 
 function CourseScoreList() {
@@ -38,7 +39,7 @@ function CourseScoreList() {
     year: '',
     semester: '',
     courseId: '',
-    classroomName: '',
+    classroomId: '',
   });
 
   const [page, setPage] = useState(0);
@@ -54,84 +55,186 @@ function CourseScoreList() {
     []
   );
 
-  const { studentScoreListLength, studentScoreListData } = useMemo(() => {
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+
+  const termsData = useMemo(
+    () => allTermsData?.termList || [],
+    [allTermsData?.termList]
+  );
+
+  const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const years = useMemo(() => Object.keys(mappedData), [mappedData]);
+
+  const { terms } = useMemo(() => {
+    const termsByYear = mappedData[values.year || years[years.length - 1]]?.map(
+      (data) => ({
+        maHK: data.maHK,
+        hocKy: data.hocKy,
+      })
+    );
     return {
-      studentScoreListLength: MOCK_DATA_STUDENT_SCORES.data.length,
-      studentScoreListData: MOCK_DATA_STUDENT_SCORES.data,
+      terms: termsByYear || [],
     };
-  }, []);
+  }, [mappedData, values.year, years]);
+
+  const { initialYear, initialTerm } = useMemo(() => {
+    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
+      data.maHK.toString()
+    );
+    return {
+      initialYear: years[years.length - 1],
+      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+    };
+  }, [mappedData, years]);
+
+  const { loading: courseListLoading, data: courseListData } =
+    useCourseListQuery({
+      variables: {
+        page: 1,
+        size: 1000,
+      },
+    });
+  const courseList = useMemo(
+    () => courseListData?.courseList.data || [],
+    [courseListData?.courseList.data]
+  );
+
+  const [
+    getClassroomList,
+    { loading: classroomListLoading, data: classroomListData },
+  ] = useClassroomListLazyQuery();
+
+  const classroomList = useMemo(
+    () => classroomListData?.classroomList || [],
+    [classroomListData?.classroomList]
+  );
+  const [
+    getClassroomScoreList,
+    { loading: classroomScoreListLoading, data: classroomScoreListData },
+  ] = useClassroomScoreListLazyQuery();
+
+  const { studentScoreListLength, studentScoreList } = useMemo(() => {
+    return {
+      studentScoreListLength:
+        classroomScoreListData?.classroomScoreList.total || 0,
+      studentScoreList: classroomScoreListData?.classroomScoreList.data || [],
+    };
+  }, [
+    classroomScoreListData?.classroomScoreList.data,
+    classroomScoreListData?.classroomScoreList.total,
+  ]);
+
+  const termId = useMemo(
+    () => (values.semester ? Number(values.semester) : Number(initialTerm)),
+    [initialTerm, values.semester]
+  );
+
+  useEffect(() => {
+    if (termId) {
+      getClassroomList({
+        variables: {
+          termId,
+        },
+      });
+    }
+  }, [getClassroomList, termId]);
+
+  const classroomId = useMemo(
+    () =>
+      values.classroomId ? Number(values.classroomId) : classroomList[0]?.maHP,
+    [classroomList, values.classroomId]
+  );
+
+  useEffect(() => {
+    if (classroomId) {
+      getClassroomScoreList({
+        variables: {
+          id: classroomId,
+          termId,
+          page: page + 1,
+          size: STUDENT_SCORE_PAGE_SIZE,
+        },
+      });
+    }
+  }, [classroomId, getClassroomScoreList, page, termId]);
 
   return (
     <Box>
       <StyledTitle>Điểm học phần</StyledTitle>
-      <AsyncDataRenderer loading={false} data={[{}]}>
-        <StyledFormControl>
+      <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+        <StyledFormControl sx={{ marginRight: '1rem' }}>
           <InputLabel id="year-select-label">Năm học</InputLabel>
           <Select
             labelId="year-select-label"
             id="year-select"
-            value={values.year || ''}
+            value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
           >
-            {MOCK_SCHOOL_YEARS.data.map((item) => (
-              <MenuItem value={item.namHocBD}>
-                {item.namHocBD} - {item.namHocBD + 1}
+            {years.map((item) => (
+              <MenuItem value={item}>
+                {item} - {Number(item) + 1}
               </MenuItem>
             ))}
           </Select>
         </StyledFormControl>
-        <StyledFormControl>
+        <StyledFormControl sx={{ marginRight: '1rem' }}>
           <InputLabel id="semester-select-label">Học kỳ</InputLabel>
           <Select
             labelId="semester-select-label"
             id="semester-select"
-            value={values.semester || ''}
+            value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
           >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={3}>3</MenuItem>
+            {terms.map((item) => (
+              <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
+            ))}
           </Select>
         </StyledFormControl>
-        {values.year && values.semester && (
-          <StyledFormControl>
-            <InputLabel id="course-select-label">Môn học</InputLabel>
-            <Select
-              labelId="course-select-label"
-              id="course-select"
-              value={values.courseId || ''}
-              label="Môn học"
-              onChange={handleChange('courseId')}
-              sx={{ minWidth: '250px' }}
-            >
-              {MOCK_COURSE_IN_1_TERM.data.map((item) => (
-                <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
-        )}
-        {values.courseId && (
-          <StyledFormControl>
-            <InputLabel id="class-select-label">Lớp học phần</InputLabel>
-            <Select
-              labelId="class-select-label"
-              id="class-select"
-              value={values.classroomName || ''}
-              label="Lớp học phần"
-              onChange={handleChange('classroomName')}
-              sx={{ minWidth: '150px' }}
-            >
-              {MOCK_CLASSROOM_1_COURSE_1_TERM.data.map((item) => (
-                <MenuItem value={item.tenLopHP}>{item.tenLopHP}</MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
-        )}
       </AsyncDataRenderer>
-      <AsyncDataRenderer loading={false} data={studentScoreListData}>
-        <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+      <AsyncDataRenderer loading={courseListLoading} data={courseList}>
+        <StyledFormControl sx={{ marginRight: '1rem' }}>
+          <InputLabel id="course-select-label">Môn học</InputLabel>
+          <Select
+            labelId="course-select-label"
+            id="course-select"
+            value={values.courseId || courseList[0]?.maMH}
+            label="Môn học"
+            onChange={handleChange('courseId')}
+            sx={{ minWidth: '250px' }}
+          >
+            {courseList.map((item) => (
+              <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>
+      </AsyncDataRenderer>
+      <AsyncDataRenderer loading={classroomListLoading} data={classroomList}>
+        <StyledFormControl>
+          <InputLabel id="class-select-label">Lớp học phần</InputLabel>
+          <Select
+            labelId="class-select-label"
+            id="class-select"
+            value={values.classroomId || String(classroomList[0]?.maHP)}
+            label="Lớp học phần"
+            onChange={handleChange('classroomId')}
+            sx={{ minWidth: '150px' }}
+          >
+            {classroomList.map((item) => (
+              <MenuItem value={item.maHP}>{item.tenLopHP}</MenuItem>
+            ))}
+          </Select>
+        </StyledFormControl>
+      </AsyncDataRenderer>
+
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+        <AsyncDataRenderer
+          hasFullWidth
+          loading={classroomScoreListLoading}
+          data={studentScoreList}
+        >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
               <TableHead>
@@ -148,9 +251,11 @@ function CourseScoreList() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {studentScoreListData.map((row, index) => (
+                {studentScoreList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maSV}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * STUDENT_SCORE_PAGE_SIZE * index + 1}
+                    </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.diemGK}</TableCell>
@@ -171,8 +276,8 @@ function CourseScoreList() {
             page={page}
             onPageChange={handleChangePage}
           />
-        </Paper>
-      </AsyncDataRenderer>
+        </AsyncDataRenderer>
+      </Paper>
     </Box>
   );
 }

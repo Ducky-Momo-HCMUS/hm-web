@@ -21,6 +21,28 @@ class CourseAPI extends BaseDataSource {
       throw this.handleError(error as ApolloError);
     }
   }
+
+  public async getMajorList({ page, size }: QueryCourseListArgs) {
+    try {
+      const res = await this.get(`v1/majors?page=${page}&size=${size}`);
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot fetch major list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getMajorResultList({ page, size }: QueryCourseListArgs) {
+    try {
+      const res = await this.get(
+        `v1/majors/students?page=${page}&size=${size}`
+      );
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot fetch major result list');
+      throw this.handleError(error as ApolloError);
+    }
+  }
 }
 
 export default CourseAPI;
