@@ -14,6 +14,8 @@ import ResetPassword from './pages/ResetPassword';
 import Authenticated from './components/Authenticated';
 import NotFound from './pages/NotFound';
 import Search from './pages/Search';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
       </Route>
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsAndConditions />} />
     </Routes>
   );
 }
