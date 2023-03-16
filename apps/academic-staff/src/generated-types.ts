@@ -135,6 +135,12 @@ export type ColumnHeader = {
   value: Scalars['String'];
 };
 
+export type ColumnHeaderConfig = {
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -588,6 +594,7 @@ export type MutationTeacherEditArgs = {
 };
 
 export type MutationUploadDocumentArgs = {
+  config: UploadFileConfig;
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
 };
@@ -919,6 +926,11 @@ export type QueryTeacherSearchStudentListArgs = {
   tenSV?: InputMaybe<Scalars['String']>;
 };
 
+export type SheetConfig = {
+  index: Scalars['Int'];
+  value: Scalars['String'];
+};
+
 export type StudentAbsentList = {
   __typename?: 'StudentAbsentList';
   data: Array<StudentAbsentListItem>;
@@ -1245,6 +1257,12 @@ export type UploadDocumentResponse = {
   status: Scalars['Int'];
 };
 
+export type UploadFileConfig = {
+  headers: Array<ColumnHeaderConfig>;
+  sheet: SheetConfig;
+  start: Scalars['Int'];
+};
+
 export type YearListItem = {
   __typename?: 'YearListItem';
   khoa: Scalars['Int'];
@@ -1253,6 +1271,7 @@ export type YearListItem = {
 export type UploadDocumentMutationVariables = Exact<{
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
+  config: UploadFileConfig;
 }>;
 
 export type UploadDocumentMutation = {
@@ -2439,8 +2458,12 @@ export type TeacherSearchStudentListQuery = {
 };
 
 export const UploadDocumentDocument = gql`
-  mutation UploadDocument($file: UploadFile!, $input: UploadDocumentInput!) {
-    uploadDocument(file: $file, input: $input) {
+  mutation UploadDocument(
+    $file: UploadFile!
+    $input: UploadDocumentInput!
+    $config: UploadFileConfig!
+  ) {
+    uploadDocument(file: $file, input: $input, config: $config) {
       status
     }
   }
@@ -2465,6 +2488,7 @@ export type UploadDocumentMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      file: // value for 'file'
  *      input: // value for 'input'
+ *      config: // value for 'config'
  *   },
  * });
  */

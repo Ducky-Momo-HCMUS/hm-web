@@ -255,12 +255,24 @@ function ImportFile() {
           variables: {
             file,
             input,
+            config: {
+              start,
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: columnHeaders,
+            },
           },
         });
       }
     },
     [
+      columnHeaders,
+      current,
       file,
+      sheets,
+      start,
       uploadDocument,
       values.class,
       values.subject,

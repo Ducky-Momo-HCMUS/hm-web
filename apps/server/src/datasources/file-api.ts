@@ -6,6 +6,7 @@ import {
   MutationUploadDocumentArgs,
   QueryImportHistoryArgs,
   UploadDocumentInput,
+  UploadFileConfig,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -73,14 +74,15 @@ class FileAPI extends BaseDataSource {
   }
 
   public async uploadDocument(payload: MutationUploadDocumentArgs) {
-    const { file, input } = payload;
+    const { file, input, config } = payload;
     const awaitedFile = await file;
     const { createReadStream, filename } = awaitedFile;
-    const formData = this.createFormData(input);
+    const formData = this.createFormData(input, config);
     if (!filename) {
       throw new UserInputError('Missing file');
     }
     formData.append('file', createReadStream(), filename);
+
     try {
       const uploadedDocument = await this.post(
         `v1/files/${input.type}`,
@@ -94,13 +96,28 @@ class FileAPI extends BaseDataSource {
   }
 
   // TODO add typing for file
-  private createFormData(input: UploadDocumentInput) {
+  private createFormData(input: UploadDocumentInput, config: UploadFileConfig) {
     const formData = new FormData();
     Object.keys(input).forEach((key) => {
       if (!input[key]) {
         throw new UserInputError(`Missing ${key}`);
       }
-      formData.append(key, input[key]);
+      formData.append(key, JSON.stringify(input[key]));
+    });
+
+    Object.keys(config).forEach((key) => {
+      if (key === 'headers') {
+        config[key].forEach((header) => {
+          formData.append('headers[]', JSON.stringify(header));
+        });
+        return;
+      }
+
+      if (!config[key]) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+
+      formData.append(key, JSON.stringify(config[key]));
     });
     return formData;
   }
