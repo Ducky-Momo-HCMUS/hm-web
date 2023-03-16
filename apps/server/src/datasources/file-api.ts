@@ -2,6 +2,7 @@ import { ApolloError, UserInputError } from 'apollo-server-express';
 import FormData from 'form-data';
 
 import {
+  ColumnHeader,
   MutationUploadDocumentArgs,
   QueryImportHistoryArgs,
   UploadDocumentInput,
@@ -29,10 +30,44 @@ class FileAPI extends BaseDataSource {
 
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
-      const res = await this.get(`v1/history-import/${fileType}`);
+      const res = await this.get(`v1/file/history/${fileType}`);
       return res;
     } catch (error) {
-      logger.error('Error: cannot fetch note detail');
+      logger.error('Error: cannot fetch import history');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getColumnHeaderList({ fileType }: QueryImportHistoryArgs) {
+    try {
+      // const res = await this.get(`v1/history-import/${fileType}`);
+      const defaultHeaders = [
+        {
+          key: 'NO',
+          value: 'STT',
+          index: 0,
+        },
+        {
+          key: 'NICKNAME',
+          value: 'Tên viết tắt',
+          index: 2,
+        },
+        {
+          key: 'FULLNAME',
+          value: 'Họ tên GV',
+          index: 1,
+        },
+        {
+          key: 'EMAIL',
+          value: 'Email',
+          index: 3,
+        },
+        { key: 'HOMEROOM_ID', value: 'Mã lớp', index: 4 },
+      ] as ColumnHeader[];
+
+      return defaultHeaders;
+    } catch (error) {
+      logger.error('Error: cannot fetch column header list');
       throw this.handleError(error as ApolloError);
     }
   }

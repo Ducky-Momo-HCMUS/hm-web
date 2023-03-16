@@ -128,6 +128,13 @@ export type ClassroomScoreListItem = {
   tenSV: Scalars['String'];
 };
 
+export type ColumnHeader = {
+  __typename?: 'ColumnHeader';
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -670,6 +677,7 @@ export type Query = {
   allTeacherList: AllTeacherList;
   classroomList: Array<ClassroomListItem>;
   classroomScoreList: ClassroomScoreList;
+  columnHeaderList: Array<ColumnHeader>;
   courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: Array<HomeroomAllListItem>;
@@ -731,6 +739,10 @@ export type QueryClassroomScoreListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryColumnHeaderListArgs = {
+  fileType: FileType;
 };
 
 export type QueryCourseListArgs = {
@@ -1347,6 +1359,20 @@ export type MajorResultListQuery = {
       chuyenNganh?: string | null | undefined;
     }>;
   };
+};
+
+export type ColumnHeaderListQueryVariables = Exact<{
+  fileType: FileType;
+}>;
+
+export type ColumnHeaderListQuery = {
+  __typename?: 'Query';
+  columnHeaderList: Array<{
+    __typename?: 'ColumnHeader';
+    key: string;
+    value: string;
+    index: number;
+  }>;
 };
 
 export type ImportHistoryQueryVariables = Exact<{
@@ -2782,6 +2808,66 @@ export type MajorResultListLazyQueryHookResult = ReturnType<
 export type MajorResultListQueryResult = Apollo.QueryResult<
   MajorResultListQuery,
   MajorResultListQueryVariables
+>;
+export const ColumnHeaderListDocument = gql`
+  query ColumnHeaderList($fileType: FileType!) {
+    columnHeaderList(fileType: $fileType) {
+      key
+      value
+      index
+    }
+  }
+`;
+
+/**
+ * __useColumnHeaderListQuery__
+ *
+ * To run a query within a React component, call `useColumnHeaderListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useColumnHeaderListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useColumnHeaderListQuery({
+ *   variables: {
+ *      fileType: // value for 'fileType'
+ *   },
+ * });
+ */
+export function useColumnHeaderListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ColumnHeaderListQuery, ColumnHeaderListQueryVariables>(
+    ColumnHeaderListDocument,
+    options
+  );
+}
+export function useColumnHeaderListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >(ColumnHeaderListDocument, options);
+}
+export type ColumnHeaderListQueryHookResult = ReturnType<
+  typeof useColumnHeaderListQuery
+>;
+export type ColumnHeaderListLazyQueryHookResult = ReturnType<
+  typeof useColumnHeaderListLazyQuery
+>;
+export type ColumnHeaderListQueryResult = Apollo.QueryResult<
+  ColumnHeaderListQuery,
+  ColumnHeaderListQueryVariables
 >;
 export const ImportHistoryDocument = gql`
   query ImportHistory($fileType: FileType!) {

@@ -1,12 +1,12 @@
 import { GridColDef } from '@mui/x-data-grid';
-import { utils, WorkSheet } from 'xlsx';
+import { WorkSheet } from 'xlsx';
 import _groupBy from 'lodash/groupBy';
 
 import { FileType, TermListItem } from '../../../../generated-types';
 
 export type DataSet = { [index: string]: WorkSheet };
-export type Row = any[];
-export type RowCol = { rows: Row[]; columns: GridColDef[] };
+export type Row = any;
+export type RowCol = { rows: any[]; columns: GridColDef[] };
 
 export const TYPES = [
   {
@@ -90,31 +90,6 @@ export const arrayify = (rows: any[]): Row[] => {
     for (; length > 0; --length) if (row[length - 1] != null) break;
     return Array.from({ length, ...row });
   });
-};
-
-/* this method returns `rows` and `columns` data for sheet change */
-export const getRowsCols = (data: DataSet, sheetName: string): RowCol => {
-  const sheet = data[sheetName];
-  const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
-
-  return {
-    rows: utils
-      .sheet_to_json<Row>(data[sheetName], { header: 1 })
-      .filter((row) => row.length > 0)
-      .map((r, id) => ({ ...r, id })),
-    columns: Array.from(
-      {
-        length: utils.decode_range(`A1:${endCell}`).e.c + 1,
-      },
-      (_, i) => ({
-        field: String(i),
-        headerName: utils.encode_col(i),
-        editable: false,
-        minWidth: 200,
-        maxWidth: 400,
-      })
-    ),
-  };
 };
 
 export const groupTermsByYear = (termList: TermListItem[]) => {

@@ -21,7 +21,7 @@ import React, {
 } from 'react';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { read, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
 import { format } from 'date-fns';
@@ -31,8 +31,10 @@ import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import ErrorMessage from '../../../components/ErrorMessage';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
+  ColumnHeader,
   FileType,
   useClassroomListLazyQuery,
+  useColumnHeaderListLazyQuery,
   useCourseListQuery,
   useImportHistoryLazyQuery,
   useTermListQuery,
@@ -43,7 +45,6 @@ import { StyledFormControl } from './styles';
 import {
   arrayify,
   DataSet,
-  getRowsCols,
   groupTermsByYear,
   MenuProps,
   Row,
@@ -69,11 +70,10 @@ function ImportFile() {
 
   const [error, setError] = useState<string>('');
 
-  const [rows, setRows] = useState<Row[]>([]); // data rows
-  const [columns, setColumns] = useState<GridColDef[]>([]); // columns
   const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
   const [sheets, setSheets] = useState<string[]>([]); // list of sheet names
   const [current, setCurrent] = useState<string>(''); // selected sheet
+  const [start, setStart] = useState<number>(1);
 
   const filePondRef = useRef<FilePond | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -88,15 +88,117 @@ function ImportFile() {
     []
   );
 
+  const fileType = useMemo(
+    () =>
+      TYPES.find((item) => item.label === values.type)?.value ||
+      FileType.DanhSachGvcn,
+    [values.type]
+  );
+
+  const [
+    getColumnHeaderList,
+    { loading: columnHeaderListLoading, data: columnHeaderListData },
+  ] = useColumnHeaderListLazyQuery();
+
+  useEffect(() => {
+    getColumnHeaderList({
+      variables: {
+        fileType,
+      },
+    });
+  }, [fileType, getColumnHeaderList]);
+
+  const defaultHeaders = useMemo(
+    () => columnHeaderListData?.columnHeaderList || [],
+    [columnHeaderListData?.columnHeaderList]
+  );
+
+  const [columnHeaders, setColumnHeaders] = useState<ColumnHeader[]>([]);
+
+  useEffect(() => {
+    setColumnHeaders(defaultHeaders);
+  }, [defaultHeaders]);
+
+  const handleChangeHeader = useCallback(
+    (index: number) => (event: SelectChangeEvent) => {
+      const targetKey = event?.target.value;
+      const selectedHeader = defaultHeaders.find(
+        (item) => item.key === targetKey
+      );
+
+      setColumnHeaders((prevSelectedHeaders) => [
+        ...prevSelectedHeaders.filter(
+          (prevSelectedHeader) => prevSelectedHeader.index !== index
+        ),
+        {
+          key: selectedHeader?.key || '',
+          value: selectedHeader?.value || '',
+          index,
+        },
+      ]);
+    },
+    [defaultHeaders]
+  );
+
+  const { dataRows, dataColumns } = useMemo(() => {
+    const sheet = workBook[current];
+
+    if (!sheet) {
+      return {
+        dataRows: [],
+        dataColumns: [],
+      };
+    }
+    const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
+
+    return {
+      dataRows: utils
+        .sheet_to_json<Row>(workBook[current], { header: 1 })
+        .map((r, id) => ({ ...r, id })),
+      dataColumns: Array.from(
+        {
+          length: utils.decode_range(`A1:${endCell}`).e.c + 1,
+        },
+        (_, i) => ({
+          field: String(i),
+          renderHeader: () => {
+            const defaultSelectedHeader = columnHeaders.find(
+              (item) => item.index === i
+            )?.key;
+
+            if (defaultSelectedHeader) {
+              return (
+                <StyledFormControl>
+                  <Select
+                    value={defaultSelectedHeader}
+                    onChange={handleChangeHeader(i)}
+                  >
+                    {defaultHeaders.map((columnHeader) => (
+                      <MenuItem value={columnHeader.key}>
+                        {columnHeader.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+              );
+            }
+
+            return utils.encode_col(i);
+          },
+          sortable: false,
+          hideSortIcons: true,
+          filterable: false,
+          disableColumnMenu: true,
+          minWidth: 150,
+        })
+      ),
+    };
+  }, [columnHeaders, current, defaultHeaders, handleChangeHeader, workBook]);
+
   /* called when sheet dropdown is changed */
   function selectSheet(name: string) {
     /* update workbook cache in case the current worksheet was changed */
-    workBook[current] = utils.aoa_to_sheet(arrayify(rows));
-
-    /* get data for desired sheet and update state */
-    const { rows: newRows, columns: newColumns } = getRowsCols(workBook, name);
-    setRows(newRows);
-    setColumns(newColumns);
+    workBook[current] = utils.aoa_to_sheet(arrayify(dataRows));
     setCurrent(name);
   }
 
@@ -109,14 +211,7 @@ function ImportFile() {
     setWorkBook(data.Sheets);
     setSheets(data.SheetNames);
 
-    /* select the first worksheet */
     const name = data.SheetNames[0];
-    const { rows: newRows, columns: newColumns } = getRowsCols(
-      data.Sheets,
-      name
-    );
-    setRows(newRows);
-    setColumns(newColumns);
     setCurrent(name);
   }
 
@@ -191,15 +286,12 @@ function ImportFile() {
   ]);
 
   useEffect(() => {
-    const fileType =
-      TYPES.find((item) => item.label === values.type)?.value ||
-      FileType.DanhSachGvcn;
     getImportHistory({
       variables: {
         fileType,
       },
     });
-  }, [getImportHistory, values.type]);
+  }, [fileType, getImportHistory]);
 
   const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
 
@@ -418,30 +510,52 @@ function ImportFile() {
         )}
         {sheets.length > 0 && (
           <>
-            <StyledFormControl sx={{ marginBottom: '1rem' }}>
-              <InputLabel id="year-select-label">Chọn sheet</InputLabel>
-              <Select
-                labelId="sheet-select-label"
-                id="sheet-select"
-                label="Chọn sheet"
-                value={current}
-                onChange={async (e) => {
-                  selectSheet(sheets[+(e.target.value as string)]);
-                }}
-              >
-                {sheets.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </StyledFormControl>
+            <Box sx={{ marginBottom: '1rem' }}>
+              <StyledFormControl>
+                <InputLabel id="sheet-select-label">Chọn sheet</InputLabel>
+                <Select
+                  labelId="sheet-select-label"
+                  label="Chọn sheet"
+                  value={current}
+                  onChange={async (e) => {
+                    selectSheet(sheets[+(e.target.value as string)]);
+                  }}
+                >
+                  {sheets.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+              <StyledFormControl>
+                <InputLabel id="start-select-label">Dòng bắt đầu</InputLabel>
+                <Select
+                  labelId="start-select-label"
+                  label="Chọn dòng bắt đầu"
+                  value={start}
+                  MenuProps={MenuProps}
+                  onChange={(e) => {
+                    setStart(Number(e.target.value));
+                  }}
+                >
+                  {dataRows.map((item, index) => (
+                    <MenuItem key={index} value={index + 1}>
+                      {index + 1}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            </Box>
             <Box>
               <Typography variant="h6">Xem trước</Typography>
               <Box
                 sx={{ width: '100%', height: 600, backgroundColor: 'white' }}
               >
-                <DataGrid columns={columns} rows={rows} />
+                <DataGrid
+                  columns={dataColumns}
+                  rows={dataRows.slice(start - 1)}
+                />
               </Box>
             </Box>
           </>
