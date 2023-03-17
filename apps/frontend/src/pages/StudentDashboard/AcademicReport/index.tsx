@@ -28,30 +28,15 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
-import { StudentDetailResult } from '../../../types';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
 import AcademicTableRow from './AcademicTableRow';
-import PointTableHead from './PointTableHead';
-import PointTableRow from './PointTableRow';
 
 interface State {
   year: string;
   term: string;
 }
-
-const STUDENT_DETAIL_RESULT = [
-  {
-    maMH: 'CSC10005',
-    tenMH: 'Kỹ thuật máy tính',
-    lopHP: '19CLC4',
-    diemGK: 5.4,
-    diemTH: 4.5,
-    diemCK: 6.5,
-    diemTong: 5.8,
-  },
-] as StudentDetailResult[];
 
 function AcademicReport() {
   const { id = '' } = useParams();
@@ -230,19 +215,6 @@ function AcademicReport() {
             </Table>
           </TableContainer>
         </AsyncDataRenderer>
-      </Paper>
-      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-        <StyledHeader>Điểm chi tiết</StyledHeader>
-        <TableContainer sx={{ maxHeight: 380 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <PointTableHead />
-            <TableBody>
-              {STUDENT_DETAIL_RESULT.map((row, index) => (
-                <PointTableRow key={row.maMH} data={row} index={index + 1} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
       </Paper>
     </>
   );

@@ -128,6 +128,19 @@ export type ClassroomScoreListItem = {
   tenSV: Scalars['String'];
 };
 
+export type ColumnHeader = {
+  __typename?: 'ColumnHeader';
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type ColumnHeaderConfig = {
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -581,6 +594,7 @@ export type MutationTeacherEditArgs = {
 };
 
 export type MutationUploadDocumentArgs = {
+  config: UploadFileConfig;
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
 };
@@ -670,6 +684,7 @@ export type Query = {
   allTeacherList: AllTeacherList;
   classroomList: Array<ClassroomListItem>;
   classroomScoreList: ClassroomScoreList;
+  columnHeaderList: Array<ColumnHeader>;
   courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: Array<HomeroomAllListItem>;
@@ -697,7 +712,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
   studentNotEnrolledList: StudentNotEnrolledList;
-  studentNoteList: Array<StudentNote>;
+  studentNoteList: StudentNoteList;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
@@ -731,6 +746,10 @@ export type QueryClassroomScoreListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryColumnHeaderListArgs = {
+  fileType: FileType;
 };
 
 export type QueryCourseListArgs = {
@@ -861,7 +880,13 @@ export type QueryStudentNotEnrolledListArgs = {
 };
 
 export type QueryStudentNoteListArgs = {
+  end?: InputMaybe<Scalars['Date']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
   studentId: Scalars['String'];
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentOverviewResultArgs = {
@@ -905,6 +930,11 @@ export type QueryTeacherListArgs = {
 export type QueryTeacherSearchStudentListArgs = {
   maSV?: InputMaybe<Scalars['String']>;
   tenSV?: InputMaybe<Scalars['String']>;
+};
+
+export type SheetConfig = {
+  index: Scalars['Int'];
+  value: Scalars['String'];
 };
 
 export type StudentAbsentList = {
@@ -1037,6 +1067,12 @@ export type StudentNote = {
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type StudentNoteList = {
+  __typename?: 'StudentNoteList';
+  data: Array<StudentNote>;
+  total: Scalars['Int'];
 };
 
 export type StudentOverviewResult = {
@@ -1233,6 +1269,12 @@ export type UploadDocumentResponse = {
   status: Scalars['Int'];
 };
 
+export type UploadFileConfig = {
+  headers: Array<ColumnHeaderConfig>;
+  sheet: SheetConfig;
+  start: Scalars['Int'];
+};
+
 export type YearListItem = {
   __typename?: 'YearListItem';
   khoa: Scalars['Int'];
@@ -1241,6 +1283,7 @@ export type YearListItem = {
 export type UploadDocumentMutationVariables = Exact<{
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
+  config: UploadFileConfig;
 }>;
 
 export type UploadDocumentMutation = {
@@ -1347,6 +1390,20 @@ export type MajorResultListQuery = {
       chuyenNganh?: string | null | undefined;
     }>;
   };
+};
+
+export type ColumnHeaderListQueryVariables = Exact<{
+  fileType: FileType;
+}>;
+
+export type ColumnHeaderListQuery = {
+  __typename?: 'Query';
+  columnHeaderList: Array<{
+    __typename?: 'ColumnHeader';
+    key: string;
+    value: string;
+    index: number;
+  }>;
 };
 
 export type ImportHistoryQueryVariables = Exact<{
@@ -2288,19 +2345,29 @@ export type StudentDetailQuery = {
 
 export type StudentNoteListQueryVariables = Exact<{
   studentId: Scalars['String'];
+  tieuDe?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type StudentNoteListQuery = {
   __typename?: 'Query';
-  studentNoteList: Array<{
-    __typename?: 'StudentNote';
-    maGC: number;
-    tieuDe: string;
-    noiDung: string;
-    thoiGianTao: string;
-    thoiGianSua: string;
-    ghiChuTag: Array<{ __typename?: 'StudentTag'; maTag: number }>;
-  }>;
+  studentNoteList: {
+    __typename?: 'StudentNoteList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentNote';
+      maGC: number;
+      tieuDe: string;
+      noiDung: string;
+      thoiGianTao: string;
+      thoiGianSua: string;
+      ghiChuTag: Array<{ __typename?: 'StudentTag'; maTag: number }>;
+    }>;
+  };
 };
 
 export type StudentOverviewResultQueryVariables = Exact<{
@@ -2413,8 +2480,12 @@ export type TeacherSearchStudentListQuery = {
 };
 
 export const UploadDocumentDocument = gql`
-  mutation UploadDocument($file: UploadFile!, $input: UploadDocumentInput!) {
-    uploadDocument(file: $file, input: $input) {
+  mutation UploadDocument(
+    $file: UploadFile!
+    $input: UploadDocumentInput!
+    $config: UploadFileConfig!
+  ) {
+    uploadDocument(file: $file, input: $input, config: $config) {
       status
     }
   }
@@ -2439,6 +2510,7 @@ export type UploadDocumentMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      file: // value for 'file'
  *      input: // value for 'input'
+ *      config: // value for 'config'
  *   },
  * });
  */
@@ -2782,6 +2854,66 @@ export type MajorResultListLazyQueryHookResult = ReturnType<
 export type MajorResultListQueryResult = Apollo.QueryResult<
   MajorResultListQuery,
   MajorResultListQueryVariables
+>;
+export const ColumnHeaderListDocument = gql`
+  query ColumnHeaderList($fileType: FileType!) {
+    columnHeaderList(fileType: $fileType) {
+      key
+      value
+      index
+    }
+  }
+`;
+
+/**
+ * __useColumnHeaderListQuery__
+ *
+ * To run a query within a React component, call `useColumnHeaderListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useColumnHeaderListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useColumnHeaderListQuery({
+ *   variables: {
+ *      fileType: // value for 'fileType'
+ *   },
+ * });
+ */
+export function useColumnHeaderListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ColumnHeaderListQuery, ColumnHeaderListQueryVariables>(
+    ColumnHeaderListDocument,
+    options
+  );
+}
+export function useColumnHeaderListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ColumnHeaderListQuery,
+    ColumnHeaderListQueryVariables
+  >(ColumnHeaderListDocument, options);
+}
+export type ColumnHeaderListQueryHookResult = ReturnType<
+  typeof useColumnHeaderListQuery
+>;
+export type ColumnHeaderListLazyQueryHookResult = ReturnType<
+  typeof useColumnHeaderListLazyQuery
+>;
+export type ColumnHeaderListQueryResult = Apollo.QueryResult<
+  ColumnHeaderListQuery,
+  ColumnHeaderListQueryVariables
 >;
 export const ImportHistoryDocument = gql`
   query ImportHistory($fileType: FileType!) {
@@ -6059,16 +6191,35 @@ export type StudentDetailQueryResult = Apollo.QueryResult<
   StudentDetailQueryVariables
 >;
 export const StudentNoteListDocument = gql`
-  query StudentNoteList($studentId: String!) {
-    studentNoteList(studentId: $studentId) {
-      maGC
-      ghiChuTag {
-        maTag
+  query StudentNoteList(
+    $studentId: String!
+    $tieuDe: String
+    $maTag: Int
+    $start: Date
+    $end: Date
+    $page: Int!
+    $size: Int!
+  ) {
+    studentNoteList(
+      studentId: $studentId
+      tieuDe: $tieuDe
+      maTag: $maTag
+      start: $start
+      end: $end
+      page: $page
+      size: $size
+    ) {
+      total
+      data {
+        maGC
+        ghiChuTag {
+          maTag
+        }
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
       }
-      tieuDe
-      noiDung
-      thoiGianTao
-      thoiGianSua
     }
   }
 `;
@@ -6086,6 +6237,12 @@ export const StudentNoteListDocument = gql`
  * const { data, loading, error } = useStudentNoteListQuery({
  *   variables: {
  *      studentId: // value for 'studentId'
+ *      tieuDe: // value for 'tieuDe'
+ *      maTag: // value for 'maTag'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
