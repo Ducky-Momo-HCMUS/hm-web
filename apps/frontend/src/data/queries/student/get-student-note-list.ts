@@ -15,14 +15,17 @@ export const GET_STUDENT_NOTE_LIST = gql`
       page: $page
       size: $size
     ) {
-      maGC
-      ghiChuTag {
-        maTag
+      total
+      data {
+        maGC
+        ghiChuTag {
+          maTag
+        }
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
       }
-      tieuDe
-      noiDung
-      thoiGianTao
-      thoiGianSua
     }
   }
 `;

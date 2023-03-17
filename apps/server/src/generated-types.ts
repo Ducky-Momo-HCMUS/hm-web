@@ -717,7 +717,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
   studentNotEnrolledList: StudentNotEnrolledList;
-  studentNoteList: Array<StudentNote>;
+  studentNoteList: StudentNoteList;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
@@ -1070,6 +1070,12 @@ export type StudentNote = {
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type StudentNoteList = {
+  __typename?: 'StudentNoteList';
+  data: Array<StudentNote>;
+  total: Scalars['Int'];
 };
 
 export type StudentOverviewResult = {
@@ -1488,6 +1494,7 @@ export type ResolversTypes = {
   StudentNotEnrolledList: ResolverTypeWrapper<StudentNotEnrolledList>;
   StudentNotEnrolledListItem: ResolverTypeWrapper<StudentNotEnrolledListItem>;
   StudentNote: ResolverTypeWrapper<StudentNote>;
+  StudentNoteList: ResolverTypeWrapper<StudentNoteList>;
   StudentOverviewResult: ResolverTypeWrapper<StudentOverviewResult>;
   StudentParentContact: ResolverTypeWrapper<StudentParentContact>;
   StudentParentContactInput: StudentParentContactInput;
@@ -1626,6 +1633,7 @@ export type ResolversParentTypes = {
   StudentNotEnrolledList: StudentNotEnrolledList;
   StudentNotEnrolledListItem: StudentNotEnrolledListItem;
   StudentNote: StudentNote;
+  StudentNoteList: StudentNoteList;
   StudentOverviewResult: StudentOverviewResult;
   StudentParentContact: StudentParentContact;
   StudentParentContactInput: StudentParentContactInput;
@@ -2812,7 +2820,7 @@ export type QueryResolvers<
     RequireFields<QueryStudentNotEnrolledListArgs, 'page' | 'size' | 'termId'>
   >;
   studentNoteList?: Resolver<
-    Array<ResolversTypes['StudentNote']>,
+    ResolversTypes['StudentNoteList'],
     ParentType,
     ContextType,
     RequireFields<QueryStudentNoteListArgs, 'page' | 'size' | 'studentId'>
@@ -3049,6 +3057,19 @@ export type StudentNoteResolvers<
   thoiGianSua?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   thoiGianTao?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tieuDe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentNoteListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentNoteList'] = ResolversParentTypes['StudentNoteList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentNote']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3411,6 +3432,7 @@ export type Resolvers<ContextType = any> = {
   StudentNotEnrolledList?: StudentNotEnrolledListResolvers<ContextType>;
   StudentNotEnrolledListItem?: StudentNotEnrolledListItemResolvers<ContextType>;
   StudentNote?: StudentNoteResolvers<ContextType>;
+  StudentNoteList?: StudentNoteListResolvers<ContextType>;
   StudentOverviewResult?: StudentOverviewResultResolvers<ContextType>;
   StudentParentContact?: StudentParentContactResolvers<ContextType>;
   StudentParentInfo?: StudentParentInfoResolvers<ContextType>;

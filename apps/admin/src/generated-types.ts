@@ -712,7 +712,7 @@ export type Query = {
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
   studentNotEnrolledList: StudentNotEnrolledList;
-  studentNoteList: Array<StudentNote>;
+  studentNoteList: StudentNoteList;
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
@@ -1065,6 +1065,12 @@ export type StudentNote = {
   thoiGianSua: Scalars['String'];
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
+};
+
+export type StudentNoteList = {
+  __typename?: 'StudentNoteList';
+  data: Array<StudentNote>;
+  total: Scalars['Int'];
 };
 
 export type StudentOverviewResult = {
@@ -2345,15 +2351,19 @@ export type StudentNoteListQueryVariables = Exact<{
 
 export type StudentNoteListQuery = {
   __typename?: 'Query';
-  studentNoteList: Array<{
-    __typename?: 'StudentNote';
-    maGC: number;
-    tieuDe: string;
-    noiDung: string;
-    thoiGianTao: string;
-    thoiGianSua: string;
-    ghiChuTag: Array<{ __typename?: 'StudentTag'; maTag: number }>;
-  }>;
+  studentNoteList: {
+    __typename?: 'StudentNoteList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentNote';
+      maGC: number;
+      tieuDe: string;
+      noiDung: string;
+      thoiGianTao: string;
+      thoiGianSua: string;
+      ghiChuTag: Array<{ __typename?: 'StudentTag'; maTag: number }>;
+    }>;
+  };
 };
 
 export type StudentOverviewResultQueryVariables = Exact<{
@@ -6191,14 +6201,17 @@ export const StudentNoteListDocument = gql`
       page: $page
       size: $size
     ) {
-      maGC
-      ghiChuTag {
-        maTag
+      total
+      data {
+        maGC
+        ghiChuTag {
+          maTag
+        }
+        tieuDe
+        noiDung
+        thoiGianTao
+        thoiGianSua
       }
-      tieuDe
-      noiDung
-      thoiGianTao
-      thoiGianSua
     }
   }
 `;

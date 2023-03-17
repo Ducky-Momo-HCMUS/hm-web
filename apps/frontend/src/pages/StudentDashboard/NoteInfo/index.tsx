@@ -92,8 +92,11 @@ function NoteInfo() {
     { loading: studentNoteListLoading, data: studentNoteListData },
   ] = useStudentNoteListLazyQuery();
 
-  const studentNoteList = useMemo(
-    () => studentNoteListData?.studentNoteList || [],
+  const { studentNoteList, studentNoteListLength } = useMemo(
+    () => ({
+      studentNoteList: studentNoteListData?.studentNoteList.data || [],
+      studentNoteListLength: studentNoteListData?.studentNoteList.total || 0,
+    }),
     [studentNoteListData?.studentNoteList]
   );
 
@@ -403,10 +406,6 @@ function NoteInfo() {
                       color="inherit"
                       onClick={() => {
                         setOpenFilterBox(false);
-                        setFilterValues({
-                          title: '',
-                          tag: '',
-                        });
                       }}
                     >
                       <FilterAltOffOutlinedIcon fontSize="inherit" />
@@ -477,47 +476,57 @@ function NoteInfo() {
                       </FormControl>
                     </AsyncDataRenderer>
                   </Box>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleFilterNote}
-                  >
-                    Lọc
-                  </Button>
+                  <Box mb={3}>
+                    <Button
+                      sx={{ marginRight: '1rem' }}
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleFilterNote}
+                    >
+                      Lọc
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        setFilterValues({
+                          title: '',
+                          tag: '',
+                        });
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </Box>
                 </>
               )}
-              {/* <StyledDivider /> */}
+              <StyledDivider />
               <List>
                 <AsyncDataRenderer
                   loading={studentNoteListLoading}
                   data={studentNoteListData}
                 >
-                  {studentNoteList
-                    .slice(
-                      page * ROWS_PER_PAGE,
-                      page * ROWS_PER_PAGE + ROWS_PER_PAGE
-                    )
-                    .map((item) => (
-                      <NoteItem
-                        key={item.maGC}
-                        selected={values.selected}
-                        data={item}
-                        onClick={() => handleSelectValue('selected', item.maGC)}
-                        onClickDelete={() => handleClickDelete(item.maGC)}
-                        tags={item.ghiChuTag.map(
-                          (item) =>
-                            tagList.find((tag) => item.maTag === tag.maTag)
-                              ?.tenTag || ''
-                        )}
-                      />
-                    ))}
+                  {studentNoteList.map((item) => (
+                    <NoteItem
+                      key={item.maGC}
+                      selected={values.selected}
+                      data={item}
+                      onClick={() => handleSelectValue('selected', item.maGC)}
+                      onClickDelete={() => handleClickDelete(item.maGC)}
+                      tags={item.ghiChuTag.map(
+                        (item) =>
+                          tagList.find((tag) => item.maTag === tag.maTag)
+                            ?.tenTag || ''
+                      )}
+                    />
+                  ))}
                 </AsyncDataRenderer>
                 {!!studentNoteList.length && (
                   <TablePagination
-                    rowsPerPageOptions={[ROWS_PER_PAGE]}
+                    rowsPerPageOptions={[]}
                     component="div"
-                    count={studentNoteList.length}
-                    rowsPerPage={ROWS_PER_PAGE}
+                    count={studentNoteListLength}
+                    rowsPerPage={STUDENT_NOTE_LIST_PAGE_SIZE}
                     page={page}
                     onPageChange={handleChangePage}
                   />

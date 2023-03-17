@@ -24,7 +24,7 @@ const studentTypeDefs = gql`
       maTag: Int
       page: Int!
       size: Int!
-    ): [StudentNote!]!
+    ): StudentNoteList!
     studentOverviewResult(studentId: String!): StudentOverviewResult
     studentDetailSubjectsResult(
       studentId: String!
@@ -250,6 +250,11 @@ const studentTypeDefs = gql`
 
   type StudentDeleteParentInfoResponse {
     status: Int!
+  }
+
+  type StudentNoteList {
+    total: Int!
+    data: [StudentNote!]!
   }
 
   type StudentNote {
