@@ -133,6 +133,19 @@ export type ClassroomScoreListItem = {
   tenSV: Scalars['String'];
 };
 
+export type ColumnHeader = {
+  __typename?: 'ColumnHeader';
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type ColumnHeaderConfig = {
+  index: Scalars['Int'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Contact = {
   __typename?: 'Contact';
   mxh: Scalars['String'];
@@ -586,6 +599,7 @@ export type MutationTeacherEditArgs = {
 };
 
 export type MutationUploadDocumentArgs = {
+  config: UploadFileConfig;
   file: Scalars['UploadFile'];
   input: UploadDocumentInput;
 };
@@ -675,6 +689,7 @@ export type Query = {
   allTeacherList: AllTeacherList;
   classroomList: Array<ClassroomListItem>;
   classroomScoreList: ClassroomScoreList;
+  columnHeaderList: Array<ColumnHeader>;
   courseList: CourseList;
   documents: Array<Document>;
   homeroomAllList: Array<HomeroomAllListItem>;
@@ -736,6 +751,10 @@ export type QueryClassroomScoreListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryColumnHeaderListArgs = {
+  fileType: FileType;
 };
 
 export type QueryCourseListArgs = {
@@ -910,6 +929,11 @@ export type QueryTeacherListArgs = {
 export type QueryTeacherSearchStudentListArgs = {
   maSV?: InputMaybe<Scalars['String']>;
   tenSV?: InputMaybe<Scalars['String']>;
+};
+
+export type SheetConfig = {
+  index: Scalars['Int'];
+  value: Scalars['String'];
 };
 
 export type StudentAbsentList = {
@@ -1238,6 +1262,12 @@ export type UploadDocumentResponse = {
   status: Scalars['Int'];
 };
 
+export type UploadFileConfig = {
+  headers: Array<ColumnHeaderConfig>;
+  sheet: SheetConfig;
+  start: Scalars['Int'];
+};
+
 export type YearListItem = {
   __typename?: 'YearListItem';
   khoa: Scalars['Int'];
@@ -1367,6 +1397,8 @@ export type ResolversTypes = {
   ClassroomListItem: ResolverTypeWrapper<ClassroomListItem>;
   ClassroomScoreList: ResolverTypeWrapper<ClassroomScoreList>;
   ClassroomScoreListItem: ResolverTypeWrapper<ClassroomScoreListItem>;
+  ColumnHeader: ResolverTypeWrapper<ColumnHeader>;
+  ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: ResolverTypeWrapper<Contact>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
@@ -1432,6 +1464,7 @@ export type ResolversTypes = {
   NoteSearch: ResolverTypeWrapper<NoteSearch>;
   NoteTag: ResolverTypeWrapper<NoteTag>;
   Query: ResolverTypeWrapper<{}>;
+  SheetConfig: SheetConfig;
   String: ResolverTypeWrapper<Scalars['String']>;
   StudentAbsentList: ResolverTypeWrapper<StudentAbsentList>;
   StudentAbsentListItem: ResolverTypeWrapper<StudentAbsentListItem>;
@@ -1480,6 +1513,7 @@ export type ResolversTypes = {
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: ResolverTypeWrapper<UploadDocumentResponse>;
   UploadFile: ResolverTypeWrapper<Scalars['UploadFile']>;
+  UploadFileConfig: UploadFileConfig;
   YearListItem: ResolverTypeWrapper<YearListItem>;
 };
 
@@ -1502,6 +1536,8 @@ export type ResolversParentTypes = {
   ClassroomListItem: ClassroomListItem;
   ClassroomScoreList: ClassroomScoreList;
   ClassroomScoreListItem: ClassroomScoreListItem;
+  ColumnHeader: ColumnHeader;
+  ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: Contact;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
@@ -1566,6 +1602,7 @@ export type ResolversParentTypes = {
   NoteSearch: NoteSearch;
   NoteTag: NoteTag;
   Query: {};
+  SheetConfig: SheetConfig;
   String: Scalars['String'];
   StudentAbsentList: StudentAbsentList;
   StudentAbsentListItem: StudentAbsentListItem;
@@ -1614,6 +1651,7 @@ export type ResolversParentTypes = {
   UploadDocumentInput: UploadDocumentInput;
   UploadDocumentResponse: UploadDocumentResponse;
   UploadFile: Scalars['UploadFile'];
+  UploadFileConfig: UploadFileConfig;
   YearListItem: YearListItem;
 };
 
@@ -1749,6 +1787,16 @@ export type ClassroomScoreListItemResolvers<
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ColumnHeaderResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ColumnHeader'] = ResolversParentTypes['ColumnHeader']
+> = {
+  index?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2445,7 +2493,7 @@ export type MutationResolvers<
     ResolversTypes['UploadDocumentResponse'],
     ParentType,
     ContextType,
-    RequireFields<MutationUploadDocumentArgs, 'file' | 'input'>
+    RequireFields<MutationUploadDocumentArgs, 'config' | 'file' | 'input'>
   >;
 };
 
@@ -2588,6 +2636,12 @@ export type QueryResolvers<
       QueryClassroomScoreListArgs,
       'id' | 'page' | 'size' | 'termId'
     >
+  >;
+  columnHeaderList?: Resolver<
+    Array<ResolversTypes['ColumnHeader']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryColumnHeaderListArgs, 'fileType'>
   >;
   courseList?: Resolver<
     ResolversTypes['CourseList'],
@@ -3281,6 +3335,7 @@ export type Resolvers<ContextType = any> = {
   ClassroomListItem?: ClassroomListItemResolvers<ContextType>;
   ClassroomScoreList?: ClassroomScoreListResolvers<ContextType>;
   ClassroomScoreListItem?: ClassroomScoreListItemResolvers<ContextType>;
+  ColumnHeader?: ColumnHeaderResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;

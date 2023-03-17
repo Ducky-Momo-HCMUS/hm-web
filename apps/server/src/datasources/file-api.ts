@@ -2,9 +2,11 @@ import { ApolloError, UserInputError } from 'apollo-server-express';
 import FormData from 'form-data';
 
 import {
+  ColumnHeader,
   MutationUploadDocumentArgs,
   QueryImportHistoryArgs,
   UploadDocumentInput,
+  UploadFileConfig,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -29,23 +31,58 @@ class FileAPI extends BaseDataSource {
 
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
-      const res = await this.get(`v1/history-import/${fileType}`);
+      const res = await this.get(`v1/file/history/${fileType}`);
       return res;
     } catch (error) {
-      logger.error('Error: cannot fetch note detail');
+      logger.error('Error: cannot fetch import history');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getColumnHeaderList({ fileType }: QueryImportHistoryArgs) {
+    try {
+      // const res = await this.get(`v1/history-import/${fileType}`);
+      const defaultHeaders = [
+        {
+          key: 'NO',
+          value: 'STT',
+          index: 0,
+        },
+        {
+          key: 'NICKNAME',
+          value: 'Tên viết tắt',
+          index: 2,
+        },
+        {
+          key: 'FULLNAME',
+          value: 'Họ tên GV',
+          index: 1,
+        },
+        {
+          key: 'EMAIL',
+          value: 'Email',
+          index: 3,
+        },
+        { key: 'HOMEROOM_ID', value: 'Mã lớp', index: 4 },
+      ] as ColumnHeader[];
+
+      return defaultHeaders;
+    } catch (error) {
+      logger.error('Error: cannot fetch column header list');
       throw this.handleError(error as ApolloError);
     }
   }
 
   public async uploadDocument(payload: MutationUploadDocumentArgs) {
-    const { file, input } = payload;
+    const { file, input, config } = payload;
     const awaitedFile = await file;
     const { createReadStream, filename } = awaitedFile;
-    const formData = this.createFormData(input);
+    const formData = this.createFormData(input, config);
     if (!filename) {
       throw new UserInputError('Missing file');
     }
     formData.append('file', createReadStream(), filename);
+
     try {
       const uploadedDocument = await this.post(
         `v1/files/${input.type}`,
@@ -59,13 +96,28 @@ class FileAPI extends BaseDataSource {
   }
 
   // TODO add typing for file
-  private createFormData(input: UploadDocumentInput) {
+  private createFormData(input: UploadDocumentInput, config: UploadFileConfig) {
     const formData = new FormData();
     Object.keys(input).forEach((key) => {
       if (!input[key]) {
         throw new UserInputError(`Missing ${key}`);
       }
-      formData.append(key, input[key]);
+      formData.append(key, JSON.stringify(input[key]));
+    });
+
+    Object.keys(config).forEach((key) => {
+      if (key === 'headers') {
+        config[key].forEach((header) => {
+          formData.append('headers[]', JSON.stringify(header));
+        });
+        return;
+      }
+
+      if (!config[key]) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+
+      formData.append(key, JSON.stringify(config[key]));
     });
     return formData;
   }
