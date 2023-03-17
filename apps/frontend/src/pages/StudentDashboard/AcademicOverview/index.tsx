@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledStickyBox,
@@ -12,7 +13,6 @@ import {
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
-import MyDocument from '../score';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -78,9 +78,6 @@ function AcademicOverview() {
 
   return (
     <>
-      <PDFViewer>
-        <MyDocument />
-      </PDFViewer>
       <StyledStickyBox>
         <StyledTitle variant="h1">Kết quả học tập</StyledTitle>
         <Box
@@ -95,10 +92,10 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          {/* <Button variant="contained" onClick={handleExportScoreFile}>
+          <Button variant="contained" onClick={handleExportScoreFile}>
             Xuất phiếu điểm
-          </Button> */}
-          <PDFDownloadLink document={<MyDocument />} fileName="FORM">
+          </Button>
+          {/* <PDFDownloadLink document={<ScorePDFTemplate />} fileName="FORM">
             {({ loading }) =>
               loading ? (
                 <Button variant="contained" disabled>
@@ -110,7 +107,7 @@ function AcademicOverview() {
                 </Button>
               )
             }
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
         </Box>
       </StyledStickyBox>
       <Box mt={3}>

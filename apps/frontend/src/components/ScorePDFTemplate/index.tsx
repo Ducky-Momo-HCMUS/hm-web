@@ -8,7 +8,7 @@ import {
   Font,
 } from '@react-pdf/renderer';
 
-import Table from '../../components/TablePDF';
+import Table from './Table';
 
 // Register Font
 // Font.register({
@@ -78,17 +78,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const data = {
-  maSV: '19127189',
-  tenSV: 'Hồ Lâm Bảo Khuyên',
-  dob: '24/01/2001',
-  tongTC: 23,
-  tongTCDaDat: 23,
-  dtb: 7.83,
-};
-
 // Create Document Component
-function MyDocument() {
+function ScorePDFTemplate({ data }: { data: any }) {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+  const yyyy = today.getFullYear();
+
   return (
     <Document>
       <Page size="A4" style={styles.all}>
@@ -110,15 +106,15 @@ function MyDocument() {
         <View style={styles.info}>
           <View style={styles.info_row}>
             <Text style={styles.info__left}>MSSV:</Text>
-            <Text style={styles.info__right}>19127189</Text>
+            <Text style={styles.info__right}>{data.maSV}</Text>
           </View>
           <View style={styles.info_row}>
             <Text style={styles.info__left}>Họ tên:</Text>
-            <Text style={styles.info__right}>Hồ Lâm Bảo Khuyên</Text>
+            <Text style={styles.info__right}>{data.tenSV}</Text>
           </View>
           <View style={styles.info_row}>
             <Text style={styles.info__left}>Ngày sinh:</Text>
-            <Text style={styles.info__right}>24/01/2001</Text>
+            <Text style={styles.info__right}>{data.dob}</Text>
           </View>
           <View style={styles.info_row}>
             <Text style={styles.info__left}>Chương trình:</Text>
@@ -127,15 +123,17 @@ function MyDocument() {
             </Text>
           </View>
         </View>
-        <Table data={data} />
+        <Table data={data.monHoc} />
         <View style={styles.creditTotal}>
-          <Text style={{ width: '40%' }}>Tổng số tín chỉ: 23</Text>
-          <Text style={{ width: '40%' }}>Tổng số tín chỉ đạt: 23</Text>
-          <Text style={{ width: '20%' }}>ĐTB: 8.63</Text>
+          <Text style={{ width: '40%' }}>Tổng số tín chỉ: {data.tongTC}</Text>
+          <Text style={{ width: '40%' }}>
+            Tổng số tín chỉ đạt: {data.tongTCDaDat}
+          </Text>
+          <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
         </View>
         <View style={styles.signature}>
           <Text style={{ fontStyle: 'italic' }}>
-            Tp.HCM, Ngày 5 tháng 3 năm 2023
+            Tp.HCM, Ngày {dd} tháng {mm} năm {yyyy}
           </Text>
           <Text>TL. HIỆU TRƯỞNG</Text>
           <Text>Trưởng Phòng Đào Tạo</Text>
@@ -145,4 +143,4 @@ function MyDocument() {
   );
 }
 
-export default MyDocument;
+export default ScorePDFTemplate;
