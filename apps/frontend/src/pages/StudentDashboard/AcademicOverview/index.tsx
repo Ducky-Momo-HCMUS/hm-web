@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
 import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
@@ -92,10 +93,10 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          <Button variant="contained" onClick={handleExportScoreFile}>
-            Xuất phiếu điểm
-          </Button>
-          {/* <PDFDownloadLink document={<ScorePDFTemplate />} fileName="FORM">
+          <PDFDownloadLink
+            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+          >
             {({ loading }) =>
               loading ? (
                 <Button variant="contained" disabled>
@@ -107,7 +108,7 @@ function AcademicOverview() {
                 </Button>
               )
             }
-          </PDFDownloadLink> */}
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Box mt={3}>

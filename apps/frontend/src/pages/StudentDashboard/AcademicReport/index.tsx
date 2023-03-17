@@ -199,7 +199,7 @@ function AcademicReport() {
           </StyledStatusBox>
           <PDFDownloadLink
             document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
-            fileName="FORM"
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${MOCK_DATA_EXPORT.hocKy}`}
           >
             {({ loading }) =>
               loading ? (
