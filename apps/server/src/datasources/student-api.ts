@@ -308,7 +308,7 @@ class StudentAPI extends BaseDataSource {
       });
 
       const res = await this.get(
-        `v1/notes?maSV=${studentId}&sortBy=thoiGianSua${queryString}`
+        `v1/notes?maSV=${studentId}&sortBy=thoiGianSua&sortOrder=desc${queryString}`
       );
       return res;
     } catch (error) {

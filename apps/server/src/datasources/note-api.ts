@@ -65,7 +65,7 @@ class NoteAPI extends BaseDataSource {
         }
       });
 
-      queryString += '&sortBy=thoiGianSua';
+      queryString += '&sortBy=thoiGianSua&sortOrder=desc';
 
       const res = await this.get(
         `v1/notes${queryString ? `?${queryString}` : ''}`
