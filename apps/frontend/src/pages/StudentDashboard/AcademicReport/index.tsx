@@ -14,7 +14,10 @@ import {
   Typography,
 } from '@mui/material';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledTitle,
@@ -204,7 +207,20 @@ function AcademicReport() {
               ĐTB: {averagePoint ? `${averagePoint.dtb}` : 'Chưa có'}
             </Button>
           </StyledStatusBox>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          <PDFDownloadLink
+            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
+            fileName="FORM"
+          >
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained">Xuất phiếu điểm</Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>

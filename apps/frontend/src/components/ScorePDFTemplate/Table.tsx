@@ -85,45 +85,56 @@ function Table({ data }) {
       </View>
       {/* -----------end row-------------  */}
       {/* -----------row-------------  */}
-      <View style={styles.tableRow}>
-        <View style={[styles.tableRow, { width: '60%' }]}>
-          <Text
-            style={[styles.tableCell, { width: '10%' }, styles.noTopBorder]}
-          >
-            1
-          </Text>
-          <Text
-            style={[styles.tableCell, { width: '30%' }, styles.noLeftTopBorder]}
-          >
-            BAA00004
-          </Text>
-          <Text
-            style={[styles.tableCell, { width: '60%' }, styles.noLeftTopBorder]}
-          >
-            Pháp luật đại cương
-          </Text>
+      {data.map((item, i) => (
+        <View key={i} style={styles.tableRow}>
+          <View style={[styles.tableRow, { width: '60%' }]}>
+            <Text
+              style={[styles.tableCell, { width: '10%' }, styles.noTopBorder]}
+            >
+              {i + 1}
+            </Text>
+            <Text
+              style={[
+                styles.tableCell,
+                { width: '30%' },
+                styles.noLeftTopBorder,
+              ]}
+            >
+              {item.maMH}
+            </Text>
+            <Text
+              style={[
+                styles.tableCell,
+                { width: '60%' },
+                styles.noLeftTopBorder,
+              ]}
+            >
+              {item.tenMH}
+            </Text>
+          </View>
+          <View style={[styles.tableRow, { width: '40%' }]}>
+            <Text
+              style={[
+                styles.tableCell,
+                { width: '50%', textAlign: 'center' },
+                styles.noLeftTopBorder,
+              ]}
+            >
+              {item.soTinChi}
+            </Text>
+            <Text
+              style={[
+                styles.tableCell,
+                { width: '50%', textAlign: 'center' },
+                styles.noLeftTopBorder,
+              ]}
+            >
+              {item.dtb}
+            </Text>
+          </View>
         </View>
-        <View style={[styles.tableRow, { width: '40%' }]}>
-          <Text
-            style={[
-              styles.tableCell,
-              { width: '50%', textAlign: 'center' },
-              styles.noLeftTopBorder,
-            ]}
-          >
-            3
-          </Text>
-          <Text
-            style={[
-              styles.tableCell,
-              { width: '50%', textAlign: 'center' },
-              styles.noLeftTopBorder,
-            ]}
-          >
-            7.5
-          </Text>
-        </View>
-      </View>
+      ))}
+
       {/* -----------end row-------------  */}
     </View>
   );
