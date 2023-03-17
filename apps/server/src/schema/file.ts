@@ -8,13 +8,38 @@ const fileTypeDefs = gql`
     importHistory(fileType: FileType!): ImportHistory!
     # Danh sách năm học
     termList: [TermListItem!]!
+    columnHeaderList(fileType: FileType!): [ColumnHeader!]!
   }
 
   extend type Mutation {
     uploadDocument(
       input: UploadDocumentInput!
+      config: UploadFileConfig!
       file: UploadFile!
     ): UploadDocumentResponse!
+  }
+
+  input UploadFileConfig {
+    start: Int!
+    sheet: SheetConfig!
+    headers: [ColumnHeaderConfig!]!
+  }
+
+  input SheetConfig {
+    value: String!
+    index: Int!
+  }
+
+  input ColumnHeaderConfig {
+    key: String!
+    value: String!
+    index: Int!
+  }
+
+  type ColumnHeader {
+    key: String!
+    value: String!
+    index: Int!
   }
 
   type TermListItem {

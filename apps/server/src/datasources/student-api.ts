@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 import { ApolloError } from 'apollo-server-express';
 
 import {
@@ -285,9 +286,34 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
+  public async getStudentNoteList({
+    studentId,
+    page,
+    size,
+    tieuDe,
+    maTag,
+    start,
+    end,
+  }: QueryStudentNoteListArgs) {
     try {
-      const res = await this.get(`v1/notes?maSV=${studentId}`);
+      const args = Object.assign(
+        {},
+        tieuDe && { tieuDe },
+        maTag && { maTag },
+        start && { start },
+        end && { end },
+        { page },
+        { size }
+      );
+
+      let queryString = '';
+      Object.keys(args).forEach((arg) => {
+        queryString += `&${arg}=${args[arg]}`;
+      });
+
+      const res = await this.get(
+        `v1/notes?maSV=${studentId}&sortBy=thoiGianSua&sortOrder=desc${queryString}`
+      );
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch student note list');

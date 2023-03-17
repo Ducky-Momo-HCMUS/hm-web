@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, {
   ChangeEvent,
@@ -9,18 +10,27 @@ import React, {
 } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
 import {
   Backdrop,
   Box,
+  Button,
   CircularProgress,
+  FormControl,
   Grid,
+  InputLabel,
   List,
+  MenuItem,
+  Select,
   SelectChangeEvent,
   TablePagination,
   Typography,
 } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import SortIcon from '@mui/icons-material/Sort';
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import { FilePond } from 'react-filepond';
 
 import NoteEditor from '../../../components/Note/NoteEditor';
@@ -31,7 +41,6 @@ import {
   StyledStickyBox,
   StyledTitle,
 } from '../../../components/styles';
-import { ROWS_PER_PAGE } from '../../../mocks';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 import {
   NoteAddInput,
@@ -39,13 +48,15 @@ import {
   useNoteAddMutation,
   useNoteDeleteMutation,
   useNoteDetailLazyQuery,
-  useStudentNoteListQuery,
   useNoteEditMutation,
   useTagListQuery,
   NoteImage,
+  useStudentNoteListLazyQuery,
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { GET_STUDENT_NOTE_LIST } from '../../../data/queries/student/get-student-note-list';
+import { STUDENT_NOTE_LIST_PAGE_SIZE } from '../../../constants';
+import { StyledTextField } from '../../NoteStore/styles';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
@@ -60,18 +71,36 @@ interface State {
   isAdding: boolean;
 }
 
+interface FilterState {
+  title: string;
+  tag: string;
+  start: Dayjs | null;
+  end: Dayjs | null;
+}
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+};
+
 function NoteInfo() {
   const { id = '' } = useParams();
 
-  const { loading: studentNoteListLoading, data: studentNoteListData } =
-    useStudentNoteListQuery({
-      variables: {
-        studentId: id,
-      },
-    });
+  const [
+    getStudentNoteList,
+    { loading: studentNoteListLoading, data: studentNoteListData },
+  ] = useStudentNoteListLazyQuery();
 
-  const studentNoteList = useMemo(
-    () => studentNoteListData?.studentNoteList || [],
+  const { studentNoteList, studentNoteListLength } = useMemo(
+    () => ({
+      studentNoteList: studentNoteListData?.studentNoteList.data || [],
+      studentNoteListLength: studentNoteListData?.studentNoteList.total || 0,
+    }),
     [studentNoteListData?.studentNoteList]
   );
 
@@ -91,6 +120,13 @@ function NoteInfo() {
     deleteIndex: -1,
     isAdding: true,
     images: [],
+  });
+
+  const [filterValues, setFilterValues] = useState<FilterState>({
+    title: '',
+    tag: '',
+    start: null,
+    end: null,
   });
 
   const [files, setFiles] = useState<File[]>();
@@ -244,6 +280,13 @@ function NoteInfo() {
     []
   );
 
+  const handleChangeFilterValue = useCallback(
+    (prop: keyof FilterState) => (event: ChangeEvent<HTMLInputElement>) => {
+      setFilterValues((v) => ({ ...v, [prop]: event.target.value }));
+    },
+    []
+  );
+
   const handleSelectTags = useCallback((event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
@@ -286,6 +329,58 @@ function NoteInfo() {
     }
   }, [deleteNote, handleReset, id, values]);
 
+  const args = useMemo(() => {
+    const params = Object.assign(
+      {},
+      { studentId: id },
+      { page: page + 1 },
+      { size: STUDENT_NOTE_LIST_PAGE_SIZE },
+      filterValues.title && { tieuDe: filterValues.title },
+      filterValues.tag && { maTag: filterValues.tag },
+      filterValues.start && { start: filterValues.start },
+      filterValues.end && { end: filterValues.end }
+    );
+
+    return params;
+  }, [
+    filterValues.end,
+    filterValues.start,
+    filterValues.tag,
+    filterValues.title,
+    id,
+    page,
+  ]);
+
+  useEffect(() => {
+    getStudentNoteList({
+      variables: args,
+      fetchPolicy: 'no-cache',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getStudentNoteList, id, page]);
+
+  const [openFilterBox, setOpenFilterBox] = useState(false);
+
+  const handleFilterNote = useCallback(() => {
+    getStudentNoteList({
+      variables: args,
+      fetchPolicy: 'no-cache',
+    });
+  }, [args, getStudentNoteList]);
+
+  const handleSelectFilterTag = useCallback(
+    (event: SelectChangeEvent<string>) => {
+      const {
+        target: { value },
+      } = event;
+      setFilterValues((v) => ({
+        ...v,
+        tag: value,
+      }));
+    },
+    []
+  );
+
   return (
     <>
       <StyledStickyBox>
@@ -318,47 +413,192 @@ function NoteInfo() {
                   >
                     <AddCircleOutlineOutlinedIcon fontSize="inherit" />
                   </StyledIconButton>
-                  <StyledIconButton
-                    size="large"
-                    aria-label="sort note"
-                    color="inherit"
-                  >
-                    <SortIcon fontSize="inherit" />
-                  </StyledIconButton>
+                  {openFilterBox ? (
+                    <StyledIconButton
+                      size="large"
+                      aria-label="close filter note"
+                      color="inherit"
+                      onClick={() => {
+                        setOpenFilterBox(false);
+                      }}
+                    >
+                      <FilterAltOffOutlinedIcon fontSize="inherit" />
+                    </StyledIconButton>
+                  ) : (
+                    <StyledIconButton
+                      size="large"
+                      aria-label="open filter note"
+                      color="inherit"
+                      onClick={() => setOpenFilterBox(true)}
+                    >
+                      <FilterAltOutlinedIcon fontSize="inherit" />
+                    </StyledIconButton>
+                  )}
                 </Box>
               </StyledHeader>
+
+              {openFilterBox && (
+                <>
+                  <Box mb={2}>
+                    <StyledTextField
+                      sx={{ width: '100%', marginBottom: '1.5rem' }}
+                      label="Tiêu đề"
+                      name="title"
+                      variant="standard"
+                      placeholder="Nhập tiêu đề..."
+                      value={filterValues.title}
+                      onChange={handleChangeFilterValue('title')}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                    <AsyncDataRenderer
+                      loading={tagListLoading}
+                      data={tagListData}
+                    >
+                      <FormControl
+                        variant="standard"
+                        sx={{ width: '100%', marginBottom: '1.5rem' }}
+                      >
+                        <InputLabel
+                          sx={{ fontWeight: 'bold' }}
+                          shrink
+                          id="class-select-label"
+                        >
+                          Tag
+                        </InputLabel>
+                        <Select
+                          sx={{
+                            '& .MuiSelect-select .notranslate::after':
+                              filterValues.tag.length === 0
+                                ? {
+                                    content: `"Chọn tag..."`,
+                                    opacity: 0.42,
+                                  }
+                                : {},
+                          }}
+                          labelId="tag-select-label"
+                          id="tag-select"
+                          MenuProps={MenuProps}
+                          label="Tag"
+                          onChange={handleSelectFilterTag}
+                          value={filterValues.tag}
+                        >
+                          {tagList.map((item) => (
+                            <MenuItem value={item.maTag}>
+                              {item.tenTag}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </AsyncDataRenderer>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Box mb={3}>
+                        <DatePicker
+                          label="Ngày bắt đầu"
+                          inputFormat="DD/MM/YYYY"
+                          value={filterValues.start}
+                          onChange={(newValue) => {
+                            setFilterValues((v) => ({ ...v, start: newValue }));
+                          }}
+                          renderInput={(params) => (
+                            <StyledTextField
+                              {...params}
+                              sx={{
+                                width: '100%',
+                              }}
+                              variant="standard"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <DatePicker
+                          label="Ngày kết thúc"
+                          inputFormat="DD/MM/YYYY"
+                          value={filterValues.end}
+                          onChange={(newValue) => {
+                            setFilterValues((v) => ({ ...v, end: newValue }));
+                          }}
+                          renderInput={(params) => (
+                            <StyledTextField
+                              {...params}
+                              sx={{
+                                width: '100%',
+                              }}
+                              variant="standard"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          )}
+                        />
+                      </Box>
+                    </LocalizationProvider>
+                  </Box>
+                  <Box mb={3}>
+                    <Button
+                      sx={{ marginRight: '1rem' }}
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleFilterNote}
+                    >
+                      Lọc
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        setFilterValues({
+                          title: '',
+                          tag: '',
+                          start: null,
+                          end: null,
+                        });
+                        getStudentNoteList({
+                          variables: {
+                            studentId: id,
+                            page: 1,
+                            size: STUDENT_NOTE_LIST_PAGE_SIZE,
+                          },
+                        });
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </Box>
+                </>
+              )}
               <StyledDivider />
               <List>
                 <AsyncDataRenderer
                   loading={studentNoteListLoading}
                   data={studentNoteListData}
                 >
-                  {studentNoteList
-                    .slice(
-                      page * ROWS_PER_PAGE,
-                      page * ROWS_PER_PAGE + ROWS_PER_PAGE
-                    )
-                    .map((item) => (
-                      <NoteItem
-                        key={item.maGC}
-                        selected={values.selected}
-                        data={item}
-                        onClick={() => handleSelectValue('selected', item.maGC)}
-                        onClickDelete={() => handleClickDelete(item.maGC)}
-                        tags={item.ghiChuTag.map(
-                          (item) =>
-                            tagList.find((tag) => item.maTag === tag.maTag)
-                              ?.tenTag || ''
-                        )}
-                      />
-                    ))}
+                  {studentNoteList.map((item) => (
+                    <NoteItem
+                      key={item.maGC}
+                      selected={values.selected}
+                      data={item}
+                      onClick={() => handleSelectValue('selected', item.maGC)}
+                      onClickDelete={() => handleClickDelete(item.maGC)}
+                      tags={item.ghiChuTag.map(
+                        (item) =>
+                          tagList.find((tag) => item.maTag === tag.maTag)
+                            ?.tenTag || ''
+                      )}
+                    />
+                  ))}
                 </AsyncDataRenderer>
                 {!!studentNoteList.length && (
                   <TablePagination
-                    rowsPerPageOptions={[ROWS_PER_PAGE]}
+                    rowsPerPageOptions={[]}
                     component="div"
-                    count={studentNoteList.length}
-                    rowsPerPage={ROWS_PER_PAGE}
+                    count={studentNoteListLength}
+                    rowsPerPage={STUDENT_NOTE_LIST_PAGE_SIZE}
                     page={page}
                     onPageChange={handleChangePage}
                   />

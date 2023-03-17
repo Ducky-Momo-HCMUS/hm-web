@@ -21,10 +21,6 @@ export const noteResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.noteAPI.getNoteDetail(args);
       return res.data;
     },
-    noteList: async (_, __, { dataSources }) => {
-      const res = await dataSources.noteAPI.getNoteList();
-      return res.data;
-    },
     noteSearch: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.searchNote(args);
       return res;
