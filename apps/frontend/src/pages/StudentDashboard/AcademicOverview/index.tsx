@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 
 import {
   StyledBreadCrumbs,
@@ -12,8 +13,7 @@ import {
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
-import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
-import { client } from '../../../ApolloClient';
+import MyDocument from '../score';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -37,6 +37,10 @@ function AcademicOverview() {
       studentId: id,
     },
   });
+
+  const handleExportScoreFile = () => {
+    console.log('xuất phiếu điểm');
+  };
 
   const studentOverviewResult = useMemo(() => {
     const data = studentOverviewResultData?.studentOverviewResult;
@@ -84,6 +88,9 @@ function AcademicOverview() {
 
   return (
     <>
+      <PDFViewer>
+        <MyDocument />
+      </PDFViewer>
       <StyledStickyBox>
         <StyledTitle variant="h1">Kết quả học tập</StyledTitle>
         <Box
@@ -98,7 +105,22 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          {/* <Button variant="contained" onClick={handleExportScoreFile}>
+            Xuất phiếu điểm
+          </Button> */}
+          <PDFDownloadLink document={<MyDocument />} fileName="FORM">
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained" onClick={handleExportScoreFile}>
+                  Xuất phiếu điểm
+                </Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Box mt={3}>
