@@ -880,7 +880,11 @@ export type QueryStudentNotEnrolledListArgs = {
 };
 
 export type QueryStudentNoteListArgs = {
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   studentId: Scalars['String'];
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentOverviewResultArgs = {
@@ -2333,6 +2337,10 @@ export type StudentDetailQuery = {
 
 export type StudentNoteListQueryVariables = Exact<{
   studentId: Scalars['String'];
+  tieuDe?: InputMaybe<Scalars['String']>;
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type StudentNoteListQuery = {
@@ -6169,8 +6177,20 @@ export type StudentDetailQueryResult = Apollo.QueryResult<
   StudentDetailQueryVariables
 >;
 export const StudentNoteListDocument = gql`
-  query StudentNoteList($studentId: String!) {
-    studentNoteList(studentId: $studentId) {
+  query StudentNoteList(
+    $studentId: String!
+    $tieuDe: String
+    $maTag: Int
+    $page: Int!
+    $size: Int!
+  ) {
+    studentNoteList(
+      studentId: $studentId
+      tieuDe: $tieuDe
+      maTag: $maTag
+      page: $page
+      size: $size
+    ) {
       maGC
       ghiChuTag {
         maTag
@@ -6196,6 +6216,10 @@ export const StudentNoteListDocument = gql`
  * const { data, loading, error } = useStudentNoteListQuery({
  *   variables: {
  *      studentId: // value for 'studentId'
+ *      tieuDe: // value for 'tieuDe'
+ *      maTag: // value for 'maTag'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

@@ -885,7 +885,11 @@ export type QueryStudentNotEnrolledListArgs = {
 };
 
 export type QueryStudentNoteListArgs = {
+  maTag?: InputMaybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   studentId: Scalars['String'];
+  tieuDe?: InputMaybe<Scalars['String']>;
 };
 
 export type QueryStudentOverviewResultArgs = {
@@ -2811,7 +2815,7 @@ export type QueryResolvers<
     Array<ResolversTypes['StudentNote']>,
     ParentType,
     ContextType,
-    RequireFields<QueryStudentNoteListArgs, 'studentId'>
+    RequireFields<QueryStudentNoteListArgs, 'page' | 'size' | 'studentId'>
   >;
   studentOverviewResult?: Resolver<
     Maybe<ResolversTypes['StudentOverviewResult']>,

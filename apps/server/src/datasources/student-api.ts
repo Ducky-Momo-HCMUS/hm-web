@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 import { ApolloError } from 'apollo-server-express';
 
 import {
@@ -285,10 +286,29 @@ class StudentAPI extends BaseDataSource {
     }
   }
 
-  public async getStudentNoteList({ studentId }: QueryStudentNoteListArgs) {
+  public async getStudentNoteList({
+    studentId,
+    page,
+    size,
+    tieuDe,
+    maTag,
+  }: QueryStudentNoteListArgs) {
     try {
+      const args = Object.assign(
+        {},
+        tieuDe && { tieuDe },
+        maTag && { maTag },
+        { page },
+        { size }
+      );
+
+      let queryString = '';
+      Object.keys(args).forEach((arg, index) => {
+        queryString += `&${arg}=${args[arg]}`;
+      });
+
       const res = await this.get(
-        `v1/notes?maSV=${studentId}&sortBy=thoiGianSua`
+        `v1/notes?maSV=${studentId}&sortBy=thoiGianSua${queryString}`
       );
       return res;
     } catch (error) {
