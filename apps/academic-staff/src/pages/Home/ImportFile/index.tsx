@@ -10,6 +10,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
   Typography,
 } from '@mui/material';
 import React, {
@@ -41,7 +42,7 @@ import {
   useUploadDocumentMutation,
 } from '../../../generated-types';
 
-import { StyledFormControl } from './styles';
+import { StyledFormControl, StyledTextField } from './styles';
 import {
   arrayify,
   DataSet,
@@ -57,6 +58,7 @@ interface State {
   term: string;
   subject: string;
   class: number;
+  start: string;
 }
 
 function ImportFile() {
@@ -66,6 +68,7 @@ function ImportFile() {
     term: '',
     subject: '',
     class: 0,
+    start: '1',
   });
 
   const [error, setError] = useState<string>('');
@@ -73,7 +76,6 @@ function ImportFile() {
   const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
   const [sheets, setSheets] = useState<string[]>([]); // list of sheet names
   const [current, setCurrent] = useState<string>(''); // selected sheet
-  const [start, setStart] = useState<number>(1);
 
   const filePondRef = useRef<FilePond | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -170,6 +172,8 @@ function ImportFile() {
               return (
                 <StyledFormControl>
                   <Select
+                    variant="standard"
+                    disableUnderline
                     value={defaultSelectedHeader}
                     onChange={handleChangeHeader(i)}
                   >
@@ -256,7 +260,7 @@ function ImportFile() {
             file,
             input,
             config: {
-              start,
+              start: Number(values.start),
               sheet: {
                 value: current,
                 index: sheets.findIndex((sheetName) => sheetName === current),
@@ -272,9 +276,9 @@ function ImportFile() {
       current,
       file,
       sheets,
-      start,
       uploadDocument,
       values.class,
+      values.start,
       values.subject,
       values.term,
       values.type,
@@ -540,24 +544,19 @@ function ImportFile() {
                   ))}
                 </Select>
               </StyledFormControl>
-              <StyledFormControl>
-                <InputLabel id="start-select-label">Dòng bắt đầu</InputLabel>
-                <Select
-                  labelId="start-select-label"
-                  label="Chọn dòng bắt đầu"
-                  value={start}
-                  MenuProps={MenuProps}
-                  onChange={(e) => {
-                    setStart(Number(e.target.value));
-                  }}
-                >
-                  {dataRows.map((item, index) => (
-                    <MenuItem key={index} value={index + 1}>
-                      {index + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
+              <StyledTextField
+                type="number"
+                variant="outlined"
+                label="Dòng bắt đầu"
+                placeholder="Nhập dòng bắt đầu..."
+                value={values.start}
+                onChange={(event) => {
+                  setValues((v) => ({
+                    ...v,
+                    start: event.target.value,
+                  }));
+                }}
+              />
             </Box>
             <Box>
               <Typography variant="h6">Xem trước</Typography>
@@ -566,7 +565,7 @@ function ImportFile() {
               >
                 <DataGrid
                   columns={dataColumns}
-                  rows={dataRows.slice(start - 1)}
+                  rows={dataRows.slice(Number(values.start) - 1)}
                 />
               </Box>
             </Box>

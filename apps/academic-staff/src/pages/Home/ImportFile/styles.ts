@@ -1,4 +1,4 @@
-import { FormControl } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export const StyledFormControl = styled(FormControl)`
@@ -10,4 +10,12 @@ export const StyledFormControl = styled(FormControl)`
   & > div > div {
     padding: 0.875rem;
   }
+`;
+
+export const StyledTextField = styled(TextField)`
+  & input {
+    padding: 14px !important;
+  }
+  width: 20%;
+  background: white;
 `;
