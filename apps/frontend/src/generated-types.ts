@@ -880,9 +880,11 @@ export type QueryStudentNotEnrolledListArgs = {
 };
 
 export type QueryStudentNoteListArgs = {
+  end?: InputMaybe<Scalars['Date']>;
   maTag?: InputMaybe<Scalars['Int']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
   studentId: Scalars['String'];
   tieuDe?: InputMaybe<Scalars['String']>;
 };
@@ -2345,6 +2347,8 @@ export type StudentNoteListQueryVariables = Exact<{
   studentId: Scalars['String'];
   tieuDe?: InputMaybe<Scalars['String']>;
   maTag?: InputMaybe<Scalars['Int']>;
+  start?: InputMaybe<Scalars['Date']>;
+  end?: InputMaybe<Scalars['Date']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
 }>;
@@ -6191,6 +6195,8 @@ export const StudentNoteListDocument = gql`
     $studentId: String!
     $tieuDe: String
     $maTag: Int
+    $start: Date
+    $end: Date
     $page: Int!
     $size: Int!
   ) {
@@ -6198,6 +6204,8 @@ export const StudentNoteListDocument = gql`
       studentId: $studentId
       tieuDe: $tieuDe
       maTag: $maTag
+      start: $start
+      end: $end
       page: $page
       size: $size
     ) {
@@ -6231,6 +6239,8 @@ export const StudentNoteListDocument = gql`
  *      studentId: // value for 'studentId'
  *      tieuDe: // value for 'tieuDe'
  *      maTag: // value for 'maTag'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
  *      page: // value for 'page'
  *      size: // value for 'size'
  *   },

@@ -22,6 +22,8 @@ const studentTypeDefs = gql`
       studentId: String!
       tieuDe: String
       maTag: Int
+      start: Date
+      end: Date
       page: Int!
       size: Int!
     ): StudentNoteList!

@@ -885,9 +885,11 @@ export type QueryStudentNotEnrolledListArgs = {
 };
 
 export type QueryStudentNoteListArgs = {
+  end?: InputMaybe<Scalars['Date']>;
   maTag?: InputMaybe<Scalars['Int']>;
   page: Scalars['Int'];
   size: Scalars['Int'];
+  start?: InputMaybe<Scalars['Date']>;
   studentId: Scalars['String'];
   tieuDe?: InputMaybe<Scalars['String']>;
 };

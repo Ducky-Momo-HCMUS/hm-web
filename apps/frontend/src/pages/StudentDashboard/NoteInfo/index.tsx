@@ -10,6 +10,9 @@ import React, {
 } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Editor as TinyMCEEditor } from 'tinymce';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
 import {
   Backdrop,
   Box,
@@ -37,9 +40,7 @@ import {
   StyledDivider,
   StyledStickyBox,
   StyledTitle,
-  StyledTextField,
 } from '../../../components/styles';
-import { ROWS_PER_PAGE } from '../../../mocks';
 import DeleteNoteDialog from '../../../components/DeleteDialog';
 import {
   NoteAddInput,
@@ -55,6 +56,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { GET_STUDENT_NOTE_LIST } from '../../../data/queries/student/get-student-note-list';
 import { STUDENT_NOTE_LIST_PAGE_SIZE } from '../../../constants';
+import { StyledTextField } from '../../NoteStore/styles';
 
 import NoteItem from './NoteItem';
 import { StyledGridContainer, StyledHeader, StyledIconButton } from './styles';
@@ -72,6 +74,8 @@ interface State {
 interface FilterState {
   title: string;
   tag: string;
+  start: Dayjs | null;
+  end: Dayjs | null;
 }
 
 const ITEM_HEIGHT = 48;
@@ -121,6 +125,8 @@ function NoteInfo() {
   const [filterValues, setFilterValues] = useState<FilterState>({
     title: '',
     tag: '',
+    start: null,
+    end: null,
   });
 
   const [files, setFiles] = useState<File[]>();
@@ -330,11 +336,20 @@ function NoteInfo() {
       { page: page + 1 },
       { size: STUDENT_NOTE_LIST_PAGE_SIZE },
       filterValues.title && { tieuDe: filterValues.title },
-      filterValues.tag && { maTag: filterValues.tag }
+      filterValues.tag && { maTag: filterValues.tag },
+      filterValues.start && { start: filterValues.start },
+      filterValues.end && { end: filterValues.end }
     );
 
     return params;
-  }, [filterValues.tag, filterValues.title, id, page]);
+  }, [
+    filterValues.end,
+    filterValues.start,
+    filterValues.tag,
+    filterValues.title,
+    id,
+    page,
+  ]);
 
   useEffect(() => {
     getStudentNoteList({
@@ -347,7 +362,6 @@ function NoteInfo() {
   const [openFilterBox, setOpenFilterBox] = useState(false);
 
   const handleFilterNote = useCallback(() => {
-    console.log('args', args);
     getStudentNoteList({
       variables: args,
       fetchPolicy: 'no-cache',
@@ -430,7 +444,7 @@ function NoteInfo() {
                       sx={{ width: '100%', marginBottom: '1.5rem' }}
                       label="Tiêu đề"
                       name="title"
-                      variant="filled"
+                      variant="standard"
                       placeholder="Nhập tiêu đề..."
                       value={filterValues.title}
                       onChange={handleChangeFilterValue('title')}
@@ -442,7 +456,10 @@ function NoteInfo() {
                       loading={tagListLoading}
                       data={tagListData}
                     >
-                      <FormControl variant="filled" sx={{ width: '100%' }}>
+                      <FormControl
+                        variant="standard"
+                        sx={{ width: '100%', marginBottom: '1.5rem' }}
+                      >
                         <InputLabel
                           sx={{ fontWeight: 'bold' }}
                           shrink
@@ -475,6 +492,52 @@ function NoteInfo() {
                         </Select>
                       </FormControl>
                     </AsyncDataRenderer>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Box mb={3}>
+                        <DatePicker
+                          label="Ngày bắt đầu"
+                          inputFormat="DD/MM/YYYY"
+                          value={filterValues.start}
+                          onChange={(newValue) => {
+                            setFilterValues((v) => ({ ...v, start: newValue }));
+                          }}
+                          renderInput={(params) => (
+                            <StyledTextField
+                              {...params}
+                              sx={{
+                                width: '100%',
+                              }}
+                              variant="standard"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Box mb={3}>
+                        <DatePicker
+                          label="Ngày kết thúc"
+                          inputFormat="DD/MM/YYYY"
+                          value={filterValues.end}
+                          onChange={(newValue) => {
+                            setFilterValues((v) => ({ ...v, end: newValue }));
+                          }}
+                          renderInput={(params) => (
+                            <StyledTextField
+                              {...params}
+                              sx={{
+                                width: '100%',
+                              }}
+                              variant="standard"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          )}
+                        />
+                      </Box>
+                    </LocalizationProvider>
                   </Box>
                   <Box mb={3}>
                     <Button
@@ -492,6 +555,15 @@ function NoteInfo() {
                         setFilterValues({
                           title: '',
                           tag: '',
+                          start: null,
+                          end: null,
+                        });
+                        getStudentNoteList({
+                          variables: {
+                            studentId: id,
+                            page: 1,
+                            size: STUDENT_NOTE_LIST_PAGE_SIZE,
+                          },
                         });
                       }}
                     >

@@ -292,18 +292,22 @@ class StudentAPI extends BaseDataSource {
     size,
     tieuDe,
     maTag,
+    start,
+    end,
   }: QueryStudentNoteListArgs) {
     try {
       const args = Object.assign(
         {},
         tieuDe && { tieuDe },
         maTag && { maTag },
+        start && { start },
+        end && { end },
         { page },
         { size }
       );
 
       let queryString = '';
-      Object.keys(args).forEach((arg, index) => {
+      Object.keys(args).forEach((arg) => {
         queryString += `&${arg}=${args[arg]}`;
       });
 
