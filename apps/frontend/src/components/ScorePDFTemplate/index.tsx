@@ -78,7 +78,7 @@ interface ScoreTemplateProps {
     maSV: string;
     tenSV: string;
     dob: string;
-    dtb: number;
+    dtb: number | undefined;
     tongTC: number;
     tongTCDaDat: number;
     hocKy:
