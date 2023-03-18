@@ -155,7 +155,7 @@ const studentTypeDefs = gql`
   }
 
   type StudentAveragePoint {
-    dtbTong: Float!
+    dtb: Float!
     xepLoai: String!
   }
 

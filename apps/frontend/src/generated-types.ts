@@ -965,7 +965,7 @@ export type StudentAddParentInfoInput = {
 
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
-  dtbTong: Scalars['Float'];
+  dtb: Scalars['Float'];
   xepLoai: Scalars['String'];
 };
 
@@ -2282,7 +2282,7 @@ export type StudentAveragePointByTermQuery = {
   __typename?: 'Query';
   studentAveragePointByTerm: {
     __typename?: 'StudentAveragePoint';
-    dtbTong: number;
+    dtb: number;
     xepLoai: string;
   };
 };
@@ -5990,7 +5990,7 @@ export type StudentAllTermsQueryResult = Apollo.QueryResult<
 export const StudentAveragePointByTermDocument = gql`
   query StudentAveragePointByTerm($studentId: String!, $term: Int!) {
     studentAveragePointByTerm(studentId: $studentId, term: $term) {
-      dtbTong
+      dtb
       xepLoai
     }
   }
