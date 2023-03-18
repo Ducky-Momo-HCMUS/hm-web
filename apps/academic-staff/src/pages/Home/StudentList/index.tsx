@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { Order, StudentProperty } from '../../../types';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
@@ -46,8 +45,6 @@ function StudentList() {
   });
 
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<StudentProperty>('maSV');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,15 +55,6 @@ function StudentList() {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
-  );
-
-  const handleRequestSort = useCallback(
-    (event: React.MouseEvent<unknown>, property: StudentProperty) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    },
-    [orderBy, order]
   );
 
   const { loading: homeroomAllListLoading, data: homeroomAllListData } =
@@ -145,11 +133,7 @@ function StudentList() {
         >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
-              <StudentTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-              />
+              <StudentTableHead />
               <TableBody>
                 {studentListData
                   // ?.sort(getComparator(order, orderBy))

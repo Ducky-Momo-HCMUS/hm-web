@@ -6,14 +6,14 @@ import { StudentSubject } from '../../../../generated-types';
 
 interface AcademicTableRowProps {
   data: StudentSubject;
-  index: number;
 }
-function AcademicTableRow({ data, index }: AcademicTableRowProps) {
+function AcademicTableRow({ data }: AcademicTableRowProps) {
   const {
     maMH,
     tenMH,
     tenLopHP,
     tinhTrang,
+    soTinChi,
     diemGK,
     diemTH,
     diemCong,
@@ -50,11 +50,11 @@ function AcademicTableRow({ data, index }: AcademicTableRowProps) {
 
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={data.maMH}>
-      <TableCell>{index}</TableCell>
       <TableCell>{maMH}</TableCell>
       <TableCell>{tenMH}</TableCell>
       <TableCell>{tenLopHP}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
+      <TableCell>{soTinChi}</TableCell>
       <TableCell>{diemGK}</TableCell>
       <TableCell>{diemTH}</TableCell>
       <TableCell>{diemCong}</TableCell>

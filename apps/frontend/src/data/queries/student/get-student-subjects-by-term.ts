@@ -7,6 +7,7 @@ export const GET_STUDENT_SUBJECTS_BY_TERM = gql`
       tenMH
       tenLopHP
       tinhTrang
+      soTinChi
       diemGK
       diemTH
       diemCong

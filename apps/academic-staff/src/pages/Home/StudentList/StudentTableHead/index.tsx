@@ -1,23 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from '@mui/material';
-import { visuallyHidden } from '@mui/utils';
-
-import { Order, StudentProperty } from '../../../../types';
-
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: StudentProperty
-  ) => void;
-  order: Order;
-  orderBy: string;
-}
+import { TableCell, TableHead, TableRow } from '@mui/material';
 
 interface Column {
   id: 'maSV' | 'tenSV' | 'maCN' | 'tinhTrang' | 'sdt' | 'emailSV';
@@ -48,35 +30,13 @@ const columns: readonly Column[] = [
   { id: 'emailSV', label: 'Email sinh viên', minWidth: 120 },
 ];
 
-function StudentTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-
-  const createSortHandler =
-    (property: StudentProperty) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
+function StudentTableHead() {
   return (
     <TableHead>
       <TableRow>
         <TableCell key="index">STT</TableCell>
         {columns.map((column) => (
-          <TableCell
-            key={column.id}
-            sortDirection={orderBy === column.id ? order : false}
-          >
-            <TableSortLabel
-              direction={orderBy === column.id ? order : 'asc'}
-              onClick={createSortHandler(column.id)}
-            >
-              {column.label}
-              {orderBy === column.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
+          <TableCell key={column.id}>{column.label}</TableCell>
         ))}
       </TableRow>
     </TableHead>
