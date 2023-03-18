@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { StyleSheet, View, Text } from '@react-pdf/renderer';
 
@@ -31,15 +30,28 @@ const styles = StyleSheet.create({
   },
 });
 
-function Table({ data }) {
+interface TableProps {
+  data: {
+    namHoc: number;
+    hocKy: number;
+    monHoc: {
+      maMH: string;
+      tenMH: string;
+      soTinChi: number;
+      dtb: number;
+    }[];
+  };
+}
+
+function Table({ data }: TableProps) {
   return (
     <View style={styles.tableContainer}>
       <View style={styles.tableHeader}>
         <Text style={[styles.tableCell, { width: '60%' }]}>
-          Năm học: 2020 - 2021
+          Năm học: {data.namHoc} - {data.namHoc + 1}
         </Text>
         <Text style={[styles.tableCell, { width: '40%' }, styles.noLeftBorder]}>
-          Học kỳ: 3
+          Học kỳ: {data.hocKy || 0}
         </Text>
       </View>
 
@@ -85,56 +97,56 @@ function Table({ data }) {
       </View>
       {/* -----------end row-------------  */}
       {/* -----------row-------------  */}
-      {data.map((item, i) => (
-        <View key={i} style={styles.tableRow}>
-          <View style={[styles.tableRow, { width: '60%' }]}>
-            <Text
-              style={[styles.tableCell, { width: '10%' }, styles.noTopBorder]}
-            >
-              {i + 1}
-            </Text>
-            <Text
-              style={[
-                styles.tableCell,
-                { width: '30%' },
-                styles.noLeftTopBorder,
-              ]}
-            >
-              {item.maMH}
-            </Text>
-            <Text
-              style={[
-                styles.tableCell,
-                { width: '60%' },
-                styles.noLeftTopBorder,
-              ]}
-            >
-              {item.tenMH}
-            </Text>
+      {data.monHoc &&
+        data.monHoc.map((item, i) => (
+          <View key={i} style={styles.tableRow}>
+            <View style={[styles.tableRow, { width: '60%' }]}>
+              <Text
+                style={[styles.tableCell, { width: '10%' }, styles.noTopBorder]}
+              >
+                {i + 1}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: '30%' },
+                  styles.noLeftTopBorder,
+                ]}
+              >
+                {item.maMH}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: '60%' },
+                  styles.noLeftTopBorder,
+                ]}
+              >
+                {item.tenMH}
+              </Text>
+            </View>
+            <View style={[styles.tableRow, { width: '40%' }]}>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: '50%', textAlign: 'center' },
+                  styles.noLeftTopBorder,
+                ]}
+              >
+                {item.soTinChi}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: '50%', textAlign: 'center' },
+                  styles.noLeftTopBorder,
+                ]}
+              >
+                {item.dtb}
+              </Text>
+            </View>
           </View>
-          <View style={[styles.tableRow, { width: '40%' }]}>
-            <Text
-              style={[
-                styles.tableCell,
-                { width: '50%', textAlign: 'center' },
-                styles.noLeftTopBorder,
-              ]}
-            >
-              {item.soTinChi}
-            </Text>
-            <Text
-              style={[
-                styles.tableCell,
-                { width: '50%', textAlign: 'center' },
-                styles.noLeftTopBorder,
-              ]}
-            >
-              {item.dtb}
-            </Text>
-          </View>
-        </View>
-      ))}
-
+        ))}
       {/* -----------end row-------------  */}
     </View>
   );
