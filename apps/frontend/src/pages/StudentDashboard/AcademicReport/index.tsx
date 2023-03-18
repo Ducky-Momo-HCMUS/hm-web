@@ -201,10 +201,7 @@ function AcademicReport() {
             </Button>
 
             <Button disabled sx={{ color: '#fff!important' }}>
-              ĐTB:{' '}
-              {averagePoint
-                ? `${averagePoint?.dtb} | ${averagePoint?.xepLoai}`
-                : 'Chưa có'}
+              ĐTB: {averagePoint ? `${averagePoint.dtb}` : 'Chưa có'}
             </Button>
           </StyledStatusBox>
           <Button variant="contained">Xuất phiếu điểm</Button>
@@ -217,12 +214,8 @@ function AcademicReport() {
             <Table stickyHeader aria-label="sticky table">
               <AcademicTableHead />
               <TableBody>
-                {subjectsData.map((row, index) => (
-                  <AcademicTableRow
-                    key={row.maMH}
-                    data={row}
-                    index={index + 1}
-                  />
+                {subjectsData.map((row) => (
+                  <AcademicTableRow key={row.maMH} data={row} />
                 ))}
               </TableBody>
             </Table>

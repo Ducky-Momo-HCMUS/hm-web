@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
+import { TableCell, TableHead, TableRow } from '@mui/material';
 
 interface Column {
   id:
@@ -7,6 +7,7 @@ interface Column {
     | 'subjectName'
     | 'class'
     | 'status'
+    | 'soTinChi'
     | 'diemGK'
     | 'diemTH'
     | 'diemCong'
@@ -36,11 +37,16 @@ const columns: readonly Column[] = [
     label: 'Tình trạng',
     minWidth: 120,
   },
-  { id: 'diemGK', label: 'GK', minWidth: 60 },
-  { id: 'diemTH', label: 'TH', minWidth: 60 },
+  {
+    id: 'soTinChi',
+    label: 'Số TC',
+    minWidth: 60,
+  },
+  { id: 'diemGK', label: 'GK', minWidth: 40 },
+  { id: 'diemTH', label: 'TH', minWidth: 40 },
   { id: 'diemCong', label: 'Cộng', minWidth: 60 },
   { id: 'diemKhac', label: 'Khác', minWidth: 60 },
-  { id: 'diemCK', label: 'CK', minWidth: 60 },
+  { id: 'diemCK', label: 'CK', minWidth: 40 },
   { id: 'dtb', label: 'Tổng', minWidth: 60 },
 ];
 
@@ -48,11 +54,8 @@ function AcademicTableHead() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell key="index">STT</TableCell>
         {columns.map((column) => (
-          <TableCell key={column.id}>
-            <TableSortLabel>{column.label}</TableSortLabel>
-          </TableCell>
+          <TableCell key={column.id}>{column.label}</TableCell>
         ))}
       </TableRow>
     </TableHead>

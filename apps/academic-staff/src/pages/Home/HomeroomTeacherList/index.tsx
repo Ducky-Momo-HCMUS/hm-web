@@ -20,7 +20,6 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
-import { Order, TeacherProperty } from '../../../types';
 import { TEACHER_LIST_PAGE_SIZE } from '../../../constants';
 
 import { StyledFormControl } from './styles';
@@ -46,8 +45,6 @@ function HomeroomTeacherList() {
   });
 
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<TeacherProperty>('maSH');
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -58,15 +55,6 @@ function HomeroomTeacherList() {
       setValues((v) => ({ ...v, [prop]: event.target.value }));
     },
     []
-  );
-
-  const handleRequestSort = useCallback(
-    (event: React.MouseEvent<unknown>, property: TeacherProperty) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    },
-    [orderBy, order]
   );
 
   const { loading: yearListLoading, data: yearListData } = useYearListQuery({});
@@ -131,22 +119,16 @@ function HomeroomTeacherList() {
         >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
-              <HomeroomTeacherTableHead
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-              />
+              <HomeroomTeacherTableHead />
               <TableBody>
-                {teacherList
-                  // ?.sort(getComparator(order, orderBy))
-                  .map((row, index) => (
-                    <TableRow hover tabIndex={-1} key={row.email}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row.tenGV}</TableCell>
-                      <TableCell>{row.maSH}</TableCell>
-                      <TableCell>{row.email}</TableCell>
-                    </TableRow>
-                  ))}
+                {teacherList.map((row, index) => (
+                  <TableRow hover tabIndex={-1} key={row.email}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{row.tenGV}</TableCell>
+                    <TableCell>{row.maSH}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

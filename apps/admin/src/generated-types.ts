@@ -966,7 +966,7 @@ export type StudentAddParentInfoInput = {
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
   dtb: Scalars['Float'];
-  xepLoai: Scalars['String'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentContact = {
@@ -1140,6 +1140,7 @@ export type StudentSubject = {
   diemTH?: Maybe<Scalars['Float']>;
   dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
@@ -2283,7 +2284,7 @@ export type StudentAveragePointByTermQuery = {
   studentAveragePointByTerm: {
     __typename?: 'StudentAveragePoint';
     dtb: number;
-    xepLoai: string;
+    xepLoai?: string | null | undefined;
   };
 };
 
@@ -2434,6 +2435,7 @@ export type StudentSubjectsByTermQuery = {
     tenMH: string;
     tenLopHP: string;
     tinhTrang: string;
+    soTinChi: number;
     diemGK?: number | null | undefined;
     diemTH?: number | null | undefined;
     diemCong?: number | null | undefined;
@@ -6425,6 +6427,7 @@ export const StudentSubjectsByTermDocument = gql`
       tenMH
       tenLopHP
       tinhTrang
+      soTinChi
       diemGK
       diemTH
       diemCong

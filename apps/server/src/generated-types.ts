@@ -971,7 +971,7 @@ export type StudentAddParentInfoInput = {
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
   dtb: Scalars['Float'];
-  xepLoai: Scalars['String'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentContact = {
@@ -1145,6 +1145,7 @@ export type StudentSubject = {
   diemTH?: Maybe<Scalars['Float']>;
   dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
@@ -2917,7 +2918,7 @@ export type StudentAveragePointResolvers<
   ParentType extends ResolversParentTypes['StudentAveragePoint'] = ResolversParentTypes['StudentAveragePoint']
 > = {
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3166,6 +3167,7 @@ export type StudentSubjectResolvers<
   diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
