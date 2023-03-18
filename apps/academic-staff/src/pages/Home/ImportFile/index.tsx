@@ -10,7 +10,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
   Typography,
 } from '@mui/material';
 import React, {
@@ -97,10 +96,8 @@ function ImportFile() {
     [values.type]
   );
 
-  const [
-    getColumnHeaderList,
-    { loading: columnHeaderListLoading, data: columnHeaderListData },
-  ] = useColumnHeaderListLazyQuery();
+  const [getColumnHeaderList, { data: columnHeaderListData }] =
+    useColumnHeaderListLazyQuery();
 
   useEffect(() => {
     getColumnHeaderList({
@@ -117,29 +114,68 @@ function ImportFile() {
 
   const [columnHeaders, setColumnHeaders] = useState<ColumnHeader[]>([]);
 
-  useEffect(() => {
-    setColumnHeaders(defaultHeaders);
-  }, [defaultHeaders]);
+  const mappedHeadersPayload = useMemo(() => {
+    if (!workBook[current]) {
+      return [];
+    }
+
+    const sheetHeaders = utils.sheet_to_json(workBook[current], {
+      header: 1,
+      range: Number(values.start) - 1,
+    })[0] as string[];
+
+    const mappedHeaders = sheetHeaders;
+    const cnt = new Array(sheetHeaders.length).fill(0);
+    mappedHeaders.forEach((header) => {
+      const findIndex = mappedHeaders.findIndex((item) => item === header);
+      cnt[findIndex] += 1;
+    });
+
+    cnt.forEach((count, index) => {
+      let tmpCount = count;
+      while (tmpCount >= 2) {
+        mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
+          tmpCount - 1
+        }`;
+        tmpCount -= 1;
+      }
+    });
+
+    const mappedHeadersPayload = mappedHeaders.map((header, index) => {
+      const originalHeader = header.split('_')[0];
+      const originalIndex = mappedHeaders.findIndex(
+        (item) => item === originalHeader
+      );
+
+      return {
+        key: defaultHeaders[originalIndex]?.key,
+        index,
+        value: header,
+      };
+    });
+
+    return mappedHeadersPayload;
+  }, [current, defaultHeaders, values.start, workBook]);
+
+  console.log('<<< payload', mappedHeadersPayload);
 
   const handleChangeHeader = useCallback(
     (index: number) => (event: SelectChangeEvent) => {
       const targetKey = event?.target.value;
-      const selectedHeader = defaultHeaders.find(
-        (item) => item.key === targetKey
-      );
+      const selectedHeader = mappedHeadersPayload[index];
 
       setColumnHeaders((prevSelectedHeaders) => [
         ...prevSelectedHeaders.filter(
           (prevSelectedHeader) => prevSelectedHeader.index !== index
         ),
         {
-          key: selectedHeader?.key || '',
+          key: targetKey || '',
           value: selectedHeader?.value || '',
           index,
         },
       ]);
     },
-    [defaultHeaders]
+    [mappedHeadersPayload]
   );
 
   const { dataRows, dataColumns } = useMemo(() => {
@@ -153,9 +189,19 @@ function ImportFile() {
     }
     const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
 
+    // const sheetHeaders = utils.sheet_to_json(sheet, {
+    //   header: 1,
+    //   range: Number(values.start) - 1,
+    // })[0] as string[];
+
+    // const headers = defaultHeaders.map((header, index) => ({
+    //   ...header,
+    //   value: sheetHeaders[index],
+    // })) as ColumnHeader[];
+
     return {
       dataRows: utils
-        .sheet_to_json<Row>(workBook[current], { header: 1 })
+        .sheet_to_json<Row>(sheet, { header: 1 })
         .map((r, id) => ({ ...r, id })),
       dataColumns: Array.from(
         {
@@ -164,30 +210,30 @@ function ImportFile() {
         (_, i) => ({
           field: String(i),
           renderHeader: () => {
-            const defaultSelectedHeader = columnHeaders.find(
-              (item) => item.index === i
-            )?.key;
+            const defaultSelectedHeader =
+              defaultHeaders.find(
+                (header) => header.value === mappedHeadersPayload[i]?.value
+              )?.key || '';
 
-            if (defaultSelectedHeader) {
-              return (
-                <StyledFormControl>
-                  <Select
-                    variant="standard"
-                    disableUnderline
-                    value={defaultSelectedHeader}
-                    onChange={handleChangeHeader(i)}
-                  >
-                    {defaultHeaders.map((columnHeader) => (
-                      <MenuItem value={columnHeader.key}>
-                        {columnHeader.value}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </StyledFormControl>
-              );
-            }
-
-            return utils.encode_col(i);
+            return (
+              <StyledFormControl>
+                <Select
+                  variant="standard"
+                  disableUnderline
+                  value={
+                    columnHeaders.find((column) => column.index === i)?.key ||
+                    defaultSelectedHeader
+                  }
+                  onChange={handleChangeHeader(i)}
+                >
+                  {defaultHeaders.map((columnHeader) => (
+                    <MenuItem value={columnHeader.key}>
+                      {columnHeader.key}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            );
           },
           sortable: false,
           hideSortIcons: true,
@@ -197,7 +243,19 @@ function ImportFile() {
         })
       ),
     };
-  }, [columnHeaders, current, defaultHeaders, handleChangeHeader, workBook]);
+  }, [
+    columnHeaders,
+    current,
+    defaultHeaders,
+    handleChangeHeader,
+    mappedHeadersPayload,
+    // values.start,
+    workBook,
+  ]);
+
+  useEffect(() => {
+    setColumnHeaders(defaultHeaders);
+  }, [defaultHeaders]);
 
   /* called when sheet dropdown is changed */
   function selectSheet(name: string) {
@@ -228,10 +286,14 @@ function ImportFile() {
     useUploadDocumentMutation({
       onCompleted: () => {
         toast.success('Cập nhật thông tin thành công');
-        setValues((v) => ({
-          ...v,
+        setValues({
           type: TYPES[0].label,
-        }));
+          year: '',
+          term: '',
+          subject: '',
+          class: 0,
+          start: '1',
+        });
         if (filePondRef.current) {
           filePondRef.current.removeFile();
         }
@@ -254,6 +316,18 @@ function ImportFile() {
         values.subject && { maMH: values.subject },
         values.class && { tenLopHP: values.class }
       );
+
+      const payloadHeaders = columnHeaders.map((item) => {
+        const value =
+          mappedHeadersPayload.find((header) => header.index === item.index)
+            ?.value || '';
+
+        return {
+          ...item,
+          value,
+        };
+      });
+
       if (file) {
         await uploadDocument({
           variables: {
@@ -265,7 +339,7 @@ function ImportFile() {
                 value: current,
                 index: sheets.findIndex((sheetName) => sheetName === current),
               },
-              headers: columnHeaders,
+              headers: payloadHeaders,
             },
           },
         });
@@ -275,6 +349,7 @@ function ImportFile() {
       columnHeaders,
       current,
       file,
+      mappedHeadersPayload,
       sheets,
       uploadDocument,
       values.class,
