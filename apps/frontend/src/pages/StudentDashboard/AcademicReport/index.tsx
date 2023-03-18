@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
@@ -14,7 +13,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { format } from 'date-fns';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledTitle,
@@ -138,8 +141,6 @@ function AcademicReport() {
     },
   }) as StudentDetailQuery;
 
-  console.log('student', studentDetail);
-
   return (
     <>
       <StyledStickyBox>
@@ -204,7 +205,34 @@ function AcademicReport() {
               ĐTB: {averagePoint ? `${averagePoint.dtb}` : 'Chưa có'}
             </Button>
           </StyledStatusBox>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          <PDFDownloadLink
+            document={
+              <ScorePDFTemplate
+                data={{
+                  maSV: id,
+                  tenSV: studentDetail?.tenSV,
+                  dob: format(new Date(studentDetail?.dob), 'dd/MM/yyyy'),
+                  hocKy: terms.find((item) => item.maHK === +values.term),
+                  namHoc: +values.year,
+                  monHoc: subjectsData,
+                  dtb: averagePoint?.dtb,
+                }}
+              />
+            }
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${
+              terms.find((item) => item.maHK === +values.term)?.hocKy || 0
+            }`}
+          >
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained">Xuất phiếu điểm</Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>

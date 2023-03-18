@@ -1,19 +1,19 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledStickyBox,
   StyledTitle,
 } from '../../../components/styles';
 import {
-  StudentDetailQuery,
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
-import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
-import { client } from '../../../ApolloClient';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -73,15 +73,6 @@ function AcademicOverview() {
     }));
   }, [studentOverviewResultData?.studentOverviewResult]);
 
-  const { studentDetail } = client.readQuery({
-    query: GET_STUDENT_DETAIL,
-    variables: {
-      studentId: id,
-    },
-  }) as StudentDetailQuery;
-
-  console.log('student', studentDetail);
-
   return (
     <>
       <StyledStickyBox>
@@ -98,7 +89,20 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          <PDFDownloadLink
+            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+          >
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained">Xuất phiếu điểm</Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Box mt={3}>
