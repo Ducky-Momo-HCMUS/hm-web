@@ -79,8 +79,6 @@ interface ScoreTemplateProps {
     tenSV: string;
     dob: string;
     dtb: number | undefined;
-    tongTC: number;
-    tongTCDaDat: number;
     hocKy:
       | {
           maHK: number;
@@ -98,7 +96,15 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
   const yyyy = today.getFullYear();
-  console.log(data);
+  let tongTC = 0;
+  let tongTCDaDat = 0;
+
+  if (data.monHoc) {
+    data.monHoc.forEach((item) => {
+      if (item.dtb >= 5) tongTCDaDat += item.soTinChi;
+      tongTC += item.soTinChi;
+    });
+  }
 
   return (
     <Document>
@@ -146,9 +152,9 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
           }}
         />
         <View style={styles.creditTotal}>
-          <Text style={{ width: '40%' }}>Tổng số tín chỉ: {data.tongTC}</Text>
+          <Text style={{ width: '40%' }}>Tổng số tín chỉ: {tongTC}</Text>
           <Text style={{ width: '40%' }}>
-            Tổng số tín chỉ đạt: {data.tongTCDaDat}
+            Tổng số tín chỉ đạt: {tongTCDaDat}
           </Text>
           <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
         </View>

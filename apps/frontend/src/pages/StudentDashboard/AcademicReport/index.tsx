@@ -87,7 +87,6 @@ function AcademicReport() {
       terms: termsByYear || [],
     };
   }, [mappedData, values.year, years]);
-  console.log('terms', terms);
 
   const { initialYear, initialTerm } = useMemo(() => {
     const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
@@ -218,8 +217,6 @@ function AcademicReport() {
                   namHoc: +values.year,
                   monHoc: subjectsData,
                   dtb: averagePoint?.dtb,
-                  tongTC: 4,
-                  tongTCDaDat: 0,
                 }}
               />
             }
