@@ -215,12 +215,12 @@ function AcademicReport() {
               <ScorePDFTemplate
                 data={{
                   maSV: id,
-                  tenSV: studentDetail.tenSV,
-                  dob: format(new Date(studentDetail.dob), 'dd/MM/yyyy'),
+                  tenSV: studentDetail?.tenSV,
+                  dob: format(new Date(studentDetail?.dob), 'dd/MM/yyyy'),
                   hocKy: terms.find((item) => item.maHK === +values.term),
                   namHoc: +values.year,
                   monHoc: subjectsData,
-                  dtb: averagePoint?.dtbTong || 3,
+                  dtb: averagePoint?.dtb,
                   tongTC: 4,
                   tongTCDaDat: 0,
                 }}
