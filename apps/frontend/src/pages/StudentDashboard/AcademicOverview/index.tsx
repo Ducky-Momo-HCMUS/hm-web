@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -13,8 +12,8 @@ import {
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
-import { client } from '../../../index';
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
+import { client } from '../../../ApolloClient';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';

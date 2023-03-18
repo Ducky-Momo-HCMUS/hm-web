@@ -31,7 +31,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
-import { client } from '../../../index';
+import { client } from '../../../ApolloClient';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
