@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import ActionsBar from '../ActionsBar';
@@ -23,7 +23,7 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
         component={Link}
         to="/"
       >
-        Homeroom management
+        <Avatar src="/img/hm-logo.png" />
       </Typography>
       {isAuthenticated && (
         <>
@@ -40,7 +40,7 @@ function Header({ isAuthenticated, isDashboard }: HeaderProps) {
           component={Link}
           to="/"
         >
-          Homeroom management
+          <Avatar src="/img/hm-logo.png" />
         </Typography>
         {isAuthenticated && (
           <>

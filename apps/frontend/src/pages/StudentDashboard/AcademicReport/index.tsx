@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
@@ -24,6 +25,7 @@ import {
   StyledStickyBox,
 } from '../../../components/styles';
 import {
+  StudentDetailQuery,
   useStudentAllTermsQuery,
   useStudentAveragePointByTermQuery,
   useStudentSubjectsByTermQuery,
@@ -31,6 +33,8 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
+import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
+import { client } from '../../../index';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
@@ -129,6 +133,15 @@ function AcademicReport() {
   const subjectsData = useMemo(() => {
     return subjectsByTermData?.studentSubjectsByTerm || [];
   }, [subjectsByTermData?.studentSubjectsByTerm]);
+
+  const { studentDetail } = client.readQuery({
+    query: GET_STUDENT_DETAIL,
+    variables: {
+      studentId: id,
+    },
+  }) as StudentDetailQuery;
+
+  console.log('student', studentDetail);
 
   return (
     <>
