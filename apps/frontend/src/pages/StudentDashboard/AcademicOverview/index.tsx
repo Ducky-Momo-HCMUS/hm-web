@@ -39,10 +39,6 @@ function AcademicOverview() {
     },
   });
 
-  const handleExportScoreFile = () => {
-    console.log('xuất phiếu điểm');
-  };
-
   const studentOverviewResult = useMemo(() => {
     const data = studentOverviewResultData?.studentOverviewResult;
     return {
@@ -113,9 +109,7 @@ function AcademicOverview() {
                   Xuất phiếu điểm
                 </Button>
               ) : (
-                <Button variant="contained" onClick={handleExportScoreFile}>
-                  Xuất phiếu điểm
-                </Button>
+                <Button variant="contained">Xuất phiếu điểm</Button>
               )
             }
           </PDFDownloadLink>
