@@ -1088,6 +1088,7 @@ export type StudentOverviewResult = {
   dtb: Scalars['Float'];
   tenCN: Scalars['String'];
   tongTC: Scalars['Int'];
+  tongTCDaHoc: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
   tuChonTuDo: Scalars['Int'];
@@ -3086,6 +3087,7 @@ export type StudentOverviewResultResolvers<
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tongTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tongTCDaHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totNghiep?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tuChonChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tuChonTuDo?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
