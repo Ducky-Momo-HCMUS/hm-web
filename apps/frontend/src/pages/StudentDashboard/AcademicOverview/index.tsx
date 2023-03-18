@@ -11,7 +11,6 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import {
-  StudentDetailQuery,
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
@@ -73,15 +72,6 @@ function AcademicOverview() {
           : `${result[index]}`,
     }));
   }, [studentOverviewResultData?.studentOverviewResult]);
-
-  const { studentDetail } = client.readQuery({
-    query: GET_STUDENT_DETAIL,
-    variables: {
-      studentId: id,
-    },
-  }) as StudentDetailQuery;
-
-  console.log('student', studentDetail);
 
   return (
     <>
