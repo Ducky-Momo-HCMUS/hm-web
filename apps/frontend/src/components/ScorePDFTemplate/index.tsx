@@ -10,11 +10,6 @@ import {
 
 import Table from './Table';
 
-// Register Font
-// Font.register({
-//   family: 'Roboto',
-//   src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf',
-// });
 Font.register({
   family: 'Roboto',
   fonts: [
@@ -78,12 +73,32 @@ const styles = StyleSheet.create({
   },
 });
 
+interface ScoreTemplateProps {
+  data: {
+    maSV: string;
+    tenSV: string;
+    dob: string;
+    dtb: number;
+    tongTC: number;
+    tongTCDaDat: number;
+    hocKy:
+      | {
+          maHK: number;
+          hocKy: number;
+        }
+      | undefined;
+    namHoc: number;
+    monHoc: any;
+  };
+}
+
 // Create Document Component
-function ScorePDFTemplate({ data }: { data: any }) {
+function ScorePDFTemplate({ data }: ScoreTemplateProps) {
   const today = new Date();
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
   const yyyy = today.getFullYear();
+  console.log(data);
 
   return (
     <Document>
@@ -123,7 +138,13 @@ function ScorePDFTemplate({ data }: { data: any }) {
             </Text>
           </View>
         </View>
-        <Table data={data.monHoc} />
+        <Table
+          data={{
+            monHoc: data.monHoc,
+            hocKy: data.hocKy?.hocKy || 0,
+            namHoc: data.namHoc,
+          }}
+        />
         <View style={styles.creditTotal}>
           <Text style={{ width: '40%' }}>Tổng số tín chỉ: {data.tongTC}</Text>
           <Text style={{ width: '40%' }}>
@@ -131,12 +152,24 @@ function ScorePDFTemplate({ data }: { data: any }) {
           </Text>
           <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
         </View>
+        <View
+          style={{
+            marginLeft: 40,
+            marginTop: 30,
+            fontStyle: 'italic',
+            fontWeight: 500,
+          }}
+        >
+          <Text>
+            *Phiếu điểm xuất ra từ hệ thống chỉ mang tính chất tham khảo, không
+            có giá trị pháp lý cũng như không thể sử dụng như một phiếu điểm
+            chính thức của nhà trường
+          </Text>
+        </View>
         <View style={styles.signature}>
           <Text style={{ fontStyle: 'italic' }}>
             Tp.HCM, Ngày {dd} tháng {mm} năm {yyyy}
           </Text>
-          <Text>TL. HIỆU TRƯỞNG</Text>
-          <Text>Trưởng Phòng Đào Tạo</Text>
         </View>
       </Page>
     </Document>

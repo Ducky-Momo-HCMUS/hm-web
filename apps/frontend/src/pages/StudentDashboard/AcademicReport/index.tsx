@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
@@ -15,6 +14,7 @@ import {
 } from '@mui/material';
 import { useParams, Link } from 'react-router-dom';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { format } from 'date-fns';
 
 import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
 import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
@@ -86,6 +86,7 @@ function AcademicReport() {
       terms: termsByYear || [],
     };
   }, [mappedData, values.year, years]);
+  console.log('terms', terms);
 
   const { initialYear, initialTerm } = useMemo(() => {
     const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
@@ -140,8 +141,6 @@ function AcademicReport() {
       studentId: id,
     },
   }) as StudentDetailQuery;
-
-  console.log('student', studentDetail);
 
   return (
     <>
@@ -208,8 +207,24 @@ function AcademicReport() {
             </Button>
           </StyledStatusBox>
           <PDFDownloadLink
-            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
-            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${MOCK_DATA_EXPORT.hocKy}`}
+            document={
+              <ScorePDFTemplate
+                data={{
+                  maSV: id,
+                  tenSV: studentDetail.tenSV,
+                  dob: format(new Date(studentDetail.dob), 'dd/MM/yyyy'),
+                  hocKy: terms.find((item) => item.maHK === +values.term),
+                  namHoc: +values.year,
+                  monHoc: subjectsData,
+                  dtb: averagePoint?.dtbTong || 3,
+                  tongTC: 4,
+                  tongTCDaDat: 0,
+                }}
+              />
+            }
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${
+              terms.find((item) => item.maHK === +values.term)?.hocKy || 0
+            }`}
           >
             {({ loading }) =>
               loading ? (

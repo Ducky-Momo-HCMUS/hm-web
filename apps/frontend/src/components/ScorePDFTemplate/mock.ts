@@ -5,7 +5,7 @@ export const MOCK_DATA_EXPORT = {
   tongTC: 23,
   tongTCDaDat: 23,
   dtb: 7.83,
-  hocKy: 3,
+  hocKy: { maHK: 1, hocKy: 3 },
   namHoc: 2020,
   monHoc: [
     {
