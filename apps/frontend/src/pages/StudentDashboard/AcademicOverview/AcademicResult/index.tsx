@@ -100,7 +100,9 @@ function AcademicResult({ studentOverviewResult }: AcademicResultProps) {
           <Tab
             label={`Bắt buộc ngành (${studentOverviewResult.batBuocChuyenNganh}/16)`}
           />
-          <Tab label={`Tự chọn ngành (${studentOverviewResult.daiCuong}/8)`} />
+          <Tab
+            label={`Tự chọn ngành (${studentOverviewResult.tuChonChuyenNganh}/8)`}
+          />
           <Tab label={`Tự chọn tự do (${studentOverviewResult.tuChonTuDo})`} />
           <Tab label={`Tốt nghiệp (${studentOverviewResult.totNghiep}/10)`} />
         </Tabs>

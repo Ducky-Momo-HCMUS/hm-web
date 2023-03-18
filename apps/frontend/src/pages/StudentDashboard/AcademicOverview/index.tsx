@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -12,12 +11,9 @@ import {
   StyledTitle,
 } from '../../../components/styles';
 import {
-  StudentDetailQuery,
   StudentOverviewResult,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
-import { client } from '../../../index';
-import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
@@ -76,15 +72,6 @@ function AcademicOverview() {
           : `${result[index]}`,
     }));
   }, [studentOverviewResultData?.studentOverviewResult]);
-
-  const { studentDetail } = client.readQuery({
-    query: GET_STUDENT_DETAIL,
-    variables: {
-      studentId: id,
-    },
-  }) as StudentDetailQuery;
-
-  console.log('student', studentDetail);
 
   return (
     <>
