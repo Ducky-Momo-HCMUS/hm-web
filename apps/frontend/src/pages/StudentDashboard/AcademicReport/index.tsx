@@ -203,7 +203,7 @@ function AcademicReport() {
             <Button disabled sx={{ color: '#fff!important' }}>
               ĐTB:{' '}
               {averagePoint
-                ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
+                ? `${averagePoint?.dtb} | ${averagePoint?.xepLoai}`
                 : 'Chưa có'}
             </Button>
           </StyledStatusBox>

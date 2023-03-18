@@ -970,7 +970,7 @@ export type StudentAddParentInfoInput = {
 
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
-  dtbTong: Scalars['Float'];
+  dtb: Scalars['Float'];
   xepLoai: Scalars['String'];
 };
 
@@ -2916,7 +2916,7 @@ export type StudentAveragePointResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentAveragePoint'] = ResolversParentTypes['StudentAveragePoint']
 > = {
-  dtbTong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
