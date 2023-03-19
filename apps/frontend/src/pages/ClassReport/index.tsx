@@ -180,24 +180,20 @@ function ClassReport() {
 
   useEffect(() => {
     if (!homeroomTermListLoading) {
-      if (selectedTab === 0) {
-        getHomeroomOverviewReportByTerm({
-          variables: {
-            homeroomId: id,
-            term: values.term ? Number(values.term) : Number(initialTerm),
-          },
-        });
-        getHomeroomFinalResultListByTerm({
-          variables: {
-            homeroomId: id,
-            term: values.term ? Number(values.term) : Number(initialTerm),
-            page: page + 1,
-            size: FINAL_RESULT_LIST_PAGE_SIZE,
-          },
-        });
-
-        return;
-      }
+      getHomeroomOverviewReportByTerm({
+        variables: {
+          homeroomId: id,
+          term: values.term ? Number(values.term) : Number(initialTerm),
+        },
+      });
+      getHomeroomFinalResultListByTerm({
+        variables: {
+          homeroomId: id,
+          term: values.term ? Number(values.term) : Number(initialTerm),
+          page: page + 1,
+          size: FINAL_RESULT_LIST_PAGE_SIZE,
+        },
+      });
 
       getHomeroomExamAbsentListByTerm({
         variables: {
@@ -220,7 +216,6 @@ function ClassReport() {
     homeroomTermListLoading,
     id,
     initialTerm,
-    selectedTab,
     values.term,
     page,
   ]);
@@ -417,7 +412,13 @@ function ClassReport() {
               </Box>
             </AsyncDataRenderer>
             <AsyncDataRenderer
-              loading={homeroomDetailLoading}
+              loading={
+                homeroomDetailLoading ||
+                homeroomOverviewReportLoading ||
+                homeroomFinalResultListLoading ||
+                homeroomExamAbsentListLoading ||
+                homeroomPostponeExamListLoading
+              }
               data={homeroomDetailData}
             >
               <Button
