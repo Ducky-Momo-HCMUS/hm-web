@@ -126,16 +126,7 @@ function Login() {
               }}
               variant="filled"
             />
-            <Grid container alignItems="center">
-              <Grid item xs>
-                <Link
-                  sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}
-                  component={RouterLink}
-                  to="/register"
-                >
-                  Tạo tài khoản
-                </Link>
-              </Grid>
+            <Grid container alignItems="center" justifyContent="flex-end">
               <Grid item>
                 <Link
                   sx={{ fontFamily: 'Roboto', fontSize: '0.875rem' }}

@@ -63,7 +63,7 @@ function AddOrEditHomeroomTeacherInfoDialog({
   );
 
   const handleSelectClass = useCallback(
-    (event: SelectChangeEvent<typeof values.className>) => {
+    (event: SelectChangeEvent<string[]>) => {
       const {
         target: { value },
       } = event;
