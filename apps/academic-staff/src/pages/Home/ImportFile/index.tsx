@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
@@ -6,12 +7,21 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemText,
   MenuItem,
   Select,
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import React, {
   useState,
   useCallback,
@@ -157,16 +167,17 @@ function ImportFile() {
     return mappedHeadersPayload;
   }, [current, defaultHeaders, values.start, workBook]);
 
-  console.log('<<< payload', mappedHeadersPayload);
-
   const handleChangeHeader = useCallback(
     (index: number) => (event: SelectChangeEvent) => {
       const targetKey = event?.target.value;
       const selectedHeader = mappedHeadersPayload[index];
 
+      // A key can only be chosen for one column
       setColumnHeaders((prevSelectedHeaders) => [
         ...prevSelectedHeaders.filter(
-          (prevSelectedHeader) => prevSelectedHeader.index !== index
+          (prevSelectedHeader) =>
+            prevSelectedHeader.index !== index &&
+            prevSelectedHeader.key !== targetKey
         ),
         {
           key: targetKey || '',
@@ -210,10 +221,10 @@ function ImportFile() {
         (_, i) => ({
           field: String(i),
           renderHeader: () => {
-            const defaultSelectedHeader =
-              defaultHeaders.find(
-                (header) => header.value === mappedHeadersPayload[i]?.value
-              )?.key || '';
+            // const defaultSelectedHeader =
+            //   defaultHeaders.find(
+            //     (header) => header.value === mappedHeadersPayload[i]?.value
+            //   )?.key || '';
 
             return (
               <StyledFormControl>
@@ -221,8 +232,8 @@ function ImportFile() {
                   variant="standard"
                   disableUnderline
                   value={
-                    columnHeaders.find((column) => column.index === i)?.key ||
-                    defaultSelectedHeader
+                    columnHeaders.find((column) => column.index === i)?.key
+                    // || defaultSelectedHeader
                   }
                   onChange={handleChangeHeader(i)}
                 >
@@ -248,7 +259,7 @@ function ImportFile() {
     current,
     defaultHeaders,
     handleChangeHeader,
-    mappedHeadersPayload,
+    // mappedHeadersPayload,
     // values.start,
     workBook,
   ]);
@@ -328,22 +339,24 @@ function ImportFile() {
         };
       });
 
-      if (file) {
-        await uploadDocument({
-          variables: {
-            file,
-            input,
-            config: {
-              start: Number(values.start),
-              sheet: {
-                value: current,
-                index: sheets.findIndex((sheetName) => sheetName === current),
-              },
-              headers: payloadHeaders,
-            },
-          },
-        });
-      }
+      console.log('<<< payload headers', payloadHeaders);
+
+      // if (file) {
+      //   await uploadDocument({
+      //     variables: {
+      //       file,
+      //       input,
+      //       config: {
+      //         start: Number(values.start),
+      //         sheet: {
+      //           value: current,
+      //           index: sheets.findIndex((sheetName) => sheetName === current),
+      //         },
+      //         headers: payloadHeaders,
+      //       },
+      //     },
+      //   });
+      // }
     },
     [
       columnHeaders,
@@ -455,6 +468,8 @@ function ImportFile() {
     values.term,
     values.type,
   ]);
+
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
 
   return (
     <>
@@ -622,8 +637,8 @@ function ImportFile() {
               <StyledTextField
                 type="number"
                 variant="outlined"
-                label="Dòng bắt đầu"
-                placeholder="Nhập dòng bắt đầu..."
+                label="Hàng tiêu đề"
+                placeholder="Nhập hàng tiêu đề..."
                 value={values.start}
                 onChange={(event) => {
                   setValues((v) => ({
@@ -634,7 +649,21 @@ function ImportFile() {
               />
             </Box>
             <Box>
-              <Typography variant="h6">Xem trước</Typography>
+              <Box display="flex" alignItems="center">
+                <Typography variant="h6" component="span">
+                  Xem trước
+                </Typography>
+                <IconButton
+                  sx={{ marginLeft: '0.25rem' }}
+                  size="large"
+                  color="inherit"
+                  aria-label="help"
+                  component="label"
+                  onClick={() => setOpenHelpDialog(true)}
+                >
+                  <HelpOutlineOutlinedIcon fontSize="inherit" />
+                </IconButton>
+              </Box>
               <Box
                 sx={{ width: '100%', height: 600, backgroundColor: 'white' }}
               >
@@ -661,6 +690,54 @@ function ImportFile() {
           </Box>
         )}
       </Box>
+      <Dialog open={openHelpDialog} onClose={() => setOpenHelpDialog(false)}>
+        <DialogTitle display="flex" alignItems="center">
+          <HelpOutlineOutlinedIcon fontSize="large" />{' '}
+          <Typography
+            sx={{ marginLeft: '0.25rem' }}
+            variant="h6"
+            component="span"
+          >
+            Hướng dẫn sử dụng
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ marginLeft: '1.5rem' }}>
+          <List
+            sx={{
+              listStyleType: 'number',
+              '& .MuiListItem-root': {
+                display: 'list-item',
+              },
+            }}
+          >
+            <ListItem>
+              <ListItemText>
+                Bản xem trước sẽ được hiển thị bắt đầu từ giá trị của Hàng tiêu
+                đề
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                Các cột sẽ được gắn các key mặc định tương ứng với header của
+                từng cột dựa trên file mẫu do người dùng cung cấp cho hệ thống.
+                <br />
+                <b>VD</b>: Đối với cột có tên "Họ và tên" thì sẽ để key tương
+                ứng là HO_TEN
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                Người dùng cần kiểm tra các key đã ở đúng tiêu đề (header) tương
+                ứng. Mọi sự nhầm lẫn sẽ gây ảnh hưởng đến dữ liệu hệ thống và
+                không thể khôi phục được
+              </ListItemText>
+            </ListItem>
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenHelpDialog(false)}>Đóng</Button>
+        </DialogActions>
+      </Dialog>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={uploadDocumentLoading}
