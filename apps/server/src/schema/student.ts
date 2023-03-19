@@ -141,6 +141,7 @@ const studentTypeDefs = gql`
     tenMH: String!
     tenLopHP: String!
     tinhTrang: String!
+    soTinChi: Int!
     diemGK: Float
     diemTH: Float
     diemCong: Float
@@ -155,8 +156,8 @@ const studentTypeDefs = gql`
   }
 
   type StudentAveragePoint {
-    dtbTong: Float!
-    xepLoai: String!
+    dtb: Float!
+    xepLoai: String
   }
 
   type StudentTerm {
@@ -281,6 +282,7 @@ const studentTypeDefs = gql`
     tuChonChuyenNganh: Int!
     totNghiep: Int!
     tongTC: Int!
+    tongTCDaHoc: Int!
     dtb: Float!
   }
 

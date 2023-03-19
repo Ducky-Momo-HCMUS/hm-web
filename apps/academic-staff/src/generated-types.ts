@@ -965,8 +965,8 @@ export type StudentAddParentInfoInput = {
 
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
-  dtbTong: Scalars['Float'];
-  xepLoai: Scalars['String'];
+  dtb: Scalars['Float'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentContact = {
@@ -1083,6 +1083,7 @@ export type StudentOverviewResult = {
   dtb: Scalars['Float'];
   tenCN: Scalars['String'];
   tongTC: Scalars['Int'];
+  tongTCDaHoc: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
   tuChonTuDo: Scalars['Int'];
@@ -1140,6 +1141,7 @@ export type StudentSubject = {
   diemTH?: Maybe<Scalars['Float']>;
   dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
@@ -2282,8 +2284,8 @@ export type StudentAveragePointByTermQuery = {
   __typename?: 'Query';
   studentAveragePointByTerm: {
     __typename?: 'StudentAveragePoint';
-    dtbTong: number;
-    xepLoai: string;
+    dtb: number;
+    xepLoai?: string | null | undefined;
   };
 };
 
@@ -2387,6 +2389,7 @@ export type StudentOverviewResultQuery = {
         tuChonChuyenNganh: number;
         totNghiep: number;
         tongTC: number;
+        tongTCDaHoc: number;
         dtb: number;
       }
     | null
@@ -2434,6 +2437,7 @@ export type StudentSubjectsByTermQuery = {
     tenMH: string;
     tenLopHP: string;
     tinhTrang: string;
+    soTinChi: number;
     diemGK?: number | null | undefined;
     diemTH?: number | null | undefined;
     diemCong?: number | null | undefined;
@@ -5990,7 +5994,7 @@ export type StudentAllTermsQueryResult = Apollo.QueryResult<
 export const StudentAveragePointByTermDocument = gql`
   query StudentAveragePointByTerm($studentId: String!, $term: Int!) {
     studentAveragePointByTerm(studentId: $studentId, term: $term) {
-      dtbTong
+      dtb
       xepLoai
     }
   }
@@ -6291,6 +6295,7 @@ export const StudentOverviewResultDocument = gql`
       tuChonChuyenNganh
       totNghiep
       tongTC
+      tongTCDaHoc
       dtb
     }
   }
@@ -6425,6 +6430,7 @@ export const StudentSubjectsByTermDocument = gql`
       tenMH
       tenLopHP
       tinhTrang
+      soTinChi
       diemGK
       diemTH
       diemCong

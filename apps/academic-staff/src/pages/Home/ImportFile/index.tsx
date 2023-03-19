@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
@@ -6,13 +7,21 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemText,
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
   Typography,
 } from '@mui/material';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import React, {
   useState,
   useCallback,
@@ -97,10 +106,8 @@ function ImportFile() {
     [values.type]
   );
 
-  const [
-    getColumnHeaderList,
-    { loading: columnHeaderListLoading, data: columnHeaderListData },
-  ] = useColumnHeaderListLazyQuery();
+  const [getColumnHeaderList, { data: columnHeaderListData }] =
+    useColumnHeaderListLazyQuery();
 
   useEffect(() => {
     getColumnHeaderList({
@@ -121,25 +128,69 @@ function ImportFile() {
     setColumnHeaders(defaultHeaders);
   }, [defaultHeaders]);
 
+  const mappedHeadersPayload = useMemo(() => {
+    if (!workBook[current]) {
+      return [];
+    }
+
+    const sheetHeaders = utils.sheet_to_json(workBook[current], {
+      header: 1,
+      range: Number(values.start) - 1,
+    })[0] as string[];
+
+    const mappedHeaders = sheetHeaders;
+    const cnt = new Array(sheetHeaders.length).fill(0);
+    mappedHeaders.forEach((header) => {
+      const findIndex = mappedHeaders.findIndex((item) => item === header);
+      cnt[findIndex] += 1;
+    });
+
+    cnt.forEach((count, index) => {
+      let tmpCount = count;
+      while (tmpCount >= 2) {
+        mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
+          tmpCount - 1
+        }`;
+        tmpCount -= 1;
+      }
+    });
+
+    const mappedHeadersPayload = mappedHeaders.map((header, index) => {
+      const originalHeader = header.split('_')[0];
+      const originalIndex = mappedHeaders.findIndex(
+        (item) => item === originalHeader
+      );
+
+      return {
+        key: defaultHeaders[originalIndex]?.key,
+        index,
+        value: header,
+      };
+    });
+
+    return mappedHeadersPayload;
+  }, [current, defaultHeaders, values.start, workBook]);
+
   const handleChangeHeader = useCallback(
     (index: number) => (event: SelectChangeEvent) => {
       const targetKey = event?.target.value;
-      const selectedHeader = defaultHeaders.find(
-        (item) => item.key === targetKey
-      );
+      const selectedHeader = mappedHeadersPayload[index];
 
+      // A key can only be chosen for one column
       setColumnHeaders((prevSelectedHeaders) => [
         ...prevSelectedHeaders.filter(
-          (prevSelectedHeader) => prevSelectedHeader.index !== index
+          (prevSelectedHeader) =>
+            prevSelectedHeader.index !== index &&
+            prevSelectedHeader.key !== targetKey
         ),
         {
-          key: selectedHeader?.key || '',
+          key: targetKey || '',
           value: selectedHeader?.value || '',
           index,
         },
       ]);
     },
-    [defaultHeaders]
+    [mappedHeadersPayload]
   );
 
   const { dataRows, dataColumns } = useMemo(() => {
@@ -153,9 +204,19 @@ function ImportFile() {
     }
     const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
 
+    // const sheetHeaders = utils.sheet_to_json(sheet, {
+    //   header: 1,
+    //   range: Number(values.start) - 1,
+    // })[0] as string[];
+
+    // const headers = defaultHeaders.map((header, index) => ({
+    //   ...header,
+    //   value: sheetHeaders[index],
+    // })) as ColumnHeader[];
+
     return {
       dataRows: utils
-        .sheet_to_json<Row>(workBook[current], { header: 1 })
+        .sheet_to_json<Row>(sheet, { header: 1 })
         .map((r, id) => ({ ...r, id })),
       dataColumns: Array.from(
         {
@@ -164,30 +225,30 @@ function ImportFile() {
         (_, i) => ({
           field: String(i),
           renderHeader: () => {
-            const defaultSelectedHeader = columnHeaders.find(
-              (item) => item.index === i
-            )?.key;
+            // const defaultSelectedHeader =
+            //   defaultHeaders.find(
+            //     (header) => header.value === mappedHeadersPayload[i]?.value
+            //   )?.key || '';
 
-            if (defaultSelectedHeader) {
-              return (
-                <StyledFormControl>
-                  <Select
-                    variant="standard"
-                    disableUnderline
-                    value={defaultSelectedHeader}
-                    onChange={handleChangeHeader(i)}
-                  >
-                    {defaultHeaders.map((columnHeader) => (
-                      <MenuItem value={columnHeader.key}>
-                        {columnHeader.value}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </StyledFormControl>
-              );
-            }
-
-            return utils.encode_col(i);
+            return (
+              <StyledFormControl>
+                <Select
+                  variant="standard"
+                  disableUnderline
+                  value={
+                    columnHeaders.find((column) => column.index === i)?.key
+                    // || defaultSelectedHeader
+                  }
+                  onChange={handleChangeHeader(i)}
+                >
+                  {defaultHeaders.map((columnHeader) => (
+                    <MenuItem value={columnHeader.key}>
+                      {columnHeader.key}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </StyledFormControl>
+            );
           },
           sortable: false,
           hideSortIcons: true,
@@ -197,7 +258,15 @@ function ImportFile() {
         })
       ),
     };
-  }, [columnHeaders, current, defaultHeaders, handleChangeHeader, workBook]);
+  }, [
+    columnHeaders,
+    current,
+    defaultHeaders,
+    handleChangeHeader,
+    // mappedHeadersPayload,
+    // values.start,
+    workBook,
+  ]);
 
   /* called when sheet dropdown is changed */
   function selectSheet(name: string) {
@@ -228,10 +297,14 @@ function ImportFile() {
     useUploadDocumentMutation({
       onCompleted: () => {
         toast.success('Cập nhật thông tin thành công');
-        setValues((v) => ({
-          ...v,
+        setValues({
           type: TYPES[0].label,
-        }));
+          year: '',
+          term: '',
+          subject: '',
+          class: 0,
+          start: '1',
+        });
         if (filePondRef.current) {
           filePondRef.current.removeFile();
         }
@@ -241,50 +314,6 @@ function ImportFile() {
         toast.error('Đã có  lỗi xảy ra');
       },
     });
-
-  const handleUploadDocument = useCallback(
-    async (event) => {
-      event.preventDefault();
-      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
-      const input = Object.assign(
-        {},
-        type && { type },
-        values.year && { namHoc: values.year },
-        values.term && { hocKy: values.term },
-        values.subject && { maMH: values.subject },
-        values.class && { tenLopHP: values.class }
-      );
-      if (file) {
-        await uploadDocument({
-          variables: {
-            file,
-            input,
-            config: {
-              start: Number(values.start),
-              sheet: {
-                value: current,
-                index: sheets.findIndex((sheetName) => sheetName === current),
-              },
-              headers: columnHeaders,
-            },
-          },
-        });
-      }
-    },
-    [
-      columnHeaders,
-      current,
-      file,
-      sheets,
-      uploadDocument,
-      values.class,
-      values.start,
-      values.subject,
-      values.term,
-      values.type,
-      values.year,
-    ]
-  );
 
   const [
     getImportHistory,
@@ -334,13 +363,76 @@ function ImportFile() {
 
   const { initialYear, initialTerm } = useMemo(() => {
     const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
-      data.maHK.toString()
+      data.hocKy.toString()
     );
     return {
       initialYear: years[years.length - 1],
       initialTerm: termsByYear?.[termsByYear.length - 1] || '',
     };
   }, [mappedData, years]);
+
+  const handleUploadDocument = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const selectedYear = values.year || initialYear;
+      const selectedTerm = values.term || initialTerm;
+      const input = Object.assign(
+        {},
+        type && { type },
+        selectedYear && { namHoc: Number(selectedYear) },
+        selectedTerm && { hocKy: Number(selectedTerm) },
+        values.subject && { maMH: values.subject },
+        values.class && { tenLopHP: values.class }
+      );
+
+      const payloadHeaders = columnHeaders.map((item) => {
+        const value =
+          mappedHeadersPayload.find((header) => header.index === item.index)
+            ?.value || '';
+
+        return {
+          ...item,
+          value,
+        };
+      });
+
+      console.log('<<< payload headers', payloadHeaders);
+
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input,
+            config: {
+              start: Number(values.start),
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: payloadHeaders,
+            },
+          },
+        });
+      }
+    },
+    [
+      columnHeaders,
+      current,
+      file,
+      initialTerm,
+      initialYear,
+      mappedHeadersPayload,
+      sheets,
+      uploadDocument,
+      values.class,
+      values.start,
+      values.subject,
+      values.term,
+      values.type,
+      values.year,
+    ]
+  );
 
   const { loading: courseListLoading, data: courseListData } =
     useCourseListQuery({
@@ -380,6 +472,8 @@ function ImportFile() {
     values.term,
     values.type,
   ]);
+
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
 
   return (
     <>
@@ -432,7 +526,7 @@ function ImportFile() {
                   MenuProps={MenuProps}
                 >
                   {terms.map((item) => (
-                    <MenuItem key={item.maHK} value={item.maHK}>
+                    <MenuItem key={item.maHK} value={item.hocKy}>
                       {item.hocKy}
                     </MenuItem>
                   ))}
@@ -547,8 +641,8 @@ function ImportFile() {
               <StyledTextField
                 type="number"
                 variant="outlined"
-                label="Dòng bắt đầu"
-                placeholder="Nhập dòng bắt đầu..."
+                label="Hàng tiêu đề"
+                placeholder="Nhập hàng tiêu đề..."
                 value={values.start}
                 onChange={(event) => {
                   setValues((v) => ({
@@ -559,7 +653,21 @@ function ImportFile() {
               />
             </Box>
             <Box>
-              <Typography variant="h6">Xem trước</Typography>
+              <Box display="flex" alignItems="center">
+                <Typography variant="h6" component="span">
+                  Xem trước
+                </Typography>
+                <IconButton
+                  sx={{ marginLeft: '0.25rem' }}
+                  size="large"
+                  color="inherit"
+                  aria-label="help"
+                  component="label"
+                  onClick={() => setOpenHelpDialog(true)}
+                >
+                  <HelpOutlineOutlinedIcon fontSize="inherit" />
+                </IconButton>
+              </Box>
               <Box
                 sx={{ width: '100%', height: 600, backgroundColor: 'white' }}
               >
@@ -572,10 +680,7 @@ function ImportFile() {
           </>
         )}
         {current.length > 0 && (
-          <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ width: '85%!important' }}>
-              {error.length > 0 && <ErrorMessage content={error} />}
-            </Box>
+          <Box mt={2} display="flex" justifyContent="flex-end">
             <Button
               type="submit"
               variant="contained"
@@ -586,6 +691,54 @@ function ImportFile() {
           </Box>
         )}
       </Box>
+      <Dialog open={openHelpDialog} onClose={() => setOpenHelpDialog(false)}>
+        <DialogTitle display="flex" alignItems="center">
+          <HelpOutlineOutlinedIcon fontSize="large" />{' '}
+          <Typography
+            sx={{ marginLeft: '0.25rem' }}
+            variant="h6"
+            component="span"
+          >
+            Hướng dẫn sử dụng
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ marginLeft: '1.5rem' }}>
+          <List
+            sx={{
+              listStyleType: 'number',
+              '& .MuiListItem-root': {
+                display: 'list-item',
+              },
+            }}
+          >
+            <ListItem>
+              <ListItemText>
+                Bản xem trước sẽ được hiển thị bắt đầu từ giá trị của Hàng tiêu
+                đề
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                Các cột sẽ được gắn các key mặc định tương ứng với header của
+                từng cột dựa trên file mẫu do người dùng cung cấp cho hệ thống.
+                <br />
+                <b>VD</b>: Đối với cột có tên "Họ và tên" thì sẽ để key tương
+                ứng là HO_TEN
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText>
+                Người dùng cần kiểm tra các key đã ở đúng tiêu đề (header) tương
+                ứng. Mọi sự nhầm lẫn sẽ gây ảnh hưởng đến dữ liệu hệ thống và
+                không thể khôi phục được
+              </ListItemText>
+            </ListItem>
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenHelpDialog(false)}>Đóng</Button>
+        </DialogActions>
+      </Dialog>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={uploadDocumentLoading}

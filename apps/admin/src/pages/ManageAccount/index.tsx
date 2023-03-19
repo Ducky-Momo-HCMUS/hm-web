@@ -9,7 +9,6 @@ import { ACCOUNT_LIST_PAGE_SIZE } from '../../constants';
 
 import AccountTable from './AccountTable';
 import AddOrEditAccountInfoDialog from './AddOrEditAccountInfoDialog';
-import ImportAccountInfoDialog from './ImportAccountInfoDialog';
 
 function ManageAccount() {
   const [openAddAccountInfoDialog, setOpenAddAccountInfoDialog] =
@@ -21,18 +20,6 @@ function ManageAccount() {
 
   const handleCloseAddAccountInfoDialog = () => {
     setOpenAddAccountInfoDialog(false);
-  };
-
-  const [file, setFile] = useState<File>();
-  const [openImportAccountInfoDialog, setOpenImportAccountInfoDialog] =
-    useState(false);
-
-  const handleOpenImportAccountInfoDialog = () => {
-    setOpenImportAccountInfoDialog(true);
-  };
-
-  const handleCloseImportAccountInfoDialog = () => {
-    setOpenImportAccountInfoDialog(false);
   };
 
   const [addAccount, { loading: addAccountLoading }] = useAccountAddMutation();
@@ -75,13 +62,6 @@ function ManageAccount() {
                 <AddIcon />
                 Thêm tài khoản
               </Button>
-              <Button
-                sx={{ textTransform: 'uppercase' }}
-                variant="contained"
-                onClick={handleOpenImportAccountInfoDialog}
-              >
-                Import tài khoản
-              </Button>
             </Box>
           </Box>
         </StyledStickyBox>
@@ -94,14 +74,6 @@ function ManageAccount() {
             onClickConfirm={handleAddAccount}
           />
         )}
-        <ImportAccountInfoDialog
-          open={openImportAccountInfoDialog}
-          onClose={handleCloseImportAccountInfoDialog}
-          onClickCancel={handleCloseImportAccountInfoDialog}
-          onClickConfirm={handleCloseImportAccountInfoDialog}
-          file={file}
-          setFile={setFile}
-        />
       </Box>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

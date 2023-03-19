@@ -970,8 +970,8 @@ export type StudentAddParentInfoInput = {
 
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
-  dtbTong: Scalars['Float'];
-  xepLoai: Scalars['String'];
+  dtb: Scalars['Float'];
+  xepLoai?: Maybe<Scalars['String']>;
 };
 
 export type StudentContact = {
@@ -1088,6 +1088,7 @@ export type StudentOverviewResult = {
   dtb: Scalars['Float'];
   tenCN: Scalars['String'];
   tongTC: Scalars['Int'];
+  tongTCDaHoc: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
   tuChonTuDo: Scalars['Int'];
@@ -1145,6 +1146,7 @@ export type StudentSubject = {
   diemTH?: Maybe<Scalars['Float']>;
   dtb?: Maybe<Scalars['Float']>;
   maMH: Scalars['String'];
+  soTinChi: Scalars['Int'];
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
@@ -2916,8 +2918,8 @@ export type StudentAveragePointResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentAveragePoint'] = ResolversParentTypes['StudentAveragePoint']
 > = {
-  dtbTong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  xepLoai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  xepLoai?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3085,6 +3087,7 @@ export type StudentOverviewResultResolvers<
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tongTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tongTCDaHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totNghiep?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tuChonChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tuChonTuDo?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -3166,6 +3169,7 @@ export type StudentSubjectResolvers<
   diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tinhTrang?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -13,7 +13,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { format } from 'date-fns';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledTitle,
@@ -21,6 +25,7 @@ import {
   StyledStickyBox,
 } from '../../../components/styles';
 import {
+  StudentDetailQuery,
   useStudentAllTermsQuery,
   useStudentAveragePointByTermQuery,
   useStudentSubjectsByTermQuery,
@@ -28,6 +33,8 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
+import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
+import { client } from '../../../ApolloClient';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
@@ -127,6 +134,13 @@ function AcademicReport() {
     return subjectsByTermData?.studentSubjectsByTerm || [];
   }, [subjectsByTermData?.studentSubjectsByTerm]);
 
+  const { studentDetail } = client.readQuery({
+    query: GET_STUDENT_DETAIL,
+    variables: {
+      studentId: id,
+    },
+  }) as StudentDetailQuery;
+
   return (
     <>
       <StyledStickyBox>
@@ -188,13 +202,37 @@ function AcademicReport() {
             </Button>
 
             <Button disabled sx={{ color: '#fff!important' }}>
-              ĐTB:{' '}
-              {averagePoint
-                ? `${averagePoint?.dtbTong} | ${averagePoint?.xepLoai}`
-                : 'Chưa có'}
+              ĐTB: {averagePoint ? `${averagePoint.dtb}` : 'Chưa có'}
             </Button>
           </StyledStatusBox>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          <PDFDownloadLink
+            document={
+              <ScorePDFTemplate
+                data={{
+                  maSV: id,
+                  tenSV: studentDetail?.tenSV,
+                  dob: format(new Date(studentDetail?.dob), 'dd/MM/yyyy'),
+                  hocKy: terms.find((item) => item.maHK === +values.term),
+                  namHoc: +values.year,
+                  monHoc: subjectsData,
+                  dtb: averagePoint?.dtb,
+                }}
+              />
+            }
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${
+              terms.find((item) => item.maHK === +values.term)?.hocKy || 0
+            }`}
+          >
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained">Xuất phiếu điểm</Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
@@ -204,12 +242,8 @@ function AcademicReport() {
             <Table stickyHeader aria-label="sticky table">
               <AcademicTableHead />
               <TableBody>
-                {subjectsData.map((row, index) => (
-                  <AcademicTableRow
-                    key={row.maMH}
-                    data={row}
-                    index={index + 1}
-                  />
+                {subjectsData.map((row) => (
+                  <AcademicTableRow key={row.maMH} data={row} />
                 ))}
               </TableBody>
             </Table>

@@ -1,7 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
+import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
+import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
   StyledStickyBox,
@@ -24,6 +27,7 @@ const OVERVIEW_CONTENT = [
   { title: 'Kiến thức tự chọn tự do', goal: '' },
   { title: 'Kiến thức tốt nghiệp', goal: '10' },
   { title: 'Tổng tín chỉ tích luỹ', goal: '138' },
+  { title: 'Tổng tín chỉ đã học', goal: '' },
   { title: 'Điểm trung bình', goal: '' },
 ];
 
@@ -58,6 +62,7 @@ function AcademicOverview() {
       data?.tuChonTuDo || 0,
       data?.totNghiep || 0,
       data?.tongTC || 0,
+      data?.tongTCDaHoc || 0,
       data?.dtb || 'Chưa có',
     ];
 
@@ -86,7 +91,20 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          <Button variant="contained">Xuất phiếu điểm</Button>
+          <PDFDownloadLink
+            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
+            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+          >
+            {({ loading }) =>
+              loading ? (
+                <Button variant="contained" disabled>
+                  Xuất phiếu điểm
+                </Button>
+              ) : (
+                <Button variant="contained">Xuất phiếu điểm</Button>
+              )
+            }
+          </PDFDownloadLink>
         </Box>
       </StyledStickyBox>
       <Box mt={3}>
