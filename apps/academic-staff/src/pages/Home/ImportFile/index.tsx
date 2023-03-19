@@ -315,65 +315,6 @@ function ImportFile() {
       },
     });
 
-  const handleUploadDocument = useCallback(
-    async (event) => {
-      event.preventDefault();
-      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
-      const input = Object.assign(
-        {},
-        type && { type },
-        values.year && { namHoc: values.year },
-        values.term && { hocKy: values.term },
-        values.subject && { maMH: values.subject },
-        values.class && { tenLopHP: values.class }
-      );
-
-      const payloadHeaders = columnHeaders.map((item) => {
-        const value =
-          mappedHeadersPayload.find((header) => header.index === item.index)
-            ?.value || '';
-
-        return {
-          ...item,
-          value,
-        };
-      });
-
-      console.log('<<< payload headers', payloadHeaders);
-
-      // if (file) {
-      //   await uploadDocument({
-      //     variables: {
-      //       file,
-      //       input,
-      //       config: {
-      //         start: Number(values.start),
-      //         sheet: {
-      //           value: current,
-      //           index: sheets.findIndex((sheetName) => sheetName === current),
-      //         },
-      //         headers: payloadHeaders,
-      //       },
-      //     },
-      //   });
-      // }
-    },
-    [
-      columnHeaders,
-      current,
-      file,
-      mappedHeadersPayload,
-      sheets,
-      uploadDocument,
-      values.class,
-      values.start,
-      values.subject,
-      values.term,
-      values.type,
-      values.year,
-    ]
-  );
-
   const [
     getImportHistory,
     { loading: importHistoryLoading, data: importHistoryData },
@@ -422,13 +363,76 @@ function ImportFile() {
 
   const { initialYear, initialTerm } = useMemo(() => {
     const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
-      data.maHK.toString()
+      data.hocKy.toString()
     );
     return {
       initialYear: years[years.length - 1],
       initialTerm: termsByYear?.[termsByYear.length - 1] || '',
     };
   }, [mappedData, years]);
+
+  const handleUploadDocument = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const selectedYear = values.year || initialYear;
+      const selectedTerm = values.term || initialTerm;
+      const input = Object.assign(
+        {},
+        type && { type },
+        selectedYear && { namHoc: Number(selectedYear) },
+        selectedTerm && { hocKy: Number(selectedTerm) },
+        values.subject && { maMH: values.subject },
+        values.class && { tenLopHP: values.class }
+      );
+
+      const payloadHeaders = columnHeaders.map((item) => {
+        const value =
+          mappedHeadersPayload.find((header) => header.index === item.index)
+            ?.value || '';
+
+        return {
+          ...item,
+          value,
+        };
+      });
+
+      console.log('<<< payload headers', payloadHeaders);
+
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input,
+            config: {
+              start: Number(values.start),
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: payloadHeaders,
+            },
+          },
+        });
+      }
+    },
+    [
+      columnHeaders,
+      current,
+      file,
+      initialTerm,
+      initialYear,
+      mappedHeadersPayload,
+      sheets,
+      uploadDocument,
+      values.class,
+      values.start,
+      values.subject,
+      values.term,
+      values.type,
+      values.year,
+    ]
+  );
 
   const { loading: courseListLoading, data: courseListData } =
     useCourseListQuery({
@@ -522,7 +526,7 @@ function ImportFile() {
                   MenuProps={MenuProps}
                 >
                   {terms.map((item) => (
-                    <MenuItem key={item.maHK} value={item.maHK}>
+                    <MenuItem key={item.maHK} value={item.hocKy}>
                       {item.hocKy}
                     </MenuItem>
                   ))}
