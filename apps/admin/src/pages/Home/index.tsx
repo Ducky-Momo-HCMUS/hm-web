@@ -15,11 +15,13 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PublishIcon from '@mui/icons-material/Publish';
 
 import Header from '../../components/Header';
 import ManageAccount from '../ManageAccount';
 import ManageTag from '../ManageTag';
 import ManageHomeroomTeacher from '../ManageHomeroomTeacher';
+import ImportAccount from '../ImportAccount';
 
 import {
   AppBar,
@@ -83,43 +85,45 @@ function Home() {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Quản lý tài khoản', 'Quản lý GVCN', 'Quản lý tag'].map(
-              (text, index) => (
-                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                  <StyledListItemButton
-                    active={selected === index}
+            {[
+              'Quản lý tài khoản',
+              'Import tài khoản',
+              'Quản lý GVCN',
+              'Quản lý tag',
+            ].map((text, index) => (
+              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                <StyledListItemButton
+                  active={selected === index}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                  }}
+                  onClick={() => setSelected(index)}
+                >
+                  <ListItemIcon
                     sx={{
-                      minHeight: 48,
-                      justifyContent: open ? 'initial' : 'center',
-                      px: 2.5,
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
                     }}
-                    onClick={() => setSelected(index)}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      {index === 0 && <ManageAccountsIcon />}
-                      {index === 1 && <AssignmentIndIcon />}
-                      {index === 2 && <TagIcon />}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={text}
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </StyledListItemButton>
-                </ListItem>
-              )
-            )}
+                    {index === 0 && <ManageAccountsIcon />}
+                    {index === 1 && <PublishIcon />}
+                    {index === 2 && <AssignmentIndIcon />}
+                    {index === 3 && <TagIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </StyledListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Drawer>
         <StyledContent component="main">
           {selected === 0 && <ManageAccount />}
-          {selected === 1 && <ManageHomeroomTeacher />}
-          {selected === 2 && <ManageTag />}
+          {selected === 1 && <ImportAccount />}
+          {selected === 2 && <ManageHomeroomTeacher />}
+          {selected === 3 && <ManageTag />}
         </StyledContent>
       </StyledContainer>
     </>
