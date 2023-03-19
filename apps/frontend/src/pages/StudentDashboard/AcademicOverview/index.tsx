@@ -27,6 +27,7 @@ const OVERVIEW_CONTENT = [
   { title: 'Kiến thức tự chọn tự do', goal: '' },
   { title: 'Kiến thức tốt nghiệp', goal: '10' },
   { title: 'Tổng tín chỉ tích luỹ', goal: '138' },
+  { title: 'Tổng tín chỉ đã học', goal: '' },
   { title: 'Điểm trung bình', goal: '' },
 ];
 
@@ -61,6 +62,7 @@ function AcademicOverview() {
       data?.tuChonTuDo || 0,
       data?.totNghiep || 0,
       data?.tongTC || 0,
+      data?.tongTCDaHoc || 0,
       data?.dtb || 'Chưa có',
     ];
 

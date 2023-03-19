@@ -98,27 +98,25 @@ class FileAPI extends BaseDataSource {
   // TODO add typing for file
   private createFormData(input: UploadDocumentInput, config: UploadFileConfig) {
     const formData = new FormData();
+
     Object.keys(input).forEach((key) => {
       if (!input[key]) {
         throw new UserInputError(`Missing ${key}`);
       }
-      formData.append(key, JSON.stringify(input[key]));
     });
 
     Object.keys(config).forEach((key) => {
-      if (key === 'headers') {
-        config[key].forEach((header) => {
-          formData.append('headers[]', JSON.stringify(header));
-        });
-        return;
-      }
-
       if (!config[key]) {
         throw new UserInputError(`Missing ${key}`);
       }
-
-      formData.append(key, JSON.stringify(config[key]));
     });
+
+    const metadata = JSON.stringify({
+      ...input,
+      ...config,
+    });
+
+    formData.append('metadata', metadata);
     return formData;
   }
 }
