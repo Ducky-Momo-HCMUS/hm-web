@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
@@ -34,7 +35,6 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
-// eslint-disable-next-line import/no-cycle
 import { client } from '../../../index';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
