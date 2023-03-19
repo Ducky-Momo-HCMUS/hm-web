@@ -26,14 +26,6 @@ interface State {
   showPassword: boolean;
 }
 
-const errorMessages = [
-  {
-    id: 'account_not_found',
-    message: 'Tài khoản không tồn tại',
-  },
-  { id: 'invalid_password', message: 'Mật khẩu không hợp lệ' },
-];
-
 function Login() {
   const [values, setValues] = useState<State>({
     showPassword: false,
@@ -78,7 +70,7 @@ function Login() {
       return;
     }
 
-    setError(loginError?.graphQLErrors?.[0]?.message);
+    setError('Email hoặc mật khẩu không hợp lệ');
   }, [loginError]);
 
   return (
