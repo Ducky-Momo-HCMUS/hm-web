@@ -660,6 +660,7 @@ export type NoteListItem = {
   maGC: Scalars['Int'];
   maSV?: Maybe<Scalars['String']>;
   noiDung: Scalars['String'];
+  sinhVien?: Maybe<StudentInfo>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -1044,6 +1045,11 @@ export type StudentEnrolledListItem = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type StudentInfo = {
+  __typename?: 'StudentInfo';
+  tenSV?: Maybe<Scalars['String']>;
 };
 
 export type StudentNotEnrolledList = {
@@ -2257,6 +2263,10 @@ export type NoteSearchQuery = {
       thoiGianTao: string;
       thoiGianSua?: string | null | undefined;
       maSV?: string | null | undefined;
+      sinhVien?:
+        | { __typename?: 'StudentInfo'; tenSV?: string | null | undefined }
+        | null
+        | undefined;
     }>;
   };
 };
@@ -5870,6 +5880,9 @@ export const NoteSearchDocument = gql`
         thoiGianTao
         thoiGianSua
         maSV
+        sinhVien {
+          tenSV
+        }
       }
     }
   }

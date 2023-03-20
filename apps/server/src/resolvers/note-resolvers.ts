@@ -26,6 +26,19 @@ export const noteResolver: Resolvers<ResolverContext> = {
       return res;
     },
   },
+  NoteListItem: {
+    sinhVien: async (parent, args, { dataSources }) => {
+      if (!parent.maSV) return null;
+      const res = await dataSources.studentAPI.getStudentDetail({
+        studentId: parent.maSV || '',
+      });
+
+      return {
+        tenSV: res.tenSV,
+      };
+    },
+  },
+
   Mutation: {
     noteAdd: async (_, args, { dataSources }) => {
       const res = await dataSources.noteAPI.addNote(args);

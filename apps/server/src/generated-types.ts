@@ -665,6 +665,7 @@ export type NoteListItem = {
   maGC: Scalars['Int'];
   maSV?: Maybe<Scalars['String']>;
   noiDung: Scalars['String'];
+  sinhVien?: Maybe<StudentInfo>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -1049,6 +1050,11 @@ export type StudentEnrolledListItem = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type StudentInfo = {
+  __typename?: 'StudentInfo';
+  tenSV?: Maybe<Scalars['String']>;
 };
 
 export type StudentNotEnrolledList = {
@@ -1495,6 +1501,7 @@ export type ResolversTypes = {
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentEnrolledList: ResolverTypeWrapper<StudentEnrolledList>;
   StudentEnrolledListItem: ResolverTypeWrapper<StudentEnrolledListItem>;
+  StudentInfo: ResolverTypeWrapper<StudentInfo>;
   StudentNotEnrolledList: ResolverTypeWrapper<StudentNotEnrolledList>;
   StudentNotEnrolledListItem: ResolverTypeWrapper<StudentNotEnrolledListItem>;
   StudentNote: ResolverTypeWrapper<StudentNote>;
@@ -1634,6 +1641,7 @@ export type ResolversParentTypes = {
   StudentEditParentInfoInput: StudentEditParentInfoInput;
   StudentEnrolledList: StudentEnrolledList;
   StudentEnrolledListItem: StudentEnrolledListItem;
+  StudentInfo: StudentInfo;
   StudentNotEnrolledList: StudentNotEnrolledList;
   StudentNotEnrolledListItem: StudentNotEnrolledListItem;
   StudentNote: StudentNote;
@@ -2589,6 +2597,11 @@ export type NoteListItemResolvers<
   maGC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   maSV?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   noiDung?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sinhVien?: Resolver<
+    Maybe<ResolversTypes['StudentInfo']>,
+    ParentType,
+    ContextType
+  >;
   thoiGianSua?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -3024,6 +3037,14 @@ export type StudentEnrolledListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StudentInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentInfo'] = ResolversParentTypes['StudentInfo']
+> = {
+  tenSV?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type StudentNotEnrolledListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentNotEnrolledList'] = ResolversParentTypes['StudentNotEnrolledList']
@@ -3435,6 +3456,7 @@ export type Resolvers<ContextType = any> = {
   StudentDetailSubjectsResult?: StudentDetailSubjectsResultResolvers<ContextType>;
   StudentEnrolledList?: StudentEnrolledListResolvers<ContextType>;
   StudentEnrolledListItem?: StudentEnrolledListItemResolvers<ContextType>;
+  StudentInfo?: StudentInfoResolvers<ContextType>;
   StudentNotEnrolledList?: StudentNotEnrolledListResolvers<ContextType>;
   StudentNotEnrolledListItem?: StudentNotEnrolledListItemResolvers<ContextType>;
   StudentNote?: StudentNoteResolvers<ContextType>;
