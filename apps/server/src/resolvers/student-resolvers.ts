@@ -94,6 +94,16 @@ export const studentResolver: Resolvers<ResolverContext> = {
       return res.data;
     },
   },
+  NoteDetail: {
+    sinhVien(parent, args, { dataSources }) {
+      if (!parent.maSV) {
+        return null;
+      }
+      return dataSources.studentAPI.getStudentDetail({
+        studentId: parent.maSV,
+      });
+    },
+  },
 };
 
 export default studentResolver;

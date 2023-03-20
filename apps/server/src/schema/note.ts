@@ -39,6 +39,8 @@ const noteTypeDefs = gql`
     thoiGianTao: String!
     thoiGianSua: String
     ghiChuHinhAnh: [NoteImage!]!
+    maSV: String
+    sinhVien: StudentDetail
   }
 
   type NoteTag {

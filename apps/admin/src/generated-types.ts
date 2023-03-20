@@ -628,7 +628,9 @@ export type NoteDetail = {
   ghiChuHinhAnh: Array<NoteImage>;
   ghiChuTag: Array<NoteTag>;
   maGC: Scalars['Int'];
+  maSV?: Maybe<Scalars['String']>;
   noiDung: Scalars['String'];
+  sinhVien?: Maybe<StudentDetail>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
