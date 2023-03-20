@@ -27,10 +27,10 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import Header from '../../components/Header';
 
-import ImportFile from './ImportFile';
 import {
   AppBar,
   Drawer,
@@ -40,17 +40,11 @@ import {
   StyledToolbar,
   DrawerHeader,
 } from './styles';
-import HomeroomTeacherList from './HomeroomTeacherList';
-import StudentList from './StudentList';
-import MajorCourseList from './MajorCourseList';
-import CourseRegisterList from './CourseRegisterList';
-import CourseScoreList from './CourseScoreList';
-import TrainingPointList from './TrainingPointList';
-import PostponeAbsentList from './PostponeAbsentList';
 
 function Home() {
-  const [selected, setSelected] = useState(0);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClickOpen = useCallback(() => {
     setOpen(true);
@@ -111,18 +105,18 @@ function Home() {
           <Divider />
           <List>
             {[
-              'Danh sách GVCN',
-              'Danh sách sinh viên',
-              'Môn học và chuyên ngành',
-              'Đăng ký học phần',
-              'Điểm học phần',
-              'Điểm rèn luyện',
-              'Hoãn/Vắng thi',
-              'Nhập thông tin',
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              { page: 'Danh sách GVCN', url: '/homeroom-teachers' },
+              { page: 'Danh sách sinh viên', url: '/students' },
+              { page: 'Môn học và chuyên ngành', url: '/major-courses' },
+              { page: 'Đăng ký học phần', url: '/course-registration' },
+              { page: 'Điểm học phần', url: '/course-result' },
+              { page: 'Điểm rèn luyện', url: '/training-result' },
+              { page: 'Hoãn/Vắng thi', url: '/exam-status' },
+              { page: 'Nhập thông tin', url: '/import-file' },
+            ].map(({ page, url }, index) => (
+              <ListItem key={url} disablePadding sx={{ display: 'block' }}>
                 <StyledListItemButton
-                  active={selected === index}
+                  active={location.pathname.includes(url)}
                   sx={{
                     minHeight: 48,
                     justifyContent: openDrawer ? 'initial' : 'center',
@@ -134,7 +128,7 @@ function Home() {
                       return;
                     }
 
-                    setSelected(index);
+                    navigate(url);
                   }}
                 >
                   <ListItemIcon
@@ -154,7 +148,7 @@ function Home() {
                     {index === 7 && <PublishIcon />}
                   </ListItemIcon>
                   <ListItemText
-                    primary={text}
+                    primary={page}
                     sx={{ opacity: openDrawer ? 1 : 0 }}
                   />
                 </StyledListItemButton>
@@ -163,14 +157,7 @@ function Home() {
           </List>
         </Drawer>
         <StyledContent component="main">
-          {selected === 0 && <HomeroomTeacherList />}
-          {selected === 1 && <StudentList />}
-          {selected === 2 && <MajorCourseList />}
-          {selected === 3 && <CourseRegisterList />}
-          {selected === 4 && <CourseScoreList />}
-          {selected === 5 && <TrainingPointList />}
-          {selected === 6 && <PostponeAbsentList />}
-          {selected === 7 && <ImportFile />}
+          <Outlet />
         </StyledContent>
         <Dialog
           open={open}
@@ -200,7 +187,7 @@ function Home() {
               color="primary"
               onClick={() => {
                 setOpen(false);
-                setSelected(7);
+                navigate('/import-file');
               }}
               autoFocus
             >

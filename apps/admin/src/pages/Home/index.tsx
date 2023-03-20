@@ -16,12 +16,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import PublishIcon from '@mui/icons-material/Publish';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import Header from '../../components/Header';
-import ManageAccount from '../ManageAccount';
-import ManageTag from '../ManageTag';
-import ManageHomeroomTeacher from '../ManageHomeroomTeacher';
-import ImportAccount from '../ImportAccount';
 
 import {
   AppBar,
@@ -34,9 +31,10 @@ import {
 } from './styles';
 
 function Home() {
-  const [selected, setSelected] = useState(0);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -86,20 +84,20 @@ function Home() {
           <Divider />
           <List>
             {[
-              'Quản lý tài khoản',
-              'Import tài khoản',
-              'Quản lý GVCN',
-              'Quản lý tag',
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              { page: 'Quản lý tài khoản', url: 'account-management' },
+              { page: 'Import tài khoản', url: 'import-account' },
+              { page: 'Quản lý GVCN', url: 'teacher-management' },
+              { page: 'Quản lý tag', url: 'tag-management' },
+            ].map(({ page, url }, index) => (
+              <ListItem key={url} disablePadding sx={{ display: 'block' }}>
                 <StyledListItemButton
-                  active={selected === index}
+                  active={location.pathname.includes(url)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                   }}
-                  onClick={() => setSelected(index)}
+                  onClick={() => navigate(url)}
                 >
                   <ListItemIcon
                     sx={{
@@ -113,17 +111,14 @@ function Home() {
                     {index === 2 && <AssignmentIndIcon />}
                     {index === 3 && <TagIcon />}
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={page} sx={{ opacity: open ? 1 : 0 }} />
                 </StyledListItemButton>
               </ListItem>
             ))}
           </List>
         </Drawer>
         <StyledContent component="main">
-          {selected === 0 && <ManageAccount />}
-          {selected === 1 && <ImportAccount />}
-          {selected === 2 && <ManageHomeroomTeacher />}
-          {selected === 3 && <ManageTag />}
+          <Outlet />
         </StyledContent>
       </StyledContainer>
     </>

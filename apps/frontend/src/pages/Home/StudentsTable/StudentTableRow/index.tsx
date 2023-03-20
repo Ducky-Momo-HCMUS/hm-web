@@ -67,7 +67,9 @@ function StudentTableRow({
       <TableCell>{index}</TableCell>
       <TableCell>{maSV}</TableCell>
       <TableCell>
-        <StyledRouterLink to={`/students/${maSV}`}>{tenSV}</StyledRouterLink>
+        <StyledRouterLink to={`/students/${maSV}/info`}>
+          {tenSV}
+        </StyledRouterLink>
       </TableCell>
       <TableCell>{tenCN || 'Chưa có'}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
