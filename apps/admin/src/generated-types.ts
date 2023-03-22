@@ -707,6 +707,7 @@ export type Query = {
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
   studentAbsentList: StudentAbsentList;
+  studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -850,6 +851,10 @@ export type QueryStudentAbsentListArgs = {
   termId: Scalars['Int'];
 };
 
+export type QueryStudentAllSubjectsResultArgs = {
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentAllTermsArgs = {
   studentId: Scalars['String'];
 };
@@ -962,6 +967,16 @@ export type StudentAddParentInfoInput = {
   quanHe: Scalars['String'];
   sdt: Scalars['String'];
   tenPH: Scalars['String'];
+};
+
+export type StudentAllSubjectsResult = {
+  __typename?: 'StudentAllSubjectsResult';
+  batBuocChuyenNganh: StudentDetailSubjectsResult;
+  coSoNganh: StudentDetailSubjectsResult;
+  daiCuong: StudentDetailSubjectsResult;
+  totNghiep: StudentDetailSubjectsResult;
+  tuChonChuyenNganh: StudentDetailSubjectsResult;
+  tuChonTuDo: StudentDetailSubjectsResult;
 };
 
 export type StudentAveragePoint = {
@@ -2268,6 +2283,95 @@ export type NoteSearchQuery = {
         | null
         | undefined;
     }>;
+  };
+};
+
+export type StudentAllSubjectsResultQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentAllSubjectsResultQuery = {
+  __typename?: 'Query';
+  studentAllSubjectsResult: {
+    __typename?: 'StudentAllSubjectsResult';
+    daiCuong: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
+    coSoNganh: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
+    batBuocChuyenNganh: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
+    tuChonChuyenNganh: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
+    tuChonTuDo: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
+    totNghiep: {
+      __typename?: 'StudentDetailSubjectsResult';
+      tichLuy: number;
+      monHoc: Array<{
+        __typename?: 'SubjectDetailResult';
+        maMH: string;
+        tenMH: string;
+        soTC: number;
+        namHoc: number;
+        hocKy: number;
+        dtb: number;
+      }>;
+    };
   };
 };
 
@@ -5943,6 +6047,129 @@ export type NoteSearchLazyQueryHookResult = ReturnType<
 export type NoteSearchQueryResult = Apollo.QueryResult<
   NoteSearchQuery,
   NoteSearchQueryVariables
+>;
+export const StudentAllSubjectsResultDocument = gql`
+  query StudentAllSubjectsResult($studentId: String!) {
+    studentAllSubjectsResult(studentId: $studentId) {
+      daiCuong {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+      coSoNganh {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+      batBuocChuyenNganh {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+      tuChonChuyenNganh {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+      tuChonTuDo {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+      totNghiep {
+        tichLuy
+        monHoc {
+          maMH
+          tenMH
+          soTC
+          namHoc
+          hocKy
+          dtb
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentAllSubjectsResultQuery__
+ *
+ * To run a query within a React component, call `useStudentAllSubjectsResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAllSubjectsResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAllSubjectsResultQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentAllSubjectsResultQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >(StudentAllSubjectsResultDocument, options);
+}
+export function useStudentAllSubjectsResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >(StudentAllSubjectsResultDocument, options);
+}
+export type StudentAllSubjectsResultQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsResultQuery
+>;
+export type StudentAllSubjectsResultLazyQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsResultLazyQuery
+>;
+export type StudentAllSubjectsResultQueryResult = Apollo.QueryResult<
+  StudentAllSubjectsResultQuery,
+  StudentAllSubjectsResultQueryVariables
 >;
 export const StudentAllTermsDocument = gql`
   query StudentAllTerms($studentId: String!) {

@@ -67,6 +67,12 @@ export const studentResolver: Resolvers<ResolverContext> = {
       );
       return res.data.data;
     },
+    studentAllSubjectsResult: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentAllSubjectsResult(
+        args
+      );
+      return res;
+    },
   },
   Mutation: {
     studentAddContact: async (_, args, { dataSources }) => {

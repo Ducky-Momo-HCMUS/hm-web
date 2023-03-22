@@ -22,6 +22,7 @@ import {
   QueryStudentTrainingPointListArgs,
   QueryStudentPostponeListArgs,
   QueryStudentAbsentListArgs,
+  QueryStudentAllSubjectsResultArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -244,6 +245,49 @@ class StudentAPI extends BaseDataSource {
       return overviewResult;
     } catch (error) {
       logger.error('Error: cannot fetch student overview result');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getStudentAllSubjectsResult({
+    studentId,
+  }: QueryStudentAllSubjectsResultArgs) {
+    try {
+      const daiCuong = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'daiCuong',
+      });
+      const coSoNganh = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'coSoNganh',
+      });
+      const batBuocChuyenNganh = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'batBuocNganh',
+      });
+      const tuChonChuyenNganh = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'tuChonChuyenNganh',
+      });
+      const tuChonTuDo = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'tuChonTuDo',
+      });
+      const totNghiep = await this.getStudentDetailSubjectsResult({
+        studentId,
+        subject: 'totNghiep',
+      });
+
+      return {
+        daiCuong: daiCuong.data.data,
+        coSoNganh: coSoNganh.data.data,
+        batBuocChuyenNganh: batBuocChuyenNganh.data.data,
+        tuChonChuyenNganh: tuChonChuyenNganh.data.data,
+        tuChonTuDo: tuChonTuDo.data.data,
+        totNghiep: totNghiep.data.data,
+      };
+    } catch (error) {
+      logger.error('Error: cannot fetch student all subjects result');
       throw this.handleError(error as ApolloError);
     }
   }

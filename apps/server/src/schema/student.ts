@@ -32,6 +32,7 @@ const studentTypeDefs = gql`
       studentId: String!
       subject: String!
     ): StudentDetailSubjectsResult!
+    studentAllSubjectsResult(studentId: String!): StudentAllSubjectsResult!
     studentEnrolledList(
       termId: Int!
       page: Int!
@@ -74,6 +75,15 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+  }
+
+  type StudentAllSubjectsResult {
+    daiCuong: StudentDetailSubjectsResult!
+    coSoNganh: StudentDetailSubjectsResult!
+    batBuocChuyenNganh: StudentDetailSubjectsResult!
+    tuChonChuyenNganh: StudentDetailSubjectsResult!
+    tuChonTuDo: StudentDetailSubjectsResult!
+    totNghiep: StudentDetailSubjectsResult!
   }
 
   type StudentAbsentList {
