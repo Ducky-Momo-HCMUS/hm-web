@@ -59,6 +59,10 @@ export const homeroomResolver: Resolvers<ResolverContext> = {
       );
       return res.data;
     },
+    homeroomReportDetailByTerm: async (_, args, { dataSources }) => {
+      const res = await dataSources.homeroomAPI.getHomeroomReportDetail(args);
+      return res;
+    },
   },
   Mutation: {
     homeroomAddWatchlist: async (_, args, { dataSources }) => {

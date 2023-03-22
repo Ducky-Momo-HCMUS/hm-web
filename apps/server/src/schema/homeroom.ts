@@ -43,6 +43,10 @@ const homeroomTypeDefs = gql`
       homeroomId: String!
       term: Int!
     ): HomeroomExamAbsentList!
+    homeroomReportDetailByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomReportDetailByTerm!
   }
 
   extend type Mutation {
@@ -52,6 +56,13 @@ const homeroomTypeDefs = gql`
     homeroomDeleteWatchlist(
       payload: HomeroomDeleteWatchlistInput!
     ): HomeroomDeleteWatchlistResponse!
+  }
+
+  type HomeroomReportDetailByTerm {
+    overviewReport: HomeroomOverviewReport!
+    finalResult: HomeroomFinalResultList!
+    examAbsent: HomeroomExamAbsentList!
+    examPostpone: HomeroomPostponeExamList!
   }
 
   input HomeroomAddWatchlistInput {

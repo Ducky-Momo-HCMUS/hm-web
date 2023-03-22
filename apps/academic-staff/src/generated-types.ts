@@ -365,6 +365,14 @@ export type HomeroomPostponeExamListSubject = {
   tenMH: Scalars['String'];
 };
 
+export type HomeroomReportDetailByTerm = {
+  __typename?: 'HomeroomReportDetailByTerm';
+  examAbsent: HomeroomExamAbsentList;
+  examPostpone: HomeroomPostponeExamList;
+  finalResult: HomeroomFinalResultList;
+  overviewReport: HomeroomOverviewReport;
+};
+
 export type HomeroomStudentList = {
   __typename?: 'HomeroomStudentList';
   data?: Maybe<Array<HomeroomStudentListItem>>;
@@ -697,6 +705,7 @@ export type Query = {
   homeroomNotEnrolledListByTerm: HomeroomNotEnrolledList;
   homeroomOverviewReportByTerm: HomeroomOverviewReport;
   homeroomPostponeExamListByTerm: HomeroomPostponeExamList;
+  homeroomReportDetailByTerm: HomeroomReportDetailByTerm;
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
@@ -791,6 +800,11 @@ export type QueryHomeroomOverviewReportByTermArgs = {
 };
 
 export type QueryHomeroomPostponeExamListByTermArgs = {
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+};
+
+export type QueryHomeroomReportDetailByTermArgs = {
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
 };
@@ -2158,6 +2172,84 @@ export type HomeroomPostponeExamListByTermQuery = {
       };
       monHoc: { __typename?: 'HomeroomPostponeExamListSubject'; tenMH: string };
     }>;
+  };
+};
+
+export type HomeroomReportDetailByTermQueryVariables = Exact<{
+  homeroomId: Scalars['String'];
+  term: Scalars['Int'];
+}>;
+
+export type HomeroomReportDetailByTermQuery = {
+  __typename?: 'Query';
+  homeroomReportDetailByTerm: {
+    __typename?: 'HomeroomReportDetailByTerm';
+    overviewReport: {
+      __typename?: 'HomeroomOverviewReport';
+      siSo: {
+        __typename?: 'HomeroomNumberOverview';
+        tong: number;
+        nam: number;
+        nu: number;
+      };
+      hocTap: {
+        __typename?: 'HomeroomLearnOverview';
+        xuatSac: number;
+        gioi: number;
+        kha: number;
+        trungBinh: number;
+        yeu: number;
+        kem: number;
+        chungChiNgoaiNgu: number;
+      };
+      drl: {
+        __typename?: 'HomeroomTrainingPointOverview';
+        xuatSac: number;
+        gioi: number;
+        kha: number;
+        trungBinh: number;
+        yeu: number;
+        kem: number;
+      };
+    };
+    finalResult: {
+      __typename?: 'HomeroomFinalResultList';
+      total: number;
+      formatted: Array<{
+        __typename?: 'HomeroomFinalResultListItem';
+        maSV: string;
+        tenSV: string;
+        dtb?: number | null | undefined;
+        xepLoai?: string | null | undefined;
+      }>;
+    };
+    examAbsent: {
+      __typename?: 'HomeroomExamAbsentList';
+      data: Array<{
+        __typename?: 'HomeroomExamAbsentListItem';
+        sinhVien: {
+          __typename?: 'HomeroomExamAbsentListStudentInfo';
+          maSV: string;
+          tenSV: string;
+        };
+        monHoc: { __typename?: 'HomeroomExamAbsentListSubject'; tenMH: string };
+      }>;
+    };
+    examPostpone: {
+      __typename?: 'HomeroomPostponeExamList';
+      data: Array<{
+        __typename?: 'HomeroomPostponeExamListItem';
+        sinhVien: {
+          __typename?: 'HomeroomPostponeExamListStudentInfo';
+          maSV: string;
+          tenSV: string;
+        };
+        monHoc: {
+          __typename?: 'HomeroomPostponeExamListSubject';
+          tenMH: string;
+        };
+      }>;
+    };
   };
 };
 
@@ -5665,6 +5757,119 @@ export type HomeroomPostponeExamListByTermLazyQueryHookResult = ReturnType<
 export type HomeroomPostponeExamListByTermQueryResult = Apollo.QueryResult<
   HomeroomPostponeExamListByTermQuery,
   HomeroomPostponeExamListByTermQueryVariables
+>;
+export const HomeroomReportDetailByTermDocument = gql`
+  query HomeroomReportDetailByTerm($homeroomId: String!, $term: Int!) {
+    homeroomReportDetailByTerm(homeroomId: $homeroomId, term: $term) {
+      overviewReport {
+        siSo {
+          tong
+          nam
+          nu
+        }
+        hocTap {
+          xuatSac
+          gioi
+          kha
+          trungBinh
+          yeu
+          kem
+          chungChiNgoaiNgu
+        }
+        drl {
+          xuatSac
+          gioi
+          kha
+          trungBinh
+          yeu
+          kem
+        }
+      }
+      finalResult {
+        total
+        formatted {
+          maSV
+          tenSV
+          dtb
+          xepLoai
+        }
+      }
+      examAbsent {
+        data {
+          sinhVien {
+            maSV
+            tenSV
+          }
+          monHoc {
+            tenMH
+          }
+        }
+      }
+      examPostpone {
+        data {
+          sinhVien {
+            maSV
+            tenSV
+          }
+          monHoc {
+            tenMH
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useHomeroomReportDetailByTermQuery__
+ *
+ * To run a query within a React component, call `useHomeroomReportDetailByTermQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHomeroomReportDetailByTermQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHomeroomReportDetailByTermQuery({
+ *   variables: {
+ *      homeroomId: // value for 'homeroomId'
+ *      term: // value for 'term'
+ *   },
+ * });
+ */
+export function useHomeroomReportDetailByTermQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    HomeroomReportDetailByTermQuery,
+    HomeroomReportDetailByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    HomeroomReportDetailByTermQuery,
+    HomeroomReportDetailByTermQueryVariables
+  >(HomeroomReportDetailByTermDocument, options);
+}
+export function useHomeroomReportDetailByTermLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    HomeroomReportDetailByTermQuery,
+    HomeroomReportDetailByTermQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    HomeroomReportDetailByTermQuery,
+    HomeroomReportDetailByTermQueryVariables
+  >(HomeroomReportDetailByTermDocument, options);
+}
+export type HomeroomReportDetailByTermQueryHookResult = ReturnType<
+  typeof useHomeroomReportDetailByTermQuery
+>;
+export type HomeroomReportDetailByTermLazyQueryHookResult = ReturnType<
+  typeof useHomeroomReportDetailByTermLazyQuery
+>;
+export type HomeroomReportDetailByTermQueryResult = Apollo.QueryResult<
+  HomeroomReportDetailByTermQuery,
+  HomeroomReportDetailByTermQueryVariables
 >;
 export const HomeroomStudentListDocument = gql`
   query HomeroomStudentList(
