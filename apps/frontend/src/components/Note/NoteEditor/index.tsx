@@ -191,21 +191,29 @@ function NoteEditor({
         </Box>
       </StyledDialog>
       <Box>
-        {isAdding && (
+        {isAdding ? (
           <Button
             sx={{ width: '50%', borderRadius: 0 }}
             variant="outlined"
             onClick={handleReset}
           >
-            Hủy ghi chú
+            Hủy
+          </Button>
+        ) : (
+          <Button
+            sx={{ width: '50%', borderRadius: 0 }}
+            variant="outlined"
+            onClick={handleReset}
+          >
+            Đóng
           </Button>
         )}
         <Button
-          sx={{ width: isAdding ? '50%' : '100%', borderRadius: 0 }}
+          sx={{ width: '50%', borderRadius: 0 }}
           variant="contained"
           onClick={onClickSave}
         >
-          Lưu ghi chú
+          Lưu
         </Button>
       </Box>
     </>
