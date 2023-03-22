@@ -8,6 +8,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import ClassTable from '../../ClassDetail/ClassTable';
 import ReportInfo from '../ReportInfo';
+import { FINAL_RESULT_LIST_PAGE_SIZE } from '../../../constants';
 
 const semesterResultColumns = [
   { id: 'maSV', label: 'MSSV' },
@@ -16,7 +17,6 @@ const semesterResultColumns = [
   { id: 'xepLoai', label: 'Xếp loại' },
 ];
 
-const ROWS_PER_PAGE = 5;
 const NUMBER_REPORT_TITLE_LIST = [
   'Tổng số sinh viên',
   'Tổng số sinh viên nam',
@@ -140,7 +140,7 @@ function ClassOverview({
         total={homeroomFinalResultListLength}
         loading={homeroomFinalResultListLoading}
         page={page}
-        rowsPerPage={ROWS_PER_PAGE}
+        rowsPerPage={FINAL_RESULT_LIST_PAGE_SIZE}
         handleChangePage={handleChangePage}
         hasFilter={false}
       />
