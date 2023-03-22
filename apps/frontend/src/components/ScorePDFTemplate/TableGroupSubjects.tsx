@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   tableRow: { flexDirection: 'row' },
   tableCell: {
     border: '1px solid #000',
-    paddingLeft: 10,
+    paddingLeft: 5,
   },
   noLeftBorder: {
     borderLeft: 'none',
@@ -48,7 +48,7 @@ interface TableProps {
 function TableGroupSubjects({ data }: TableProps) {
   if (data.monHoc?.length !== 0)
     return (
-      <View style={styles.tableContainer}>
+      <View style={styles.tableContainer} wrap={false}>
         <View style={styles.tableHeader}>
           <Text style={[styles.tableCell, { width: '60%' }]}>
             {data.loaiMon}

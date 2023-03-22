@@ -97,8 +97,6 @@ function AcademicOverview() {
     ]
   );
 
-  console.log(studentOverviewResultData);
-
   return (
     <>
       <StyledStickyBox>

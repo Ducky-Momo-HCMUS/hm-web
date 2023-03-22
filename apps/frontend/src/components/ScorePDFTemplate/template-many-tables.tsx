@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Document,
   Page,
@@ -36,12 +36,12 @@ Font.register({
 
 // Create styles
 const styles = StyleSheet.create({
-  all: { fontFamily: 'Roboto', fontSize: '10px' },
+  all: { fontFamily: 'Roboto', fontSize: '10px', padding: 40 },
   header: {
     flexDirection: 'row',
   },
   header__column: {
-    margin: 20,
+    padding: 20,
     fontSize: '10px',
     width: '50%',
     textAlign: 'center',
@@ -52,7 +52,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 700,
   },
-  info: { marginTop: 20, marginLeft: 80 },
+  info: {
+    paddingTop: 20,
+    paddingLeft: 80,
+  },
   info_row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -66,13 +69,13 @@ const styles = StyleSheet.create({
   },
   creditTotal: {
     flexDirection: 'row',
-    marginLeft: 60,
+    paddingLeft: 60,
     fontWeight: 500,
   },
   signature: {
     textAlign: 'center',
-    marginLeft: 350,
-    marginTop: 30,
+    paddingLeft: 350,
+    paddingTop: 30,
   },
 });
 
@@ -97,7 +100,7 @@ function FullScorePDFTemplate({ data }: ScoreTemplateProps) {
 
   return (
     <Document>
-      <Page size="A4" style={styles.all}>
+      <Page size="A4" style={styles.all} wrap>
         <View style={styles.header}>
           <View style={styles.header__column}>
             <Text>ĐẠI HỌC QUỐC GIA TP HCM</Text>
@@ -133,122 +136,86 @@ function FullScorePDFTemplate({ data }: ScoreTemplateProps) {
             </Text>
           </View>
         </View>
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
-            tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[1].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.coSoNganh.monHoc,
-            tichLuy: data.loaiMonHoc?.coSoNganh.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[2].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[2].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.batBuocChuyenNganh.monHoc,
-            tichLuy: data.loaiMonHoc?.batBuocChuyenNganh.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[3].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[3].goal,
-          }}
-        />
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.tuChonChuyenNganh.monHoc,
-            tichLuy: data.loaiMonHoc?.tuChonChuyenNganh.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[4].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[4].goal,
-          }}
-        />
+        <View wrap>
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.daiCuong?.monHoc,
+              tichLuy: data.loaiMonHoc?.daiCuong?.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[1].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[1].goal,
+            }}
+          />
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.coSoNganh.monHoc,
+              tichLuy: data.loaiMonHoc?.coSoNganh.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[2].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[2].goal,
+            }}
+          />
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.batBuocChuyenNganh.monHoc,
+              tichLuy: data.loaiMonHoc?.batBuocChuyenNganh.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[3].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[3].goal,
+            }}
+          />
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.tuChonChuyenNganh.monHoc,
+              tichLuy: data.loaiMonHoc?.tuChonChuyenNganh.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[4].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[4].goal,
+            }}
+          />
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.tuChonTuDo.monHoc,
+              tichLuy: data.loaiMonHoc?.tuChonTuDo.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[5].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[5].goal,
+            }}
+          />
 
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.tuChonTuDo.monHoc,
-            tichLuy: data.loaiMonHoc?.tuChonTuDo.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[5].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[5].goal,
-          }}
-        />
-
-        <TableGroupSubjects
-          data={{
-            monHoc: data.loaiMonHoc?.totNghiep.monHoc,
-            tichLuy: data.loaiMonHoc?.totNghiep.tichLuy,
-            loaiMon: OVERVIEW_CONTENT[6].title,
-            tongTCBatBuoc: +OVERVIEW_CONTENT[6].goal,
-          }}
-        />
-
-        <View style={styles.creditTotal}>
-          <Text style={{ width: '40%' }}>Tổng số tín chỉ: {data.tongTC}</Text>
-          <Text style={{ width: '40%' }}>
-            Tổng số tín chỉ đạt: {data.tongTCDaDat}
-          </Text>
-          <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
-        </View>
-        <View
-          style={{
-            marginLeft: 40,
-            marginTop: 30,
-            fontStyle: 'italic',
-            fontWeight: 500,
-          }}
-        >
-          <Text>
-            *Phiếu điểm xuất ra từ hệ thống chỉ mang tính chất tham khảo, không
-            có giá trị pháp lý cũng như không thể sử dụng như một phiếu điểm
-            chính thức của nhà trường
-          </Text>
-        </View>
-        <View style={styles.signature}>
-          <Text style={{ fontStyle: 'italic' }}>
-            Tp.HCM, Ngày {dd} tháng {mm} năm {yyyy}
-          </Text>
+          <TableGroupSubjects
+            data={{
+              monHoc: data.loaiMonHoc?.totNghiep.monHoc,
+              tichLuy: data.loaiMonHoc?.totNghiep.tichLuy,
+              loaiMon: OVERVIEW_CONTENT[6].title,
+              tongTCBatBuoc: +OVERVIEW_CONTENT[6].goal,
+            }}
+          />
+          <View wrap={false}>
+            <View style={styles.creditTotal}>
+              <Text style={{ width: '40%' }}>
+                Tổng số tín chỉ: {data.tongTC}
+              </Text>
+              <Text style={{ width: '40%' }}>
+                Tổng số tín chỉ đạt: {data.tongTCDaDat}
+              </Text>
+              <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
+            </View>
+            <View
+              style={{
+                marginLeft: 40,
+                marginTop: 30,
+                fontStyle: 'italic',
+                fontWeight: 500,
+              }}
+            >
+              <Text>
+                *Phiếu điểm xuất ra từ hệ thống chỉ mang tính chất tham khảo,
+                không có giá trị pháp lý cũng như không thể sử dụng như một
+                phiếu điểm chính thức của nhà trường
+              </Text>
+            </View>
+            <View style={styles.signature}>
+              <Text style={{ fontStyle: 'italic' }}>
+                Tp.HCM, Ngày {dd} tháng {mm} năm {yyyy}
+              </Text>
+            </View>
+          </View>
         </View>
       </Page>
     </Document>
