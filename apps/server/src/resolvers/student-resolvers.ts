@@ -28,7 +28,7 @@ export const studentResolver: Resolvers<ResolverContext> = {
     },
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentSubjectsByTerm(args);
-      return res.data;
+      return res;
     },
     studentTrainingPointByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentTrainingPointByTerm(
@@ -66,6 +66,12 @@ export const studentResolver: Resolvers<ResolverContext> = {
         args
       );
       return res.data.data;
+    },
+    studentAllSubjectsResult: async (_, args, { dataSources }) => {
+      const res = await dataSources.studentAPI.getStudentAllSubjectsResult(
+        args
+      );
+      return res;
     },
   },
   Mutation: {

@@ -22,9 +22,9 @@ export const StyledGridContainer = styled(Grid)`
 
 export const StyledDialog = styled(Dialog)`
   margin-top: 4rem;
-  min-height: 37.5rem;
   & .MuiPaper-root {
     width: 50rem;
     max-width: 50rem;
+    min-height: 40rem;
   }
 `;

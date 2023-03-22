@@ -660,6 +660,7 @@ export type NoteListItem = {
   maGC: Scalars['Int'];
   maSV?: Maybe<Scalars['String']>;
   noiDung: Scalars['String'];
+  sinhVien?: Maybe<StudentInfo>;
   thoiGianSua?: Maybe<Scalars['String']>;
   thoiGianTao: Scalars['String'];
   tieuDe: Scalars['String'];
@@ -706,6 +707,7 @@ export type Query = {
   noteList: Array<NoteListItem>;
   noteSearch: NoteSearch;
   studentAbsentList: StudentAbsentList;
+  studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
   studentDetail: StudentDetail;
@@ -716,7 +718,7 @@ export type Query = {
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
-  studentSubjectsByTerm: Array<StudentSubject>;
+  studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   studentTrainingPointList: StudentTrainingPointList;
   tagList: TagList;
@@ -849,6 +851,10 @@ export type QueryStudentAbsentListArgs = {
   termId: Scalars['Int'];
 };
 
+export type QueryStudentAllSubjectsResultArgs = {
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentAllTermsArgs = {
   studentId: Scalars['String'];
 };
@@ -963,6 +969,22 @@ export type StudentAddParentInfoInput = {
   tenPH: Scalars['String'];
 };
 
+export type StudentAllSubjectsResult = {
+  __typename?: 'StudentAllSubjectsResult';
+  result: StudentAllSubjectsResultDetail;
+  sinhVien: StudentDetail;
+};
+
+export type StudentAllSubjectsResultDetail = {
+  __typename?: 'StudentAllSubjectsResultDetail';
+  batBuocChuyenNganh: StudentDetailSubjectsResult;
+  coSoNganh: StudentDetailSubjectsResult;
+  daiCuong: StudentDetailSubjectsResult;
+  totNghiep: StudentDetailSubjectsResult;
+  tuChonChuyenNganh: StudentDetailSubjectsResult;
+  tuChonTuDo: StudentDetailSubjectsResult;
+};
+
 export type StudentAveragePoint = {
   __typename?: 'StudentAveragePoint';
   dtb: Scalars['Float'];
@@ -1044,6 +1066,11 @@ export type StudentEnrolledListItem = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type StudentInfo = {
+  __typename?: 'StudentInfo';
+  tenSV?: Maybe<Scalars['String']>;
 };
 
 export type StudentNotEnrolledList = {
@@ -1145,6 +1172,12 @@ export type StudentSubject = {
   tenLopHP: Scalars['String'];
   tenMH: Scalars['String'];
   tinhTrang: Scalars['String'];
+};
+
+export type StudentSubjectsByTerm = {
+  __typename?: 'StudentSubjectsByTerm';
+  sinhVien: StudentDetail;
+  subjects: Array<StudentSubject>;
 };
 
 export type StudentTag = {
@@ -2257,7 +2290,104 @@ export type NoteSearchQuery = {
       thoiGianTao: string;
       thoiGianSua?: string | null | undefined;
       maSV?: string | null | undefined;
+      sinhVien?:
+        | { __typename?: 'StudentInfo'; tenSV?: string | null | undefined }
+        | null
+        | undefined;
     }>;
+  };
+};
+
+export type StudentAllSubjectsResultQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentAllSubjectsResultQuery = {
+  __typename?: 'Query';
+  studentAllSubjectsResult: {
+    __typename?: 'StudentAllSubjectsResult';
+    result: {
+      __typename?: 'StudentAllSubjectsResultDetail';
+      daiCuong: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+      coSoNganh: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+      batBuocChuyenNganh: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+      tuChonChuyenNganh: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+      tuChonTuDo: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+      totNghiep: {
+        __typename?: 'StudentDetailSubjectsResult';
+        tichLuy: number;
+        monHoc: Array<{
+          __typename?: 'SubjectDetailResult';
+          maMH: string;
+          tenMH: string;
+          soTC: number;
+          namHoc: number;
+          hocKy: number;
+          dtb: number;
+        }>;
+      };
+    };
+    sinhVien: { __typename?: 'StudentDetail'; tenSV: string; dob: string };
   };
 };
 
@@ -2431,20 +2561,24 @@ export type StudentSubjectsByTermQueryVariables = Exact<{
 
 export type StudentSubjectsByTermQuery = {
   __typename?: 'Query';
-  studentSubjectsByTerm: Array<{
-    __typename?: 'StudentSubject';
-    maMH: string;
-    tenMH: string;
-    tenLopHP: string;
-    tinhTrang: string;
-    soTinChi: number;
-    diemGK?: number | null | undefined;
-    diemTH?: number | null | undefined;
-    diemCong?: number | null | undefined;
-    diemKhac?: number | null | undefined;
-    diemCK?: number | null | undefined;
-    dtb?: number | null | undefined;
-  }>;
+  studentSubjectsByTerm: {
+    __typename?: 'StudentSubjectsByTerm';
+    subjects: Array<{
+      __typename?: 'StudentSubject';
+      maMH: string;
+      tenMH: string;
+      tenLopHP: string;
+      tinhTrang: string;
+      soTinChi: number;
+      diemGK?: number | null | undefined;
+      diemTH?: number | null | undefined;
+      diemCong?: number | null | undefined;
+      diemKhac?: number | null | undefined;
+      diemCK?: number | null | undefined;
+      dtb?: number | null | undefined;
+    }>;
+    sinhVien: { __typename?: 'StudentDetail'; tenSV: string; dob: string };
+  };
 };
 
 export type StudentTrainingPointByTermQueryVariables = Exact<{
@@ -5870,6 +6004,9 @@ export const NoteSearchDocument = gql`
         thoiGianTao
         thoiGianSua
         maSV
+        sinhVien {
+          tenSV
+        }
       }
     }
   }
@@ -5930,6 +6067,135 @@ export type NoteSearchLazyQueryHookResult = ReturnType<
 export type NoteSearchQueryResult = Apollo.QueryResult<
   NoteSearchQuery,
   NoteSearchQueryVariables
+>;
+export const StudentAllSubjectsResultDocument = gql`
+  query StudentAllSubjectsResult($studentId: String!) {
+    studentAllSubjectsResult(studentId: $studentId) {
+      result {
+        daiCuong {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+        coSoNganh {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+        batBuocChuyenNganh {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+        tuChonChuyenNganh {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+        tuChonTuDo {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+        totNghiep {
+          tichLuy
+          monHoc {
+            maMH
+            tenMH
+            soTC
+            namHoc
+            hocKy
+            dtb
+          }
+        }
+      }
+      sinhVien {
+        tenSV
+        dob
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentAllSubjectsResultQuery__
+ *
+ * To run a query within a React component, call `useStudentAllSubjectsResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentAllSubjectsResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentAllSubjectsResultQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentAllSubjectsResultQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >(StudentAllSubjectsResultDocument, options);
+}
+export function useStudentAllSubjectsResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentAllSubjectsResultQuery,
+    StudentAllSubjectsResultQueryVariables
+  >(StudentAllSubjectsResultDocument, options);
+}
+export type StudentAllSubjectsResultQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsResultQuery
+>;
+export type StudentAllSubjectsResultLazyQueryHookResult = ReturnType<
+  typeof useStudentAllSubjectsResultLazyQuery
+>;
+export type StudentAllSubjectsResultQueryResult = Apollo.QueryResult<
+  StudentAllSubjectsResultQuery,
+  StudentAllSubjectsResultQueryVariables
 >;
 export const StudentAllTermsDocument = gql`
   query StudentAllTerms($studentId: String!) {
@@ -6426,17 +6692,23 @@ export type StudentParentInfoListQueryResult = Apollo.QueryResult<
 export const StudentSubjectsByTermDocument = gql`
   query StudentSubjectsByTerm($studentId: String!, $term: Int!) {
     studentSubjectsByTerm(studentId: $studentId, term: $term) {
-      maMH
-      tenMH
-      tenLopHP
-      tinhTrang
-      soTinChi
-      diemGK
-      diemTH
-      diemCong
-      diemKhac
-      diemCK
-      dtb
+      subjects {
+        maMH
+        tenMH
+        tenLopHP
+        tinhTrang
+        soTinChi
+        diemGK
+        diemTH
+        diemCong
+        diemKhac
+        diemCK
+        dtb
+      }
+      sinhVien {
+        tenSV
+        dob
+      }
     }
   }
 `;

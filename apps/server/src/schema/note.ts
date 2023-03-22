@@ -58,6 +58,11 @@ const noteTypeDefs = gql`
     thoiGianTao: String!
     thoiGianSua: String
     maSV: String
+    sinhVien: StudentInfo
+  }
+
+  type StudentInfo {
+    tenSV: String
   }
 
   input NoteAddInput {

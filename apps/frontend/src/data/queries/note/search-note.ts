@@ -32,6 +32,9 @@ export const SEARCH_NOTE = gql`
         thoiGianTao
         thoiGianSua
         maSV
+        sinhVien {
+          tenSV
+        }
       }
     }
   }

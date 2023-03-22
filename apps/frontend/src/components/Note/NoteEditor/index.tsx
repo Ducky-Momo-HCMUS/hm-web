@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   FormControl,
   ImageList,
   ImageListItem,
@@ -42,6 +43,10 @@ interface NoteEditorProps {
   handleSelectTags: any;
   handleReset: any;
   isAdding: boolean;
+  height?: number;
+  isNoteStore?: boolean;
+  maSV?: String;
+  tenSV?: String;
 }
 
 const ITEM_HEIGHT = 48;
@@ -68,6 +73,10 @@ function NoteEditor({
   handleSelectTags,
   handleReset,
   isAdding,
+  height,
+  isNoteStore = false,
+  maSV = '',
+  tenSV = '',
 }: NoteEditorProps) {
   const [url, setUrl] = useState('');
   const handleShowImage = useCallback((imageUrl: string) => {
@@ -77,6 +86,11 @@ function NoteEditor({
   return (
     <>
       <Box sx={{ padding: '1rem' }}>
+        {isNoteStore && (
+          <Box mb={2}>
+            {maSV && <Chip label={`${maSV} - ${tenSV}`} color="primary" />}
+          </Box>
+        )}
         <StyledTextField
           sx={{ width: '100%' }}
           label="Tiêu đề"
@@ -128,7 +142,7 @@ function NoteEditor({
             editorRef.current = editor;
           }}
           initialValue={initialValue}
-          init={NOTE_EDITOR_CONFIG}
+          init={height ? { ...NOTE_EDITOR_CONFIG, height } : NOTE_EDITOR_CONFIG}
         />
         {!!imageList.length && (
           <ImageList cols={2} rowHeight={200}>
@@ -177,21 +191,29 @@ function NoteEditor({
         </Box>
       </StyledDialog>
       <Box>
-        {isAdding && (
+        {isAdding ? (
           <Button
             sx={{ width: '50%', borderRadius: 0 }}
             variant="outlined"
             onClick={handleReset}
           >
-            Hủy ghi chú
+            Hủy
+          </Button>
+        ) : (
+          <Button
+            sx={{ width: '50%', borderRadius: 0 }}
+            variant="outlined"
+            onClick={handleReset}
+          >
+            Đóng
           </Button>
         )}
         <Button
-          sx={{ width: isAdding ? '50%' : '100%', borderRadius: 0 }}
+          sx={{ width: '50%', borderRadius: 0 }}
           variant="contained"
           onClick={onClickSave}
         >
-          Lưu ghi chú
+          Lưu
         </Button>
       </Box>
     </>
