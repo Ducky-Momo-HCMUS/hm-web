@@ -69,6 +69,8 @@ interface State {
   tags: string[];
   isAdding: boolean;
   images: NoteImage[];
+  maSV: String;
+  tenSV: String;
 }
 
 interface FilterState {
@@ -98,6 +100,8 @@ function NoteStore() {
     tags: [],
     isAdding: false,
     images: [],
+    maSV: '',
+    tenSV: '',
   });
 
   const [filterValues, setFilterValues] = useState<FilterState>({
@@ -590,6 +594,8 @@ function NoteStore() {
                       ...values,
                       selected: item.maGC,
                       isAdding: false,
+                      maSV: item.maSV || '',
+                      tenSV: item.sinhVien?.tenSV || '',
                     })
                   }
                   onClickDelete={() =>
@@ -616,6 +622,10 @@ function NoteStore() {
         }}
       >
         <NoteEditor
+          isNoteStore
+          maSV={values.maSV}
+          tenSV={values.tenSV}
+          height={300}
           filePondRef={filePondRef}
           tagList={tagList}
           imageList={values.images}

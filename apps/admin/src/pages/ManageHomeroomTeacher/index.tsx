@@ -1,4 +1,4 @@
-import { Button, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
@@ -8,28 +8,13 @@ import { useAllTeacherListLazyQuery } from '../../generated-types';
 import { TeacherListItem } from '../../types';
 
 import HomeroomTeacherTable from './HomeroomTeacherTable';
-import ImportHomeroomTeacherListDialog from './ImportHomeroomTeacherListDialog';
 
 function ManageHomeroomTeacher() {
-  const [file, setFile] = useState<File>();
-  const [
-    openImportHomeroomTeacherInfoDialog,
-    setOpenImportHomeroomTeacherInfoDialog,
-  ] = useState(false);
-
   const [page, setPage] = useState(0);
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const handleOpenImportHomeroomTeacherInfoDialog = () => {
-    setOpenImportHomeroomTeacherInfoDialog(true);
-  };
-
-  const handleCloseImportHomeroomTeacherInfoDialog = () => {
-    setOpenImportHomeroomTeacherInfoDialog(false);
-  };
 
   const [
     getAllTeacherList,
@@ -65,21 +50,8 @@ function ManageHomeroomTeacher() {
   return (
     <Box display="flex" flexDirection="column" gap={1}>
       <StyledStickyBox>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="baseline"
-        >
+        <Box>
           <StyledTitle variant="h1">Quản lý GVCN</StyledTitle>
-          <Box display="flex" gap={1}>
-            <Button
-              sx={{ textTransform: 'uppercase' }}
-              variant="contained"
-              onClick={handleOpenImportHomeroomTeacherInfoDialog}
-            >
-              Import danh sách GVCN
-            </Button>
-          </Box>
         </Box>
       </StyledStickyBox>
       <AsyncDataRenderer
@@ -93,14 +65,6 @@ function ManageHomeroomTeacher() {
           total={teacherListLength}
         />
       </AsyncDataRenderer>
-      <ImportHomeroomTeacherListDialog
-        open={openImportHomeroomTeacherInfoDialog}
-        onClose={handleCloseImportHomeroomTeacherInfoDialog}
-        onClickCancel={handleCloseImportHomeroomTeacherInfoDialog}
-        onClickConfirm={handleCloseImportHomeroomTeacherInfoDialog}
-        file={file}
-        setFile={setFile}
-      />
     </Box>
   );
 }

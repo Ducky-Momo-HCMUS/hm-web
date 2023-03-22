@@ -10,6 +10,7 @@ import {
   QueryHomeroomNotEnrolledListByTermArgs,
   QueryHomeroomOverviewReportByTermArgs,
   QueryHomeroomPostponeExamListByTermArgs,
+  QueryHomeroomReportDetailByTermArgs,
   QueryHomeroomStudentListArgs,
   QueryHomeroomTermListArgs,
   QueryHomeroomWatchListArgs,
@@ -109,10 +110,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomFailListByTermArgs) {
     try {
       const homeroomFailList = await this.get(
-        `v1/homerooms/${homeroomId}/fail`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/fail?term=${term}`
       );
       return homeroomFailList;
     } catch (error) {
@@ -127,8 +125,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomNotEnrolledListByTermArgs) {
     try {
       const homeroomNotEnrolledList = await this.get(
-        `/v1/homerooms/${homeroomId}/not-enrolled`,
-        { term }
+        `/v1/homerooms/${homeroomId}/not-enrolled?term=${term}`
       );
       return homeroomNotEnrolledList;
     } catch (error) {
@@ -143,8 +140,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomPostponeExamListByTermArgs) {
     try {
       const homeroomPostponeExamList = await this.get(
-        `v1/homerooms/${homeroomId}/postpone-exam`,
-        { term }
+        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}`
       );
       return homeroomPostponeExamList;
     } catch (error) {
@@ -159,10 +155,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomOverviewReportByTermArgs) {
     try {
       const homeroomOverviewReport = await this.get(
-        `v1/homerooms/${homeroomId}/report`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/report?term=${term}`
       );
       return homeroomOverviewReport;
     } catch (error) {
@@ -177,10 +170,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomFinalResultListByTermArgs) {
     try {
       const homeroomFinalResultList = await this.get(
-        `v1/homerooms/${homeroomId}/score`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/score?term=${term}`
       );
       return homeroomFinalResultList;
     } catch (error) {
@@ -195,12 +185,39 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomExamAbsentListByTermArgs) {
     try {
       const homeroomExamAbsentList = await this.get(
-        `v1/homerooms/${homeroomId}/absent`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/absent?term=${term}`
       );
       return homeroomExamAbsentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch homeroom exam absent list by term');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getHomeroomReportDetail({
+    homeroomId,
+    term,
+  }: QueryHomeroomReportDetailByTermArgs) {
+    try {
+      const homeroomOverviewReport = await this.get(
+        `v1/homerooms/${homeroomId}/report?term=${term}`
+      );
+      const homeroomExamAbsentList = await this.get(
+        `v1/homerooms/${homeroomId}/absent?term=${term}`
+      );
+      const homeroomFinalResultList = await this.get(
+        `v1/homerooms/${homeroomId}/score?term=${term}`
+      );
+      const homeroomPostponeExamList = await this.get(
+        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}`
+      );
+
+      return {
+        overviewReport: homeroomOverviewReport.data,
+        examAbsent: homeroomExamAbsentList.data,
+        finalResult: homeroomFinalResultList.data,
+        examPostpone: homeroomPostponeExamList.data,
+      };
     } catch (error) {
       logger.error('Error: cannot fetch homeroom exam absent list by term');
       throw this.handleError(error as ApolloError);

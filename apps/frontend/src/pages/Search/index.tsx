@@ -129,7 +129,7 @@ function Search() {
                       </TableCell>
                       <TableCell>{item.maSV}</TableCell>
                       <TableCell>
-                        <StyledRouterLink to={`/students/${item.maSV}`}>
+                        <StyledRouterLink to={`/students/${item.maSV}/info`}>
                           {item.tenSV}
                         </StyledRouterLink>
                       </TableCell>

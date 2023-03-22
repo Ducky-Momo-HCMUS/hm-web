@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import List from '@mui/material/List';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
@@ -16,6 +17,7 @@ import {
   useTheme,
   Box,
 } from '@mui/material';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Header from '../../components/Header';
 
@@ -28,15 +30,13 @@ import {
   StyledListItemButton,
   StyledToolbar,
 } from './styles';
-import NoteInfo from './NoteInfo';
-import AcademicReport from './AcademicReport';
-import StudentProfile from './StudentProfile';
-import AcademicOverview from './AcademicOverview';
 
 function StudentDashboard() {
-  const [selected, setSelected] = useState(0);
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
+  const { id = '' } = useParams();
+  const location = useLocation();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -86,20 +86,20 @@ function StudentDashboard() {
           <Divider />
           <List>
             {[
-              'Thông tin sinh viên',
-              'Ghi chú sinh viên',
-              'Tình hình học tập',
-              'Kết quả học tập',
-            ].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              { page: 'Thông tin sinh viên', url: 'info' },
+              { page: 'Ghi chú sinh viên', url: 'notes' },
+              { page: 'Tình hình học tập', url: 'academic-report' },
+              { page: 'Kết quả học tập', url: 'academic-overview' },
+            ].map(({ page, url }, index) => (
+              <ListItem key={url} disablePadding sx={{ display: 'block' }}>
                 <StyledListItemButton
-                  active={selected === index}
+                  active={location.pathname.includes(url)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                   }}
-                  onClick={() => setSelected(index)}
+                  onClick={() => navigate(`/students/${id}/${url}`)}
                 >
                   <ListItemIcon
                     sx={{
@@ -113,7 +113,7 @@ function StudentDashboard() {
                     {index === 2 && <StackedBarChartIcon />}
                     {index === 3 && <StarIcon />}
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={page} sx={{ opacity: open ? 1 : 0 }} />
                 </StyledListItemButton>
               </ListItem>
             ))}
@@ -121,10 +121,7 @@ function StudentDashboard() {
         </Drawer>
 
         <StyledContent component="main">
-          {selected === 0 && <StudentProfile />}
-          {selected === 1 && <NoteInfo />}
-          {selected === 2 && <AcademicReport />}
-          {selected === 3 && <AcademicOverview />}
+          <Outlet />
         </StyledContent>
       </StyledContainer>
     </>

@@ -1,8 +1,6 @@
 import React from 'react';
 import { TableCell, TableHead, TableRow } from '@mui/material';
 
-import { Order, Property } from '../../../../types';
-
 interface Column {
   id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'contact';
   label: string;

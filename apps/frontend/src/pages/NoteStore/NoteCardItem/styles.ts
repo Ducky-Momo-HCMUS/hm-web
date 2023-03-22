@@ -28,9 +28,6 @@ export const StyledContent = styled(Typography)`
 `;
 
 export const StyledFooter = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
   marginTop: '0.5rem',
   '& > span': {
     color: theme.palette.primary.dark,

@@ -5,6 +5,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
 import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   StyledBreadCrumbs,
   StyledStickyBox,
@@ -12,6 +13,7 @@ import {
 } from '../../../components/styles';
 import {
   StudentOverviewResult,
+  useStudentAllSubjectsResultQuery,
   useStudentOverviewResultQuery,
 } from '../../../generated-types';
 
@@ -75,6 +77,24 @@ function AcademicOverview() {
     }));
   }, [studentOverviewResultData?.studentOverviewResult]);
 
+  const { loading: allSubjectsResultLoading, data: allSubjectsResultData } =
+    useStudentAllSubjectsResultQuery({
+      variables: {
+        studentId: id,
+      },
+    });
+
+  const { subjectList, studentDetail } = useMemo(
+    () => ({
+      subjectList: allSubjectsResultData?.studentAllSubjectsResult.result || [],
+      studentDetail: allSubjectsResultData?.studentAllSubjectsResult.sinhVien,
+    }),
+    [
+      allSubjectsResultData?.studentAllSubjectsResult.result,
+      allSubjectsResultData?.studentAllSubjectsResult.sinhVien,
+    ]
+  );
+
   return (
     <>
       <StyledStickyBox>
@@ -91,20 +111,25 @@ function AcademicOverview() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Kết quả học tập</Typography>
           </StyledBreadCrumbs>
-          <PDFDownloadLink
-            document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
-            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+          <AsyncDataRenderer
+            loading={allSubjectsResultLoading}
+            data={allSubjectsResultData}
           >
-            {({ loading }) =>
-              loading ? (
-                <Button variant="contained" disabled>
-                  Xuất phiếu điểm
-                </Button>
-              ) : (
-                <Button variant="contained">Xuất phiếu điểm</Button>
-              )
-            }
-          </PDFDownloadLink>
+            <PDFDownloadLink
+              document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
+              fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+            >
+              {({ loading }) =>
+                loading ? (
+                  <Button variant="contained" disabled>
+                    Xuất phiếu điểm
+                  </Button>
+                ) : (
+                  <Button variant="contained">Xuất phiếu điểm</Button>
+                )
+              }
+            </PDFDownloadLink>
+          </AsyncDataRenderer>
         </Box>
       </StyledStickyBox>
       <Box mt={3}>

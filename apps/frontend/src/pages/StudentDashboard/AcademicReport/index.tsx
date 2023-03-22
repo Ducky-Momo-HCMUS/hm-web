@@ -131,16 +131,12 @@ function AcademicReport() {
       skip: allTermsLoading,
     });
 
-  const subjectsData = useMemo(() => {
-    return subjectsByTermData?.studentSubjectsByTerm || [];
+  const { subjectsData, studentDetail } = useMemo(() => {
+    return {
+      subjectsData: subjectsByTermData?.studentSubjectsByTerm.subjects || [],
+      studentDetail: subjectsByTermData?.studentSubjectsByTerm.sinhVien,
+    };
   }, [subjectsByTermData?.studentSubjectsByTerm]);
-
-  const { studentDetail } = client.readQuery({
-    query: GET_STUDENT_DETAIL,
-    variables: {
-      studentId: id,
-    },
-  }) as StudentDetailQuery;
 
   return (
     <>
@@ -211,8 +207,10 @@ function AcademicReport() {
               <ScorePDFTemplate
                 data={{
                   maSV: id,
-                  tenSV: studentDetail?.tenSV,
-                  dob: format(new Date(studentDetail?.dob), 'dd/MM/yyyy'),
+                  tenSV: studentDetail?.tenSV || '',
+                  dob: studentDetail
+                    ? format(new Date(studentDetail?.dob), 'dd/MM/yyyy')
+                    : '',
                   hocKy: terms.find((item) => item.maHK === +values.term),
                   namHoc: +values.year,
                   monHoc: subjectsData,
