@@ -20,14 +20,23 @@ const homeroomTypeDefs = gql`
     ): HomeroomWatchList!
     homeroomDetail(homeroomId: String!): HomeroomDetail!
     homeroomTermList(homeroomId: String!): [HomeroomTermListItem!]!
-    homeroomFailListByTerm(homeroomId: String!, term: Int!): HomeroomFailList!
+    homeroomFailListByTerm(
+      homeroomId: String!
+      term: Int!
+      page: Int!
+      size: Int!
+    ): HomeroomFailList!
     homeroomNotEnrolledListByTerm(
       homeroomId: String!
       term: Int!
+      page: Int!
+      size: Int!
     ): HomeroomNotEnrolledList!
     homeroomPostponeExamListByTerm(
       homeroomId: String!
       term: Int!
+      page: Int!
+      size: Int!
     ): HomeroomPostponeExamList!
     homeroomOverviewReportByTerm(
       homeroomId: String!
@@ -42,7 +51,13 @@ const homeroomTypeDefs = gql`
     homeroomExamAbsentListByTerm(
       homeroomId: String!
       term: Int!
+      page: Int!
+      size: Int!
     ): HomeroomExamAbsentList!
+    homeroomReportDetailByTerm(
+      homeroomId: String!
+      term: Int!
+    ): HomeroomReportDetailByTerm!
   }
 
   extend type Mutation {
@@ -52,6 +67,13 @@ const homeroomTypeDefs = gql`
     homeroomDeleteWatchlist(
       payload: HomeroomDeleteWatchlistInput!
     ): HomeroomDeleteWatchlistResponse!
+  }
+
+  type HomeroomReportDetailByTerm {
+    overviewReport: HomeroomOverviewReport!
+    finalResult: HomeroomFinalResultList!
+    examAbsent: HomeroomExamAbsentList!
+    examPostpone: HomeroomPostponeExamList!
   }
 
   input HomeroomAddWatchlistInput {
@@ -158,6 +180,7 @@ const homeroomTypeDefs = gql`
 
   type HomeroomNotEnrolledList {
     data: [HomeroomNotEnrolledListItem!]!
+    total: Int!
   }
 
   type HomeroomNotEnrolledListItem {
@@ -171,6 +194,7 @@ const homeroomTypeDefs = gql`
 
   type HomeroomPostponeExamList {
     data: [HomeroomPostponeExamListItem!]!
+    total: Int!
   }
 
   type HomeroomPostponeExamListItem {
@@ -232,6 +256,7 @@ const homeroomTypeDefs = gql`
 
   type HomeroomExamAbsentList {
     data: [HomeroomExamAbsentListItem!]!
+    total: Int!
   }
 
   type HomeroomExamAbsentListItem {

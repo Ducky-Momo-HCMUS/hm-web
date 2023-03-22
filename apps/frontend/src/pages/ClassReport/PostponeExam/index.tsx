@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Box } from '@mui/material';
 
 import ClassTable from '../../ClassDetail/ClassTable';
@@ -11,11 +11,6 @@ const missExamColumns = [
 
 const ROWS_PER_PAGE = 5;
 
-interface Page {
-  missExam: number;
-  postponeExam: number;
-}
-
 interface HomeroomMappedPostponeExamListItem {
   maSV: string;
   tenSV: string;
@@ -24,41 +19,35 @@ interface HomeroomMappedPostponeExamListItem {
 
 interface PostponeExamProps {
   homeroomExamAbsentList: HomeroomMappedPostponeExamListItem[];
+  homeroomExamAbsentListLength: number;
+  examAbsentPage: number;
   homeroomExamPostponedList: HomeroomMappedPostponeExamListItem[];
+  homeroomExamPostponedListLength: number;
+  examPostponePage: number;
+  handleChangeExamAbsentPage: any;
+  handleChangeExamPostponePage: any;
 }
 
 function PostponeExam({
   homeroomExamAbsentList,
+  homeroomExamAbsentListLength,
   homeroomExamPostponedList,
+  homeroomExamPostponedListLength,
+  examAbsentPage,
+  examPostponePage,
+  handleChangeExamAbsentPage,
+  handleChangeExamPostponePage,
 }: PostponeExamProps) {
-  const [page, setPage] = useState<Page>({
-    missExam: 0,
-    postponeExam: 0,
-  });
-
-  const handleChangeMissExamPage = useCallback(
-    (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, missExam: newPage }));
-    },
-    []
-  );
-
-  const handleChangePostponeExamPage = useCallback(
-    (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, postponeExam: newPage }));
-    },
-    []
-  );
-
   return (
     <Box sx={{ marginTop: '2rem' }}>
       <ClassTable
         title="Danh sách vắng thi"
         columns={missExamColumns}
         data={homeroomExamAbsentList}
-        page={page.missExam}
+        total={homeroomExamAbsentListLength}
+        page={examAbsentPage}
         rowsPerPage={ROWS_PER_PAGE}
-        handleChangePage={handleChangeMissExamPage}
+        handleChangePage={handleChangeExamAbsentPage}
         hasFilter={false}
       />
       <Box sx={{ height: '2rem' }}> </Box>
@@ -66,9 +55,10 @@ function PostponeExam({
         title="Danh sách hoãn thi"
         columns={missExamColumns}
         data={homeroomExamPostponedList}
-        page={page.postponeExam}
+        total={homeroomExamPostponedListLength}
+        page={examPostponePage}
         rowsPerPage={ROWS_PER_PAGE}
-        handleChangePage={handleChangePostponeExamPage}
+        handleChangePage={handleChangeExamPostponePage}
         hasFilter={false}
       />
     </Box>

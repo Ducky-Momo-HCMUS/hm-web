@@ -190,26 +190,14 @@ function NoteEditor({
           )}
         </Box>
       </StyledDialog>
-      <Box>
+      <Box sx={{ padding: '1rem' }} display="flex" justifyContent="flex-end">
         {isAdding ? (
-          <Button
-            sx={{ width: '50%', borderRadius: 0 }}
-            variant="outlined"
-            onClick={handleReset}
-          >
-            Hủy
-          </Button>
+          <Button onClick={handleReset}>Hủy</Button>
         ) : (
-          <Button
-            sx={{ width: '50%', borderRadius: 0 }}
-            variant="outlined"
-            onClick={handleReset}
-          >
-            Đóng
-          </Button>
+          <Button onClick={handleReset}>Đóng</Button>
         )}
         <Button
-          sx={{ width: '50%', borderRadius: 0 }}
+          sx={{ marginLeft: '0.5rem' }}
           variant="contained"
           onClick={onClickSave}
         >

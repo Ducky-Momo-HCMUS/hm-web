@@ -24,8 +24,13 @@ import {
   StyledTitle,
 } from '../../components/styles';
 import TabPanel from '../../components/TabPanel';
-import { FINAL_RESULT_LIST_PAGE_SIZE } from '../../constants';
 import {
+  EXAM_ABSENT_LIST_PAGE_SIZE,
+  FINAL_RESULT_LIST_PAGE_SIZE,
+  POSTPONE_EXAM_LIST_PAGE_SIZE,
+} from '../../constants';
+import {
+  HomeroomFinalResultListItem,
   HomeroomOverviewReport,
   StudentTerm,
   useHomeroomDetailQuery,
@@ -33,6 +38,7 @@ import {
   useHomeroomFinalResultListByTermLazyQuery,
   useHomeroomOverviewReportByTermLazyQuery,
   useHomeroomPostponeExamListByTermLazyQuery,
+  useHomeroomReportDetailByTermQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
 import { groupTermsByYear } from '../../utils';
@@ -47,14 +53,41 @@ interface State {
   term: string;
 }
 
+interface Page {
+  finalResult: number;
+  examAbsent: number;
+  postponeExam: number;
+}
+
 function ClassReport() {
   const { id = '' } = useParams();
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<Page>({
+    finalResult: 0,
+    examAbsent: 0,
+    postponeExam: 0,
+  });
 
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
+  const handleChangeFinalResultPage = useCallback(
+    (event: unknown, newPage: number) => {
+      setPage((p) => ({ ...p, subjectStatus: newPage }));
+    },
+    []
+  );
+
+  const handleChangeExamAbsentPage = useCallback(
+    (event: unknown, newPage: number) => {
+      setPage((p) => ({ ...p, notRegistered: newPage }));
+    },
+    []
+  );
+
+  const handleChangePostponeExamPage = useCallback(
+    (event: unknown, newPage: number) => {
+      setPage((p) => ({ ...p, postponeExam: newPage }));
+    },
+    []
+  );
 
   const [values, setValues] = useState<State>({
     year: '',
@@ -133,11 +166,18 @@ function ClassReport() {
     },
   ] = useHomeroomFinalResultListByTermLazyQuery();
 
-  const homeroomFinalResultList = useMemo(
-    () =>
-      homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted ||
-      [],
-    [homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted]
+  const { homeroomFinalResultList, homeroomFinalResultListLength } = useMemo(
+    () => ({
+      homeroomFinalResultList:
+        homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted ||
+        [],
+      homeroomFinalResultListLength:
+        homeroomFinalResultListData?.homeroomFinalResultListByTerm.total || 0,
+    }),
+    [
+      homeroomFinalResultListData?.homeroomFinalResultListByTerm.formatted,
+      homeroomFinalResultListData?.homeroomFinalResultListByTerm.total,
+    ]
   );
 
   const [
@@ -148,16 +188,21 @@ function ClassReport() {
     },
   ] = useHomeroomExamAbsentListByTermLazyQuery();
 
-  const homeroomExamAbsentList = useMemo(() => {
-    const examAbsentListData =
-      homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data || [];
+  const { homeroomExamAbsentList, homeroomExamAbsentListLength } =
+    useMemo(() => {
+      const examAbsentListData =
+        homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data || [];
 
-    return examAbsentListData.map((item) => ({
-      maSV: item.sinhVien.maSV,
-      tenSV: item.sinhVien.tenSV,
-      tenMH: item.monHoc.tenMH,
-    })) as ExamAbsentListItem[];
-  }, [homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.data]);
+      return {
+        homeroomExamAbsentList: examAbsentListData.map((item) => ({
+          maSV: item.sinhVien.maSV,
+          tenSV: item.sinhVien.tenSV,
+          tenMH: item.monHoc.tenMH,
+        })) as ExamAbsentListItem[],
+        homeroomExamAbsentListLength:
+          homeroomExamAbsentListData?.homeroomExamAbsentListByTerm.total || 0,
+      };
+    }, [homeroomExamAbsentListData?.homeroomExamAbsentListByTerm]);
 
   const [
     getHomeroomPostponeExamListByTerm,
@@ -167,30 +212,44 @@ function ClassReport() {
     },
   ] = useHomeroomPostponeExamListByTermLazyQuery();
 
-  const homeroomPostponeExamList = useMemo(() => {
-    const postponeExamListData =
-      homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data || [];
+  const { homeroomPostponeExamList, homeroomPostponeExamListLength } =
+    useMemo(() => {
+      const postponeExamListData =
+        homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data || [];
 
-    return postponeExamListData.map((item) => ({
-      maSV: item.sinhVien.maSV,
-      tenSV: item.sinhVien.tenSV,
-      tenMH: item.monHoc.tenMH,
-    })) as ExamAbsentListItem[];
-  }, [homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data]);
+      return {
+        homeroomPostponeExamList: postponeExamListData.map((item) => ({
+          maSV: item.sinhVien.maSV,
+          tenSV: item.sinhVien.tenSV,
+          tenMH: item.monHoc.tenMH,
+        })) as ExamAbsentListItem[],
+        homeroomPostponeExamListLength:
+          homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.total ||
+          0,
+      };
+    }, [
+      homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.data,
+      homeroomPostponeExamListData?.homeroomPostponeExamListByTerm.total,
+    ]);
+
+  const selectedTerm = useMemo(
+    () => (values.term ? Number(values.term) : Number(initialTerm)),
+    [initialTerm, values.term]
+  );
 
   useEffect(() => {
     if (!homeroomTermListLoading) {
       getHomeroomOverviewReportByTerm({
         variables: {
           homeroomId: id,
-          term: values.term ? Number(values.term) : Number(initialTerm),
+          term: selectedTerm,
         },
       });
       getHomeroomFinalResultListByTerm({
         variables: {
           homeroomId: id,
-          term: values.term ? Number(values.term) : Number(initialTerm),
-          page: page + 1,
+          term: selectedTerm,
+          page: page.finalResult + 1,
           size: FINAL_RESULT_LIST_PAGE_SIZE,
         },
       });
@@ -198,13 +257,17 @@ function ClassReport() {
       getHomeroomExamAbsentListByTerm({
         variables: {
           homeroomId: id,
-          term: values.term ? Number(values.term) : Number(initialTerm),
+          term: selectedTerm,
+          page: page.examAbsent + 1,
+          size: EXAM_ABSENT_LIST_PAGE_SIZE,
         },
       });
       getHomeroomPostponeExamListByTerm({
         variables: {
           homeroomId: id,
-          term: values.term ? Number(values.term) : Number(initialTerm),
+          term: selectedTerm,
+          page: page.postponeExam + 1,
+          size: POSTPONE_EXAM_LIST_PAGE_SIZE,
         },
       });
     }
@@ -215,9 +278,8 @@ function ClassReport() {
     getHomeroomOverviewReportByTerm,
     homeroomTermListLoading,
     id,
-    initialTerm,
-    values.term,
     page,
+    selectedTerm,
   ]);
 
   const handleChangeTab = useCallback(
@@ -229,13 +291,13 @@ function ClassReport() {
           getHomeroomOverviewReportByTerm({
             variables: {
               homeroomId: id,
-              term: values.term ? Number(values.term) : Number(initialTerm),
+              term: selectedTerm,
             },
           });
           getHomeroomFinalResultListByTerm({
             variables: {
               homeroomId: id,
-              term: values.term ? Number(values.term) : Number(initialTerm),
+              term: selectedTerm,
               page: 1,
               size: FINAL_RESULT_LIST_PAGE_SIZE,
             },
@@ -245,13 +307,17 @@ function ClassReport() {
           getHomeroomExamAbsentListByTerm({
             variables: {
               homeroomId: id,
-              term: values.term ? Number(values.term) : Number(initialTerm),
+              term: selectedTerm,
+              page: 1,
+              size: EXAM_ABSENT_LIST_PAGE_SIZE,
             },
           });
           getHomeroomPostponeExamListByTerm({
             variables: {
               homeroomId: id,
-              term: values.term ? Number(values.term) : Number(initialTerm),
+              term: selectedTerm,
+              page: 1,
+              size: POSTPONE_EXAM_LIST_PAGE_SIZE,
             },
           });
           break;
@@ -260,22 +326,20 @@ function ClassReport() {
       }
     },
     [
-      getHomeroomExamAbsentListByTerm,
-      getHomeroomPostponeExamListByTerm,
-      getHomeroomFinalResultListByTerm,
       getHomeroomOverviewReportByTerm,
       id,
-      initialTerm,
-      values.term,
+      selectedTerm,
+      getHomeroomFinalResultListByTerm,
+      getHomeroomExamAbsentListByTerm,
+      getHomeroomPostponeExamListByTerm,
     ]
   );
 
-  const { loading: homeroomDetailLoading, data: homeroomDetailData } =
-    useHomeroomDetailQuery({
-      variables: {
-        homeroomId: id,
-      },
-    });
+  const { data: homeroomDetailData } = useHomeroomDetailQuery({
+    variables: {
+      homeroomId: id,
+    },
+  });
 
   const homeroomDetail = useMemo(
     () =>
@@ -287,6 +351,16 @@ function ClassReport() {
       },
     [homeroomDetailData?.homeroomDetail]
   );
+
+  const {
+    loading: homeroomReportDetailLoading,
+    data: homeroomReportDetailData,
+  } = useHomeroomReportDetailByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: selectedTerm,
+    },
+  });
 
   function saveDocumentToFile(doc, fileName) {
     Packer.toBlob(doc).then((blob) => {
@@ -313,22 +387,37 @@ function ClassReport() {
     (event) => {
       event.preventDefault();
       const documentCreator = new DocumentCreator();
-      const selectedTerm = values.term || initialTerm;
       const namHocBD = values.year || initialYear;
       const hocKy =
-        terms
-          .find((item) => item.maHK.toString() === selectedTerm)
-          ?.hocKy.toString() || '';
+        terms.find((item) => item.maHK === selectedTerm)?.hocKy.toString() ||
+        '';
 
       const doc = documentCreator.create({
         hocKy,
         namHocBD,
         tenGVCN: homeroomDetail?.giaoVien.tenGV,
         lopChuNhiem: id,
-        homeroomOverviewReport,
-        homeroomExamAbsentList,
-        homeroomPostponeExamList,
-        homeroomFinalResultList,
+        homeroomOverviewReport: homeroomReportDetailData
+          ?.homeroomReportDetailByTerm.overviewReport as HomeroomOverviewReport,
+        homeroomExamAbsentList:
+          homeroomReportDetailData?.homeroomReportDetailByTerm.examAbsent.data.map(
+            (item) => ({
+              maSV: item.sinhVien.maSV,
+              tenSV: item.sinhVien.tenSV,
+              tenMH: item.monHoc.tenMH,
+            })
+          ) as ExamAbsentListItem[],
+        homeroomPostponeExamList:
+          homeroomReportDetailData?.homeroomReportDetailByTerm.examPostpone.data.map(
+            (item) => ({
+              maSV: item.sinhVien.maSV,
+              tenSV: item.sinhVien.tenSV,
+              tenMH: item.monHoc.tenMH,
+            })
+          ) as ExamAbsentListItem[],
+        homeroomFinalResultList: homeroomReportDetailData
+          ?.homeroomReportDetailByTerm.finalResult
+          .formatted as HomeroomFinalResultListItem[],
       });
       saveDocumentToFile(
         doc,
@@ -341,15 +430,15 @@ function ClassReport() {
     },
     [
       homeroomDetail?.giaoVien.tenGV,
-      homeroomExamAbsentList,
-      homeroomFinalResultList,
-      homeroomOverviewReport,
-      homeroomPostponeExamList,
+      homeroomReportDetailData?.homeroomReportDetailByTerm.examAbsent.data,
+      homeroomReportDetailData?.homeroomReportDetailByTerm.examPostpone.data,
+      homeroomReportDetailData?.homeroomReportDetailByTerm.finalResult
+        .formatted,
+      homeroomReportDetailData?.homeroomReportDetailByTerm.overviewReport,
       id,
-      initialTerm,
       initialYear,
+      selectedTerm,
       terms,
-      values.term,
       values.year,
     ]
   );
@@ -364,6 +453,7 @@ function ClassReport() {
             <Link to="/">Trang chủ</Link>
             <Link to={`/classes/${id}`}>Tổng quan lớp học</Link>
             <Typography color="text.primary">Báo cáo lớp học</Typography>
+            <Typography color="text.primary">{id}</Typography>
           </StyledBreadCrumbs>
           <Box
             sx={{
@@ -412,14 +502,8 @@ function ClassReport() {
               </Box>
             </AsyncDataRenderer>
             <AsyncDataRenderer
-              loading={
-                homeroomDetailLoading ||
-                homeroomOverviewReportLoading ||
-                homeroomFinalResultListLoading ||
-                homeroomExamAbsentListLoading ||
-                homeroomPostponeExamListLoading
-              }
-              data={homeroomDetailData}
+              loading={homeroomReportDetailLoading}
+              data={homeroomReportDetailData}
             >
               <Button
                 sx={{ textTransform: 'uppercase' }}
@@ -455,8 +539,9 @@ function ClassReport() {
               homeroomFinalResultList={homeroomFinalResultList}
               homeroomOverviewReportLoading={homeroomOverviewReportLoading}
               homeroomFinalResultListLoading={homeroomFinalResultListLoading}
-              page={page}
-              handleChangePage={handleChangePage}
+              homeroomFinalResultListLength={homeroomFinalResultListLength}
+              page={page.finalResult}
+              handleChangePage={handleChangeFinalResultPage}
             />
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
@@ -468,7 +553,13 @@ function ClassReport() {
             >
               <PostponeExam
                 homeroomExamAbsentList={homeroomExamAbsentList}
+                homeroomExamAbsentListLength={homeroomExamAbsentListLength}
                 homeroomExamPostponedList={homeroomPostponeExamList}
+                homeroomExamPostponedListLength={homeroomPostponeExamListLength}
+                examAbsentPage={page.examAbsent}
+                examPostponePage={page.postponeExam}
+                handleChangeExamAbsentPage={handleChangeExamAbsentPage}
+                handleChangeExamPostponePage={handleChangePostponeExamPage}
               />
             </AsyncDataRenderer>
           </TabPanel>

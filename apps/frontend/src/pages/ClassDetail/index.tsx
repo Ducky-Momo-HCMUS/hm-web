@@ -5,7 +5,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
@@ -19,9 +19,9 @@ import {
   HomeroomTermListItem,
   StudentTerm,
   useHomeroomDetailQuery,
-  useHomeroomFailListByTermQuery,
-  useHomeroomNotEnrolledListByTermQuery,
-  useHomeroomPostponeExamListByTermQuery,
+  useHomeroomFailListByTermLazyQuery,
+  useHomeroomNotEnrolledListByTermLazyQuery,
+  useHomeroomPostponeExamListByTermLazyQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
@@ -48,7 +48,6 @@ const postponeExamColumns = [
   { id: 'maSV', label: 'MSSV' },
   { id: 'tenSV', label: 'Họ và tên' },
   { id: 'tenMH', label: 'Môn học' },
-  { id: 'maLopHP', label: 'Lớp HP' },
 ];
 
 interface Selection {
@@ -182,81 +181,153 @@ function ClassDetail() {
     };
   }, [mappedData, years]);
 
-  const {
-    loading: homeroomFailListByTermLoading,
-    data: homeroomFailListByTermData,
-  } = useHomeroomFailListByTermQuery({
-    variables: {
-      homeroomId: id,
-      term: values.termFailList
-        ? Number(values.termFailList)
-        : Number(initialTerm),
+  const [
+    getHomeroomFailListByTerm,
+    {
+      loading: homeroomFailListByTermLoading,
+      data: homeroomFailListByTermData,
     },
-    skip: homeroomTermListLoading,
-  });
+  ] = useHomeroomFailListByTermLazyQuery();
 
-  const failList = useMemo(() => {
+  useEffect(() => {
+    if (!homeroomTermListLoading) {
+      getHomeroomFailListByTerm({
+        variables: {
+          homeroomId: id,
+          term: values.termFailList
+            ? Number(values.termFailList)
+            : Number(initialTerm),
+          page: page.subjectStatus + 1,
+          size: ROWS_PER_PAGE,
+        },
+      });
+    }
+  }, [
+    getHomeroomFailListByTerm,
+    homeroomTermListLoading,
+    id,
+    initialTerm,
+    page.subjectStatus,
+    values.termFailList,
+  ]);
+
+  const { failList, failListLength } = useMemo(() => {
     const failListData =
       homeroomFailListByTermData?.homeroomFailListByTerm?.data || [];
-    return failListData.map((item) => ({
-      maSV: item.sinhVien.maSV,
-      tenSV: item.sinhVien.tenSV,
-      tenMH: item.lopHocPhan.monHoc.tenMH,
-      tenLopHP: item.lopHocPhan.tenLopHP,
-      dtb: item.dtb,
-      ghiChu: item.vang ? 'Vắng' : '',
-    }));
-  }, [homeroomFailListByTermData?.homeroomFailListByTerm?.data]);
+    return {
+      failList: failListData.map((item) => ({
+        maSV: item.sinhVien.maSV,
+        tenSV: item.sinhVien.tenSV,
+        tenMH: item.lopHocPhan.monHoc.tenMH,
+        tenLopHP: item.lopHocPhan.tenLopHP,
+        dtb: item.dtb,
+        ghiChu: item.vang ? 'Vắng' : '',
+      })),
+      failListLength:
+        homeroomFailListByTermData?.homeroomFailListByTerm?.total || 0,
+    };
+  }, [
+    homeroomFailListByTermData?.homeroomFailListByTerm?.data,
+    homeroomFailListByTermData?.homeroomFailListByTerm?.total,
+  ]);
 
-  const {
-    loading: homeroomNotEnrolledListByTermLoading,
-    data: homeroomNotEnrolledListByTermData,
-  } = useHomeroomNotEnrolledListByTermQuery({
-    variables: {
-      homeroomId: id,
-      term: values.termNotRegistered
-        ? Number(values.termNotRegistered)
-        : Number(initialTerm),
+  const [
+    getHomeroomNotEnrolledListByTerm,
+    {
+      loading: homeroomNotEnrolledListByTermLoading,
+      data: homeroomNotEnrolledListByTermData,
     },
-    skip: homeroomTermListLoading,
-  });
+  ] = useHomeroomNotEnrolledListByTermLazyQuery();
 
-  const notEnrolledList = useMemo(() => {
+  useEffect(() => {
+    if (!homeroomTermListLoading) {
+      getHomeroomNotEnrolledListByTerm({
+        variables: {
+          homeroomId: id,
+          term: values.termNotRegistered
+            ? Number(values.termNotRegistered)
+            : Number(initialTerm),
+          page: page.notRegistered + 1,
+          size: ROWS_PER_PAGE,
+        },
+      });
+    }
+  }, [
+    getHomeroomNotEnrolledListByTerm,
+    homeroomTermListLoading,
+    id,
+    initialTerm,
+    page.notRegistered,
+    values.termNotRegistered,
+  ]);
+
+  const { notEnrolledList, notEnrolledListLength } = useMemo(() => {
     const notEnrolledListData =
       homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm?.data ||
       [];
 
-    return notEnrolledListData.map((item) => ({
-      maSV: item.sinhVien.maSV,
-      tenSV: item.sinhVien.tenSV,
-    }));
-  }, [homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm?.data]);
+    return {
+      notEnrolledList: notEnrolledListData.map((item) => ({
+        maSV: item.sinhVien.maSV,
+        tenSV: item.sinhVien.tenSV,
+      })),
+      notEnrolledListLength:
+        homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm
+          .total || 0,
+    };
+  }, [
+    homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm?.data,
+    homeroomNotEnrolledListByTermData?.homeroomNotEnrolledListByTerm.total,
+  ]);
 
-  const {
-    loading: homeroomPostponeExamListByTermLoading,
-    data: homeroomPostponeExamListByTermData,
-  } = useHomeroomPostponeExamListByTermQuery({
-    variables: {
-      homeroomId: id,
-      term: values.termPostponeExam
-        ? Number(values.termPostponeExam)
-        : Number(initialTerm),
+  const [
+    getHomeroomPostponeExamListByTerm,
+    {
+      loading: homeroomPostponeExamListByTermLoading,
+      data: homeroomPostponeExamListByTermData,
     },
-    skip: homeroomTermListLoading,
-  });
+  ] = useHomeroomPostponeExamListByTermLazyQuery();
 
-  const postponeExamList = useMemo(() => {
+  useEffect(() => {
+    if (!homeroomTermListLoading) {
+      getHomeroomPostponeExamListByTerm({
+        variables: {
+          homeroomId: id,
+          term: values.termPostponeExam
+            ? Number(values.termPostponeExam)
+            : Number(initialTerm),
+          page: page.postponeExam + 1,
+          size: ROWS_PER_PAGE,
+        },
+      });
+    }
+  }, [
+    getHomeroomPostponeExamListByTerm,
+    homeroomTermListLoading,
+    id,
+    initialTerm,
+    page.postponeExam,
+    values.termPostponeExam,
+  ]);
+
+  const { postponeExamList, postponeExamListLength } = useMemo(() => {
     const postponeExamListData =
       homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
         ?.data || [];
 
-    return postponeExamListData.map((item) => ({
-      maSV: item.sinhVien.maSV,
-      tenSV: item.sinhVien.tenSV,
-      tenMH: item.monHoc.tenMH,
-    }));
+    return {
+      postponeExamList: postponeExamListData.map((item) => ({
+        maSV: item.sinhVien.maSV,
+        tenSV: item.sinhVien.tenSV,
+        tenMH: item.monHoc.tenMH,
+      })),
+      postponeExamListLength:
+        homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm
+          .total || 0,
+    };
   }, [
     homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm?.data,
+    homeroomPostponeExamListByTermData?.homeroomPostponeExamListByTerm.total,
   ]);
 
   return (
@@ -317,6 +388,7 @@ function ClassDetail() {
           title="Tình hình rớt môn"
           columns={failedColumns}
           data={failList}
+          total={failListLength}
           loading={homeroomFailListByTermLoading}
           page={page.subjectStatus}
           termList={termFailList as HomeroomTermListItem[]}
@@ -336,6 +408,7 @@ function ClassDetail() {
               title="Danh sách không đăng ký học phần"
               columns={notRegisteredSubjectColumns}
               data={notEnrolledList}
+              total={notEnrolledListLength}
               loading={homeroomNotEnrolledListByTermLoading}
               page={page.notRegistered}
               termList={termNotRegistered as HomeroomTermListItem[]}
@@ -355,6 +428,7 @@ function ClassDetail() {
               title="Danh sách hoãn thi"
               columns={postponeExamColumns}
               data={postponeExamList}
+              total={postponeExamListLength}
               loading={homeroomPostponeExamListByTermLoading}
               page={page.postponeExam}
               termList={termPostponeExam as HomeroomTermListItem[]}

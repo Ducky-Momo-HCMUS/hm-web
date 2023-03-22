@@ -10,6 +10,7 @@ import {
   QueryHomeroomNotEnrolledListByTermArgs,
   QueryHomeroomOverviewReportByTermArgs,
   QueryHomeroomPostponeExamListByTermArgs,
+  QueryHomeroomReportDetailByTermArgs,
   QueryHomeroomStudentListArgs,
   QueryHomeroomTermListArgs,
   QueryHomeroomWatchListArgs,
@@ -106,13 +107,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomFailListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomFailListByTermArgs) {
     try {
       const homeroomFailList = await this.get(
-        `v1/homerooms/${homeroomId}/fail`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/fail?term=${term}&page=${page}&size=${size}`
       );
       return homeroomFailList;
     } catch (error) {
@@ -124,11 +124,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomNotEnrolledListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomNotEnrolledListByTermArgs) {
     try {
       const homeroomNotEnrolledList = await this.get(
-        `/v1/homerooms/${homeroomId}/not-enrolled`,
-        { term }
+        `/v1/homerooms/${homeroomId}/not-enrolled?term=${term}&page=${page}&size=${size}`
       );
       return homeroomNotEnrolledList;
     } catch (error) {
@@ -140,11 +141,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomPostponeExamListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomPostponeExamListByTermArgs) {
     try {
       const homeroomPostponeExamList = await this.get(
-        `v1/homerooms/${homeroomId}/postpone-exam`,
-        { term }
+        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}&page=${page}&size=${size}`
       );
       return homeroomPostponeExamList;
     } catch (error) {
@@ -159,10 +161,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomOverviewReportByTermArgs) {
     try {
       const homeroomOverviewReport = await this.get(
-        `v1/homerooms/${homeroomId}/report`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/report?term=${term}`
       );
       return homeroomOverviewReport;
     } catch (error) {
@@ -177,10 +176,7 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomFinalResultListByTermArgs) {
     try {
       const homeroomFinalResultList = await this.get(
-        `v1/homerooms/${homeroomId}/score`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/score?term=${term}`
       );
       return homeroomFinalResultList;
     } catch (error) {
@@ -195,12 +191,39 @@ class HomeroomAPI extends BaseDataSource {
   }: QueryHomeroomExamAbsentListByTermArgs) {
     try {
       const homeroomExamAbsentList = await this.get(
-        `v1/homerooms/${homeroomId}/absent`,
-        {
-          term,
-        }
+        `v1/homerooms/${homeroomId}/absent?term=${term}`
       );
       return homeroomExamAbsentList;
+    } catch (error) {
+      logger.error('Error: cannot fetch homeroom exam absent list by term');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async getHomeroomReportDetail({
+    homeroomId,
+    term,
+  }: QueryHomeroomReportDetailByTermArgs) {
+    try {
+      const homeroomOverviewReport = await this.get(
+        `v1/homerooms/${homeroomId}/report?term=${term}`
+      );
+      const homeroomExamAbsentList = await this.get(
+        `v1/homerooms/${homeroomId}/absent?term=${term}`
+      );
+      const homeroomFinalResultList = await this.get(
+        `v1/homerooms/${homeroomId}/score?term=${term}`
+      );
+      const homeroomPostponeExamList = await this.get(
+        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}`
+      );
+
+      return {
+        overviewReport: homeroomOverviewReport.data,
+        examAbsent: homeroomExamAbsentList.data,
+        finalResult: homeroomFinalResultList.data,
+        examPostpone: homeroomPostponeExamList.data,
+      };
     } catch (error) {
       logger.error('Error: cannot fetch homeroom exam absent list by term');
       throw this.handleError(error as ApolloError);

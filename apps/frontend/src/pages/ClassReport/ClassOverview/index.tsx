@@ -43,6 +43,7 @@ const TRAINING_REPORT_TITLE_LIST = [
 interface ClassOverviewProps {
   homeroomOverviewReport: HomeroomOverviewReport;
   homeroomFinalResultList: HomeroomFinalResultListItem[];
+  homeroomFinalResultListLength: number;
   homeroomFinalResultListLoading: boolean;
   homeroomOverviewReportLoading: boolean;
   page: number;
@@ -52,6 +53,7 @@ interface ClassOverviewProps {
 function ClassOverview({
   homeroomOverviewReport,
   homeroomFinalResultList,
+  homeroomFinalResultListLength,
   homeroomFinalResultListLoading,
   homeroomOverviewReportLoading,
   page,
@@ -135,6 +137,7 @@ function ClassOverview({
         title="Danh sách kết quả cuối học kỳ"
         columns={semesterResultColumns}
         data={homeroomFinalResultList}
+        total={homeroomFinalResultListLength}
         loading={homeroomFinalResultListLoading}
         page={page}
         rowsPerPage={ROWS_PER_PAGE}
