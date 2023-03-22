@@ -28,7 +28,7 @@ export const studentResolver: Resolvers<ResolverContext> = {
     },
     studentSubjectsByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentSubjectsByTerm(args);
-      return res.data;
+      return res;
     },
     studentTrainingPointByTerm: async (_, args, { dataSources }) => {
       const res = await dataSources.studentAPI.getStudentTrainingPointByTerm(

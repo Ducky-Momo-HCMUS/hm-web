@@ -120,10 +120,14 @@ class StudentAPI extends BaseDataSource {
     term,
   }: QueryStudentSubjectsByTermArgs) {
     try {
-      const subjectList = await this.get(
+      const subjects = await this.get(
         `v1/students/${studentId}/subjects?term=${term}`
       );
-      return subjectList;
+      const studentDetail = await this.get(`/v1/students/${studentId}`);
+      return {
+        subjects: subjects.data,
+        sinhVien: studentDetail,
+      };
     } catch (error) {
       logger.error('Error: cannot fetch subject list by term');
       throw this.handleError(error as ApolloError);
@@ -277,14 +281,18 @@ class StudentAPI extends BaseDataSource {
         studentId,
         subject: 'totNghiep',
       });
+      const sinhVien = await this.getStudentDetail({ studentId });
 
       return {
-        daiCuong: daiCuong.data.data,
-        coSoNganh: coSoNganh.data.data,
-        batBuocChuyenNganh: batBuocChuyenNganh.data.data,
-        tuChonChuyenNganh: tuChonChuyenNganh.data.data,
-        tuChonTuDo: tuChonTuDo.data.data,
-        totNghiep: totNghiep.data.data,
+        result: {
+          daiCuong: daiCuong.data.data,
+          coSoNganh: coSoNganh.data.data,
+          batBuocChuyenNganh: batBuocChuyenNganh.data.data,
+          tuChonChuyenNganh: tuChonChuyenNganh.data.data,
+          tuChonTuDo: tuChonTuDo.data.data,
+          totNghiep: totNghiep.data.data,
+        },
+        sinhVien,
       };
     } catch (error) {
       logger.error('Error: cannot fetch student all subjects result');

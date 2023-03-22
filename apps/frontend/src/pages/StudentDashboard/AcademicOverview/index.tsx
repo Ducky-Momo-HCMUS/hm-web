@@ -84,6 +84,17 @@ function AcademicOverview() {
       },
     });
 
+  const { subjectList, studentDetail } = useMemo(
+    () => ({
+      subjectList: allSubjectsResultData?.studentAllSubjectsResult.result || [],
+      studentDetail: allSubjectsResultData?.studentAllSubjectsResult.sinhVien,
+    }),
+    [
+      allSubjectsResultData?.studentAllSubjectsResult.result,
+      allSubjectsResultData?.studentAllSubjectsResult.sinhVien,
+    ]
+  );
+
   return (
     <>
       <StyledStickyBox>
