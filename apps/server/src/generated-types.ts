@@ -226,6 +226,7 @@ export type HomeroomDetail = {
 export type HomeroomExamAbsentList = {
   __typename?: 'HomeroomExamAbsentList';
   data: Array<HomeroomExamAbsentListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomExamAbsentListItem = {
@@ -321,6 +322,7 @@ export type HomeroomListItem = {
 export type HomeroomNotEnrolledList = {
   __typename?: 'HomeroomNotEnrolledList';
   data: Array<HomeroomNotEnrolledListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomNotEnrolledListItem = {
@@ -351,6 +353,7 @@ export type HomeroomOverviewReport = {
 export type HomeroomPostponeExamList = {
   __typename?: 'HomeroomPostponeExamList';
   data: Array<HomeroomPostponeExamListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomPostponeExamListItem = {
@@ -779,11 +782,15 @@ export type QueryHomeroomDetailArgs = {
 
 export type QueryHomeroomExamAbsentListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
 export type QueryHomeroomFailListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -796,6 +803,8 @@ export type QueryHomeroomFinalResultListByTermArgs = {
 
 export type QueryHomeroomNotEnrolledListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -806,6 +815,8 @@ export type QueryHomeroomOverviewReportByTermArgs = {
 
 export type QueryHomeroomPostponeExamListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -1970,6 +1981,7 @@ export type HomeroomExamAbsentListResolvers<
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2146,6 +2158,7 @@ export type HomeroomNotEnrolledListResolvers<
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2211,6 +2224,7 @@ export type HomeroomPostponeExamListResolvers<
     ParentType,
     ContextType
   >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2774,13 +2788,19 @@ export type QueryResolvers<
     ResolversTypes['HomeroomExamAbsentList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomExamAbsentListByTermArgs, 'homeroomId' | 'term'>
+    RequireFields<
+      QueryHomeroomExamAbsentListByTermArgs,
+      'homeroomId' | 'page' | 'size' | 'term'
+    >
   >;
   homeroomFailListByTerm?: Resolver<
     ResolversTypes['HomeroomFailList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomFailListByTermArgs, 'homeroomId' | 'term'>
+    RequireFields<
+      QueryHomeroomFailListByTermArgs,
+      'homeroomId' | 'page' | 'size' | 'term'
+    >
   >;
   homeroomFinalResultListByTerm?: Resolver<
     ResolversTypes['HomeroomFinalResultList'],
@@ -2800,7 +2820,10 @@ export type QueryResolvers<
     ResolversTypes['HomeroomNotEnrolledList'],
     ParentType,
     ContextType,
-    RequireFields<QueryHomeroomNotEnrolledListByTermArgs, 'homeroomId' | 'term'>
+    RequireFields<
+      QueryHomeroomNotEnrolledListByTermArgs,
+      'homeroomId' | 'page' | 'size' | 'term'
+    >
   >;
   homeroomOverviewReportByTerm?: Resolver<
     ResolversTypes['HomeroomOverviewReport'],
@@ -2814,7 +2837,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<
       QueryHomeroomPostponeExamListByTermArgs,
-      'homeroomId' | 'term'
+      'homeroomId' | 'page' | 'size' | 'term'
     >
   >;
   homeroomReportDetailByTerm?: Resolver<

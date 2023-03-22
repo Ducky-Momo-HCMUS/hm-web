@@ -107,10 +107,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomFailListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomFailListByTermArgs) {
     try {
       const homeroomFailList = await this.get(
-        `v1/homerooms/${homeroomId}/fail?term=${term}`
+        `v1/homerooms/${homeroomId}/fail?term=${term}&page=${page}&size=${size}`
       );
       return homeroomFailList;
     } catch (error) {
@@ -122,10 +124,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomNotEnrolledListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomNotEnrolledListByTermArgs) {
     try {
       const homeroomNotEnrolledList = await this.get(
-        `/v1/homerooms/${homeroomId}/not-enrolled?term=${term}`
+        `/v1/homerooms/${homeroomId}/not-enrolled?term=${term}&page=${page}&size=${size}`
       );
       return homeroomNotEnrolledList;
     } catch (error) {
@@ -137,10 +141,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomPostponeExamListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomPostponeExamListByTermArgs) {
     try {
       const homeroomPostponeExamList = await this.get(
-        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}`
+        `v1/homerooms/${homeroomId}/postpone-exam?term=${term}&page=${page}&size=${size}`
       );
       return homeroomPostponeExamList;
     } catch (error) {

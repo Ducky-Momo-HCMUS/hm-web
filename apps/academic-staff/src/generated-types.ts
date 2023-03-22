@@ -221,6 +221,7 @@ export type HomeroomDetail = {
 export type HomeroomExamAbsentList = {
   __typename?: 'HomeroomExamAbsentList';
   data: Array<HomeroomExamAbsentListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomExamAbsentListItem = {
@@ -316,6 +317,7 @@ export type HomeroomListItem = {
 export type HomeroomNotEnrolledList = {
   __typename?: 'HomeroomNotEnrolledList';
   data: Array<HomeroomNotEnrolledListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomNotEnrolledListItem = {
@@ -346,6 +348,7 @@ export type HomeroomOverviewReport = {
 export type HomeroomPostponeExamList = {
   __typename?: 'HomeroomPostponeExamList';
   data: Array<HomeroomPostponeExamListItem>;
+  total: Scalars['Int'];
 };
 
 export type HomeroomPostponeExamListItem = {
@@ -774,11 +777,15 @@ export type QueryHomeroomDetailArgs = {
 
 export type QueryHomeroomExamAbsentListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
 export type QueryHomeroomFailListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -791,6 +798,8 @@ export type QueryHomeroomFinalResultListByTermArgs = {
 
 export type QueryHomeroomNotEnrolledListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -801,6 +810,8 @@ export type QueryHomeroomOverviewReportByTermArgs = {
 
 export type QueryHomeroomPostponeExamListByTermArgs = {
   homeroomId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
   term: Scalars['Int'];
 };
 
@@ -2014,12 +2025,15 @@ export type HomeroomDetailQuery = {
 export type HomeroomExamAbsentListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomExamAbsentListByTermQuery = {
   __typename?: 'Query';
   homeroomExamAbsentListByTerm: {
     __typename?: 'HomeroomExamAbsentList';
+    total: number;
     data: Array<{
       __typename?: 'HomeroomExamAbsentListItem';
       sinhVien: {
@@ -2035,6 +2049,8 @@ export type HomeroomExamAbsentListByTermQuery = {
 export type HomeroomFailListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomFailListByTermQuery = {
@@ -2100,12 +2116,15 @@ export type HomeroomListQuery = {
 export type HomeroomNotEnrolledListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomNotEnrolledListByTermQuery = {
   __typename?: 'Query';
   homeroomNotEnrolledListByTerm: {
     __typename?: 'HomeroomNotEnrolledList';
+    total: number;
     data: Array<{
       __typename?: 'HomeroomNotEnrolledListItem';
       sinhVien: {
@@ -2157,12 +2176,15 @@ export type HomeroomOverviewReportByTermQuery = {
 export type HomeroomPostponeExamListByTermQueryVariables = Exact<{
   homeroomId: Scalars['String'];
   term: Scalars['Int'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
 }>;
 
 export type HomeroomPostponeExamListByTermQuery = {
   __typename?: 'Query';
   homeroomPostponeExamListByTerm: {
     __typename?: 'HomeroomPostponeExamList';
+    total: number;
     data: Array<{
       __typename?: 'HomeroomPostponeExamListItem';
       sinhVien: {
@@ -5270,8 +5292,18 @@ export type HomeroomDetailQueryResult = Apollo.QueryResult<
   HomeroomDetailQueryVariables
 >;
 export const HomeroomExamAbsentListByTermDocument = gql`
-  query HomeroomExamAbsentListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomExamAbsentListByTerm(homeroomId: $homeroomId, term: $term) {
+  query HomeroomExamAbsentListByTerm(
+    $homeroomId: String!
+    $term: Int!
+    $page: Int!
+    $size: Int!
+  ) {
+    homeroomExamAbsentListByTerm(
+      homeroomId: $homeroomId
+      term: $term
+      page: $page
+      size: $size
+    ) {
       data {
         sinhVien {
           maSV
@@ -5281,6 +5313,7 @@ export const HomeroomExamAbsentListByTermDocument = gql`
           tenMH
         }
       }
+      total
     }
   }
 `;
@@ -5299,6 +5332,8 @@ export const HomeroomExamAbsentListByTermDocument = gql`
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
  *      term: // value for 'term'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -5337,8 +5372,18 @@ export type HomeroomExamAbsentListByTermQueryResult = Apollo.QueryResult<
   HomeroomExamAbsentListByTermQueryVariables
 >;
 export const HomeroomFailListByTermDocument = gql`
-  query HomeroomFailListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomFailListByTerm(homeroomId: $homeroomId, term: $term) {
+  query HomeroomFailListByTerm(
+    $homeroomId: String!
+    $term: Int!
+    $page: Int!
+    $size: Int!
+  ) {
+    homeroomFailListByTerm(
+      homeroomId: $homeroomId
+      term: $term
+      page: $page
+      size: $size
+    ) {
       total
       data {
         dtb
@@ -5372,6 +5417,8 @@ export const HomeroomFailListByTermDocument = gql`
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
  *      term: // value for 'term'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -5548,14 +5595,25 @@ export type HomeroomListQueryResult = Apollo.QueryResult<
   HomeroomListQueryVariables
 >;
 export const HomeroomNotEnrolledListByTermDocument = gql`
-  query HomeroomNotEnrolledListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomNotEnrolledListByTerm(homeroomId: $homeroomId, term: $term) {
+  query HomeroomNotEnrolledListByTerm(
+    $homeroomId: String!
+    $term: Int!
+    $page: Int!
+    $size: Int!
+  ) {
+    homeroomNotEnrolledListByTerm(
+      homeroomId: $homeroomId
+      term: $term
+      page: $page
+      size: $size
+    ) {
       data {
         sinhVien {
           maSV
           tenSV
         }
       }
+      total
     }
   }
 `;
@@ -5574,6 +5632,8 @@ export const HomeroomNotEnrolledListByTermDocument = gql`
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
  *      term: // value for 'term'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */
@@ -5692,8 +5752,18 @@ export type HomeroomOverviewReportByTermQueryResult = Apollo.QueryResult<
   HomeroomOverviewReportByTermQueryVariables
 >;
 export const HomeroomPostponeExamListByTermDocument = gql`
-  query HomeroomPostponeExamListByTerm($homeroomId: String!, $term: Int!) {
-    homeroomPostponeExamListByTerm(homeroomId: $homeroomId, term: $term) {
+  query HomeroomPostponeExamListByTerm(
+    $homeroomId: String!
+    $term: Int!
+    $page: Int!
+    $size: Int!
+  ) {
+    homeroomPostponeExamListByTerm(
+      homeroomId: $homeroomId
+      term: $term
+      page: $page
+      size: $size
+    ) {
       data {
         sinhVien {
           maSV
@@ -5703,6 +5773,7 @@ export const HomeroomPostponeExamListByTermDocument = gql`
           tenMH
         }
       }
+      total
     }
   }
 `;
@@ -5721,6 +5792,8 @@ export const HomeroomPostponeExamListByTermDocument = gql`
  *   variables: {
  *      homeroomId: // value for 'homeroomId'
  *      term: // value for 'term'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

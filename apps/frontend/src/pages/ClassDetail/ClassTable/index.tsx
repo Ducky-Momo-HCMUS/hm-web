@@ -24,6 +24,7 @@ interface ClassTableProps {
   title: string;
   columns: Column[];
   data: any;
+  total: number;
   loading?: boolean;
   page: number;
   termList?: HomeroomTermListItem[];
@@ -42,6 +43,7 @@ function ClassTable({
   title,
   columns,
   data,
+  total,
   loading = false,
   page,
   termList = [],
@@ -104,18 +106,19 @@ function ClassTable({
           <Table stickyHeader>
             <CustomisedTableHead columns={columns} />
             <TableBody>
-              {data
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((item: any, index: number) => (
-                  <CustomisedTableRow data={item} index={index + 1} />
-                ))}
+              {data.map((item: any, index: number) => (
+                <CustomisedTableRow
+                  data={item}
+                  index={page * rowsPerPage + index + 1}
+                />
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[]}
           component="div"
-          count={data.length || 0}
+          count={total}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
