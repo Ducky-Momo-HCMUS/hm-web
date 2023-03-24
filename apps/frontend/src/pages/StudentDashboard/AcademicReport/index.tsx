@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   Box,
@@ -16,7 +17,6 @@ import { useParams, Link } from 'react-router-dom';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
-import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
 import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
 import {
   StyledBreadCrumbs,
@@ -25,7 +25,6 @@ import {
   StyledStickyBox,
 } from '../../../components/styles';
 import {
-  StudentDetailQuery,
   useStudentAllTermsQuery,
   useStudentAveragePointByTermQuery,
   useStudentSubjectsByTermQuery,
@@ -33,8 +32,6 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { groupTermsByYear } from '../../../utils';
-import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
-import { client } from '../../../ApolloClient';
 
 import { StyledFormControl, StyledStatusBox } from './styles';
 import AcademicTableHead from './AcademicTableHead';
@@ -217,7 +214,7 @@ function AcademicReport() {
                 }}
               />
             }
-            fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}_HK${
+            fileName={`PhieuDiem_${id}_HK${
               terms.find((item) => item.maHK === +values.term)?.hocKy || 0
             }`}
           >
