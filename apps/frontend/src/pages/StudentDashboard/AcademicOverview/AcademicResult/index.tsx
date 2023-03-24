@@ -142,7 +142,7 @@ function AcademicResult({ studentOverviewResult }: AcademicResultProps) {
         <TabPanel index={4} value={selectedTab}>
           <AcademicTable header="Kiến thức tự chọn tự do" data={data} />
         </TabPanel>
-        <TabPanel index={5} value={studentOverviewResult.tuChonTuDo}>
+        <TabPanel index={5} value={selectedTab}>
           <AcademicTable
             header="Kiến thức tốt nghiệp"
             description={`Tích lũy: ${studentOverviewResult.totNghiep}/10`}
