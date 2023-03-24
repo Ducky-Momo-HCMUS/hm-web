@@ -188,10 +188,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomExamAbsentListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomExamAbsentListByTermArgs) {
     try {
       const homeroomExamAbsentList = await this.get(
-        `v1/homerooms/${homeroomId}/absent?term=${term}`
+        `v1/homerooms/${homeroomId}/absent?term=${term}&page=${page}&size=${size}`
       );
       return homeroomExamAbsentList;
     } catch (error) {

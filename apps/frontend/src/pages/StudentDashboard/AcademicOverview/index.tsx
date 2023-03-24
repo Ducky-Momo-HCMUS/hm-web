@@ -2,9 +2,10 @@ import { Box, Button, Typography } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { format } from 'date-fns';
 
-import { MOCK_DATA_EXPORT } from '../../../components/ScorePDFTemplate/mock';
-import ScorePDFTemplate from '../../../components/ScorePDFTemplate';
+// eslint-disable-next-line import/no-cycle
+import FullScorePDFTemplate from '../../../components/ScorePDFTemplate/template-many-tables';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   StyledBreadCrumbs,
@@ -20,7 +21,7 @@ import {
 import AcademicInfo from './AcademicInfo';
 import AcademicResult from './AcademicResult';
 
-const OVERVIEW_CONTENT = [
+export const OVERVIEW_CONTENT = [
   { title: 'Chuyên ngành', goal: '' },
   { title: 'Giáo dục đại cương', goal: '56' },
   { title: 'Kiến thức cơ sở ngành', goal: '38' },
@@ -50,7 +51,8 @@ function AcademicOverview() {
       tuChonChuyenNganh: data?.tuChonChuyenNganh || 0,
       tuChonTuDo: data?.tuChonTuDo || 0,
       totNghiep: data?.totNghiep || 0,
-    } as Omit<StudentOverviewResult, 'tenCN | dtb'>;
+      dtb: data?.dtb,
+    } as StudentOverviewResult;
   }, [studentOverviewResultData?.studentOverviewResult]);
 
   const mappedData = useMemo(() => {
@@ -116,8 +118,26 @@ function AcademicOverview() {
             data={allSubjectsResultData}
           >
             <PDFDownloadLink
-              document={<ScorePDFTemplate data={MOCK_DATA_EXPORT} />}
-              fileName={`PhieuDiem_${MOCK_DATA_EXPORT.maSV}`}
+              document={
+                <FullScorePDFTemplate
+                  data={{
+                    maSV: id,
+                    tenSV: studentDetail?.tenSV || '',
+                    dob: studentDetail
+                      ? format(new Date(studentDetail?.dob), 'dd/MM/yyyy')
+                      : '',
+                    dtb: studentOverviewResult.dtb,
+                    loaiMonHoc: subjectList,
+                    tongTCDaDat:
+                      studentOverviewResultData?.studentOverviewResult
+                        ?.tongTC || 0,
+                    tongTC:
+                      studentOverviewResultData?.studentOverviewResult
+                        ?.tongTCDaHoc || 0,
+                  }}
+                />
+              }
+              fileName={`PhieuDiem_${id}`}
             >
               {({ loading }) =>
                 loading ? (

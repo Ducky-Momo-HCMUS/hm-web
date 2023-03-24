@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 interface TableProps {
   data: {
     namHoc: number;
-    hocKy: number;
+    hocKy?: number;
     monHoc: {
       maMH: string;
       tenMH: string;

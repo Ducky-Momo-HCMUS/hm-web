@@ -239,20 +239,24 @@ function ClassReport() {
 
   useEffect(() => {
     if (!homeroomTermListLoading) {
-      getHomeroomOverviewReportByTerm({
-        variables: {
-          homeroomId: id,
-          term: selectedTerm,
-        },
-      });
-      getHomeroomFinalResultListByTerm({
-        variables: {
-          homeroomId: id,
-          term: selectedTerm,
-          page: page.finalResult + 1,
-          size: FINAL_RESULT_LIST_PAGE_SIZE,
-        },
-      });
+      if (selectedTab === 0) {
+        getHomeroomOverviewReportByTerm({
+          variables: {
+            homeroomId: id,
+            term: selectedTerm,
+          },
+        });
+        getHomeroomFinalResultListByTerm({
+          variables: {
+            homeroomId: id,
+            term: selectedTerm,
+            page: page.finalResult + 1,
+            size: FINAL_RESULT_LIST_PAGE_SIZE,
+          },
+        });
+
+        return;
+      }
 
       getHomeroomExamAbsentListByTerm({
         variables: {
@@ -262,6 +266,7 @@ function ClassReport() {
           size: EXAM_ABSENT_LIST_PAGE_SIZE,
         },
       });
+
       getHomeroomPostponeExamListByTerm({
         variables: {
           homeroomId: id,
@@ -280,6 +285,7 @@ function ClassReport() {
     id,
     page,
     selectedTerm,
+    selectedTab,
   ]);
 
   const handleChangeTab = useCallback(
@@ -360,6 +366,7 @@ function ClassReport() {
       homeroomId: id,
       term: selectedTerm,
     },
+    skip: homeroomTermListLoading,
   });
 
   function saveDocumentToFile(doc, fileName) {
@@ -545,23 +552,18 @@ function ClassReport() {
             />
           </TabPanel>
           <TabPanel index={1} value={selectedTab}>
-            <AsyncDataRenderer
-              loading={
-                homeroomExamAbsentListLoading || homeroomPostponeExamListLoading
-              }
-              data={homeroomExamAbsentListData && homeroomPostponeExamListData}
-            >
-              <PostponeExam
-                homeroomExamAbsentList={homeroomExamAbsentList}
-                homeroomExamAbsentListLength={homeroomExamAbsentListLength}
-                homeroomExamPostponedList={homeroomPostponeExamList}
-                homeroomExamPostponedListLength={homeroomPostponeExamListLength}
-                examAbsentPage={page.examAbsent}
-                examPostponePage={page.postponeExam}
-                handleChangeExamAbsentPage={handleChangeExamAbsentPage}
-                handleChangeExamPostponePage={handleChangePostponeExamPage}
-              />
-            </AsyncDataRenderer>
+            <PostponeExam
+              homeroomExamAbsentList={homeroomExamAbsentList}
+              homeroomExamAbsentListLength={homeroomExamAbsentListLength}
+              homeroomExamAbsentListLoading={homeroomExamAbsentListLoading}
+              homeroomExamPostponedList={homeroomPostponeExamList}
+              homeroomExamPostponedListLength={homeroomPostponeExamListLength}
+              homeroomExamPostponedListLoading={homeroomPostponeExamListLoading}
+              examAbsentPage={page.examAbsent}
+              examPostponePage={page.postponeExam}
+              handleChangeExamAbsentPage={handleChangeExamAbsentPage}
+              handleChangeExamPostponePage={handleChangePostponeExamPage}
+            />
           </TabPanel>
         </Box>
       </StyledContentWrapper>
