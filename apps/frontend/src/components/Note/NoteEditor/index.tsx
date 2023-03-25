@@ -43,7 +43,6 @@ interface NoteEditorProps {
   handleSelectTags: any;
   handleReset: any;
   isAdding: boolean;
-  height?: number;
   isNoteStore?: boolean;
   maSV?: String;
   tenSV?: String;
@@ -73,7 +72,6 @@ function NoteEditor({
   handleSelectTags,
   handleReset,
   isAdding,
-  height,
   isNoteStore = false,
   maSV = '',
   tenSV = '',
@@ -142,7 +140,7 @@ function NoteEditor({
             editorRef.current = editor;
           }}
           initialValue={initialValue}
-          init={height ? { ...NOTE_EDITOR_CONFIG, height } : NOTE_EDITOR_CONFIG}
+          init={NOTE_EDITOR_CONFIG}
         />
         {!!imageList.length && (
           <ImageList cols={2} rowHeight={200}>
