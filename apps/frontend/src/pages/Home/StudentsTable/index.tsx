@@ -446,7 +446,7 @@ function StudentsTable() {
             <Paper
               sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}
             >
-              <TableContainer sx={{ maxHeight: 350 }}>
+              <TableContainer sx={{ height: '55vh' }}>
                 <Table stickyHeader>
                   <StudentTableHead />
                   <TableBody>

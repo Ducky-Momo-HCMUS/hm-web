@@ -26,6 +26,9 @@ import { Dayjs } from 'dayjs';
 import { Editor as TinyMCEEditor } from 'tinymce';
 import { Link } from 'react-router-dom';
 import { FilePond } from 'react-filepond';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 
 import Header from '../../components/Header';
 import {
@@ -59,6 +62,7 @@ import {
   StyledDialog,
   StyledFilterBox,
   StyledGridContainer,
+  StyledIconButton,
   StyledTextField,
 } from './styles';
 
@@ -231,6 +235,8 @@ function NoteStore() {
       title: '',
       tags: [],
       images: [],
+      maSV: '',
+      tenSV: '',
     }));
     setFiles([]);
     if (editorRef.current) {
@@ -404,6 +410,8 @@ function NoteStore() {
     [homeroomListData?.homeroomList.lopChuNhiem]
   );
 
+  const [openFilterBox, setOpenFilterBox] = useState(false);
+
   return (
     <>
       <StyledContainer>
@@ -419,170 +427,195 @@ function NoteStore() {
               }}
             >
               <StyledTitle variant="h1">Ghi chú của tôi</StyledTitle>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleReset();
-                  setValues((v) => ({ ...v, isAdding: true }));
-                }}
-              >
-                Tạo ghi chú mới
-              </Button>
+              <Box>
+                <StyledIconButton
+                  size="large"
+                  aria-label="add note"
+                  color="primary"
+                  onClick={() => {
+                    handleReset();
+                    setValues((v) => ({ ...v, isAdding: true }));
+                  }}
+                >
+                  <AddBoxIcon fontSize="inherit" />
+                </StyledIconButton>
+                {openFilterBox ? (
+                  <StyledIconButton
+                    size="large"
+                    aria-label="close filter note"
+                    color="primary"
+                    onClick={() => setOpenFilterBox(false)}
+                  >
+                    <FilterAltOffIcon fontSize="inherit" />
+                  </StyledIconButton>
+                ) : (
+                  <StyledIconButton
+                    size="large"
+                    aria-label="open filter note"
+                    color="primary"
+                    onClick={() => setOpenFilterBox(true)}
+                  >
+                    <FilterAltIcon fontSize="inherit" />
+                  </StyledIconButton>
+                )}
+              </Box>
             </Box>
             <StyledBreadCrumbs aria-label="breadcrumb">
               <Link to="/">Trang chủ</Link>
               <Typography color="text.primary">Ghi chú của tôi</Typography>
             </StyledBreadCrumbs>
           </StyledStickyBox>
-          <StyledCard>
-            <StyledFilterBox>
-              <StyledTextField
-                sx={{ width: '20%' }}
-                id="title-keyword"
-                variant="standard"
-                label="Tiêu đề"
-                placeholder="Nhập tiêu đề..."
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleChangeFilterValue('title')}
-                value={filterValues.title}
-              />
-              <StyledTextField
-                sx={{ width: '15%' }}
-                id="student-keyword"
-                variant="standard"
-                label="Sinh viên"
-                placeholder="Nhập họ tên/MSSV..."
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleChangeFilterValue('student')}
-                value={filterValues.student}
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label="Ngày bắt đầu"
-                  inputFormat="DD/MM/YYYY"
-                  value={filterValues.start}
-                  onChange={(newValue) => {
-                    setFilterValues((v) => ({ ...v, start: newValue }));
+          {openFilterBox && (
+            <StyledCard>
+              <StyledFilterBox>
+                <StyledTextField
+                  sx={{ width: '20%' }}
+                  id="title-keyword"
+                  variant="standard"
+                  label="Tiêu đề"
+                  placeholder="Nhập tiêu đề..."
+                  InputLabelProps={{
+                    shrink: true,
                   }}
-                  renderInput={(params) => (
-                    <StyledTextField
-                      {...params}
-                      variant="standard"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
+                  onChange={handleChangeFilterValue('title')}
+                  value={filterValues.title}
                 />
-                <DatePicker
-                  label="Ngày kết thúc"
-                  inputFormat="DD/MM/YYYY"
-                  value={filterValues.end}
-                  onChange={(newValue) => {
-                    setFilterValues((v) => ({ ...v, end: newValue }));
+                <StyledTextField
+                  sx={{ width: '15%' }}
+                  id="student-keyword"
+                  variant="standard"
+                  label="Sinh viên"
+                  placeholder="Nhập họ tên/MSSV..."
+                  InputLabelProps={{
+                    shrink: true,
                   }}
-                  renderInput={(params) => (
-                    <StyledTextField
-                      {...params}
-                      variant="standard"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  )}
+                  onChange={handleChangeFilterValue('student')}
+                  value={filterValues.student}
                 />
-              </LocalizationProvider>
-              <AsyncDataRenderer
-                loading={homeroomListLoading}
-                data={homeroomListData}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Ngày bắt đầu"
+                    inputFormat="DD/MM/YYYY"
+                    value={filterValues.start}
+                    onChange={(newValue) => {
+                      setFilterValues((v) => ({ ...v, start: newValue }));
+                    }}
+                    renderInput={(params) => (
+                      <StyledTextField
+                        {...params}
+                        variant="standard"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    )}
+                  />
+                  <DatePicker
+                    label="Ngày kết thúc"
+                    inputFormat="DD/MM/YYYY"
+                    value={filterValues.end}
+                    onChange={(newValue) => {
+                      setFilterValues((v) => ({ ...v, end: newValue }));
+                    }}
+                    renderInput={(params) => (
+                      <StyledTextField
+                        {...params}
+                        variant="standard"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <AsyncDataRenderer
+                  loading={homeroomListLoading}
+                  data={homeroomListData}
+                >
+                  <FormControl variant="standard" sx={{ width: '10%' }}>
+                    <InputLabel
+                      sx={{ fontWeight: 'bold' }}
+                      shrink
+                      id="class-select-label"
+                    >
+                      Lớp
+                    </InputLabel>
+                    <Select
+                      sx={{
+                        '& .MuiSelect-select .notranslate::after':
+                          filterValues.class.length === 0
+                            ? {
+                                content: `"Chọn lớp..."`,
+                                opacity: 0.42,
+                              }
+                            : {},
+                      }}
+                      labelId="class-select-label"
+                      id="class-select"
+                      label="Lớp"
+                      onChange={handleSelectFilterClass}
+                      value={filterValues.class}
+                    >
+                      {homeroomList.map((item) => (
+                        <MenuItem value={item.maSH}>{item.maSH}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </AsyncDataRenderer>
+                <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
+                  <FormControl variant="standard" sx={{ width: '15%' }}>
+                    <InputLabel
+                      sx={{ fontWeight: 'bold' }}
+                      shrink
+                      id="class-select-label"
+                    >
+                      Tag
+                    </InputLabel>
+                    <Select
+                      sx={{
+                        '& .MuiSelect-select .notranslate::after':
+                          filterValues.tag.length === 0
+                            ? {
+                                content: `"Chọn tag..."`,
+                                opacity: 0.42,
+                              }
+                            : {},
+                      }}
+                      labelId="tag-select-label"
+                      id="tag-select"
+                      MenuProps={MenuProps}
+                      label="Tag"
+                      onChange={handleSelectFilterTag}
+                      value={filterValues.tag}
+                    >
+                      {tagList.map((item) => (
+                        <MenuItem value={item.maTag}>{item.tenTag}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </AsyncDataRenderer>
+              </StyledFilterBox>
+              <Button
+                sx={{ marginTop: '1rem' }}
+                variant="contained"
+                color="primary"
+                onClick={handleSearchNote}
               >
-                <FormControl variant="standard" sx={{ width: '10%' }}>
-                  <InputLabel
-                    sx={{ fontWeight: 'bold' }}
-                    shrink
-                    id="class-select-label"
-                  >
-                    Lớp
-                  </InputLabel>
-                  <Select
-                    sx={{
-                      '& .MuiSelect-select .notranslate::after':
-                        filterValues.class.length === 0
-                          ? {
-                              content: `"Chọn lớp..."`,
-                              opacity: 0.42,
-                            }
-                          : {},
-                    }}
-                    labelId="class-select-label"
-                    id="class-select"
-                    label="Lớp"
-                    onChange={handleSelectFilterClass}
-                    value={filterValues.class}
-                  >
-                    {homeroomList.map((item) => (
-                      <MenuItem value={item.maSH}>{item.maSH}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </AsyncDataRenderer>
-              <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
-                <FormControl variant="standard" sx={{ width: '15%' }}>
-                  <InputLabel
-                    sx={{ fontWeight: 'bold' }}
-                    shrink
-                    id="class-select-label"
-                  >
-                    Tag
-                  </InputLabel>
-                  <Select
-                    sx={{
-                      '& .MuiSelect-select .notranslate::after':
-                        filterValues.tag.length === 0
-                          ? {
-                              content: `"Chọn tag..."`,
-                              opacity: 0.42,
-                            }
-                          : {},
-                    }}
-                    labelId="tag-select-label"
-                    id="tag-select"
-                    MenuProps={MenuProps}
-                    label="Tag"
-                    onChange={handleSelectFilterTag}
-                    value={filterValues.tag}
-                  >
-                    {tagList.map((item) => (
-                      <MenuItem value={item.maTag}>{item.tenTag}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </AsyncDataRenderer>
-            </StyledFilterBox>
-            <Button
-              sx={{ marginTop: '1rem' }}
-              variant="contained"
-              color="primary"
-              onClick={handleSearchNote}
-            >
-              Lọc
-            </Button>
-            <Button
-              sx={{ marginTop: '1rem', marginLeft: '1rem' }}
-              variant="outlined"
-              color="primary"
-              onClick={handleResetFilter}
-            >
-              Reset
-            </Button>
-          </StyledCard>
+                Lọc
+              </Button>
+              <Button
+                sx={{ marginTop: '1rem', marginLeft: '1rem' }}
+                variant="outlined"
+                color="primary"
+                onClick={handleResetFilter}
+              >
+                Reset
+              </Button>
+            </StyledCard>
+          )}
           <AsyncDataRenderer loading={searchNoteLoading} data={noteList}>
             <StyledGridContainer
-              sx={{ overflowY: 'auto', height: '20rem', padding: '1rem 0' }}
+              sx={{ overflowY: 'auto', paddingBottom: '1rem' }}
               container
               spacing={3}
             >

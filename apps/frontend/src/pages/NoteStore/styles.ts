@@ -1,4 +1,12 @@
-import { Box, Card, Dialog, Grid, styled, TextField } from '@mui/material';
+import {
+  Box,
+  Card,
+  Dialog,
+  Grid,
+  IconButton,
+  styled,
+  TextField,
+} from '@mui/material';
 
 export const StyledTextField = styled(TextField)`
   & label {
@@ -27,4 +35,9 @@ export const StyledDialog = styled(Dialog)`
     max-width: 50rem;
     min-height: 40rem;
   }
+`;
+
+export const StyledIconButton = styled(IconButton)`
+  font-size: 2.25rem;
+  padding: 6px;
 `;

@@ -134,6 +134,38 @@ function AcademicReport() {
     };
   }, [subjectsByTermData?.studentSubjectsByTerm]);
 
+  const averagePointRating = useMemo(() => {
+    if (!averagePoint) {
+      return '';
+    }
+
+    if (averagePoint.dtb >= 9 && averagePoint.dtb <= 10) {
+      return 'Xuất sắc';
+    }
+
+    if (averagePoint.dtb >= 8 && averagePoint.dtb < 9) {
+      return 'Giỏi';
+    }
+
+    if (averagePoint.dtb >= 7 && averagePoint.dtb < 8) {
+      return 'Khá';
+    }
+
+    if (averagePoint.dtb >= 5 && averagePoint.dtb < 7) {
+      return 'Trung bình';
+    }
+
+    if (averagePoint.dtb >= 4 && averagePoint.dtb < 5) {
+      return 'Yếu';
+    }
+
+    if (averagePoint.dtb >= 3 && averagePoint.dtb < 4) {
+      return 'Kém';
+    }
+
+    return '';
+  }, [averagePoint]);
+
   return (
     <>
       <StyledStickyBox>
@@ -195,7 +227,10 @@ function AcademicReport() {
             </Button>
 
             <Button disabled sx={{ color: '#fff!important' }}>
-              ĐTB: {averagePoint ? `${averagePoint.dtb}` : 'Chưa có'}
+              ĐTB:{' '}
+              {averagePoint
+                ? `${averagePoint.dtb} | ${averagePointRating}`
+                : 'Chưa có'}
             </Button>
           </StyledStatusBox>
           <PDFDownloadLink
