@@ -17,7 +17,7 @@ export const fileResolver: Resolvers<ResolverContext> = {
     },
     columnHeaderList: async (_, args, { dataSources }) => {
       const res = await dataSources.fileAPI.getColumnHeaderList(args);
-      return res;
+      return res.data.headers;
     },
   },
   Mutation: {

@@ -31,7 +31,7 @@ class FileAPI extends BaseDataSource {
 
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
-      const res = await this.get(`v1/file/history/${fileType}`);
+      const res = await this.get(`v1/files/history/${fileType}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch import history');
@@ -41,32 +41,32 @@ class FileAPI extends BaseDataSource {
 
   public async getColumnHeaderList({ fileType }: QueryImportHistoryArgs) {
     try {
-      // const res = await this.get(`v1/history-import/${fileType}`);
-      const defaultHeaders = [
-        {
-          key: 'NO',
-          value: 'STT',
-          index: 0,
-        },
-        {
-          key: 'NICKNAME',
-          value: 'Tên viết tắt',
-          index: 2,
-        },
-        {
-          key: 'FULLNAME',
-          value: 'Họ tên GV',
-          index: 1,
-        },
-        {
-          key: 'EMAIL',
-          value: 'Email',
-          index: 3,
-        },
-        { key: 'HOMEROOM_ID', value: 'Mã lớp', index: 4 },
-      ] as ColumnHeader[];
+      const res = await this.get(`v1/files/config/DANH_SACH_GVCN`);
+      // const defaultHeaders = [
+      //   {
+      //     key: 'NO',
+      //     value: 'STT',
+      //     index: 0,
+      //   },
+      //   {
+      //     key: 'NICKNAME',
+      //     value: 'Tên viết tắt',
+      //     index: 2,
+      //   },
+      //   {
+      //     key: 'FULLNAME',
+      //     value: 'Họ tên GV',
+      //     index: 1,
+      //   },
+      //   {
+      //     key: 'EMAIL',
+      //     value: 'Email',
+      //     index: 3,
+      //   },
+      //   { key: 'HOMEROOM_ID', value: 'Mã lớp', index: 4 },
+      // ] as ColumnHeader[];
 
-      return defaultHeaders;
+      return res;
     } catch (error) {
       logger.error('Error: cannot fetch column header list');
       throw this.handleError(error as ApolloError);
@@ -85,7 +85,7 @@ class FileAPI extends BaseDataSource {
 
     try {
       const uploadedDocument = await this.post(
-        `v1/files/${input.type}`,
+        `v1/files/upload/${input.type}`,
         formData
       );
       return uploadedDocument;
