@@ -625,7 +625,6 @@ function NoteStore() {
           isNoteStore
           maSV={values.maSV}
           tenSV={values.tenSV}
-          height={300}
           filePondRef={filePondRef}
           tagList={tagList}
           imageList={values.images}

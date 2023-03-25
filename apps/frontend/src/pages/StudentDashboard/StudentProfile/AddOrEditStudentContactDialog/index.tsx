@@ -69,7 +69,9 @@ function AddOrEditStudentContactDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {data ? 'Chỉnh sửa thông tin liên lạc' : 'Thêm thông tin liên lạc'}
+        {data
+          ? 'Chỉnh sửa thông tin mạng xã hội'
+          : 'Thêm thông tin mạng xã hội'}
       </DialogTitle>
       <DialogContent>
         <Box component="form">

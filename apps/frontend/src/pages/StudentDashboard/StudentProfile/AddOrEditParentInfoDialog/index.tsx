@@ -179,7 +179,7 @@ function AddOrEditParentInfoDialog({
             type="number"
             label="Số điện thoại"
             name="phoneNumber"
-            value={values.sdt}
+            value={values.sdt ? Number(values.sdt) : ''}
             sx={{ margin: '0.5rem 0', width: '100%' }}
             variant="filled"
             onChange={handleChange('sdt')}
