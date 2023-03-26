@@ -277,9 +277,9 @@ function ImportFile() {
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
-        toast.success('Cập nhật thông tin thành công');
-        setValues((v) => ({
-          ...v,
+        toast.success('File đang được xử lý. Thông báo sẽ được hiển thị sau!');
+        setValues({
+          type: TYPES[0].label,
           year: '',
           term: '',
           class: '',
