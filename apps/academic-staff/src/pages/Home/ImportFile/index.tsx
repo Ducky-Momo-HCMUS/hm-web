@@ -139,30 +139,28 @@ function ImportFile() {
     })[0] as string[];
 
     const mappedHeaders = sheetHeaders;
-    const cnt = new Array(sheetHeaders.length).fill(0);
-    mappedHeaders.forEach((header) => {
-      const findIndex = mappedHeaders.findIndex((item) => item === header);
-      cnt[findIndex] += 1;
-    });
+    // const cnt = new Array(sheetHeaders.length).fill(0);
+    // mappedHeaders.forEach((header) => {
+    //   const findIndex = mappedHeaders.findIndex((item) => item === header);
+    //   cnt[findIndex] += 1;
+    // });
 
-    cnt.forEach((count, index) => {
-      let tmpCount = count;
-      while (tmpCount >= 2) {
-        mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
-          tmpCount - 1
-        }`;
-        tmpCount -= 1;
-      }
-    });
+    // cnt.forEach((count, index) => {
+    //   let tmpCount = count;
+    //   while (tmpCount >= 2) {
+    //     mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
+    //       tmpCount - 1
+    //     }`;
+    //     tmpCount -= 1;
+    //   }
+    // });
 
     const mappedHeadersPayload = mappedHeaders.map((header, index) => {
-      const originalHeader = header.split('_')[0];
-      const originalIndex = mappedHeaders.findIndex(
-        (item) => item === originalHeader
-      );
+      // const originalHeader = header.split('_')[0];
+      // const originalIndex = mappedHeaders.findIndex((item) => item === header);
 
       return {
-        key: defaultHeaders[originalIndex]?.key,
+        key: defaultHeaders[index]?.key,
         index,
         value: header,
       };
@@ -310,8 +308,7 @@ function ImportFile() {
         }
       },
       onError: (error) => {
-        // TODO: lấy error từ BE
-        toast.error('Đã có  lỗi xảy ra');
+        toast.error(error.message);
       },
     });
 
@@ -396,8 +393,6 @@ function ImportFile() {
           value,
         };
       });
-
-      console.log('<<< payload headers', payloadHeaders);
 
       if (file) {
         await uploadDocument({

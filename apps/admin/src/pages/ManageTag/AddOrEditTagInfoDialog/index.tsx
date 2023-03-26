@@ -69,7 +69,7 @@ function AddOrEditTagInfoDialog({
               onClickConfirm({ tenTag: values.tag });
             }}
           >
-            {data ? <>Lưu</> : <>Thêm</>}
+            {data ? 'Lưu' : 'Thêm'}
           </Button>
         </DialogActions>
       </DialogContent>

@@ -1,6 +1,7 @@
 import { MutationEditPasswordArgs } from '../generated-types';
 import { DataSourceResponse, MutationStatusReponse } from '../types';
 import { SERVICES_BASE_URL } from '../utils/config';
+import { logger } from '../utils/logger';
 
 import { BaseDataSource } from './base-data-source';
 
@@ -22,7 +23,7 @@ export default class AuthAPI extends BaseDataSource {
       );
       return response;
     } catch (error) {
-      // TODO add log
+      logger.error('Error: cannot login');
       throw this.handleError(error);
     }
   }
@@ -35,7 +36,7 @@ export default class AuthAPI extends BaseDataSource {
       );
       return response;
     } catch (error) {
-      // TODO add log
+      logger.error('Error: cannot get reset password link');
       throw this.handleError(error);
     }
   }
@@ -53,7 +54,7 @@ export default class AuthAPI extends BaseDataSource {
       );
       return response;
     } catch (error) {
-      // TODO add log
+      logger.error('Error: cannot reset password');
       throw this.handleError(error);
     }
   }
@@ -71,7 +72,7 @@ export default class AuthAPI extends BaseDataSource {
       );
       return response;
     } catch (error) {
-      // TODO add log
+      logger.error('Error: cannot change password');
       throw this.handleError(error);
     }
   }

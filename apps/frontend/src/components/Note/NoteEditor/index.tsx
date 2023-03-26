@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Chip,
+  DialogActions,
   FormControl,
   ImageList,
   ImageListItem,
@@ -42,6 +43,7 @@ interface NoteEditorProps {
   handleChangeValue: any;
   handleSelectTags: any;
   handleReset: any;
+  handleRemoveImage: any;
   isAdding: boolean;
   isNoteStore?: boolean;
   maSV?: String;
@@ -71,14 +73,18 @@ function NoteEditor({
   handleChangeValue,
   handleSelectTags,
   handleReset,
+  handleRemoveImage,
   isAdding,
   isNoteStore = false,
   maSV = '',
   tenSV = '',
 }: NoteEditorProps) {
   const [url, setUrl] = useState('');
-  const handleShowImage = useCallback((imageUrl: string) => {
+  const [imageId, setImageId] = useState('');
+
+  const handleShowImage = useCallback((imageUrl: string, imageId: string) => {
     setUrl(imageUrl);
+    setImageId(imageId);
   }, []);
 
   return (
@@ -143,24 +149,37 @@ function NoteEditor({
           init={NOTE_EDITOR_CONFIG}
         />
         {!!imageList.length && (
-          <ImageList cols={2} rowHeight={200}>
-            {imageList.map((item) => (
-              <ImageListItem
-                key={item.id}
-                onClick={() => handleShowImage(item.url)}
-              >
-                <img
-                  style={{ objectFit: 'contain', cursor: 'pointer' }}
-                  src={`${item.url}`}
-                  srcSet={`${item.url}`}
-                  alt={item.id}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+          <Box p={1}>
+            <ImageList
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                flexWrap: 'nowrap',
+              }}
+              rowHeight={100}
+            >
+              {imageList.map((item) => (
+                <ImageListItem
+                  key={item.id}
+                  onClick={() => handleShowImage(item.url, item.id)}
+                >
+                  <img
+                    style={{
+                      objectFit: 'contain',
+                      cursor: 'pointer',
+                      maxWidth: '100%',
+                      display: 'block',
+                    }}
+                    src={`${item.url}`}
+                    srcSet={`${item.url}`}
+                    alt={item.id}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
         )}
-
         <FilePond
           ref={filePondRef}
           allowMultiple
@@ -187,6 +206,19 @@ function NoteEditor({
             />
           )}
         </Box>
+        <DialogActions>
+          <Button onClick={() => setUrl('')}>Đóng</Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              handleRemoveImage(imageId);
+              setUrl('');
+            }}
+          >
+            Xoá ảnh
+          </Button>
+        </DialogActions>
       </StyledDialog>
       <Box sx={{ padding: '1rem' }} display="flex" justifyContent="flex-end">
         {isAdding ? (
