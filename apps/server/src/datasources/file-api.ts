@@ -2,7 +2,6 @@ import { ApolloError, UserInputError } from 'apollo-server-express';
 import FormData from 'form-data';
 
 import {
-  ColumnHeader,
   MutationUploadDocumentArgs,
   QueryImportHistoryArgs,
   UploadDocumentInput,
@@ -41,30 +40,7 @@ class FileAPI extends BaseDataSource {
 
   public async getColumnHeaderList({ fileType }: QueryImportHistoryArgs) {
     try {
-      const res = await this.get(`v1/files/config/DANH_SACH_GVCN`);
-      // const defaultHeaders = [
-      //   {
-      //     key: 'NO',
-      //     value: 'STT',
-      //     index: 0,
-      //   },
-      //   {
-      //     key: 'NICKNAME',
-      //     value: 'Tên viết tắt',
-      //     index: 2,
-      //   },
-      //   {
-      //     key: 'FULLNAME',
-      //     value: 'Họ tên GV',
-      //     index: 1,
-      //   },
-      //   {
-      //     key: 'EMAIL',
-      //     value: 'Email',
-      //     index: 3,
-      //   },
-      //   { key: 'HOMEROOM_ID', value: 'Mã lớp', index: 4 },
-      // ] as ColumnHeader[];
+      const res = await this.get(`v1/files/config/${fileType}`);
 
       return res;
     } catch (error) {
