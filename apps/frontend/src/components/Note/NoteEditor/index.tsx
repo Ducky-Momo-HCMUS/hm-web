@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Chip,
+  DialogActions,
   FormControl,
   ImageList,
   ImageListItem,
@@ -42,6 +43,7 @@ interface NoteEditorProps {
   handleChangeValue: any;
   handleSelectTags: any;
   handleReset: any;
+  handleRemoveImage: any;
   isAdding: boolean;
   isNoteStore?: boolean;
   maSV?: String;
@@ -71,14 +73,18 @@ function NoteEditor({
   handleChangeValue,
   handleSelectTags,
   handleReset,
+  handleRemoveImage,
   isAdding,
   isNoteStore = false,
   maSV = '',
   tenSV = '',
 }: NoteEditorProps) {
   const [url, setUrl] = useState('');
-  const handleShowImage = useCallback((imageUrl: string) => {
+  const [imageId, setImageId] = useState('');
+
+  const handleShowImage = useCallback((imageUrl: string, imageId: string) => {
     setUrl(imageUrl);
+    setImageId(imageId);
   }, []);
 
   return (
@@ -147,7 +153,7 @@ function NoteEditor({
             {imageList.map((item) => (
               <ImageListItem
                 key={item.id}
-                onClick={() => handleShowImage(item.url)}
+                onClick={() => handleShowImage(item.url, item.id)}
               >
                 <img
                   style={{ objectFit: 'contain', cursor: 'pointer' }}
@@ -160,7 +166,6 @@ function NoteEditor({
             ))}
           </ImageList>
         )}
-
         <FilePond
           ref={filePondRef}
           allowMultiple
@@ -187,6 +192,19 @@ function NoteEditor({
             />
           )}
         </Box>
+        <DialogActions>
+          <Button onClick={() => setUrl('')}>Đóng</Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => {
+              handleRemoveImage(imageId);
+              setUrl('');
+            }}
+          >
+            Xoá ảnh
+          </Button>
+        </DialogActions>
       </StyledDialog>
       <Box sx={{ padding: '1rem' }} display="flex" justifyContent="flex-end">
         {isAdding ? (

@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const tagTypeDefs = gql`
   extend type Query {
-    tagList: TagList!
+    tagList(page: Int, size: Int): TagList!
   }
 
   extend type Mutation {
@@ -12,7 +12,8 @@ const tagTypeDefs = gql`
   }
 
   type TagList {
-    tags: [Tag!]!
+    data: [Tag!]!
+    total: Int!
   }
 
   type Tag {

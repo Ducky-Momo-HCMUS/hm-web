@@ -4,9 +4,9 @@ import { ResolverContext } from './types';
 
 export const tagResolver: Resolvers<ResolverContext> = {
   Query: {
-    tagList: async (_, __, { dataSources }) => {
-      const res = await dataSources.tagAPI.getTagList();
-      return res.data;
+    tagList: async (_, args, { dataSources }) => {
+      const res = await dataSources.tagAPI.getTagList(args);
+      return res;
     },
   },
   Mutation: {

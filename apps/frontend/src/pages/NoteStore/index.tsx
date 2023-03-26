@@ -117,10 +117,15 @@ function NoteStore() {
     end: null,
   });
 
-  const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
+  const { data: tagListData, loading: tagListLoading } = useTagListQuery({
+    variables: {
+      page: 1,
+      size: 1000,
+    },
+  });
   const tagList = useMemo(
-    () => tagListData?.tagList.tags || [],
-    [tagListData?.tagList.tags]
+    () => tagListData?.tagList.data || [],
+    [tagListData?.tagList.data]
   );
 
   const [files, setFiles] = useState<File[]>();
@@ -282,6 +287,11 @@ function NoteStore() {
         noteDetail?.ghiChuTag
           .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
           .map((ghiChuTag) => ghiChuTag.maTag) || [],
+      removeImageIds: noteDetail?.ghiChuHinhAnh
+        .filter(
+          (hinhAnh) => !values.images.find((item) => item.id === hinhAnh.id)
+        )
+        .map((ghiChuHinhAnh) => ghiChuHinhAnh.id),
       addTagIds:
         values.tags
           .filter(
@@ -312,8 +322,10 @@ function NoteStore() {
     editNote,
     files,
     handleReset,
+    noteDetail?.ghiChuHinhAnh,
     noteDetail?.ghiChuTag,
     tagList,
+    values.images,
     values.isAdding,
     values.selected,
     values.tags,
@@ -411,6 +423,13 @@ function NoteStore() {
   );
 
   const [openFilterBox, setOpenFilterBox] = useState(false);
+
+  const handleRemoveImage = useCallback((imageId: string) => {
+    setValues((v) => ({
+      ...v,
+      images: v.images.filter((image) => image.id !== imageId),
+    }));
+  }, []);
 
   return (
     <>
@@ -670,6 +689,7 @@ function NoteStore() {
           handleChangeValue={handleChangeValue}
           handleSelectTags={handleSelectTags}
           handleReset={handleReset}
+          handleRemoveImage={handleRemoveImage}
           isAdding={values.isAdding}
         />
       </StyledDialog>

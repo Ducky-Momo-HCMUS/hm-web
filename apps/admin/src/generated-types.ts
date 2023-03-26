@@ -952,6 +952,11 @@ export type QueryStudentTrainingPointListArgs = {
   termId: Scalars['Int'];
 };
 
+export type QueryTagListArgs = {
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
+};
+
 export type QueryTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
@@ -1268,7 +1273,8 @@ export type TagEditInput = {
 
 export type TagList = {
   __typename?: 'TagList';
-  tags: Array<Tag>;
+  data: Array<Tag>;
+  total: Scalars['Int'];
 };
 
 export type TeacherEditInput = {
@@ -1757,13 +1763,17 @@ export type AccountListQuery = {
   };
 };
 
-export type TagListQueryVariables = Exact<{ [key: string]: never }>;
+export type TagListQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
+}>;
 
 export type TagListQuery = {
   __typename?: 'Query';
   tagList: {
     __typename?: 'TagList';
-    tags: Array<{ __typename?: 'Tag'; maTag: number; tenTag: string }>;
+    total: number;
+    data: Array<{ __typename?: 'Tag'; maTag: number; tenTag: string }>;
   };
 };
 
@@ -4303,9 +4313,10 @@ export type AccountListQueryResult = Apollo.QueryResult<
   AccountListQueryVariables
 >;
 export const TagListDocument = gql`
-  query TagList {
-    tagList {
-      tags {
+  query TagList($page: Int, $size: Int) {
+    tagList(page: $page, size: $size) {
+      total
+      data {
         maTag
         tenTag
       }
@@ -4325,6 +4336,8 @@ export const TagListDocument = gql`
  * @example
  * const { data, loading, error } = useTagListQuery({
  *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

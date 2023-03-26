@@ -1,15 +1,11 @@
 import { Button, Box, Backdrop, CircularProgress } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
 import { StyledStickyBox, StyledTitle } from '../../components/styles';
-import {
-  TagAddInput,
-  useTagAddMutation,
-  useTagListQuery,
-} from '../../generated-types';
-import AsyncDataRenderer from '../../components/AsyncDataRenderer';
+import { TagAddInput, useTagAddMutation } from '../../generated-types';
 import { GET_TAG_LIST } from '../../data/queries/tag/get-tag-list';
+import { TAG_LIST_PAGE_SIZE } from '../../constants';
 
 import TagTable from './TagTable';
 import AddOrEditTagInfoDialog from './AddOrEditTagInfoDialog';
@@ -25,12 +21,6 @@ function ManageTag() {
     setOpenAddTagInfoDialog(false);
   };
 
-  const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
-  const tagList = useMemo(
-    () => tagListData?.tagList.tags || [],
-    [tagListData?.tagList.tags]
-  );
-
   const [addTag, { loading: addTagLoading }] = useTagAddMutation();
 
   const handleAddTag = useCallback(
@@ -40,7 +30,13 @@ function ManageTag() {
         variables: {
           payload,
         },
-        refetchQueries: [{ query: GET_TAG_LIST }, 'TagList'],
+        refetchQueries: [
+          {
+            query: GET_TAG_LIST,
+            variables: { page: 1, size: TAG_LIST_PAGE_SIZE },
+          },
+          'TagList',
+        ],
       });
     },
     [addTag]
@@ -68,9 +64,7 @@ function ManageTag() {
             </Box>
           </Box>
         </StyledStickyBox>
-        <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
-          <TagTable data={tagList} />
-        </AsyncDataRenderer>
+        <TagTable />
         <AddOrEditTagInfoDialog
           open={openAddTagInfoDialog}
           onClose={handleCloseAddTagInfoDialog}

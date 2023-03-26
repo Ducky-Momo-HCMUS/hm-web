@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   Paper,
   Table,
@@ -9,31 +9,30 @@ import {
   TablePagination,
   Backdrop,
   CircularProgress,
+  IconButton,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import DeleteDialog from '../../../components/DeleteDialog';
 import {
-  Tag,
   TagEditInput,
   useTagDeleteMutation,
   useTagEditMutation,
+  useTagListLazyQuery,
 } from '../../../generated-types';
 import EditTagInfoDialog from '../AddOrEditTagInfoDialog';
 import { GET_TAG_LIST } from '../../../data/queries/tag/get-tag-list';
-
-import TagTableRow from './TagTableRow';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
+import { TAG_LIST_PAGE_SIZE } from '../../../constants';
 
 interface State {
   deleteIndex: number;
   editIndex: number;
 }
-interface TagInfoTableProps {
-  data: Tag[];
-}
 
-function TagTable({ data }: TagInfoTableProps) {
+function TagTable() {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
@@ -51,14 +50,6 @@ function TagTable({ data }: TagInfoTableProps) {
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
   }, []);
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
 
   const [editTag, { loading: editTagLoading }] = useTagEditMutation();
   const handleEditTag = useCallback(
@@ -86,6 +77,26 @@ function TagTable({ data }: TagInfoTableProps) {
     });
   }, [deleteTag, values.deleteIndex]);
 
+  const [getTagList, { loading: tagListLoading, data: tagListData }] =
+    useTagListLazyQuery();
+
+  const { tagList, tagListLength } = useMemo(
+    () => ({
+      tagList: tagListData?.tagList.data || [],
+      tagListLength: tagListData?.tagList.total || 0,
+    }),
+    [tagListData?.tagList.data, tagListData?.tagList.total]
+  );
+
+  useEffect(() => {
+    getTagList({
+      variables: {
+        page: page + 1,
+        size: TAG_LIST_PAGE_SIZE,
+      },
+    });
+  }, [getTagList, page]);
+
   return (
     <>
       <Paper>
@@ -97,36 +108,43 @@ function TagTable({ data }: TagInfoTableProps) {
               <TableCell align="center">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TagTableRow
-                  data={row}
-                  onClickDelete={() => handleClickDelete(row.maTag)}
-                  onClickEdit={() => handleClickEdit(row.maTag)}
-                />
+          <AsyncDataRenderer loading={tagListLoading} data={tagListData}>
+            <TableBody>
+              {tagList.map((row, index) => (
+                <TableRow key={row.maTag}>
+                  <TableCell>{page * TAG_LIST_PAGE_SIZE + index + 1}</TableCell>
+                  <TableCell>{row.tenTag}</TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleClickEdit(row.maTag)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleClickDelete(row.maTag)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
               ))}
-          </TableBody>
+            </TableBody>
+          </AsyncDataRenderer>
         </Table>
-        <TablePagination
-          rowsPerPageOptions={[]}
-          component="div"
-          count={data.length || 0}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          labelRowsPerPage="Số dòng trên trang"
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {!!tagListLength && (
+          <TablePagination
+            rowsPerPageOptions={[]}
+            component="div"
+            count={tagListLength}
+            page={page}
+            rowsPerPage={TAG_LIST_PAGE_SIZE}
+            onPageChange={handleChangePage}
+          />
+        )}
         {values.deleteIndex >= 0 && (
           <DeleteDialog
             open={values.deleteIndex >= 0}
             onClose={() => setValues({ ...values, deleteIndex: -1 })}
             description="Bạn có đồng ý xoá tag"
             boldText={
-              data.find((item) => item.maTag === values.deleteIndex)?.tenTag ||
-              ''
+              tagList.find((item) => item.maTag === values.deleteIndex)
+                ?.tenTag || ''
             }
             onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
             onClickConfirm={handleDeleteTag}
@@ -138,7 +156,7 @@ function TagTable({ data }: TagInfoTableProps) {
             onClose={() => setValues({ ...values, editIndex: -1 })}
             onClickCancel={() => setValues({ ...values, editIndex: -1 })}
             onClickConfirm={handleEditTag}
-            data={data.find((item) => item.maTag === values.editIndex)}
+            data={tagList.find((item) => item.maTag === values.editIndex)}
           />
         )}
       </Paper>

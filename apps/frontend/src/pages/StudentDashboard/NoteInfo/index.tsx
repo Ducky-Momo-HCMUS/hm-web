@@ -161,10 +161,15 @@ function NoteInfo() {
   const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
   const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
 
-  const { data: tagListData, loading: tagListLoading } = useTagListQuery({});
+  const { data: tagListData, loading: tagListLoading } = useTagListQuery({
+    variables: {
+      page: 1,
+      size: 1000,
+    },
+  });
   const tagList = useMemo(
-    () => tagListData?.tagList.tags || [],
-    [tagListData?.tagList.tags]
+    () => tagListData?.tagList.data || [],
+    [tagListData?.tagList.data]
   );
 
   const filePondRef = useRef<FilePond | null>(null);
@@ -208,6 +213,8 @@ function NoteInfo() {
             query: GET_STUDENT_NOTE_LIST,
             variables: {
               studentId: id,
+              page: 1,
+              size: STUDENT_NOTE_LIST_PAGE_SIZE,
             },
           },
           'StudentNoteList',
@@ -225,6 +232,11 @@ function NoteInfo() {
       removeTagIds: noteDetail?.ghiChuTag
         .filter((tag) => !values.tags.find((item) => item === tag.tenTag))
         .map((ghiChuTag) => ghiChuTag.maTag),
+      removeImageIds: noteDetail?.ghiChuHinhAnh
+        .filter(
+          (hinhAnh) => !values.images.find((item) => item.id === hinhAnh.id)
+        )
+        .map((ghiChuHinhAnh) => ghiChuHinhAnh.id),
       addTagIds: values.tags
         .filter(
           (tag) => !noteDetail?.ghiChuTag.find((item) => item.tenTag === tag)
@@ -244,6 +256,8 @@ function NoteInfo() {
           query: GET_STUDENT_NOTE_LIST,
           variables: {
             studentId: id,
+            page: 1,
+            size: STUDENT_NOTE_LIST_PAGE_SIZE,
           },
         },
         'StudentNoteList',
@@ -257,8 +271,10 @@ function NoteInfo() {
     files,
     handleReset,
     id,
+    noteDetail?.ghiChuHinhAnh,
     noteDetail?.ghiChuTag,
     tagList,
+    values.images,
     values.isAdding,
     values.selected,
     values.tags,
@@ -318,6 +334,8 @@ function NoteInfo() {
           query: GET_STUDENT_NOTE_LIST,
           variables: {
             studentId: id,
+            page: 1,
+            size: STUDENT_NOTE_LIST_PAGE_SIZE,
           },
         },
         'StudentNoteList',
@@ -380,6 +398,13 @@ function NoteInfo() {
     },
     []
   );
+
+  const handleRemoveImage = useCallback((imageId: string) => {
+    setValues((v) => ({
+      ...v,
+      images: v.images.filter((image) => image.id !== imageId),
+    }));
+  }, []);
 
   return (
     <>
@@ -626,6 +651,7 @@ function NoteInfo() {
                 handleChangeValue={handleChangeValue}
                 handleSelectTags={handleSelectTags}
                 handleReset={handleReset}
+                handleRemoveImage={handleRemoveImage}
                 isAdding={values.isAdding}
               />
             </Item>

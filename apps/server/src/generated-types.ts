@@ -957,6 +957,11 @@ export type QueryStudentTrainingPointListArgs = {
   termId: Scalars['Int'];
 };
 
+export type QueryTagListArgs = {
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
+};
+
 export type QueryTeacherListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
@@ -1273,7 +1278,8 @@ export type TagEditInput = {
 
 export type TagList = {
   __typename?: 'TagList';
-  tags: Array<Tag>;
+  data: Array<Tag>;
+  total: Scalars['Int'];
 };
 
 export type TeacherEditInput = {
@@ -2989,7 +2995,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentTrainingPointListArgs, 'page' | 'size' | 'termId'>
   >;
-  tagList?: Resolver<ResolversTypes['TagList'], ParentType, ContextType>;
+  tagList?: Resolver<
+    ResolversTypes['TagList'],
+    ParentType,
+    ContextType,
+    Partial<QueryTagListArgs>
+  >;
   teacherList?: Resolver<
     ResolversTypes['TeacherList'],
     ParentType,
@@ -3456,7 +3467,8 @@ export type TagListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList']
 > = {
-  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

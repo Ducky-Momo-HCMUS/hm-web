@@ -4,6 +4,7 @@ import {
   MutationTagAddArgs,
   MutationTagDeleteArgs,
   MutationTagEditArgs,
+  QueryTagListArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -16,9 +17,14 @@ class TagAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getTagList() {
+  public async getTagList({ page, size }: QueryTagListArgs) {
+    const params = new URLSearchParams({
+      page: page?.toString(),
+      size: size?.toString(),
+    } as Record<string, string>);
+
     try {
-      const tagList = await this.get('v1/tags');
+      const tagList = await this.get(`v1/tags?${params}`);
       return tagList;
     } catch (error) {
       logger.error('Error: cannot fetch tag list');

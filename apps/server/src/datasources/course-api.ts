@@ -1,3 +1,4 @@
+/* eslint-disable prefer-object-spread */
 import { ApolloError } from 'apollo-server-express';
 
 import { QueryCourseListArgs } from '../generated-types';
@@ -13,8 +14,13 @@ class CourseAPI extends BaseDataSource {
   }
 
   public async getCourseList({ page, size }: QueryCourseListArgs) {
+    const params = new URLSearchParams({
+      page: page?.toString(),
+      size: size?.toString(),
+    } as Record<string, string>);
+
     try {
-      const res = await this.get(`v1/courses?page=${page}&size=${size}`);
+      const res = await this.get(`v1/courses?${params}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch course list');
@@ -23,8 +29,13 @@ class CourseAPI extends BaseDataSource {
   }
 
   public async getMajorList({ page, size }: QueryCourseListArgs) {
+    const params = new URLSearchParams({
+      page: page?.toString(),
+      size: size?.toString(),
+    } as Record<string, string>);
+
     try {
-      const res = await this.get(`v1/majors?page=${page}&size=${size}`);
+      const res = await this.get(`v1/majors?${params}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch major list');
@@ -33,10 +44,13 @@ class CourseAPI extends BaseDataSource {
   }
 
   public async getMajorResultList({ page, size }: QueryCourseListArgs) {
+    const params = new URLSearchParams({
+      page: page?.toString(),
+      size: size?.toString(),
+    } as Record<string, string>);
+
     try {
-      const res = await this.get(
-        `v1/majors/students?page=${page}&size=${size}`
-      );
+      const res = await this.get(`v1/majors/students?${params}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch major result list');
