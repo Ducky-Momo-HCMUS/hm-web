@@ -139,30 +139,28 @@ function ImportFile() {
     })[0] as string[];
 
     const mappedHeaders = sheetHeaders;
-    const cnt = new Array(sheetHeaders.length).fill(0);
-    mappedHeaders.forEach((header) => {
-      const findIndex = mappedHeaders.findIndex((item) => item === header);
-      cnt[findIndex] += 1;
-    });
+    // const cnt = new Array(sheetHeaders.length).fill(0);
+    // mappedHeaders.forEach((header) => {
+    //   const findIndex = mappedHeaders.findIndex((item) => item === header);
+    //   cnt[findIndex] += 1;
+    // });
 
-    cnt.forEach((count, index) => {
-      let tmpCount = count;
-      while (tmpCount >= 2) {
-        mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
-          tmpCount - 1
-        }`;
-        tmpCount -= 1;
-      }
-    });
+    // cnt.forEach((count, index) => {
+    //   let tmpCount = count;
+    //   while (tmpCount >= 2) {
+    //     mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
+    //       tmpCount - 1
+    //     }`;
+    //     tmpCount -= 1;
+    //   }
+    // });
 
     const mappedHeadersPayload = mappedHeaders.map((header, index) => {
-      const originalHeader = header.split('_')[0];
-      const originalIndex = mappedHeaders.findIndex(
-        (item) => item === originalHeader
-      );
+      // const originalHeader = header.split('_')[0];
+      // const originalIndex = mappedHeaders.findIndex((item) => item === header);
 
       return {
-        key: defaultHeaders[originalIndex]?.key,
+        key: defaultHeaders[index]?.key,
         index,
         value: header,
       };
@@ -318,7 +316,7 @@ function ImportFile() {
   const handleUploadDocument = useCallback(
     async (event) => {
       event.preventDefault();
-      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const type = TYPES.find((item) => item.label === values.type)?.value;
       const input = Object.assign(
         {},
         type && { type },
@@ -327,6 +325,8 @@ function ImportFile() {
         values.subject && { maMH: values.subject },
         values.class && { tenLopHP: values.class }
       );
+
+      console.log('mapped', mappedHeadersPayload);
 
       const payloadHeaders = columnHeaders.map((item) => {
         const value =
@@ -341,22 +341,22 @@ function ImportFile() {
 
       console.log('<<< payload headers', payloadHeaders);
 
-      // if (file) {
-      //   await uploadDocument({
-      //     variables: {
-      //       file,
-      //       input,
-      //       config: {
-      //         start: Number(values.start),
-      //         sheet: {
-      //           value: current,
-      //           index: sheets.findIndex((sheetName) => sheetName === current),
-      //         },
-      //         headers: payloadHeaders,
-      //       },
-      //     },
-      //   });
-      // }
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input,
+            config: {
+              start: Number(values.start) - 1,
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: payloadHeaders,
+            },
+          },
+        });
+      }
     },
     [
       columnHeaders,
