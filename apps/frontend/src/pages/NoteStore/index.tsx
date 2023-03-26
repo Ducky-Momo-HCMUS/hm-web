@@ -248,7 +248,7 @@ function NoteStore() {
       editorRef.current.setContent('');
     }
     if (filePondRef.current) {
-      filePondRef.current.removeFile();
+      filePondRef.current.removeFiles();
     }
   }, []);
 
@@ -706,12 +706,12 @@ function NoteStore() {
           onClickConfirm={handleDeleteNote}
         />
       )}
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={deleteNoteLoading || addNoteLoading || editNoteLoading}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
     </>
   );
 }

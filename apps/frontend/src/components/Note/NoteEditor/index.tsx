@@ -149,22 +149,36 @@ function NoteEditor({
           init={NOTE_EDITOR_CONFIG}
         />
         {!!imageList.length && (
-          <ImageList cols={2} rowHeight={200}>
-            {imageList.map((item) => (
-              <ImageListItem
-                key={item.id}
-                onClick={() => handleShowImage(item.url, item.id)}
-              >
-                <img
-                  style={{ objectFit: 'contain', cursor: 'pointer' }}
-                  src={`${item.url}`}
-                  srcSet={`${item.url}`}
-                  alt={item.id}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+          <Box p={1}>
+            <ImageList
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                flexWrap: 'nowrap',
+              }}
+              rowHeight={100}
+            >
+              {imageList.map((item) => (
+                <ImageListItem
+                  key={item.id}
+                  onClick={() => handleShowImage(item.url, item.id)}
+                >
+                  <img
+                    style={{
+                      objectFit: 'contain',
+                      cursor: 'pointer',
+                      maxWidth: '100%',
+                      display: 'block',
+                    }}
+                    src={`${item.url}`}
+                    srcSet={`${item.url}`}
+                    alt={item.id}
+                    loading="lazy"
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
         )}
         <FilePond
           ref={filePondRef}

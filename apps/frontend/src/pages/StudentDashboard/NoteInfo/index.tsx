@@ -188,7 +188,7 @@ function NoteInfo() {
       editorRef.current.setContent('');
     }
     if (filePondRef.current) {
-      filePondRef.current.removeFile();
+      filePondRef.current.removeFiles();
     }
   }, []);
 
