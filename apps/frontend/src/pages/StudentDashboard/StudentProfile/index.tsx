@@ -24,6 +24,7 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   StudentAddContactInput,
   StudentAddParentInfoInput,
+  StudentContact,
   useStudentAddContactMutation,
   useStudentAddParentInfoMutation,
   useStudentDetailQuery,
@@ -32,12 +33,18 @@ import {
 import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 import { GET_STUDENT_PARENT_INFO_LIST } from '../../../data/queries/student/get-student-parent-info';
 import { PARENT_PAGE_SIZE } from '../../../constants';
+import { saveDocumentToFile } from '../../../utils';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
 import StudentContactTable from './StudentContactTable';
 import AddParentInfoDialog from './AddOrEditParentInfoDialog';
 import AddStudentContactDialog from './AddOrEditStudentContactDialog';
+import DocumentCreator, {
+  ContactInfo,
+  GeneralInfo,
+  LearningInfo,
+} from './student-info-document-creator';
 
 function StudentProfile() {
   const { id = '' } = useParams();
@@ -162,6 +169,45 @@ function StudentProfile() {
     [addStudentParentInfo, id]
   );
 
+  const { generalInfo, learningInfo, contactInfo } = useMemo(
+    () => ({
+      generalInfo: {
+        maSV: id,
+        tenSV: String(studentDetails?.tenSV),
+        dob: studentDetails?.dob
+          ? format(new Date(String(studentDetails?.dob)), 'dd/MM/yyyy')
+          : '',
+        gioiTinh: studentDetails?.gioiTinh ? 'Nam' : 'Nữ',
+        maSH: String(studentDetails?.maSH),
+      } as GeneralInfo,
+      learningInfo: {
+        tenCN: studentDetails?.tenCN || 'Chưa có',
+        xepLoai: studentDetails?.xepLoai || 'Chưa có',
+        gpa_10: studentDetails?.gpa_10 || 'Chưa có',
+        ngoaiNgu: studentDetails?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp',
+        tinhTrang: studentDetails?.tinhTrang || 'Chưa có',
+      } as LearningInfo,
+      contactInfo: {
+        sdt: studentDetails?.sdt,
+        emailCaNhan: studentDetails?.emailCaNhan,
+        emailSV: studentDetails?.emailSV,
+        lienHeSV: studentDetails?.lienHeSV || [],
+      } as ContactInfo,
+    }),
+    [id, studentDetails]
+  );
+
+  const handleExportStudentInfo = useCallback(() => {
+    const documentCreator = new DocumentCreator();
+    const doc = documentCreator.create({
+      generalInfo,
+      learningInfo,
+      contactInfo,
+      parentInfo: studentParentInfoList,
+    });
+    saveDocumentToFile(doc, `PhieuThongTin_${id}.docx`);
+  }, [contactInfo, generalInfo, id, learningInfo, studentParentInfoList]);
+
   return (
     <>
       <StyledStickyBox sx={{ top: '63px' }}>
@@ -176,7 +222,11 @@ function StudentProfile() {
             <Typography color="text.primary">{id}</Typography>
             <Typography color="text.primary">Thông tin sinh viên</Typography>
           </StyledBreadCrumbs>
-          <Button sx={{ textTransform: 'uppercase' }} variant="contained">
+          <Button
+            sx={{ textTransform: 'uppercase' }}
+            variant="contained"
+            onClick={handleExportStudentInfo}
+          >
             Xuất thông tin
           </Button>
         </Box>
@@ -206,35 +256,19 @@ function StudentProfile() {
               <StyledDivider />
             </Grid>
             <Grid item xs={12}>
-              <ClassInfo
-                title="Họ và tên"
-                description={studentDetails?.tenSV}
-              />
+              <ClassInfo title="Họ và tên" description={generalInfo.tenSV} />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo
-                title="Lớp sinh hoạt"
-                description={studentDetails?.maSH?.toUpperCase()}
-              />
+              <ClassInfo title="Lớp sinh hoạt" description={generalInfo.maSH} />
             </Grid>
             <Grid item xs={5}>
-              <ClassInfo title="MSSV" description={id} />
+              <ClassInfo title="MSSV" description={generalInfo.maSV} />
             </Grid>
             <Grid item xs={7}>
-              <ClassInfo
-                title="Ngày sinh"
-                description={
-                  studentDetails?.dob && studentDetails?.dob.length > 0
-                    ? format(new Date(studentDetails?.dob || ''), 'dd/MM/yyyy')
-                    : ''
-                }
-              />
+              <ClassInfo title="Ngày sinh" description={generalInfo.dob} />
             </Grid>
             <Grid item xs={5}>
-              <ClassInfo
-                title="Giới tính"
-                description={studentDetails?.gioiTinh === 1 ? 'Nam' : 'Nữ'}
-              />
+              <ClassInfo title="Giới tính" description={generalInfo.gioiTinh} />
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>
@@ -255,19 +289,19 @@ function StudentProfile() {
               <Grid item xs={12}>
                 <ClassInfo
                   title="Số điện thoại"
-                  description={studentDetails?.sdt}
+                  description={contactInfo.sdt}
                 />
               </Grid>
               <Grid item xs={12}>
                 <ClassInfo
                   title="Email cá nhân"
-                  description={studentDetails?.emailCaNhan}
+                  description={contactInfo.emailCaNhan}
                 />
               </Grid>
               <Grid item xs={12}>
                 <ClassInfo
                   title="Email sinh viên"
-                  description={studentDetails?.emailSV}
+                  description={contactInfo.emailSV}
                 />
               </Grid>
             </Grid>
@@ -284,9 +318,11 @@ function StudentProfile() {
               </Box>
               <AsyncDataRenderer
                 loading={studentDetailsLoading}
-                data={studentDetails?.lienHeSV}
+                data={contactInfo.lienHeSV}
               >
-                <StudentContactTable data={studentDetails?.lienHeSV || []} />
+                <StudentContactTable
+                  data={contactInfo.lienHeSV as StudentContact[]}
+                />
               </AsyncDataRenderer>
             </Grid>
           </StyledGridContainer>
@@ -327,31 +363,31 @@ function StudentProfile() {
             <Grid item xs={7}>
               <ClassInfo
                 title="Chuyên ngành"
-                description={studentDetails?.tenCN || 'Chưa có'}
+                description={learningInfo.tenCN as string}
               />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
                 title="GPA"
-                description={studentDetails?.gpa_10?.toString() || 'Chưa có'}
+                description={String(learningInfo.gpa_10)}
               />
             </Grid>
             <Grid item xs={7}>
               <ClassInfo
                 title="Xếp loại học lực"
-                description={studentDetails?.xepLoai || 'Chưa có'}
+                description={learningInfo.xepLoai as string}
               />
             </Grid>
             <Grid item xs={5}>
               <ClassInfo
                 title="Tình trạng"
-                description={studentDetails?.tinhTrang}
+                description={learningInfo.tinhTrang}
               />
             </Grid>
             <Grid item xs={12}>
               <ClassInfo
                 title="Chứng chỉ ngoại ngữ"
-                description={studentDetails?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp'}
+                description={learningInfo.ngoaiNgu}
               />
             </Grid>
           </StyledGridContainer>

@@ -278,8 +278,6 @@ function ImportAccount() {
         };
       });
 
-      console.log('<<< payload headers', payloadHeaders);
-
       // if (file) {
       //   await uploadDocument({
       //     variables: {

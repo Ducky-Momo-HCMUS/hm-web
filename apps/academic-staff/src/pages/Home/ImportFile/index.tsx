@@ -308,8 +308,7 @@ function ImportFile() {
         }
       },
       onError: (error) => {
-        // TODO: lấy error từ BE
-        toast.error('Đã có  lỗi xảy ra');
+        toast.error(error.message);
       },
     });
 
@@ -326,8 +325,6 @@ function ImportFile() {
         values.class && { tenLopHP: values.class }
       );
 
-      console.log('mapped', mappedHeadersPayload);
-
       const payloadHeaders = columnHeaders.map((item) => {
         const value =
           mappedHeadersPayload.find((header) => header.index === item.index)
@@ -338,8 +335,6 @@ function ImportFile() {
           value,
         };
       });
-
-      console.log('<<< payload headers', payloadHeaders);
 
       if (file) {
         await uploadDocument({

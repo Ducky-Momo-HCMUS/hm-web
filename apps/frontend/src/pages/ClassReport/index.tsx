@@ -12,8 +12,6 @@ import {
 } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Packer } from 'docx';
-import { saveAs } from 'file-saver';
 
 import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import AppHeader from '../../components/Header';
@@ -41,7 +39,7 @@ import {
   useHomeroomReportDetailByTermQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
-import { groupTermsByYear } from '../../utils';
+import { groupTermsByYear, saveDocumentToFile } from '../../utils';
 
 import ClassOverview from './ClassOverview';
 import PostponeExam from './PostponeExam';
@@ -368,12 +366,6 @@ function ClassReport() {
     },
     skip: homeroomTermListLoading,
   });
-
-  function saveDocumentToFile(doc, fileName) {
-    Packer.toBlob(doc).then((blob) => {
-      saveAs(blob, fileName);
-    });
-  }
 
   function convertName(tenGVCN: string) {
     const words = tenGVCN.split(' ');
