@@ -130,21 +130,21 @@ function CourseScoreList() {
     [initialTerm, values.semester]
   );
 
-  const courseId = useMemo(
+  const subjectId = useMemo(
     () => values.courseId || courseList[0]?.maMH,
     [courseList, values.courseId]
   );
 
   useEffect(() => {
-    if (termId && courseId) {
+    if (termId && subjectId) {
       getClassroomList({
         variables: {
           termId,
-          courseId,
+          subjectId,
         },
       });
     }
-  }, [courseId, getClassroomList, termId]);
+  }, [subjectId, getClassroomList, termId]);
 
   const classroomId = useMemo(
     () =>
@@ -266,7 +266,7 @@ function CourseScoreList() {
                 {studentScoreList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maSV}>
                     <TableCell>
-                      {page * STUDENT_SCORE_PAGE_SIZE * index + 1}
+                      {page * STUDENT_SCORE_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

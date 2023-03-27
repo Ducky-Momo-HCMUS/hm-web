@@ -751,7 +751,7 @@ export type QueryAllTeacherListArgs = {
 };
 
 export type QueryClassroomListArgs = {
-  courseId?: InputMaybe<Scalars['String']>;
+  subjectId?: InputMaybe<Scalars['String']>;
   termId: Scalars['Int'];
 };
 
@@ -1359,7 +1359,7 @@ export type UploadDocumentMutation = {
 
 export type ClassroomListQueryVariables = Exact<{
   termId: Scalars['Int'];
-  courseId?: InputMaybe<Scalars['String']>;
+  subjectId?: InputMaybe<Scalars['String']>;
 }>;
 
 export type ClassroomListQuery = {
@@ -2798,8 +2798,8 @@ export type UploadDocumentMutationOptions = Apollo.BaseMutationOptions<
   UploadDocumentMutationVariables
 >;
 export const ClassroomListDocument = gql`
-  query ClassroomList($termId: Int!, $courseId: String) {
-    classroomList(termId: $termId, courseId: $courseId) {
+  query ClassroomList($termId: Int!, $subjectId: String) {
+    classroomList(termId: $termId, subjectId: $subjectId) {
       maHP
       tenLopHP
     }
@@ -2819,7 +2819,7 @@ export const ClassroomListDocument = gql`
  * const { data, loading, error } = useClassroomListQuery({
  *   variables: {
  *      termId: // value for 'termId'
- *      courseId: // value for 'courseId'
+ *      subjectId: // value for 'subjectId'
  *   },
  * });
  */

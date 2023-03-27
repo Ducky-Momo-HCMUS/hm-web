@@ -756,7 +756,7 @@ export type QueryAllTeacherListArgs = {
 };
 
 export type QueryClassroomListArgs = {
-  courseId?: InputMaybe<Scalars['String']>;
+  subjectId?: InputMaybe<Scalars['String']>;
   termId: Scalars['Int'];
 };
 
