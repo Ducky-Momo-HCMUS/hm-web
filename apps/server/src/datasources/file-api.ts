@@ -23,7 +23,7 @@ class FileAPI extends BaseDataSource {
       const res = await this.get('v1/terms');
       return res;
     } catch (error) {
-      logger.error('Error: cannot fetch term list');
+      logger.error('Error: cannot fetch term list ');
       throw this.handleError(error as ApolloError);
     }
   }
