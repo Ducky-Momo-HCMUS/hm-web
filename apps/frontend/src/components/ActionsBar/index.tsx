@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Logout } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
+import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 function ActionsBar() {
@@ -43,7 +43,7 @@ function ActionsBar() {
           component="label"
           onClick={() => navigate('/notes')}
         >
-          <StickyNote2OutlinedIcon fontSize="inherit" />
+          <StickyNote2Icon fontSize="inherit" />
         </IconButton>
         <IconButton
           sx={{ paddingRight: 0 }}

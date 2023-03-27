@@ -16,11 +16,11 @@ class ClassroomAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getClassroomList({ termId, courseId }: QueryClassroomListArgs) {
+  public async getClassroomList({ termId, subjectId }: QueryClassroomListArgs) {
     const args = Object.assign(
       {},
       termId && { termId },
-      courseId && { courseId }
+      subjectId && { subjectId }
     );
     let queryString = '';
     Object.keys(args).forEach((arg, index) => {

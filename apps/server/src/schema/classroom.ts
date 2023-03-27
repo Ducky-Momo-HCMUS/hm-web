@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const classroomTypeDefs = gql`
   extend type Query {
-    classroomList(termId: Int!, courseId: String): [ClassroomListItem!]!
+    classroomList(termId: Int!, subjectId: String): [ClassroomListItem!]!
     classroomScoreList(
       id: Int!
       termId: Int!

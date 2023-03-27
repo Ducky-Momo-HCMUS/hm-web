@@ -20,7 +20,7 @@ import {
 } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
-import { TEACHER_LIST_PAGE_SIZE } from '../../../constants';
+import { MenuProps, TEACHER_LIST_PAGE_SIZE } from '../../../constants';
 
 import { StyledFormControl } from './styles';
 import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
@@ -28,16 +28,6 @@ import HomeroomTeacherTableHead from './HomeroomTeacherTableHead';
 interface State {
   year: string;
 }
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-export const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
 
 function HomeroomTeacherList() {
   const [values, setValues] = useState<State>({

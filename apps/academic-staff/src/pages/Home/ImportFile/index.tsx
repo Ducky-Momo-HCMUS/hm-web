@@ -38,7 +38,6 @@ import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
-import ErrorMessage from '../../../components/ErrorMessage';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   ColumnHeader,
@@ -50,16 +49,10 @@ import {
   useTermListQuery,
   useUploadDocumentMutation,
 } from '../../../generated-types';
+import { MenuProps } from '../../../constants';
 
 import { StyledFormControl, StyledTextField } from './styles';
-import {
-  arrayify,
-  DataSet,
-  groupTermsByYear,
-  MenuProps,
-  Row,
-  TYPES,
-} from './utils';
+import { arrayify, DataSet, groupTermsByYear, Row, TYPES } from './utils';
 
 interface State {
   year: string;
@@ -79,8 +72,6 @@ function ImportFile() {
     class: 0,
     start: '1',
   });
-
-  const [error, setError] = useState<string>('');
 
   const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
   const [sheets, setSheets] = useState<string[]>([]); // list of sheet names
@@ -160,7 +151,9 @@ function ImportFile() {
       // const originalIndex = mappedHeaders.findIndex((item) => item === header);
 
       return {
-        key: defaultHeaders[index]?.key,
+        key: defaultHeaders.find(
+          (defaultHeader) => defaultHeader.index === index
+        )?.key,
         index,
         value: header,
       };
@@ -172,13 +165,15 @@ function ImportFile() {
   const handleChangeHeader = useCallback(
     (index: number) => (event: SelectChangeEvent) => {
       const targetKey = event?.target.value;
-      const selectedHeader = mappedHeadersPayload[index];
+      const selectedHeader = mappedHeadersPayload.find(
+        (header) => header.index === index
+      );
 
       // A key can only be chosen for one column
       setColumnHeaders((prevSelectedHeaders) => [
         ...prevSelectedHeaders.filter(
           (prevSelectedHeader) =>
-            prevSelectedHeader.index !== index &&
+            // prevSelectedHeader.index !== index &&
             prevSelectedHeader.key !== targetKey
         ),
         {
@@ -234,7 +229,8 @@ function ImportFile() {
                   variant="standard"
                   disableUnderline
                   value={
-                    columnHeaders.find((column) => column.index === i)?.key
+                    columnHeaders.find((column) => column.index === i)?.key ||
+                    ''
                     // || defaultSelectedHeader
                   }
                   onChange={handleChangeHeader(i)}
@@ -455,7 +451,7 @@ function ImportFile() {
       getClassroomList({
         variables: {
           termId: Number(values.term) || Number(initialTerm),
-          courseId: values.subject || courseList[0].maMH,
+          subjectId: values.subject || courseList[0].maMH,
         },
       });
     }

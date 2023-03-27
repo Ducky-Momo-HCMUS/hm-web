@@ -18,7 +18,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import { TRAINING_POINT_PAGE_SIZE } from '../../../constants';
+import { MenuProps, TRAINING_POINT_PAGE_SIZE } from '../../../constants';
 import {
   useStudentTrainingPointListLazyQuery,
   useTermListQuery,
@@ -122,6 +122,7 @@ function TrainingPointList() {
             value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
+            MenuProps={MenuProps}
           >
             {years.map((item) => (
               <MenuItem value={item}>
@@ -138,6 +139,7 @@ function TrainingPointList() {
             value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
+            MenuProps={MenuProps}
           >
             {terms.map((item) => (
               <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
