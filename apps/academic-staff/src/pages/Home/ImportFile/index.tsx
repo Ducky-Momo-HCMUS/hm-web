@@ -367,7 +367,7 @@ function ImportFile() {
   const handleUploadDocument = useCallback(
     async (event) => {
       event.preventDefault();
-      const type = TYPES.find((item) => item.label === values.type)?.endpoint;
+      const type = TYPES.find((item) => item.label === values.type)?.value;
       const selectedYear = values.year || initialYear;
       const selectedTerm = values.term || initialTerm;
       const input = Object.assign(
