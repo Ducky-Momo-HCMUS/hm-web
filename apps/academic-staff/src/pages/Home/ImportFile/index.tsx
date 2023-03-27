@@ -323,7 +323,7 @@ function ImportFile() {
 
       const payloadHeaders = columnHeaders.map((item) => {
         const value =
-          mappedHeadersPayload.find((header) => header.index === item.index)
+          mappedHeadersPayload.find((header) => header?.index === item.index)
             ?.value || '';
 
         return {
