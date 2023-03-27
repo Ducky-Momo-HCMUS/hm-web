@@ -38,7 +38,6 @@ import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
-import ErrorMessage from '../../../components/ErrorMessage';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   ColumnHeader,
@@ -50,16 +49,10 @@ import {
   useTermListQuery,
   useUploadDocumentMutation,
 } from '../../../generated-types';
+import { MenuProps } from '../../../constants';
 
 import { StyledFormControl, StyledTextField } from './styles';
-import {
-  arrayify,
-  DataSet,
-  groupTermsByYear,
-  MenuProps,
-  Row,
-  TYPES,
-} from './utils';
+import { arrayify, DataSet, groupTermsByYear, Row, TYPES } from './utils';
 
 interface State {
   year: string;
@@ -79,8 +72,6 @@ function ImportFile() {
     class: 0,
     start: '1',
   });
-
-  const [error, setError] = useState<string>('');
 
   const [workBook, setWorkBook] = useState<DataSet>({} as DataSet); // workbook
   const [sheets, setSheets] = useState<string[]>([]); // list of sheet names

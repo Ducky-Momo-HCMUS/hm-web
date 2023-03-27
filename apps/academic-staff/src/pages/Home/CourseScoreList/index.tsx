@@ -18,7 +18,7 @@ import {
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
-import { STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
+import { MenuProps, STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
 import {
   useClassroomListLazyQuery,
   useClassroomScoreListLazyQuery,
@@ -130,15 +130,21 @@ function CourseScoreList() {
     [initialTerm, values.semester]
   );
 
+  const courseId = useMemo(
+    () => values.courseId || courseList[0]?.maMH,
+    [courseList, values.courseId]
+  );
+
   useEffect(() => {
-    if (termId) {
+    if (termId && courseId) {
       getClassroomList({
         variables: {
           termId,
+          courseId,
         },
       });
     }
-  }, [getClassroomList, termId]);
+  }, [courseId, getClassroomList, termId]);
 
   const classroomId = useMemo(
     () =>
@@ -171,6 +177,7 @@ function CourseScoreList() {
             value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
+            MenuProps={MenuProps}
           >
             {years.map((item) => (
               <MenuItem value={item}>
@@ -187,6 +194,7 @@ function CourseScoreList() {
             value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
+            MenuProps={MenuProps}
           >
             {terms.map((item) => (
               <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
@@ -203,7 +211,7 @@ function CourseScoreList() {
             value={values.courseId || courseList[0]?.maMH}
             label="Môn học"
             onChange={handleChange('courseId')}
-            sx={{ minWidth: '250px' }}
+            MenuProps={MenuProps}
           >
             {courseList.map((item) => (
               <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
@@ -211,7 +219,10 @@ function CourseScoreList() {
           </Select>
         </StyledFormControl>
       </AsyncDataRenderer>
-      <AsyncDataRenderer loading={classroomListLoading} data={classroomList}>
+      <AsyncDataRenderer
+        loading={classroomListLoading}
+        data={classroomListData}
+      >
         <StyledFormControl>
           <InputLabel id="class-select-label">Lớp học phần</InputLabel>
           <Select
@@ -221,6 +232,7 @@ function CourseScoreList() {
             label="Lớp học phần"
             onChange={handleChange('classroomId')}
             sx={{ minWidth: '150px' }}
+            MenuProps={MenuProps}
           >
             {classroomList.map((item) => (
               <MenuItem value={item.maHP}>{item.tenLopHP}</MenuItem>
@@ -233,7 +245,7 @@ function CourseScoreList() {
         <AsyncDataRenderer
           hasFullWidth
           loading={classroomScoreListLoading}
-          data={studentScoreList}
+          data={classroomScoreListData}
         >
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>

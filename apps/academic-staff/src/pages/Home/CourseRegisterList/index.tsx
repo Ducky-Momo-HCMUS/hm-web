@@ -21,6 +21,7 @@ import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { groupTermsByYear } from '../ImportFile/utils';
 import { useTermListQuery } from '../../../generated-types';
+import { MenuProps } from '../../../constants';
 
 import EnrolledList from './EnrolledList';
 import NotEnrolledList from './NotEnrolledList';
@@ -94,6 +95,7 @@ function CourseRegisterList() {
             value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
+            MenuProps={MenuProps}
           >
             {years.map((item) => (
               <MenuItem value={item}>
@@ -110,6 +112,7 @@ function CourseRegisterList() {
             value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
+            MenuProps={MenuProps}
           >
             {terms.map((item) => (
               <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>

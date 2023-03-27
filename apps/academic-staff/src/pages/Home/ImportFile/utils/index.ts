@@ -34,7 +34,6 @@ export const TYPES = [
     value: FileType.HoSoSinhVien,
     endpoint: 'students-info',
   },
-  // 'Danh sách đăng ký học phần',
   {
     label: 'Danh sách không đăng ký học phần',
     value: FileType.DanhSachSinhVienKhongDkhp,
@@ -71,16 +70,6 @@ export const TYPES = [
     endpoint: 'score',
   },
 ];
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-export const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-    },
-  },
-};
 
 export const arrayify = (rows: any[]): Row[] => {
   return rows.map((row) => {

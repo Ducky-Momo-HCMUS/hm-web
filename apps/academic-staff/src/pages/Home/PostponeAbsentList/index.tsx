@@ -21,6 +21,7 @@ import { StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { groupTermsByYear } from '../ImportFile/utils';
 import { useTermListQuery } from '../../../generated-types';
+import { MenuProps } from '../../../constants';
 
 import AbsentList from './AbsentList';
 import PostponeList from './PostponeList';
@@ -100,6 +101,7 @@ function PostponeAbsentList() {
             value={values.year || initialYear}
             label="Năm học"
             onChange={handleChange('year')}
+            MenuProps={MenuProps}
           >
             {years.map((item) => (
               <MenuItem value={item}>
@@ -116,6 +118,7 @@ function PostponeAbsentList() {
             value={values.semester || initialTerm}
             label="Học kỳ"
             onChange={handleChange('semester')}
+            MenuProps={MenuProps}
           >
             {terms.map((item) => (
               <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
