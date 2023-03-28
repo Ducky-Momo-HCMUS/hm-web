@@ -255,7 +255,7 @@ function ImportAccount() {
       },
       onError: (error) => {
         // TODO: lấy error từ BE
-        toast.error('Đã có  lỗi xảy ra');
+        toast.error(error.message);
       },
     });
 
