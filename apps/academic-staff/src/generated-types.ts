@@ -173,6 +173,7 @@ export type Document = {
 
 export const FileType = {
   BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
+  ChungChiNgoaiNgu: 'CHUNG_CHI_NGOAI_NGU',
   DanhSachChuyenNganh: 'DANH_SACH_CHUYEN_NGANH',
   DanhSachGvcn: 'DANH_SACH_GVCN',
   DanhSachMonHoc: 'DANH_SACH_MON_HOC',

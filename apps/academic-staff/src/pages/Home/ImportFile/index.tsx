@@ -59,7 +59,7 @@ interface State {
   type: string;
   term: string;
   subject: string;
-  class: number;
+  class: string;
   start: string;
 }
 
@@ -69,7 +69,7 @@ function ImportFile() {
     year: '',
     term: '',
     subject: '',
-    class: 0,
+    class: '',
     start: '1',
   });
 
@@ -287,88 +287,36 @@ function ImportFile() {
     if (file) await handleAB(file);
   }
 
+  const [
+    getImportHistory,
+    { loading: importHistoryLoading, data: importHistoryData },
+  ] = useImportHistoryLazyQuery();
+
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
         toast.success('Cập nhật thông tin thành công');
-        setValues({
-          type: TYPES[0].label,
+        setValues((v) => ({
+          ...v,
           year: '',
           term: '',
           subject: '',
-          class: 0,
+          class: '',
           start: '1',
-        });
+        }));
         if (filePondRef.current) {
           filePondRef.current.removeFile();
         }
+        getImportHistory({
+          variables: {
+            fileType,
+          },
+        });
       },
       onError: (error) => {
         toast.error(error.message);
       },
     });
-
-  const handleUploadDocument = useCallback(
-    async (event) => {
-      event.preventDefault();
-      const type = TYPES.find((item) => item.label === values.type)?.value;
-      const input = Object.assign(
-        {},
-        type && { type },
-        values.year && { namHoc: values.year },
-        values.term && { hocKy: values.term },
-        values.subject && { maMH: values.subject },
-        values.class && { tenLopHP: values.class }
-      );
-
-      const payloadHeaders = columnHeaders.map((item) => {
-        const value =
-          mappedHeadersPayload.find((header) => header?.index === item.index)
-            ?.value || '';
-
-        return {
-          ...item,
-          value,
-        };
-      });
-
-      if (file) {
-        await uploadDocument({
-          variables: {
-            file,
-            input,
-            config: {
-              start: Number(values.start) - 1,
-              sheet: {
-                value: current,
-                index: sheets.findIndex((sheetName) => sheetName === current),
-              },
-              headers: payloadHeaders,
-            },
-          },
-        });
-      }
-    },
-    [
-      columnHeaders,
-      current,
-      file,
-      mappedHeadersPayload,
-      sheets,
-      uploadDocument,
-      values.class,
-      values.start,
-      values.subject,
-      values.term,
-      values.type,
-      values.year,
-    ]
-  );
-
-  const [
-    getImportHistory,
-    { loading: importHistoryLoading, data: importHistoryData },
-  ] = useImportHistoryLazyQuery();
 
   const { thoiGian, tenGV } = useMemo(() => {
     return {
@@ -385,6 +333,7 @@ function ImportFile() {
       variables: {
         fileType,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [fileType, getImportHistory]);
 
@@ -412,14 +361,16 @@ function ImportFile() {
   }, [mappedData, values.year, years]);
 
   const { initialYear, initialTerm } = useMemo(() => {
-    const termsByYear = mappedData[years[years.length - 1]]?.map((data) =>
-      data.maHK.toString()
+    const termsByYear = mappedData[years[years.length - 1]]?.map(
+      (data) => data.maHK
     );
+    const maHK = termsByYear?.[termsByYear.length - 1] || '';
     return {
       initialYear: years[years.length - 1],
-      initialTerm: termsByYear?.[termsByYear.length - 1] || '',
+      initialTerm:
+        terms.find((term) => term.maHK === maHK)?.hocKy.toString() || '',
     };
-  }, [mappedData, years]);
+  }, [mappedData, terms, years]);
 
   const { loading: courseListLoading, data: courseListData } =
     useCourseListQuery({
@@ -460,6 +411,79 @@ function ImportFile() {
     values.type,
   ]);
 
+  const { selectedTerm, selectedYear, selectedClass } = useMemo(
+    () => ({
+      selectedTerm: values.term ? Number(values.term) : Number(initialTerm),
+      selectedYear: values.year ? Number(values.year) : Number(initialYear),
+      selectedClass: values.class || classroomList[0]?.tenLopHP,
+    }),
+    [
+      classroomList,
+      initialTerm,
+      initialYear,
+      values.class,
+      values.term,
+      values.year,
+    ]
+  );
+
+  const handleUploadDocument = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const type = TYPES.find((item) => item.label === values.type)?.value;
+      const input = Object.assign(
+        {},
+        type && { type },
+        selectedYear && { namHoc: selectedYear },
+        selectedTerm && { hocKy: selectedTerm },
+        values.subject && { maMH: values.subject },
+        selectedClass && { tenLopHP: selectedClass }
+      );
+
+      const payloadHeaders = columnHeaders.map((item) => {
+        const value =
+          mappedHeadersPayload.find((header) => header?.index === item.index)
+            ?.value || '';
+
+        return {
+          ...item,
+          value,
+        };
+      });
+
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input,
+            config: {
+              start: Number(values.start) - 1,
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: payloadHeaders,
+            },
+          },
+        });
+      }
+    },
+    [
+      columnHeaders,
+      current,
+      file,
+      mappedHeadersPayload,
+      selectedClass,
+      selectedTerm,
+      selectedYear,
+      sheets,
+      uploadDocument,
+      values.start,
+      values.subject,
+      values.type,
+    ]
+  );
+
   const [openHelpDialog, setOpenHelpDialog] = useState(false);
 
   return (
@@ -482,7 +506,7 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        {TYPES.findIndex((item) => item.label === values.type) >= 4 && (
+        {TYPES.findIndex((item) => item.label === values.type) >= 5 && (
           <>
             <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
               <StyledFormControl>
@@ -513,7 +537,7 @@ function ImportFile() {
                   MenuProps={MenuProps}
                 >
                   {terms.map((item) => (
-                    <MenuItem key={item.maHK} value={item.maHK}>
+                    <MenuItem key={item.maHK} value={item.hocKy}>
                       {item.hocKy}
                     </MenuItem>
                   ))}
@@ -550,13 +574,13 @@ function ImportFile() {
                 <Select
                   labelId="class-select-label"
                   id="class-select"
-                  value={String(values.class) || String(classroomList[0].maHP)}
+                  value={selectedClass}
                   label="Lớp học phần"
                   onChange={handleChange('class')}
                   MenuProps={MenuProps}
                 >
                   {classroomList.map((item) => (
-                    <MenuItem value={item.maHP}>{item.tenLopHP}</MenuItem>
+                    <MenuItem value={item.tenLopHP}>{item.tenLopHP}</MenuItem>
                   ))}
                 </Select>
               </StyledFormControl>
@@ -615,7 +639,7 @@ function ImportFile() {
                   label="Chọn sheet"
                   value={current}
                   onChange={async (e) => {
-                    selectSheet(sheets[+(e.target.value as string)]);
+                    selectSheet(e.target.value);
                   }}
                 >
                   {sheets.map((item) => (

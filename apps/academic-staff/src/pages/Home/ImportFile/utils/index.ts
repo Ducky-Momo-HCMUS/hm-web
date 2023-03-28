@@ -12,62 +12,54 @@ export const TYPES = [
   {
     label: 'Danh sách giáo viên chủ nhiệm',
     value: FileType.DanhSachGvcn,
-    endpoint: 'teachers',
   },
   {
     label: 'Danh sách môn học',
     value: FileType.DanhSachMonHoc,
-    endpoint: 'courses',
   },
   {
     label: 'Danh sách chuyên ngành',
     value: FileType.DanhSachChuyenNganh,
-    endpoint: 'majors',
   },
   {
     label: 'Danh sách kết quả chuyên ngành',
     value: FileType.KetQuaChuyenNganh,
-    endpoint: 'major-result',
+  },
+  {
+    label: 'Chứng chỉ ngoại ngữ',
+    value: FileType.ChungChiNgoaiNgu,
   },
   {
     label: 'Danh sách hồ sơ sinh viên',
     value: FileType.HoSoSinhVien,
-    endpoint: 'students-info',
   },
   {
     label: 'Danh sách không đăng ký học phần',
     value: FileType.DanhSachSinhVienKhongDkhp,
-    endpoint: 'unregister',
   },
   {
     label: 'Danh sách hoãn thi',
     value: FileType.DanhSachSinhVienHoanThi,
-    endpoint: 'postpone',
   },
   {
     label: 'Danh sách vắng thi',
     value: FileType.DanhSachSinhVienVangThi,
-    endpoint: 'absent',
   },
   {
     label: 'Điểm rèn luyện',
     value: FileType.DiemRenLuyen,
-    endpoint: 'training-point',
   },
   {
     label: 'Thống kê đăng ký học phần',
     value: FileType.ThongKeDkhp,
-    endpoint: 'registration-statistic',
   },
   {
     label: 'Bảng điểm toàn bộ sinh viên',
     value: FileType.BangDiemToanBoSinhVien,
-    endpoint: 'student-status',
   },
   {
     label: 'Bảng điểm lớp học phần',
     value: FileType.DiemThiTheoLopHocPhan,
-    endpoint: 'score',
   },
 ];
 
