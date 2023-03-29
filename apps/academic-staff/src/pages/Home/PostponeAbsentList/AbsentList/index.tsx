@@ -72,7 +72,7 @@ function AbsentList({ termId }: AbsentListProps) {
                 {absentList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>
-                      {page * NOT_ENROLLED_PAGE_SIZE * index + 1}
+                      {page * NOT_ENROLLED_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

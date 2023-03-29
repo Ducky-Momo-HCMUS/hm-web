@@ -118,12 +118,12 @@ export type ClassroomScoreList = {
 
 export type ClassroomScoreListItem = {
   __typename?: 'ClassroomScoreListItem';
-  diemCK: Scalars['Float'];
-  diemCong: Scalars['Float'];
-  diemGK: Scalars['Float'];
-  diemKhac: Scalars['Float'];
-  diemTH: Scalars['Float'];
-  dtb: Scalars['Float'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -1388,12 +1388,12 @@ export type ClassroomScoreListQuery = {
       __typename?: 'ClassroomScoreListItem';
       maSV: string;
       tenSV: string;
-      diemCK: number;
-      diemCong: number;
-      diemGK: number;
-      diemKhac: number;
-      diemTH: number;
-      dtb: number;
+      diemCK?: number | null | undefined;
+      diemCong?: number | null | undefined;
+      diemGK?: number | null | undefined;
+      diemKhac?: number | null | undefined;
+      diemTH?: number | null | undefined;
+      dtb?: number | null | undefined;
     }>;
   };
 };

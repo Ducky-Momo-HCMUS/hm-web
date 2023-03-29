@@ -113,7 +113,9 @@ function HomeroomTeacherList() {
               <TableBody>
                 {teacherList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.email}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * TEACHER_LIST_PAGE_SIZE + index + 1}
+                    </TableCell>
                     <TableCell>{row.tenGV}</TableCell>
                     <TableCell>{row.maSH}</TableCell>
                     <TableCell>{row.email}</TableCell>

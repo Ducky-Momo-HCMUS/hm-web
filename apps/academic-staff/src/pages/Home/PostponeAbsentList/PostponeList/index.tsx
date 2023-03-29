@@ -74,7 +74,7 @@ function PostponeList({ termId }: PostponeListProps) {
                 {postponeList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>
-                      {page * ENROLLED_PAGE_SIZE * index + 1}
+                      {page * ENROLLED_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

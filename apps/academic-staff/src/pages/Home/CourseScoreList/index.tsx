@@ -270,12 +270,12 @@ function CourseScoreList() {
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.diemGK}</TableCell>
-                    <TableCell>{row.diemTH}</TableCell>
-                    <TableCell>{row.diemCong}</TableCell>
-                    <TableCell>{row.diemKhac}</TableCell>
-                    <TableCell>{row.diemCK}</TableCell>
-                    <TableCell>{row.dtb}</TableCell>
+                    <TableCell>{row.diemGK || 0}</TableCell>
+                    <TableCell>{row.diemTH || 0}</TableCell>
+                    <TableCell>{row.diemCong || 0}</TableCell>
+                    <TableCell>{row.diemKhac || 0}</TableCell>
+                    <TableCell>{row.diemCK || 0}</TableCell>
+                    <TableCell>{row.dtb || 0}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

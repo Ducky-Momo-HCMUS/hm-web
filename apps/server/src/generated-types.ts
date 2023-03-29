@@ -123,12 +123,12 @@ export type ClassroomScoreList = {
 
 export type ClassroomScoreListItem = {
   __typename?: 'ClassroomScoreListItem';
-  diemCK: Scalars['Float'];
-  diemCong: Scalars['Float'];
-  diemGK: Scalars['Float'];
-  diemKhac: Scalars['Float'];
-  diemTH: Scalars['Float'];
-  dtb: Scalars['Float'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -1870,12 +1870,12 @@ export type ClassroomScoreListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ClassroomScoreListItem'] = ResolversParentTypes['ClassroomScoreListItem']
 > = {
-  diemCK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemCong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemGK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemKhac?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemTH?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemCK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemCong?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemGK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemKhac?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

@@ -173,7 +173,7 @@ function ImportFile() {
       setColumnHeaders((prevSelectedHeaders) => [
         ...prevSelectedHeaders.filter(
           (prevSelectedHeader) =>
-            // prevSelectedHeader.index !== index &&
+            prevSelectedHeader.index !== index &&
             prevSelectedHeader.key !== targetKey
         ),
         {
@@ -393,39 +393,53 @@ function ImportFile() {
     [classroomListData?.classroomList]
   );
 
+  const { selectedTerm, selectedYear, selectedClass, selectedSubject } =
+    useMemo(
+      () => ({
+        selectedTerm: values.term ? Number(values.term) : Number(initialTerm),
+        selectedYear: values.year ? Number(values.year) : Number(initialYear),
+        selectedClass: values.class || classroomList[0]?.tenLopHP,
+        selectedSubject: values.subject || courseList[0]?.maMH,
+      }),
+      [
+        classroomList,
+        courseList,
+        initialTerm,
+        initialYear,
+        values.class,
+        values.subject,
+        values.term,
+        values.year,
+      ]
+    );
+
   useEffect(() => {
     if (values.type === 'Bảng điểm lớp học phần') {
-      getClassroomList({
-        variables: {
-          termId: Number(values.term) || Number(initialTerm),
-          subjectId: values.subject || courseList[0].maMH,
-        },
-      });
+      const termId = mappedData[selectedYear].find(
+        (item) => item.hocKy === selectedTerm
+      )?.maHK;
+
+      if (termId) {
+        getClassroomList({
+          variables: {
+            termId,
+            subjectId: selectedSubject,
+          },
+        });
+      }
     }
   }, [
     courseList,
     getClassroomList,
     initialTerm,
+    mappedData,
+    selectedSubject,
+    selectedTerm,
+    selectedYear,
     values.subject,
     values.term,
     values.type,
   ]);
-
-  const { selectedTerm, selectedYear, selectedClass } = useMemo(
-    () => ({
-      selectedTerm: values.term ? Number(values.term) : Number(initialTerm),
-      selectedYear: values.year ? Number(values.year) : Number(initialYear),
-      selectedClass: values.class || classroomList[0]?.tenLopHP,
-    }),
-    [
-      classroomList,
-      initialTerm,
-      initialYear,
-      values.class,
-      values.term,
-      values.year,
-    ]
-  );
 
   const handleUploadDocument = useCallback(
     async (event) => {

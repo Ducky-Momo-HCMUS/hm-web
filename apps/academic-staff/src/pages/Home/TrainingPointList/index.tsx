@@ -168,7 +168,7 @@ function TrainingPointList() {
                 {trainingPointList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.maSV}>
                     <TableCell>
-                      {page * TRAINING_POINT_PAGE_SIZE * index + 1}
+                      {page * TRAINING_POINT_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

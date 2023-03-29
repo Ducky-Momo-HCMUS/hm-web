@@ -125,19 +125,19 @@ function StudentList() {
             <Table stickyHeader>
               <StudentTableHead />
               <TableBody>
-                {studentListData
-                  // ?.sort(getComparator(order, orderBy))
-                  .map((row, index) => (
-                    <TableRow hover tabIndex={-1} key={row.maSV}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row.maSV}</TableCell>
-                      <TableCell>{row.tenSV}</TableCell>
-                      <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
-                      <TableCell>{row.tinhTrang}</TableCell>
-                      <TableCell>{row.sdt}</TableCell>
-                      <TableCell>{row.emailSV}</TableCell>
-                    </TableRow>
-                  ))}
+                {studentListData.map((row, index) => (
+                  <TableRow hover tabIndex={-1} key={row.maSV}>
+                    <TableCell>
+                      {page * STUDENT_LIST_PAGE_SIZE + index + 1}
+                    </TableCell>
+                    <TableCell>{row.maSV}</TableCell>
+                    <TableCell>{row.tenSV}</TableCell>
+                    <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
+                    <TableCell>{row.tinhTrang}</TableCell>
+                    <TableCell>{row.sdt}</TableCell>
+                    <TableCell>{row.emailSV}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
