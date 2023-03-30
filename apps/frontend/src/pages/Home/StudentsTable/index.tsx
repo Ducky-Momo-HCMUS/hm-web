@@ -40,7 +40,7 @@ import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
 import { StyledFormControl } from './styles';
 
-const TYPES = ['Tất cả', 'Cần chú ý'];
+const TYPES = ['Tất cả', 'Cần chú ý', 'Cá biệt'];
 
 interface State {
   year: string;

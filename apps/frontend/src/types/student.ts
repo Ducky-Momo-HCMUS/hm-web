@@ -18,6 +18,15 @@ export interface HomeroomStudentListData {
   contact: ContactInfo;
 }
 
+export interface HomeroomStudentStatisticsData {
+  maSV: string;
+  namHoc: string;
+  hocKy: number;
+  dtb?: number;
+  drl?: number;
+  soTinChi?: number;
+}
+
 export interface ContactInfo {
   sdt: string;
   lienHe: Contact[];

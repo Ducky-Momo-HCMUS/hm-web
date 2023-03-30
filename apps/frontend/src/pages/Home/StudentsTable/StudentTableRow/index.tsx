@@ -1,5 +1,12 @@
 import React, { useCallback } from 'react';
-import { Checkbox, TableCell, TableRow, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import {
+  Button,
+  Checkbox,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
 
 import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
@@ -51,6 +58,34 @@ function StudentTableRow({
     );
   }, [tinhTrang]);
 
+  const renderGPA4WithProperColor = useCallback(() => {
+    let color = '';
+    if (gpa4 && gpa4 < 2.0) {
+      color = theme.palette.error.main;
+    } else {
+      color = theme.palette.text.primary;
+    }
+    return (
+      <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
+        {gpa4 || 'Chưa có'}
+      </Typography>
+    );
+  }, [gpa4]);
+
+  const renderGPA10WithProperColor = useCallback(() => {
+    let color = '';
+    if (gpa10 && gpa10 < 5.0) {
+      color = theme.palette.error.main;
+    } else {
+      color = theme.palette.text.primary;
+    }
+    return (
+      <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
+        {gpa10 || 'Chưa có'}
+      </Typography>
+    );
+  }, [gpa10]);
+
   const handleChange = useCallback(() => {
     handleCheck(data.maSV);
   }, [data.maSV, handleCheck]);
@@ -73,8 +108,8 @@ function StudentTableRow({
       </TableCell>
       <TableCell>{tenCN || 'Chưa có'}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{gpa4 || 'Chưa có'}</TableCell>
-      <TableCell>{gpa10 || 'Chưa có'}</TableCell>
+      <TableCell>{renderGPA4WithProperColor()}</TableCell>
+      <TableCell>{renderGPA10WithProperColor()}</TableCell>
       <TableCell>
         {contact.sdt}
         {contact.lienHe?.map((social) => (
@@ -85,6 +120,15 @@ function StudentTableRow({
             </StyledMuiLink>
           </>
         ))}
+      </TableCell>
+      <TableCell>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/students/${maSV}/statistics`}
+        >
+          Thống kê
+        </Button>
       </TableCell>
     </TableRow>
   );
