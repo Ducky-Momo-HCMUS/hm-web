@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import List from '@mui/material/List';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
+import TableChartIcon from '@mui/icons-material/TableChart';
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import StarIcon from '@mui/icons-material/Star';
@@ -87,6 +88,7 @@ function StudentDashboard() {
           <List>
             {[
               { page: 'Thông tin sinh viên', url: 'info' },
+              { page: 'Thống kê tình hình', url: 'statistics' },
               { page: 'Ghi chú sinh viên', url: 'notes' },
               { page: 'Tình hình học tập', url: 'academic-report' },
               { page: 'Kết quả học tập', url: 'academic-overview' },
@@ -109,9 +111,10 @@ function StudentDashboard() {
                     }}
                   >
                     {index === 0 && <ContactPageIcon />}
-                    {index === 1 && <StickyNote2Icon />}
-                    {index === 2 && <StackedBarChartIcon />}
-                    {index === 3 && <StarIcon />}
+                    {index === 1 && <TableChartIcon />}
+                    {index === 2 && <StickyNote2Icon />}
+                    {index === 3 && <StackedBarChartIcon />}
+                    {index === 4 && <StarIcon />}
                   </ListItemIcon>
                   <ListItemText primary={page} sx={{ opacity: open ? 1 : 0 }} />
                 </StyledListItemButton>

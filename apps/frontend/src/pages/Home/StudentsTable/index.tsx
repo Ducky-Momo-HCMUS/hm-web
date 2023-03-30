@@ -1,5 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import _isEqual from 'lodash/isEqual';
 import {
@@ -40,7 +42,7 @@ import StudentTableHead from './StudentTableHead';
 import StudentTableRow from './StudentTableRow';
 import { StyledFormControl } from './styles';
 
-const TYPES = ['Tất cả', 'Cần chú ý'];
+const TYPES = ['Tất cả', 'Cần chú ý', 'Cá biệt'];
 
 interface State {
   year: string;
@@ -338,6 +340,7 @@ function StudentsTable() {
 
   return (
     <>
+      <ToastContainer />
       <StyledContentWrapper>
         <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
         <AsyncDataRenderer
