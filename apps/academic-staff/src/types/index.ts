@@ -8,3 +8,15 @@ export type StudentProperty =
   | 'sdt'
   | 'emailSV';
 export type GenericObject<T = any> = Record<string, T>;
+
+export interface FileHandlingError {
+  message: string;
+  details: FileErrorDetails;
+}
+
+interface FileErrorDetails {
+  expected: { key: string; value: string; index: number }[];
+  received: any[];
+  fieldErrors?: { [key: string]: string[] };
+  formErrors?: string[];
+}

@@ -46,6 +46,7 @@ function AbsentList({ termId }: AbsentListProps) {
         page: page + 1,
         size: NOT_ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getAbsentList, page, termId]);
 

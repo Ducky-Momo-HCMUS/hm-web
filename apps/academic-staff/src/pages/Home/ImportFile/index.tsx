@@ -45,6 +45,7 @@ import {
 } from '../../../generated-types';
 import { MenuProps } from '../../../constants';
 import { StyledAutocompleteBox } from '../styles';
+import { FileHandlingError } from '../../../types';
 
 import { StyledFormControl, StyledTextField } from './styles';
 import {
@@ -55,6 +56,7 @@ import {
   unmergeSheet,
 } from './utils';
 import HelpDialog from './HelpDialog';
+import ErrorDialog from './ErrorDialog';
 
 interface State {
   year: string;
@@ -63,30 +65,6 @@ interface State {
   subject: string;
   class: string;
   start: string;
-}
-
-interface FileHandlingError {
-  message: string;
-  details: FileErrorDetails;
-}
-
-export interface OrderedKeyValue<K extends string = string> {
-  key: K;
-  value: string;
-  index: number;
-}
-
-export type Cell = boolean | number | string | Date | undefined;
-
-interface FileErrorDetails {
-  expected: OrderedKeyValue<string>[];
-  received: Cell[];
-  fieldErrors: {
-    [x: string]: string[] | undefined;
-    [x: number]: string[] | undefined;
-    [x: symbol]: string[] | undefined;
-  };
-  formErrors: string[];
 }
 
 function ImportFile() {
@@ -292,6 +270,10 @@ function ImportFile() {
     { loading: importHistoryLoading, data: importHistoryData },
   ] = useImportHistoryLazyQuery();
 
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
+  const [fileError, setFileError] = useState<FileHandlingError>();
+
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
@@ -318,6 +300,9 @@ function ImportFile() {
         const fileError = error
           .graphQLErrors[0] as unknown as FileHandlingError;
         toast.error(fileError.message);
+        setFileError(fileError);
+        console.log('error', fileError);
+        setOpenErrorDialog(true);
       },
     });
 
@@ -500,8 +485,6 @@ function ImportFile() {
       values.type,
     ]
   );
-
-  const [openHelpDialog, setOpenHelpDialog] = useState(false);
 
   return (
     <>
@@ -735,6 +718,13 @@ function ImportFile() {
         openHelpDialog={openHelpDialog}
         onClose={() => setOpenHelpDialog(false)}
       />
+      {openErrorDialog && (
+        <ErrorDialog
+          openErrorDialog={openErrorDialog}
+          onClose={() => setOpenErrorDialog(false)}
+          error={fileError as FileHandlingError}
+        />
+      )}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={uploadDocumentLoading}

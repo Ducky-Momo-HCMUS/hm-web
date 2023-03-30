@@ -48,6 +48,7 @@ function PostponeList({ termId }: PostponeListProps) {
         page: page + 1,
         size: ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getPostponeList, page, termId]);
 
