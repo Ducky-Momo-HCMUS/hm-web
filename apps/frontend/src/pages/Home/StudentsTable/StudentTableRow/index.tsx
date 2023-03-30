@@ -29,20 +29,22 @@ function StudentTableRow({
   const renderStatusWithProperColor = useCallback(() => {
     let color = '';
 
-    switch (tinhTrang) {
-      case 'Đang học': {
+    switch (true) {
+      case tinhTrang === 'Đang học': {
         color = theme.palette.text.primary;
         break;
       }
-      case 'Bị buộc thôi học': {
+      case tinhTrang.toLowerCase().includes('đình chỉ'):
+      case tinhTrang.toLowerCase().includes('thôi học'): {
         color = theme.palette.error.main;
         break;
       }
-      case 'Đình chỉ học': {
+      case tinhTrang.toLowerCase().includes('nghỉ'):
+      case tinhTrang.toLowerCase().includes('hoãn'): {
         color = theme.palette.warning.main;
         break;
       }
-      case 'Đã tốt nghiệp': {
+      case tinhTrang === 'Đã tốt nghiệp': {
         color = theme.palette.success.main;
         break;
       }
