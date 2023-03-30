@@ -107,7 +107,7 @@ function HomeroomTeacherList() {
           loading={teacherListLoading}
           data={teacherList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <HomeroomTeacherTableHead />
               <TableBody>

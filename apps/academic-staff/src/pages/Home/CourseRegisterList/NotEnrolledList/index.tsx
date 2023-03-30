@@ -64,7 +64,7 @@ function NotEnrolledList({ termId }: NotEnrolledListProps) {
           loading={studentNotEnrolledListLoading}
           data={notEnrolledList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>

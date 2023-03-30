@@ -57,7 +57,7 @@ function AbsentList({ termId }: AbsentListProps) {
           loading={absentListLoading}
           data={absentList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>

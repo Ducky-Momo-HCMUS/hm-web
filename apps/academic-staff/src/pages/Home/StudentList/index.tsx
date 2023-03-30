@@ -121,7 +121,7 @@ function StudentList() {
           loading={homeroomStudentListLoading}
           data={studentListData}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <StudentTableHead />
               <TableBody>

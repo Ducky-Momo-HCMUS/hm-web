@@ -111,7 +111,7 @@ function Search() {
         </StyledStickyBox>
         <AsyncDataRenderer loading={searchStudentsLoading} data={studentsList}>
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-            <TableContainer sx={{ maxHeight: 350 }}>
+            <TableContainer sx={{ maxHeight: '100vh' }}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>

@@ -49,7 +49,7 @@ function MajorList() {
           loading={majorListLoading}
           data={majorListData}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>

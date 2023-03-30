@@ -31,6 +31,10 @@ export const TYPES = [
     label: 'Chứng chỉ ngoại ngữ',
     value: FileType.ChungChiNgoaiNgu,
   },
+  {
+    label: 'Bảng điểm toàn bộ sinh viên',
+    value: FileType.BangDiemToanBoSinhVien,
+  },
   { label: 'Thời khoá biểu', value: FileType.ThoiKhoaBieu },
   {
     label: 'Danh sách hồ sơ sinh viên',
@@ -56,10 +60,7 @@ export const TYPES = [
     label: 'Thống kê đăng ký học phần',
     value: FileType.ThongKeDkhp,
   },
-  {
-    label: 'Bảng điểm toàn bộ sinh viên',
-    value: FileType.BangDiemToanBoSinhVien,
-  },
+
   {
     label: 'Bảng điểm lớp học phần',
     value: FileType.DiemThiTheoLopHocPhan,

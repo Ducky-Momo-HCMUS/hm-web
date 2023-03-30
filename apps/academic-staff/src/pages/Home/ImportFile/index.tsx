@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
 import {
+  Autocomplete,
   Backdrop,
   Box,
   Button,
@@ -19,6 +20,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
   Typography,
 } from '@mui/material';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
@@ -50,6 +52,7 @@ import {
   useUploadDocumentMutation,
 } from '../../../generated-types';
 import { MenuProps } from '../../../constants';
+import { StyledAutocompleteBox } from '../styles';
 
 import { StyledFormControl, StyledTextField } from './styles';
 import {
@@ -501,7 +504,7 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        {TYPES.findIndex((item) => item.label === values.type) >= 5 && (
+        {TYPES.findIndex((item) => item.label === values.type) >= 6 && (
           <>
             <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
               <StyledFormControl>
@@ -544,41 +547,53 @@ function ImportFile() {
         {values.type === 'Bảng điểm lớp học phần' && (
           <>
             <AsyncDataRenderer loading={courseListLoading} data={courseList}>
-              <StyledFormControl sx={{ minWidth: '13rem' }}>
-                <InputLabel id="subject-select-label">Môn học</InputLabel>
-                <Select
-                  labelId="subject-select-label"
-                  id="subject-select"
-                  value={values.subject || courseList[0].maMH}
-                  label="Môn học"
-                  onChange={handleChange('subject')}
-                  MenuProps={MenuProps}
-                >
-                  {courseList.map((item) => (
-                    <MenuItem value={item.maMH}>{item.maMH}</MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
+              <StyledAutocompleteBox>
+                <Autocomplete
+                  sx={{ width: 300 }}
+                  disablePortal
+                  autoHighlight
+                  options={courseList}
+                  onChange={(event, newValue) => {
+                    setValues((v) => ({
+                      ...v,
+                      subject: newValue?.maMH || '',
+                    }));
+                  }}
+                  value={courseList.find(
+                    (course) => course.maMH === selectedSubject
+                  )}
+                  getOptionLabel={(option) => option.tenMH}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Môn học" />
+                  )}
+                />
+              </StyledAutocompleteBox>
             </AsyncDataRenderer>
             <AsyncDataRenderer
               loading={classroomListLoading}
               data={classroomListData}
             >
-              <StyledFormControl sx={{ minWidth: '9rem' }}>
-                <InputLabel id="class-select-label">Lớp học phần</InputLabel>
-                <Select
-                  labelId="class-select-label"
-                  id="class-select"
-                  value={selectedClass}
-                  label="Lớp học phần"
-                  onChange={handleChange('class')}
-                  MenuProps={MenuProps}
-                >
-                  {classroomList.map((item) => (
-                    <MenuItem value={item.tenLopHP}>{item.tenLopHP}</MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
+              <StyledAutocompleteBox>
+                <Autocomplete
+                  sx={{ width: 200 }}
+                  disablePortal
+                  autoHighlight
+                  options={classroomList}
+                  onChange={(event, newValue) => {
+                    setValues((v) => ({
+                      ...v,
+                      class: String(newValue?.tenLopHP),
+                    }));
+                  }}
+                  value={classroomList.find(
+                    (classroom) => classroom.tenLopHP === selectedClass
+                  )}
+                  getOptionLabel={(option) => option.tenLopHP}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Lớp học phần" />
+                  )}
+                />
+              </StyledAutocompleteBox>
             </AsyncDataRenderer>
           </>
         )}
