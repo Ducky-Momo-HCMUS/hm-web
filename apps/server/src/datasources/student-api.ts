@@ -106,7 +106,7 @@ class StudentAPI extends BaseDataSource {
   }: QueryStudentAbsentListArgs) {
     try {
       const studentList = await this.get(
-        `v1/students/postpone?termId=${termId}&page=${page}&size=${size}`
+        `v1/students/absent?termId=${termId}&page=${page}&size=${size}`
       );
       return studentList;
     } catch (error) {

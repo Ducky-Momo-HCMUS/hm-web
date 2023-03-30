@@ -32,7 +32,7 @@ import React, {
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import { DataGrid } from '@mui/x-data-grid';
-import { read, utils } from 'xlsx';
+import { read, Sheet2JSONOpts, utils } from 'xlsx';
 import { ToastContainer, toast } from 'react-toastify';
 import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
@@ -52,7 +52,13 @@ import {
 import { MenuProps } from '../../../constants';
 
 import { StyledFormControl, StyledTextField } from './styles';
-import { arrayify, DataSet, groupTermsByYear, Row, TYPES } from './utils';
+import {
+  arrayify,
+  DataSet,
+  groupTermsByYear,
+  TYPES,
+  unmergeSheet,
+} from './utils';
 
 interface State {
   year: string;
@@ -124,40 +130,30 @@ function ImportFile() {
       return [];
     }
 
-    const sheetHeaders = utils.sheet_to_json(workBook[current], {
+    const parserConfig: Sheet2JSONOpts = {
       header: 1,
-      range: Number(values.start) - 1,
-    })[0] as string[];
+      blankrows: true,
+      raw: true,
+      skipHidden: false,
+    };
+    const aoa: any[][] = utils.sheet_to_json(workBook[current], {
+      ...parserConfig,
+    });
+    unmergeSheet(aoa, workBook[current]['!merges']);
+    const sheetHeaders = aoa[Number(values.start) - 1];
 
     const mappedHeaders = sheetHeaders;
-    // const cnt = new Array(sheetHeaders.length).fill(0);
-    // mappedHeaders.forEach((header) => {
-    //   const findIndex = mappedHeaders.findIndex((item) => item === header);
-    //   cnt[findIndex] += 1;
-    // });
 
-    // cnt.forEach((count, index) => {
-    //   let tmpCount = count;
-    //   while (tmpCount >= 2) {
-    //     mappedHeaders[index + tmpCount - 1] = `${mappedHeaders[index]}_${
-    //       tmpCount - 1
-    //     }`;
-    //     tmpCount -= 1;
-    //   }
-    // });
-
-    const mappedHeadersPayload = mappedHeaders.map((header, index) => {
-      // const originalHeader = header.split('_')[0];
-      // const originalIndex = mappedHeaders.findIndex((item) => item === header);
-
-      return {
-        key: defaultHeaders.find(
-          (defaultHeader) => defaultHeader.index === index
-        )?.key,
-        index,
-        value: header,
-      };
-    });
+    const mappedHeadersPayload =
+      mappedHeaders?.map((header, index) => {
+        return {
+          key: defaultHeaders.find(
+            (defaultHeader) => defaultHeader.index === index
+          )?.key,
+          index,
+          value: header,
+        };
+      }) || [];
 
     return mappedHeadersPayload;
   }, [current, defaultHeaders, values.start, workBook]);
@@ -195,34 +191,27 @@ function ImportFile() {
         dataColumns: [],
       };
     }
-    const endCell = Object.keys(sheet)[Object.keys(sheet).length - 2];
 
-    // const sheetHeaders = utils.sheet_to_json(sheet, {
-    //   header: 1,
-    //   range: Number(values.start) - 1,
-    // })[0] as string[];
-
-    // const headers = defaultHeaders.map((header, index) => ({
-    //   ...header,
-    //   value: sheetHeaders[index],
-    // })) as ColumnHeader[];
+    const parserConfig: Sheet2JSONOpts = {
+      header: 1,
+      blankrows: true,
+      raw: true,
+      skipHidden: false,
+    };
+    const aoa: any[][] = utils.sheet_to_json(sheet, {
+      ...parserConfig,
+    });
+    unmergeSheet(aoa, sheet['!merges']);
 
     return {
-      dataRows: utils
-        .sheet_to_json<Row>(sheet, { header: 1 })
-        .map((r, id) => ({ ...r, id })),
+      dataRows: aoa.map((r, id) => ({ ...r, id })),
       dataColumns: Array.from(
         {
-          length: utils.decode_range(`A1:${endCell}`).e.c + 1,
+          length: utils.decode_range(sheet['!ref'] as string).e.c + 1,
         },
         (_, i) => ({
           field: String(i),
           renderHeader: () => {
-            // const defaultSelectedHeader =
-            //   defaultHeaders.find(
-            //     (header) => header.value === mappedHeadersPayload[i]?.value
-            //   )?.key || '';
-
             return (
               <StyledFormControl>
                 <Select
@@ -231,7 +220,6 @@ function ImportFile() {
                   value={
                     columnHeaders.find((column) => column.index === i)?.key ||
                     ''
-                    // || defaultSelectedHeader
                   }
                   onChange={handleChangeHeader(i)}
                 >
@@ -252,15 +240,7 @@ function ImportFile() {
         })
       ),
     };
-  }, [
-    columnHeaders,
-    current,
-    defaultHeaders,
-    handleChangeHeader,
-    // mappedHeadersPayload,
-    // values.start,
-    workBook,
-  ]);
+  }, [columnHeaders, current, defaultHeaders, handleChangeHeader, workBook]);
 
   /* called when sheet dropdown is changed */
   function selectSheet(name: string) {
@@ -311,6 +291,7 @@ function ImportFile() {
           variables: {
             fileType,
           },
+          fetchPolicy: 'no-cache',
         });
       },
       onError: (error) => {
