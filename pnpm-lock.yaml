@@ -281,6 +281,7 @@ importers:
       react-router-dom: ^6.4.2
       react-scripts: 5.0.1
       react-show-more-text: ^1.6.2
+      react-toastify: ^9.1.1
       tinymce: ^6.2.0
       ts-jest: ^29.0.3
       typescript: ^4.8.4
@@ -318,6 +319,7 @@ importers:
       react-router-dom: 6.4.2_react-dom@17.0.2+react@17.0.2
       react-scripts: 5.0.1_8f26910281e9d53ae8efeca19f1caada
       react-show-more-text: 1.6.2_react@17.0.2
+      react-toastify: 9.1.1_react-dom@17.0.2+react@17.0.2
       tinymce: 6.2.0
       typescript: 4.8.4
       web-vitals: 2.1.4

@@ -1,5 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import _isEqual from 'lodash/isEqual';
 import {
@@ -338,6 +340,7 @@ function StudentsTable() {
 
   return (
     <>
+      <ToastContainer />
       <StyledContentWrapper>
         <StyledTitle>Danh sách lớp chủ nhiệm</StyledTitle>
         <AsyncDataRenderer

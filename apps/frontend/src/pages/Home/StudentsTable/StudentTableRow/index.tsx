@@ -7,10 +7,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
 import { HomeroomStudentListData } from '../../../../types';
 import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
 import { theme } from '../../../../theme';
+import { Contact } from '../../../../generated-types';
 
 interface StudentTableRowProps {
   checked: boolean;
@@ -88,6 +90,39 @@ function StudentTableRow({
     );
   }, [gpa10]);
 
+  const renderSocialContact = (social: Contact) => {
+    const regex =
+      // eslint-disable-next-line no-useless-escape
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    if (regex.test(social.url)) {
+      return (
+        <>
+          ,{' '}
+          <StyledMuiLink
+            style={{ cursor: 'pointer' }}
+            key={social.url}
+            onClick={() => {
+              navigator.clipboard.writeText(social.url);
+              toast.success(
+                `Sao chép số điện thoại ${social.mxh} ${social.url} thành công`
+              );
+            }}
+          >
+            {social.mxh}
+          </StyledMuiLink>
+        </>
+      );
+    }
+    return (
+      <>
+        ,{' '}
+        <StyledMuiLink key={social.url} target="_blank" href={social.url}>
+          {social.mxh}
+        </StyledMuiLink>
+      </>
+    );
+  };
+
   const handleChange = useCallback(() => {
     handleCheck(data.maSV);
   }, [data.maSV, handleCheck]);
@@ -114,14 +149,7 @@ function StudentTableRow({
       <TableCell>{renderGPA10WithProperColor()}</TableCell>
       <TableCell>
         {contact.sdt}
-        {contact.lienHe?.map((social) => (
-          <>
-            ,{' '}
-            <StyledMuiLink key={social.url} target="_blank" href={social.url}>
-              {social.mxh}
-            </StyledMuiLink>
-          </>
-        ))}
+        {contact.lienHe?.map((social) => renderSocialContact(social))}
       </TableCell>
       <TableCell>
         <Button
