@@ -466,8 +466,8 @@ export type MajorResultList = {
 
 export type MajorResultListItem = {
   __typename?: 'MajorResultListItem';
-  chuyenNganh?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
+  tenCN: Scalars['String'];
   tenSV: Scalars['String'];
 };
 
@@ -2446,12 +2446,8 @@ export type MajorResultListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['MajorResultListItem'] = ResolversParentTypes['MajorResultListItem']
 > = {
-  chuyenNganh?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

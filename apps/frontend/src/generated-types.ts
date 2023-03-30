@@ -461,8 +461,8 @@ export type MajorResultList = {
 
 export type MajorResultListItem = {
   __typename?: 'MajorResultListItem';
-  chuyenNganh?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
+  tenCN: Scalars['String'];
   tenSV: Scalars['String'];
 };
 
@@ -1454,7 +1454,7 @@ export type MajorResultListQuery = {
       __typename?: 'MajorResultListItem';
       maSV: string;
       tenSV: string;
-      chuyenNganh?: string | null | undefined;
+      tenCN: string;
     }>;
   };
 };
@@ -3061,7 +3061,7 @@ export const MajorResultListDocument = gql`
       data {
         maSV
         tenSV
-        chuyenNganh
+        tenCN
       }
     }
   }

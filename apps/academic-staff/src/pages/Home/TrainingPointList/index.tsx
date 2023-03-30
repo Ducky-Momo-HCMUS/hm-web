@@ -106,6 +106,7 @@ function TrainingPointList() {
         page: page + 1,
         size: TRAINING_POINT_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getTraningPointList, initialTerm, page, values.semester]);
 

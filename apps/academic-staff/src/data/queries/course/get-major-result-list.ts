@@ -7,7 +7,7 @@ export const GET_MAJOR_RESULT_LIST = gql`
       data {
         maSV
         tenSV
-        chuyenNganh
+        tenCN
       }
     }
   }

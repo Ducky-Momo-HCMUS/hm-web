@@ -53,6 +53,7 @@ function NotEnrolledList({ termId }: NotEnrolledListProps) {
         page: page + 1,
         size: NOT_ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getStudentNotEnrolledList, page, termId]);
 

@@ -38,6 +38,7 @@ function MajorList() {
         page: page + 1,
         size: MAJOR_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getMajorList, page]);
 
@@ -47,7 +48,7 @@ function MajorList() {
         <AsyncDataRenderer
           hasFullWidth
           loading={majorListLoading}
-          data={majorListData}
+          data={majorList}
         >
           <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>

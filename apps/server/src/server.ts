@@ -24,6 +24,8 @@ export async function startServer() {
     debug: true,
     formatError: (error: GraphQLError) => {
       const { extensions } = error;
+      console.log('extensions', extensions);
+
       const code = extensions?.code;
       const stacktrace = extensions?.exception;
       delete extensions?.exception;
@@ -33,6 +35,8 @@ export async function startServer() {
       const formattedError = {
         message: error.message,
         errorId: (extensions && code) || 'INTERNAL_SERVER_ERROR',
+        details: extensions?.response?.body?.details,
+        // details: error.details,
       };
       return formattedError;
     },

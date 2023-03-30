@@ -38,6 +38,7 @@ function CourseList() {
         page: page + 1,
         size: COURSE_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getCourseList, page]);
 
@@ -47,7 +48,7 @@ function CourseList() {
         <AsyncDataRenderer
           hasFullWidth
           loading={courseListLoading}
-          data={courseListData}
+          data={courseList}
         >
           <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable prefer-object-spread */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
@@ -8,15 +7,8 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   InputLabel,
-  List,
-  ListItem,
-  ListItemText,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -62,6 +54,7 @@ import {
   TYPES,
   unmergeSheet,
 } from './utils';
+import HelpDialog from './HelpDialog';
 
 interface State {
   year: string;
@@ -70,6 +63,30 @@ interface State {
   subject: string;
   class: string;
   start: string;
+}
+
+interface FileHandlingError {
+  message: string;
+  details: FileErrorDetails;
+}
+
+export interface OrderedKeyValue<K extends string = string> {
+  key: K;
+  value: string;
+  index: number;
+}
+
+export type Cell = boolean | number | string | Date | undefined;
+
+interface FileErrorDetails {
+  expected: OrderedKeyValue<string>[];
+  received: Cell[];
+  fieldErrors: {
+    [x: string]: string[] | undefined;
+    [x: number]: string[] | undefined;
+    [x: symbol]: string[] | undefined;
+  };
+  formErrors: string[];
 }
 
 function ImportFile() {
@@ -298,7 +315,9 @@ function ImportFile() {
         });
       },
       onError: (error) => {
-        toast.error(error.message);
+        const fileError = error
+          .graphQLErrors[0] as unknown as FileHandlingError;
+        toast.error(fileError.message);
       },
     });
 
@@ -504,7 +523,7 @@ function ImportFile() {
             ))}
           </Select>
         </StyledFormControl>
-        {TYPES.findIndex((item) => item.label === values.type) >= 6 && (
+        {TYPES.findIndex((item) => item.label === values.type) >= 7 && (
           <>
             <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
               <StyledFormControl>
@@ -712,54 +731,10 @@ function ImportFile() {
           </Box>
         )}
       </Box>
-      <Dialog open={openHelpDialog} onClose={() => setOpenHelpDialog(false)}>
-        <DialogTitle display="flex" alignItems="center">
-          <HelpOutlineOutlinedIcon fontSize="large" />{' '}
-          <Typography
-            sx={{ marginLeft: '0.25rem' }}
-            variant="h6"
-            component="span"
-          >
-            Hướng dẫn sử dụng
-          </Typography>
-        </DialogTitle>
-        <DialogContent sx={{ marginLeft: '1.5rem' }}>
-          <List
-            sx={{
-              listStyleType: 'number',
-              '& .MuiListItem-root': {
-                display: 'list-item',
-              },
-            }}
-          >
-            <ListItem>
-              <ListItemText>
-                Bản xem trước sẽ được hiển thị bắt đầu từ giá trị của Hàng tiêu
-                đề
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText>
-                Các cột sẽ được gắn các key mặc định tương ứng với header của
-                từng cột dựa trên file mẫu do người dùng cung cấp cho hệ thống.
-                <br />
-                <b>VD</b>: Đối với cột có tên "Họ và tên" thì sẽ để key tương
-                ứng là HO_TEN
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText>
-                Người dùng cần kiểm tra các key đã ở đúng tiêu đề (header) tương
-                ứng. Mọi sự nhầm lẫn sẽ gây ảnh hưởng đến dữ liệu hệ thống và
-                không thể khôi phục được
-              </ListItemText>
-            </ListItem>
-          </List>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenHelpDialog(false)}>Đóng</Button>
-        </DialogActions>
-      </Dialog>
+      <HelpDialog
+        openHelpDialog={openHelpDialog}
+        onClose={() => setOpenHelpDialog(false)}
+      />
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={uploadDocumentLoading}

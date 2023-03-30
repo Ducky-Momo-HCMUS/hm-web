@@ -49,6 +49,7 @@ function EnrolledList({ termId }: EnrolledListProps) {
         page: page + 1,
         size: ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getStudentEnrolledList, page, termId]);
 

@@ -163,6 +163,7 @@ function CourseScoreList() {
           page: page + 1,
           size: STUDENT_SCORE_PAGE_SIZE,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [classroomId, getClassroomScoreList, page, termId]);
@@ -205,7 +206,7 @@ function CourseScoreList() {
             </Select>
           </StyledFormControl>
         </AsyncDataRenderer>
-        <AsyncDataRenderer loading={courseListLoading} data={courseList}>
+        <AsyncDataRenderer loading={courseListLoading} data={courseListData}>
           <StyledAutocompleteBox>
             <Autocomplete
               sx={{ width: 300 }}

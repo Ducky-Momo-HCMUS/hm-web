@@ -50,7 +50,9 @@ function CourseRegisterList() {
     []
   );
 
-  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   const termsData = useMemo(
     () => allTermsData?.termList || [],

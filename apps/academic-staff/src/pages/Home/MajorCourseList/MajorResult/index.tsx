@@ -43,6 +43,7 @@ function MajorList() {
         page: page + 1,
         size: MAJOR_RESULT_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getMajorResultList, page]);
 
@@ -52,7 +53,7 @@ function MajorList() {
         <AsyncDataRenderer
           hasFullWidth
           loading={majorResultListLoading}
-          data={majorResultListData}
+          data={majorResultList}
         >
           <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
@@ -72,7 +73,7 @@ function MajorList() {
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.chuyenNganh}</TableCell>
+                    <TableCell>{row.tenCN}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

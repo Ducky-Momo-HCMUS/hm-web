@@ -68,14 +68,14 @@ function ClassReport() {
 
   const handleChangeFinalResultPage = useCallback(
     (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, subjectStatus: newPage }));
+      setPage((p) => ({ ...p, finalResult: newPage }));
     },
     []
   );
 
   const handleChangeExamAbsentPage = useCallback(
     (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, notRegistered: newPage }));
+      setPage((p) => ({ ...p, examAbsent: newPage }));
     },
     []
   );

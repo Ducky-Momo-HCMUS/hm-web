@@ -16,6 +16,10 @@ export const TYPES = [
     value: FileType.DanhSachGvcn,
   },
   {
+    label: 'Danh sách hồ sơ sinh viên',
+    value: FileType.HoSoSinhVien,
+  },
+  {
     label: 'Danh sách môn học',
     value: FileType.DanhSachMonHoc,
   },
@@ -36,10 +40,7 @@ export const TYPES = [
     value: FileType.BangDiemToanBoSinhVien,
   },
   { label: 'Thời khoá biểu', value: FileType.ThoiKhoaBieu },
-  {
-    label: 'Danh sách hồ sơ sinh viên',
-    value: FileType.HoSoSinhVien,
-  },
+
   {
     label: 'Danh sách không đăng ký học phần',
     value: FileType.DanhSachSinhVienKhongDkhp,

@@ -5,7 +5,6 @@ import {
   Table,
   TableBody,
   TableContainer,
-  TablePagination,
   Typography,
 } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
@@ -57,14 +56,6 @@ function StudentStatistics() {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <TablePagination
-          rowsPerPageOptions={[]}
-          component="div"
-          count={}
-          rowsPerPage={STUDENT_LIST_PAGE_SIZE}
-          page={page}
-          onPageChange={handleChangePage}
-        /> */}
       </Paper>
     </>
   );
