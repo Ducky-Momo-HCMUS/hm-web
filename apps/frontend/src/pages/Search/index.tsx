@@ -1,4 +1,5 @@
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -32,7 +33,7 @@ import {
 } from '../../utils';
 
 interface Column {
-  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10';
+  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'actions';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -65,6 +66,11 @@ const columns: readonly Column[] = [
     id: 'gpa10',
     label: 'GPA hệ 10',
     minWidth: 60,
+  },
+  {
+    id: 'actions',
+    label: 'Thao tác',
+    minWidth: 80,
   },
 ];
 
@@ -149,6 +155,15 @@ function Search() {
                       <StyledTableCell>
                         {renderGPA10WithProperColor(item.gpa10 as number)}
                       </StyledTableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          component={Link}
+                          to={`/students/${maSV}/statistics`}
+                        >
+                          Thống kê
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

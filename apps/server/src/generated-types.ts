@@ -832,6 +832,7 @@ export type QueryHomeroomStudentListArgs = {
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type QueryHomeroomTermListArgs = {

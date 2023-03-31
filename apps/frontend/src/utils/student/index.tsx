@@ -70,23 +70,25 @@ export const renderStatusWithProperColor = (tinhTrang: string) => {
 };
 
 export const renderGPA4WithProperColor = (gpa4: number) => {
+  const isFinite = gpa4 !== null && gpa4 !== undefined;
   let color = '';
-  if (gpa4 && gpa4 <= 2.0) {
+  if (isFinite && gpa4 <= 2.0) {
     color = theme.palette.error.main;
   } else {
     color = theme.palette.text.primary;
   }
-  return <Typography sx={{ color }}>{gpa4 || 'Chưa có'}</Typography>;
+  return <Typography sx={{ color }}>{isFinite ? gpa4 : 'Chưa có'}</Typography>;
 };
 
 export const renderGPA10WithProperColor = (gpa10: number) => {
+  const isFinite = gpa10 !== null && gpa10 !== undefined;
   let color = '';
-  if (gpa10 && gpa10 <= 5.0) {
+  if (isFinite && gpa10 <= 5.0) {
     color = theme.palette.error.main;
   } else {
     color = theme.palette.text.primary;
   }
-  return <Typography sx={{ color }}>{gpa10 || 'Chưa có'}</Typography>;
+  return <Typography sx={{ color }}>{isFinite ? gpa10 : 'Chưa có'}</Typography>;
 };
 
 export const renderSocialContact = (social: Contact) => {

@@ -827,6 +827,7 @@ export type QueryHomeroomStudentListArgs = {
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -2292,6 +2293,7 @@ export type HomeroomStudentListQueryVariables = Exact<{
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type HomeroomStudentListQuery = {
@@ -5965,6 +5967,7 @@ export const HomeroomStudentListDocument = gql`
     $size: Int!
     $sortBy: String
     $sortOrder: String
+    $unruly: Boolean
   ) {
     homeroomStudentList(
       homeroomId: $homeroomId
@@ -5972,6 +5975,7 @@ export const HomeroomStudentListDocument = gql`
       size: $size
       sortBy: $sortBy
       sortOrder: $sortOrder
+      unruly: $unruly
     ) {
       total
       data {
@@ -6009,6 +6013,7 @@ export const HomeroomStudentListDocument = gql`
  *      size: // value for 'size'
  *      sortBy: // value for 'sortBy'
  *      sortOrder: // value for 'sortOrder'
+ *      unruly: // value for 'unruly'
  *   },
  * });
  */

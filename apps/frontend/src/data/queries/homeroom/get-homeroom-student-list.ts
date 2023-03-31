@@ -7,6 +7,7 @@ export const GET_HOMEROOM_STUDENT_LIST = gql`
     $size: Int!
     $sortBy: String
     $sortOrder: String
+    $unruly: Boolean
   ) {
     homeroomStudentList(
       homeroomId: $homeroomId
@@ -14,6 +15,7 @@ export const GET_HOMEROOM_STUDENT_LIST = gql`
       size: $size
       sortBy: $sortBy
       sortOrder: $sortOrder
+      unruly: $unruly
     ) {
       total
       data {

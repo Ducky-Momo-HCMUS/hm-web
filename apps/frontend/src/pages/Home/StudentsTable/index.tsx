@@ -151,12 +151,12 @@ function StudentsTable() {
   const { homeroomLoading, homeroomData, homeroomLength } = useMemo(
     () => ({
       homeroomLoading:
-        values.type === 'Tất cả'
-          ? homeroomStudentListLoading
-          : homeroomWatchListLoading,
-      homeroomData: values.type === 'Tất cả' ? studentListData : watchListData,
+        values.type === TYPES[1]
+          ? homeroomWatchListLoading
+          : homeroomStudentListLoading,
+      homeroomData: values.type === TYPES[1] ? watchListData : studentListData,
       homeroomLength:
-        values.type === 'Tất cả' ? studentListLength : watchListLength,
+        values.type === TYPES[1] ? watchListLength : studentListLength,
     }),
     [
       homeroomStudentListLoading,
@@ -171,18 +171,38 @@ function StudentsTable() {
 
   useEffect(() => {
     if (values.class.length > 0 || initialClass.length > 0) {
-      getHomeroomStudentList({
-        variables: {
-          homeroomId: values.class.length > 0 ? values.class : initialClass,
-          page: page + 1,
-          size: STUDENT_LIST_PAGE_SIZE,
-          sortOrder: values.sortOrder,
-          sortBy: values.sortBy,
-        },
-        fetchPolicy: 'no-cache',
-      });
+      if (values.type === TYPES[2]) {
+        getHomeroomStudentList({
+          variables: {
+            homeroomId: values.class.length > 0 ? values.class : initialClass,
+            page: page + 1,
+            size: STUDENT_LIST_PAGE_SIZE,
+            sortOrder: values.sortOrder,
+            sortBy: values.sortBy,
+            unruly: true,
+          },
+          fetchPolicy: 'no-cache',
+        });
 
-      getHomeroomWatchList({
+        return;
+      }
+
+      if (values.type === TYPES[1]) {
+        getHomeroomWatchList({
+          variables: {
+            homeroomId: values.class.length > 0 ? values.class : initialClass,
+            page: page + 1,
+            size: STUDENT_LIST_PAGE_SIZE,
+            sortOrder: values.sortOrder,
+            sortBy: values.sortBy,
+          },
+          fetchPolicy: 'no-cache',
+        });
+
+        return;
+      }
+
+      getHomeroomStudentList({
         variables: {
           homeroomId: values.class.length > 0 ? values.class : initialClass,
           page: page + 1,
