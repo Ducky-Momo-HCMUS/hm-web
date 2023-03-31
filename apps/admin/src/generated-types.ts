@@ -82,7 +82,7 @@ export type AccountListItem = {
   gvu: Scalars['Boolean'];
   hoatDong: Scalars['Boolean'];
   maTK: Scalars['Int'];
-  tenGV: Scalars['String'];
+  tenGV?: Maybe<Scalars['String']>;
 };
 
 export type AllTeacherList = {
@@ -1294,7 +1294,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSH: Array<Scalars['String']>;
+  lopSinhHoat: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1771,7 +1771,7 @@ export type AccountListQuery = {
       __typename?: 'AccountListItem';
       maTK: number;
       email: string;
-      tenGV: string;
+      tenGV?: string | null | undefined;
       hoatDong: boolean;
       gvcn: boolean;
       gvu: boolean;

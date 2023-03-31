@@ -35,8 +35,7 @@ export async function startServer() {
       const formattedError = {
         message: error.message,
         errorId: (extensions && code) || 'INTERNAL_SERVER_ERROR',
-        details: extensions?.response?.body?.details,
-        // details: error.details,
+        details: extensions?.response?.body?.detail,
       };
       return formattedError;
     },

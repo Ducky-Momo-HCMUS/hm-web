@@ -11,7 +11,6 @@ import {
   ListItemText,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableRow,
   Typography,
@@ -21,7 +20,7 @@ import { utils } from 'xlsx';
 
 import { FileHandlingError } from '../../../../types';
 
-import { StyledDialog } from './styles';
+import { StyledDialog, StyledTableCell } from './styles';
 
 interface ErrorDialogProps {
   openErrorDialog: boolean;
@@ -30,24 +29,21 @@ interface ErrorDialogProps {
 }
 
 function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
-  const { details: { expected = [], received = [], fieldErrors = {} } = {} } =
-    error;
+  const { details: { headers = [], row = [], fieldErrors = {} } = {} } = error;
   const { columnNames, headerKeys, headerValues } = useMemo(
     () => ({
-      columnNames: expected.map((item) => utils.encode_col(item.index)),
-      headerKeys: expected.map((item) => item.key),
-      headerValues: expected.map((item) => item.value),
+      columnNames: headers.map((item) => utils.encode_col(item.index)),
+      headerKeys: headers.map((item) => item.key),
+      headerValues: headers.map((item) => item.value),
     }),
-    [expected]
+    [headers]
   );
 
   const { receivedColumnNames } = useMemo(
     () => ({
-      receivedColumnNames: received.map((item, index) =>
-        utils.encode_col(index)
-      ),
+      receivedColumnNames: row.map((item, index) => utils.encode_col(index)),
     }),
-    [received]
+    [row]
   );
 
   return (
@@ -59,58 +55,58 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ marginLeft: '1.5rem' }}>
-        {expected.length > 0 && (
+        {headers.length > 0 && (
           <Box>
             <Typography fontWeight="bold">Expected</Typography>
-            <Table>
+            <Table sx={{ width: 'fit-content' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell> </TableCell>
+                  <StyledTableCell> </StyledTableCell>
                   {columnNames.map((columnName) => (
-                    <TableCell>{columnName}</TableCell>
+                    <StyledTableCell>{columnName}</StyledTableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>
+                  <StyledTableCell>
                     <b>Key</b>
-                  </TableCell>
+                  </StyledTableCell>
                   {headerKeys.map((headerKey) => (
-                    <TableCell>{headerKey}</TableCell>
+                    <StyledTableCell>{headerKey}</StyledTableCell>
                   ))}
                 </TableRow>
                 <TableRow>
-                  <TableCell>
+                  <StyledTableCell>
                     <b>Value</b>
-                  </TableCell>
+                  </StyledTableCell>
                   {headerValues.map((headerValue) => (
-                    <TableCell>{headerValue}</TableCell>
+                    <StyledTableCell>{headerValue}</StyledTableCell>
                   ))}
                 </TableRow>
               </TableBody>
             </Table>
           </Box>
         )}
-        {received.length > 0 && (
+        {row.length > 0 && (
           <Box mt={2}>
             <Typography fontWeight="bold">Received</Typography>
-            <Table>
+            <Table sx={{ width: 'fit-content' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell> </TableCell>
+                  <StyledTableCell> </StyledTableCell>
                   {receivedColumnNames.map((columnName) => (
-                    <TableCell>{columnName}</TableCell>
+                    <StyledTableCell>{columnName}</StyledTableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>
+                  <StyledTableCell>
                     <b>Value</b>
-                  </TableCell>
-                  {received.map((receivedValue) => (
-                    <TableCell>{receivedValue}</TableCell>
+                  </StyledTableCell>
+                  {row.map((receivedValue) => (
+                    <StyledTableCell>{receivedValue}</StyledTableCell>
                   ))}
                 </TableRow>
               </TableBody>

@@ -87,7 +87,7 @@ export type AccountListItem = {
   gvu: Scalars['Boolean'];
   hoatDong: Scalars['Boolean'];
   maTK: Scalars['Int'];
-  tenGV: Scalars['String'];
+  tenGV?: Maybe<Scalars['String']>;
 };
 
 export type AllTeacherList = {
@@ -1299,7 +1299,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSH: Array<Scalars['String']>;
+  lopSinhHoat: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1821,7 +1821,7 @@ export type AccountListItemResolvers<
   gvu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   hoatDong?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenGV?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

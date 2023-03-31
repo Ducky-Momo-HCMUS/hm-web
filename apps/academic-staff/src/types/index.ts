@@ -15,8 +15,8 @@ export interface FileHandlingError {
 }
 
 interface FileErrorDetails {
-  expected: { key: string; value: string; index: number }[];
-  received: any[];
+  headers: { key: string; value: string; index: number }[];
+  row: any[];
   fieldErrors?: { [key: string]: string[] };
   formErrors?: string[];
 }
