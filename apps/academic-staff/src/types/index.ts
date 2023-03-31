@@ -15,6 +15,7 @@ export interface FileHandlingError {
 }
 
 interface FileErrorDetails {
+  index: number;
   headers: { key: string; value: string; index: number }[];
   row: any[];
   fieldErrors?: { [key: string]: string[] };

@@ -491,21 +491,26 @@ function ImportFile() {
       <StyledStickyBox>
         <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
         <Box display="flex" alignItems="center">
-          <StyledFormControl sx={{ minWidth: '18.5rem' }}>
-            <InputLabel id="type-select-label">Loại thông tin</InputLabel>
-            <Select
-              labelId="type-select-label"
-              id="type-select"
-              value={values.type}
-              label="Loại thông tin"
-              onChange={handleChange('type')}
-              MenuProps={MenuProps}
-            >
-              {TYPES.map((item) => (
-                <MenuItem value={item.label}>{item.label}</MenuItem>
-              ))}
-            </Select>
-          </StyledFormControl>
+          <StyledAutocompleteBox>
+            <Autocomplete
+              sx={{ width: 300 }}
+              disablePortal
+              disableClearable
+              autoHighlight
+              options={TYPES}
+              onChange={(event, newValue) => {
+                setValues((v) => ({
+                  ...v,
+                  type: newValue?.label || '',
+                }));
+              }}
+              value={TYPES.find((type) => type.label === values.type)}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => (
+                <TextField {...params} label="Loại thông tin" />
+              )}
+            />
+          </StyledAutocompleteBox>
           {TYPES.findIndex((item) => item.label === values.type) >= 7 && (
             <>
               <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
@@ -553,6 +558,7 @@ function ImportFile() {
                   <Autocomplete
                     sx={{ width: 300 }}
                     disablePortal
+                    disableClearable
                     autoHighlight
                     options={courseList}
                     onChange={(event, newValue) => {
@@ -579,6 +585,7 @@ function ImportFile() {
                   <Autocomplete
                     sx={{ width: 200 }}
                     disablePortal
+                    disableClearable
                     autoHighlight
                     options={classroomList}
                     onChange={(event, newValue) => {

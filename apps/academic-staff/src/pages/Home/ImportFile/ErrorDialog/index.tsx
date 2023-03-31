@@ -29,7 +29,8 @@ interface ErrorDialogProps {
 }
 
 function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
-  const { details: { headers = [], row = [], fieldErrors = {} } = {} } = error;
+  const { details: { headers = [], row = [], fieldErrors = {}, index } = {} } =
+    error;
   const { columnNames, headerKeys, headerValues } = useMemo(
     () => ({
       columnNames: headers.map((item) => utils.encode_col(item.index)),
@@ -41,7 +42,9 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
 
   const { receivedColumnNames } = useMemo(
     () => ({
-      receivedColumnNames: row.map((item, index) => utils.encode_col(index)),
+      receivedColumnNames: row.map((item, columnIndex) =>
+        utils.encode_col(columnIndex)
+      ),
     }),
     [row]
   );
@@ -103,7 +106,7 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
               <TableBody>
                 <TableRow>
                   <StyledTableCell>
-                    <b>Value</b>
+                    <b>{index}</b>
                   </StyledTableCell>
                   {row.map((receivedValue) => (
                     <StyledTableCell>{receivedValue}</StyledTableCell>
