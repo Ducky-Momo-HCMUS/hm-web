@@ -3,6 +3,8 @@ import { TableCell, TableRow, Typography } from '@mui/material';
 
 import { theme } from '../../../../theme';
 import { StudentSubject } from '../../../../generated-types';
+import { renderGPA10WithProperColor } from '../../../../utils/student';
+import { StyledTableCell } from '../../../../components/styles';
 
 interface AcademicTableRowProps {
   data: StudentSubject;
@@ -55,12 +57,24 @@ function AcademicTableRow({ data }: AcademicTableRowProps) {
       <TableCell>{tenLopHP}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
       <TableCell>{soTinChi}</TableCell>
-      <TableCell>{diemGK}</TableCell>
-      <TableCell>{diemTH}</TableCell>
-      <TableCell>{diemCong}</TableCell>
-      <TableCell>{diemKhac}</TableCell>
-      <TableCell>{diemCK}</TableCell>
-      <TableCell>{dtb}</TableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(diemGK as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(diemTH as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(diemCong as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(diemKhac as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(diemCK as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(dtb as number)}
+      </StyledTableCell>
     </TableRow>
   );
 }

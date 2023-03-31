@@ -18,7 +18,11 @@ import {
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledStickyBox, StyledTitle } from '../../../components/styles';
+import {
+  StyledStickyBox,
+  StyledTableCell,
+  StyledTitle,
+} from '../../../components/styles';
 import { StyledAutocompleteBox, StyledFormControl } from '../styles';
 import { MenuProps, STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
 import {
@@ -28,6 +32,7 @@ import {
   useTermListQuery,
 } from '../../../generated-types';
 import { groupTermsByYear } from '../ImportFile/utils';
+import { renderGPA10WithProperColor } from '../../../utils';
 
 interface State {
   year: string;
@@ -283,12 +288,24 @@ function CourseScoreList() {
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.diemGK || 0}</TableCell>
-                    <TableCell>{row.diemTH || 0}</TableCell>
-                    <TableCell>{row.diemCong || 0}</TableCell>
-                    <TableCell>{row.diemKhac || 0}</TableCell>
-                    <TableCell>{row.diemCK || 0}</TableCell>
-                    <TableCell>{row.dtb || 0}</TableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemGK as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemTH as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemCong as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemKhac as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemCK as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.dtb as number)}
+                    </StyledTableCell>
                   </TableRow>
                 ))}
               </TableBody>

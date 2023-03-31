@@ -183,7 +183,7 @@ function StudentProfile() {
       learningInfo: {
         tenCN: studentDetails?.tenCN || 'Chưa có',
         xepLoai: studentDetails?.xepLoai || 'Chưa có',
-        gpa_10: studentDetails?.gpa_10 || 'Chưa có',
+        gpa10: studentDetails?.gpa10 || 'Chưa có',
         ngoaiNgu: studentDetails?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp',
         tinhTrang: studentDetails?.tinhTrang || 'Chưa có',
       } as LearningInfo,
@@ -367,10 +367,7 @@ function StudentProfile() {
               />
             </Grid>
             <Grid item xs={5}>
-              <ClassInfo
-                title="GPA"
-                description={String(learningInfo.gpa_10)}
-              />
+              <ClassInfo title="GPA" description={String(learningInfo.gpa10)} />
             </Grid>
             <Grid item xs={7}>
               <ClassInfo

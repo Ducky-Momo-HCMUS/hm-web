@@ -8,6 +8,7 @@ import {
   Paper,
   Divider,
   Breadcrumbs,
+  TableCell,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -109,3 +110,9 @@ export const StyledBreadCrumbs = styled(Breadcrumbs)(({ theme }) => ({
     color: theme.palette.primary.main,
   },
 }));
+
+export const StyledTableCell = styled(TableCell)`
+  & > p {
+    font-size: 0.875rem;
+  }
+`;

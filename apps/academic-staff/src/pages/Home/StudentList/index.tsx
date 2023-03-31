@@ -15,13 +15,18 @@ import {
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledStickyBox, StyledTitle } from '../../../components/styles';
+import {
+  StyledStickyBox,
+  StyledTableCell,
+  StyledTitle,
+} from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
   useHomeroomAllListQuery,
   useHomeroomStudentListLazyQuery,
 } from '../../../generated-types';
 import { MenuProps, STUDENT_LIST_PAGE_SIZE } from '../../../constants';
+import { renderStatusWithProperColor } from '../../../utils';
 
 import StudentTableHead from './StudentTableHead';
 
@@ -133,7 +138,9 @@ function StudentList() {
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
                     <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
-                    <TableCell>{row.tinhTrang}</TableCell>
+                    <StyledTableCell>
+                      {renderStatusWithProperColor(row.tinhTrang)}
+                    </StyledTableCell>
                     <TableCell>{row.sdt}</TableCell>
                     <TableCell>{row.emailSV}</TableCell>
                   </TableRow>

@@ -204,8 +204,8 @@ const studentTypeDefs = gql`
     emailCaNhan: String!
     sdt: String!
     tenCN: String
-    gpa_4: Float
-    gpa_10: Float
+    gpa4: Float
+    gpa10: Float
     ngoaiNgu: Boolean!
     tinhTrang: String!
     maSH: String!

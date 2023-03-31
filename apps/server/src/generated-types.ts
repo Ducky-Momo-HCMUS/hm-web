@@ -1058,8 +1058,8 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4?: Maybe<Scalars['Float']>;
-  gpa_10?: Maybe<Scalars['Float']>;
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
   lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
@@ -3150,8 +3150,8 @@ export type StudentDetailResolvers<
   emailCaNhan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gioiTinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  gpa_4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  gpa_10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   lienHeSV?: Resolver<
     Maybe<Array<ResolversTypes['StudentContact']>>,
     ParentType,

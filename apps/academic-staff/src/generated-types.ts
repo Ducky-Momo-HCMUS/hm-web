@@ -1053,8 +1053,8 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4?: Maybe<Scalars['Float']>;
-  gpa_10?: Maybe<Scalars['Float']>;
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
   lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
@@ -2582,8 +2582,8 @@ export type StudentDetailQuery = {
     emailCaNhan: string;
     sdt: string;
     tenCN?: string | null | undefined;
-    gpa_4?: number | null | undefined;
-    gpa_10?: number | null | undefined;
+    gpa4?: number | null | undefined;
+    gpa10?: number | null | undefined;
     ngoaiNgu: boolean;
     tinhTrang: string;
     maSH: string;
@@ -6687,8 +6687,8 @@ export const StudentDetailDocument = gql`
       emailCaNhan
       sdt
       tenCN
-      gpa_4
-      gpa_10
+      gpa4
+      gpa10
       ngoaiNgu
       tinhTrang
       maSH

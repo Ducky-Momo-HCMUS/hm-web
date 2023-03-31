@@ -2,8 +2,7 @@ import React from 'react';
 import { Paper, Typography } from '@mui/material';
 
 import { StyledHeader, StyledInfoBox } from '../../../../components/styles';
-
-import { StyledInfoWithColor } from './styles';
+import { renderGPA10WithProperColor } from '../../../../utils/student';
 
 interface AcademicDetail {
   title: string;
@@ -22,7 +21,7 @@ function AcademicInfo({ infoList }: AcademicInfoProps) {
         <StyledInfoBox key={item.title}>
           <Typography>{item.title}</Typography>
           {typeof item.content === 'number' ? (
-            <StyledInfoWithColor>{item.content}</StyledInfoWithColor>
+            <>{renderGPA10WithProperColor(item.content)}</>
           ) : (
             <Typography>{item.content}</Typography>
           )}

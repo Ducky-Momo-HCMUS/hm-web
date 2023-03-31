@@ -20,10 +20,16 @@ import {
   StyledContentWrapper,
   StyledRouterLink,
   StyledStickyBox,
+  StyledTableCell,
   StyledTitle,
 } from '../../components/styles';
 import { STUDENT_LIST_PAGE_SIZE } from '../../constants';
 import { useTeacherSearchStudentListQuery } from '../../generated-types';
+import {
+  renderGPA10WithProperColor,
+  renderGPA4WithProperColor,
+  renderStatusWithProperColor,
+} from '../../utils';
 
 interface Column {
   id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10';
@@ -134,9 +140,15 @@ function Search() {
                         </StyledRouterLink>
                       </TableCell>
                       <TableCell>{item.tenCN || 'Chưa có'}</TableCell>
-                      <TableCell>{item.tinhTrang}</TableCell>
-                      <TableCell>{item.gpa4 || 'Chưa có'}</TableCell>
-                      <TableCell>{item.gpa10 || 'Chưa có'}</TableCell>
+                      <StyledTableCell>
+                        {renderStatusWithProperColor(item.tinhTrang)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {renderGPA4WithProperColor(item.gpa4 as number)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {renderGPA10WithProperColor(item.gpa10 as number)}
+                      </StyledTableCell>
                     </TableRow>
                   ))}
                 </TableBody>
