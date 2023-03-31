@@ -91,14 +91,14 @@ export const renderGPA10WithProperColor = (gpa10: number) => {
   return <Typography sx={{ color }}>{isFinite ? gpa10 : 'Chưa có'}</Typography>;
 };
 
-export const renderSocialContact = (social: Contact) => {
+export const renderSocialContact = (social: Contact, hasComma) => {
   const regex =
     // eslint-disable-next-line no-useless-escape
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
   if (regex.test(social.url)) {
     return (
       <>
-        ,{' '}
+        {hasComma && `, `}
         <StyledMuiLink
           style={{ cursor: 'pointer' }}
           key={social.url}
@@ -116,7 +116,7 @@ export const renderSocialContact = (social: Contact) => {
   }
   return (
     <>
-      ,{' '}
+      {hasComma && `, `}
       <StyledMuiLink key={social.url} target="_blank" href={social.url}>
         {social.mxh}
       </StyledMuiLink>

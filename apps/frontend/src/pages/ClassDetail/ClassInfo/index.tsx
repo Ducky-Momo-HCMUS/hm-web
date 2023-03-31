@@ -20,7 +20,9 @@ function ClassInfo({ title, description = '' }: ClassInfoProps) {
     }
 
     if (title === 'GPA') {
-      return renderGPA10WithProperColor(Number(description));
+      return Number.isNaN(Number(description))
+        ? description
+        : renderGPA10WithProperColor(Number(description));
     }
 
     return <Typography variant="body1">{description}</Typography>;

@@ -101,6 +101,7 @@ function CourseScoreList() {
         page: 1,
         size: 1000,
       },
+      fetchPolicy: 'no-cache',
     });
   const courseList = useMemo(
     () => courseListData?.courseList.data || [],
@@ -149,6 +150,7 @@ function CourseScoreList() {
           termId,
           subjectId,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [subjectId, getClassroomList, termId]);

@@ -60,7 +60,7 @@ function StudentTableRow({
       </StyledTableCell>
       <TableCell>
         {contact.sdt}
-        {contact.lienHe?.map((social) => renderSocialContact(social))}
+        {contact.lienHe?.map((social) => renderSocialContact(social, true))}
       </TableCell>
       <TableCell>
         <Button

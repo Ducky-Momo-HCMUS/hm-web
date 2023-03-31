@@ -22,7 +22,7 @@ export type GeneralInfo = Pick<
 
 export type LearningInfo = Pick<
   StudentDetail,
-  'tenCN' | 'xepLoai' | 'gpa10' | 'tinhTrang'
+  'tenCN' | 'xepLoai' | 'tinhTrang' | 'gpa10'
 > & { ngoaiNgu: string };
 
 export type ContactInfo = Pick<

@@ -282,7 +282,6 @@ function ImportFile() {
           ...v,
           year: '',
           term: '',
-          subject: '',
           class: '',
           start: '1',
         }));
@@ -491,114 +490,116 @@ function ImportFile() {
       <ToastContainer />
       <StyledStickyBox>
         <StyledTitle variant="h1">Nhập thông tin</StyledTitle>
-        <StyledFormControl sx={{ minWidth: '18.5rem' }}>
-          <InputLabel id="type-select-label">Loại thông tin</InputLabel>
-          <Select
-            labelId="type-select-label"
-            id="type-select"
-            value={values.type}
-            label="Loại thông tin"
-            onChange={handleChange('type')}
-            MenuProps={MenuProps}
-          >
-            {TYPES.map((item) => (
-              <MenuItem value={item.label}>{item.label}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-        {TYPES.findIndex((item) => item.label === values.type) >= 7 && (
-          <>
-            <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
-              <StyledFormControl>
-                <InputLabel id="year-select-label">Năm học</InputLabel>
-                <Select
-                  labelId="year-select-label"
-                  id="year-select"
-                  value={values.year || initialYear}
-                  label="Năm học"
-                  onChange={handleChange('year')}
-                  MenuProps={MenuProps}
-                >
-                  {years.map((item) => (
-                    <MenuItem value={item.toString()}>
-                      {item} - {Number(item) + 1}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
-              <StyledFormControl>
-                <InputLabel id="term-select-label">Học kỳ</InputLabel>
-                <Select
-                  labelId="term-select-label"
-                  id="term-select"
-                  value={values.term || initialTerm}
-                  label="Học kỳ"
-                  onChange={handleChange('term')}
-                  MenuProps={MenuProps}
-                >
-                  {terms.map((item) => (
-                    <MenuItem key={item.maHK} value={item.hocKy}>
-                      {item.hocKy}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </StyledFormControl>
-            </AsyncDataRenderer>
-          </>
-        )}
-        {values.type === 'Bảng điểm lớp học phần' && (
-          <>
-            <AsyncDataRenderer loading={courseListLoading} data={courseList}>
-              <StyledAutocompleteBox>
-                <Autocomplete
-                  sx={{ width: 300 }}
-                  disablePortal
-                  autoHighlight
-                  options={courseList}
-                  onChange={(event, newValue) => {
-                    setValues((v) => ({
-                      ...v,
-                      subject: newValue?.maMH || '',
-                    }));
-                  }}
-                  value={courseList.find(
-                    (course) => course.maMH === selectedSubject
-                  )}
-                  getOptionLabel={(option) => option.tenMH}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Môn học" />
-                  )}
-                />
-              </StyledAutocompleteBox>
-            </AsyncDataRenderer>
-            <AsyncDataRenderer
-              loading={classroomListLoading}
-              data={classroomListData}
+        <Box display="flex" alignItems="center">
+          <StyledFormControl sx={{ minWidth: '18.5rem' }}>
+            <InputLabel id="type-select-label">Loại thông tin</InputLabel>
+            <Select
+              labelId="type-select-label"
+              id="type-select"
+              value={values.type}
+              label="Loại thông tin"
+              onChange={handleChange('type')}
+              MenuProps={MenuProps}
             >
-              <StyledAutocompleteBox>
-                <Autocomplete
-                  sx={{ width: 200 }}
-                  disablePortal
-                  autoHighlight
-                  options={classroomList}
-                  onChange={(event, newValue) => {
-                    setValues((v) => ({
-                      ...v,
-                      class: String(newValue?.tenLopHP),
-                    }));
-                  }}
-                  value={classroomList.find(
-                    (classroom) => classroom.tenLopHP === selectedClass
-                  )}
-                  getOptionLabel={(option) => option.tenLopHP}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Lớp học phần" />
-                  )}
-                />
-              </StyledAutocompleteBox>
-            </AsyncDataRenderer>
-          </>
-        )}
+              {TYPES.map((item) => (
+                <MenuItem value={item.label}>{item.label}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+          {TYPES.findIndex((item) => item.label === values.type) >= 7 && (
+            <>
+              <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+                <StyledFormControl>
+                  <InputLabel id="year-select-label">Năm học</InputLabel>
+                  <Select
+                    labelId="year-select-label"
+                    id="year-select"
+                    value={values.year || initialYear}
+                    label="Năm học"
+                    onChange={handleChange('year')}
+                    MenuProps={MenuProps}
+                  >
+                    {years.map((item) => (
+                      <MenuItem value={item.toString()}>
+                        {item} - {Number(item) + 1}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+                <StyledFormControl>
+                  <InputLabel id="term-select-label">Học kỳ</InputLabel>
+                  <Select
+                    labelId="term-select-label"
+                    id="term-select"
+                    value={values.term || initialTerm}
+                    label="Học kỳ"
+                    onChange={handleChange('term')}
+                    MenuProps={MenuProps}
+                  >
+                    {terms.map((item) => (
+                      <MenuItem key={item.maHK} value={item.hocKy}>
+                        {item.hocKy}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+              </AsyncDataRenderer>
+            </>
+          )}
+          {values.type === 'Bảng điểm lớp học phần' && (
+            <>
+              <AsyncDataRenderer loading={courseListLoading} data={courseList}>
+                <StyledAutocompleteBox>
+                  <Autocomplete
+                    sx={{ width: 300 }}
+                    disablePortal
+                    autoHighlight
+                    options={courseList}
+                    onChange={(event, newValue) => {
+                      setValues((v) => ({
+                        ...v,
+                        subject: newValue?.maMH || '',
+                      }));
+                    }}
+                    value={courseList.find(
+                      (course) => course.maMH === selectedSubject
+                    )}
+                    getOptionLabel={(option) => option.tenMH}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Môn học" />
+                    )}
+                  />
+                </StyledAutocompleteBox>
+              </AsyncDataRenderer>
+              <AsyncDataRenderer
+                loading={classroomListLoading}
+                data={classroomListData}
+              >
+                <StyledAutocompleteBox>
+                  <Autocomplete
+                    sx={{ width: 200 }}
+                    disablePortal
+                    autoHighlight
+                    options={classroomList}
+                    onChange={(event, newValue) => {
+                      setValues((v) => ({
+                        ...v,
+                        class: String(newValue?.tenLopHP),
+                      }));
+                    }}
+                    value={classroomList.find(
+                      (classroom) => classroom.tenLopHP === selectedClass
+                    )}
+                    getOptionLabel={(option) => option.tenLopHP}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Lớp học phần" />
+                    )}
+                  />
+                </StyledAutocompleteBox>
+              </AsyncDataRenderer>
+            </>
+          )}
+        </Box>
       </StyledStickyBox>
       <Box component="form">
         {values.type.length > 0 && (

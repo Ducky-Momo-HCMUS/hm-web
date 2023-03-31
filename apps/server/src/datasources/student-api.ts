@@ -342,7 +342,7 @@ class StudentAPI extends BaseDataSource {
     payload,
   }: MutationStudentEditParentInfoArgs) {
     try {
-      const res = await this.patch(`v1/students/parents/${parentId}`, payload);
+      const res = await this.patch(`v1/student/parents/${parentId}`, payload);
       return res;
     } catch (error) {
       logger.error('Error: cannot edit student parent info');
@@ -354,7 +354,7 @@ class StudentAPI extends BaseDataSource {
     parentId,
   }: MutationStudentDeleteParentInfoArgs) {
     try {
-      const res = await this.delete(`v1/students/parents/${parentId}`);
+      const res = await this.delete(`v1/student/parents/${parentId}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot delete student parent info');
