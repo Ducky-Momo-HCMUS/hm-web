@@ -731,6 +731,7 @@ export type Query = {
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
+  studentStatistics: Array<StudentStatisticsItem>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   studentTrainingPointList: StudentTrainingPointList;
@@ -936,6 +937,10 @@ export type QueryStudentPostponeListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryStudentStatisticsArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentSubjectsByTermArgs = {
@@ -1189,6 +1194,15 @@ export type StudentPostponeListItem = {
   maSV: Scalars['String'];
   tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type StudentStatisticsItem = {
+  __typename?: 'StudentStatisticsItem';
+  drl: Scalars['Int'];
+  dtb: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  namHoc: Scalars['Int'];
+  soTinChi: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -2679,6 +2693,22 @@ export type StudentParentInfoListQuery = {
       }>;
     }>;
   };
+};
+
+export type StudentStatisticsQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentStatisticsQuery = {
+  __typename?: 'Query';
+  studentStatistics: Array<{
+    __typename?: 'StudentStatisticsItem';
+    namHoc: number;
+    hocKy: number;
+    dtb: number;
+    drl: number;
+    soTinChi: number;
+  }>;
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -6985,6 +7015,68 @@ export type StudentParentInfoListLazyQueryHookResult = ReturnType<
 export type StudentParentInfoListQueryResult = Apollo.QueryResult<
   StudentParentInfoListQuery,
   StudentParentInfoListQueryVariables
+>;
+export const StudentStatisticsDocument = gql`
+  query StudentStatistics($studentId: String!) {
+    studentStatistics(studentId: $studentId) {
+      namHoc
+      hocKy
+      dtb
+      drl
+      soTinChi
+    }
+  }
+`;
+
+/**
+ * __useStudentStatisticsQuery__
+ *
+ * To run a query within a React component, call `useStudentStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentStatisticsQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentStatisticsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >(StudentStatisticsDocument, options);
+}
+export function useStudentStatisticsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >(StudentStatisticsDocument, options);
+}
+export type StudentStatisticsQueryHookResult = ReturnType<
+  typeof useStudentStatisticsQuery
+>;
+export type StudentStatisticsLazyQueryHookResult = ReturnType<
+  typeof useStudentStatisticsLazyQuery
+>;
+export type StudentStatisticsQueryResult = Apollo.QueryResult<
+  StudentStatisticsQuery,
+  StudentStatisticsQueryVariables
 >;
 export const StudentSubjectsByTermDocument = gql`
   query StudentSubjectsByTerm($studentId: String!, $term: Int!) {

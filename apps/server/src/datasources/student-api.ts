@@ -23,6 +23,7 @@ import {
   QueryStudentPostponeListArgs,
   QueryStudentAbsentListArgs,
   QueryStudentAllSubjectsResultArgs,
+  QueryStudentStatisticsArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -33,6 +34,29 @@ class StudentAPI extends BaseDataSource {
   constructor(baseUrl: string = SERVICES_BASE_URL) {
     super();
     this.baseURL = baseUrl;
+  }
+
+  public async getStudentStatistics({ studentId }: QueryStudentStatisticsArgs) {
+    try {
+      // const studentStatistics = await this.get(
+      //   `v1/students/${studentId}/statistics`
+      // );
+      // return studentStatistics;
+      return {
+        data: [
+          {
+            namHoc: 2019,
+            hocKy: 1,
+            dtb: 4.0,
+            drl: 90,
+            soTinChi: 12,
+          },
+        ],
+      };
+    } catch (error) {
+      logger.error('Error: cannot fetch student statistics');
+      throw this.handleError(error as ApolloError);
+    }
   }
 
   public async getStudentEnrolledList({

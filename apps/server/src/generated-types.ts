@@ -736,6 +736,7 @@ export type Query = {
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
+  studentStatistics: Array<StudentStatisticsItem>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   studentTrainingPointList: StudentTrainingPointList;
@@ -941,6 +942,10 @@ export type QueryStudentPostponeListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryStudentStatisticsArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentSubjectsByTermArgs = {
@@ -1194,6 +1199,15 @@ export type StudentPostponeListItem = {
   maSV: Scalars['String'];
   tenMH: Scalars['String'];
   tenSV: Scalars['String'];
+};
+
+export type StudentStatisticsItem = {
+  __typename?: 'StudentStatisticsItem';
+  drl: Scalars['Int'];
+  dtb: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  namHoc: Scalars['Int'];
+  soTinChi: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -1576,6 +1590,7 @@ export type ResolversTypes = {
   StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentPostponeList: ResolverTypeWrapper<StudentPostponeList>;
   StudentPostponeListItem: ResolverTypeWrapper<StudentPostponeListItem>;
+  StudentStatisticsItem: ResolverTypeWrapper<StudentStatisticsItem>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTag: ResolverTypeWrapper<StudentTag>;
@@ -1720,6 +1735,7 @@ export type ResolversParentTypes = {
   StudentParentInfoList: StudentParentInfoList;
   StudentPostponeList: StudentPostponeList;
   StudentPostponeListItem: StudentPostponeListItem;
+  StudentStatisticsItem: StudentStatisticsItem;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTag: StudentTag;
@@ -2975,6 +2991,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentPostponeListArgs, 'page' | 'size' | 'termId'>
   >;
+  studentStatistics?: Resolver<
+    Array<ResolversTypes['StudentStatisticsItem']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentStatisticsArgs, 'studentId'>
+  >;
   studentSubjectsByTerm?: Resolver<
     ResolversTypes['StudentSubjectsByTerm'],
     ParentType,
@@ -3349,6 +3371,18 @@ export type StudentPostponeListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type StudentStatisticsItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentStatisticsItem'] = ResolversParentTypes['StudentStatisticsItem']
+> = {
+  drl?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type StudentSubjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentSubject'] = ResolversParentTypes['StudentSubject']
@@ -3654,6 +3688,7 @@ export type Resolvers<ContextType = any> = {
   StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentPostponeList?: StudentPostponeListResolvers<ContextType>;
   StudentPostponeListItem?: StudentPostponeListItemResolvers<ContextType>;
+  StudentStatisticsItem?: StudentStatisticsItemResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTag?: StudentTagResolvers<ContextType>;
