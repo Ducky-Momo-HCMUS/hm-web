@@ -53,7 +53,7 @@ class FileAPI extends BaseDataSource {
     const { file, input, config } = payload;
     const awaitedFile = await file;
     const { createReadStream, filename } = awaitedFile;
-    const formData = this.createFormData(input);
+    const formData = this.createFormData(input, config);
     if (!filename) {
       throw new UserInputError('Missing file');
     }
@@ -72,7 +72,7 @@ class FileAPI extends BaseDataSource {
   }
 
   // TODO add typing for file
-  private createFormData(input: UploadDocumentInput) {
+  private createFormData(input: UploadDocumentInput, config: UploadFileConfig) {
     const formData = new FormData();
 
     Object.keys(input).forEach((key) => {
@@ -88,12 +88,12 @@ class FileAPI extends BaseDataSource {
       }
     });
 
-    // const metadata = JSON.stringify({
-    //   ...input,
-    //   ...config,
-    // });
+    const metadata = JSON.stringify({
+      ...input,
+      ...config,
+    });
 
-    // formData.append('metadata', metadata);
+    formData.append('metadata', metadata);
     return formData;
   }
 }
