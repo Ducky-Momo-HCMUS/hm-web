@@ -17,6 +17,7 @@ import Search from './pages/Search';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
 import StudentProfile from './pages/StudentDashboard/StudentProfile';
+import StudentStatistics from './pages/StudentDashboard/StudentStatistics';
 import AcademicReport from './pages/StudentDashboard/AcademicReport';
 import AcademicOverview from './pages/StudentDashboard/AcademicOverview';
 import NoteInfo from './pages/StudentDashboard/NoteInfo';
@@ -34,6 +35,10 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route element={<StudentDashboard />}>
             <Route path="/students/:id/info" element={<StudentProfile />} />
+            <Route
+              path="/students/:id/statistics"
+              element={<StudentStatistics />}
+            />
             <Route
               path="/students/:id/academic-report"
               element={<AcademicReport />}

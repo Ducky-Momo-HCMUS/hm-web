@@ -133,3 +133,14 @@ export const StyledFormControl = styled(FormControl)`
     padding: 0.875rem;
   }
 `;
+
+export const StyledAutocompleteBox = styled(Box)`
+  display: inline-block;
+  margin-right: 1rem;
+  & > div {
+    background-color: white;
+  }
+  & > div > div > div {
+    padding: 0.4rem !important;
+  }
+`;

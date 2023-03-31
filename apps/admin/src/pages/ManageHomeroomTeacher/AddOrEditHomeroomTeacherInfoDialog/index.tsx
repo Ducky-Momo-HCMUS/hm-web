@@ -15,10 +15,13 @@ import {
 } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 
-import { CLASS_LIST } from '../../../mocks/teacher';
 import { StyledTextField } from '../../../components/styles';
 import { TeacherListItem } from '../../../types';
-import { TeacherEditInput } from '../../../generated-types';
+import {
+  TeacherEditInput,
+  useHomeroomAllListQuery,
+} from '../../../generated-types';
+import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
 interface State {
   fullName: string;
@@ -75,6 +78,11 @@ function AddOrEditHomeroomTeacherInfoDialog({
     []
   );
 
+  const {
+    loading: homeroomAllListLoading,
+    data: { homeroomAllList = [] } = {},
+  } = useHomeroomAllListQuery({});
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
@@ -96,48 +104,55 @@ function AddOrEditHomeroomTeacherInfoDialog({
               shrink: true,
             }}
           />
-          <FormControl
-            sx={{ margin: '0.5rem 0', width: '100%' }}
-            variant="filled"
-            required
+          <AsyncDataRenderer
+            loading={homeroomAllListLoading}
+            data={homeroomAllList}
           >
-            <InputLabel shrink id="class-select-label">
-              Lớp chủ nhiệm
-            </InputLabel>
-            <Select
-              sx={{
-                '& .MuiSelect-select .notranslate::after':
-                  values.className.length === 0
-                    ? {
-                        content: `"Chọn lớp chủ nhiệm"`,
-                        opacity: 0.42,
-                      }
-                    : {},
-              }}
-              multiple
-              renderValue={(selected) => selected.join(', ')}
-              labelId="class-select-label"
-              id="class-select"
-              label="Lớp chủ nhiệm"
-              value={values.className}
-              onChange={handleSelectClass}
-              MenuProps={MenuProps}
+            <FormControl
+              sx={{ margin: '0.5rem 0', width: '100%' }}
+              variant="filled"
+              required
             >
-              {CLASS_LIST.map((item) => (
-                <MenuItem key={item} value={item}>
-                  <Checkbox checked={values.className.indexOf(item) > -1} />
-                  <ListItemText primary={item} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel shrink id="class-select-label">
+                Lớp chủ nhiệm
+              </InputLabel>
+              <Select
+                sx={{
+                  '& .MuiSelect-select .notranslate::after':
+                    values.className.length === 0
+                      ? {
+                          content: `"Chọn lớp chủ nhiệm"`,
+                          opacity: 0.42,
+                        }
+                      : {},
+                }}
+                multiple
+                renderValue={(selected) => selected.join(', ')}
+                labelId="class-select-label"
+                id="class-select"
+                label="Lớp chủ nhiệm"
+                value={values.className}
+                onChange={handleSelectClass}
+                MenuProps={MenuProps}
+              >
+                {homeroomAllList.map((item) => (
+                  <MenuItem key={item.maSH} value={item.maSH}>
+                    <Checkbox
+                      checked={values.className.indexOf(item.maSH) > -1}
+                    />
+                    <ListItemText primary={item.maSH} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </AsyncDataRenderer>
         </Box>
         <DialogActions>
           <Button onClick={onClickCancel}>Hủy</Button>
           <Button
             color="primary"
             variant="contained"
-            onClick={() => onClickConfirm({ lopSH: values.className })}
+            onClick={() => onClickConfirm({ lopSinhHoat: values.className })}
           >
             {data ? 'Lưu' : 'Thêm'}
           </Button>

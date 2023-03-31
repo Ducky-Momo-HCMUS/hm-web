@@ -17,7 +17,7 @@ import {
   TabPanel,
 } from '../../../components/TabsContainer';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { groupTermsByYear } from '../ImportFile/utils';
 import { useTermListQuery } from '../../../generated-types';
@@ -50,7 +50,9 @@ function CourseRegisterList() {
     []
   );
 
-  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({});
+  const { loading: allTermsLoading, data: allTermsData } = useTermListQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   const termsData = useMemo(
     () => allTermsData?.termList || [],
@@ -85,41 +87,43 @@ function CourseRegisterList() {
 
   return (
     <Box>
-      <StyledTitle>Tình hình đăng ký học phần</StyledTitle>
-      <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
-        <StyledFormControl sx={{ marginRight: '1rem' }}>
-          <InputLabel id="year-select-label">Năm học</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.year || initialYear}
-            label="Năm học"
-            onChange={handleChange('year')}
-            MenuProps={MenuProps}
-          >
-            {years.map((item) => (
-              <MenuItem value={item}>
-                {item} - {Number(item) + 1}
-              </MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-        <StyledFormControl>
-          <InputLabel id="semester-select-label">Học kỳ</InputLabel>
-          <Select
-            labelId="semester-select-label"
-            id="semester-select"
-            value={values.semester || initialTerm}
-            label="Học kỳ"
-            onChange={handleChange('semester')}
-            MenuProps={MenuProps}
-          >
-            {terms.map((item) => (
-              <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Tình hình đăng ký học phần</StyledTitle>
+        <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+          <StyledFormControl sx={{ marginRight: '1rem' }}>
+            <InputLabel id="year-select-label">Năm học</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={values.year || initialYear}
+              label="Năm học"
+              onChange={handleChange('year')}
+              MenuProps={MenuProps}
+            >
+              {years.map((item) => (
+                <MenuItem value={item}>
+                  {item} - {Number(item) + 1}
+                </MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+          <StyledFormControl>
+            <InputLabel id="semester-select-label">Học kỳ</InputLabel>
+            <Select
+              labelId="semester-select-label"
+              id="semester-select"
+              value={values.semester || initialTerm}
+              label="Học kỳ"
+              onChange={handleChange('semester')}
+              MenuProps={MenuProps}
+            >
+              {terms.map((item) => (
+                <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
+              ))}
+            </Select>
+          </StyledFormControl>
+        </AsyncDataRenderer>
+      </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
         <AppBar position="static">
           <Tabs

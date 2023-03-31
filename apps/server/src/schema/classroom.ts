@@ -24,12 +24,12 @@ const classroomTypeDefs = gql`
   type ClassroomScoreListItem {
     maSV: String!
     tenSV: String!
-    diemGK: Float!
-    diemTH: Float!
-    diemCong: Float!
-    diemCK: Float!
-    dtb: Float!
-    diemKhac: Float!
+    diemGK: Float
+    diemTH: Float
+    diemCong: Float
+    diemCK: Float
+    dtb: Float
+    diemKhac: Float
   }
 `;
 

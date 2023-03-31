@@ -10,8 +10,12 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-import { StyledHeader } from '../../../../../components/styles';
+import {
+  StyledHeader,
+  StyledTableCell,
+} from '../../../../../components/styles';
 import { SubjectDetailResult } from '../../../../../generated-types';
+import { renderGPA10WithProperColor } from '../../../../../utils/student';
 
 interface Column {
   id: 'maMH' | 'tenMH' | 'soTC' | 'namHoc' | 'hocKy' | 'dtb';
@@ -84,7 +88,9 @@ function AcademicTable({ header, description, data }: AcademicTableProps) {
                   {item.namHoc} - {item.namHoc + 1}
                 </TableCell>
                 <TableCell>{item.hocKy}</TableCell>
-                <TableCell>{item.dtb}</TableCell>
+                <StyledTableCell>
+                  {renderGPA10WithProperColor(item.dtb)}
+                </StyledTableCell>
               </TableRow>
             ))}
           </TableBody>

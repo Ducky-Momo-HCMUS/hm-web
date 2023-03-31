@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Typography } from '@mui/material';
+
+import {
+  renderGPA10WithProperColor,
+  renderStatusWithProperColor,
+} from '../../../utils/student';
 
 import { StyledContainer, StyledTitle } from './styles';
 
@@ -9,10 +14,24 @@ interface ClassInfoProps {
 }
 
 function ClassInfo({ title, description = '' }: ClassInfoProps) {
+  const renderDescriptionWithProperColor = useCallback(() => {
+    if (title === 'Tình trạng') {
+      return renderStatusWithProperColor(description);
+    }
+
+    if (title === 'GPA') {
+      return Number.isNaN(Number(description))
+        ? description
+        : renderGPA10WithProperColor(Number(description));
+    }
+
+    return <Typography variant="body1">{description}</Typography>;
+  }, [description, title]);
+
   return (
     <StyledContainer>
       <StyledTitle>{title}</StyledTitle>
-      <Typography variant="body1">{description}</Typography>
+      {renderDescriptionWithProperColor()}
     </StyledContainer>
   );
 }

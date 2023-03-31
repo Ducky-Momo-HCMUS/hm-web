@@ -20,7 +20,7 @@ const accountTypeDefs = gql`
   type AccountListItem {
     maTK: Int!
     email: String!
-    tenGV: String!
+    tenGV: String
     gvcn: Boolean!
     gvu: Boolean!
     hoatDong: Boolean!

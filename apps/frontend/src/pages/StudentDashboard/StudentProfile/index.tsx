@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { format } from 'date-fns';
+import { ToastContainer } from 'react-toastify';
 
 import { StyledHeader } from '../NoteInfo/styles';
 import ClassInfo from '../../ClassDetail/ClassInfo';
@@ -183,7 +184,7 @@ function StudentProfile() {
       learningInfo: {
         tenCN: studentDetails?.tenCN || 'Chưa có',
         xepLoai: studentDetails?.xepLoai || 'Chưa có',
-        gpa_10: studentDetails?.gpa_10 || 'Chưa có',
+        gpa10: studentDetails?.gpa10,
         ngoaiNgu: studentDetails?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp',
         tinhTrang: studentDetails?.tinhTrang || 'Chưa có',
       } as LearningInfo,
@@ -210,6 +211,7 @@ function StudentProfile() {
 
   return (
     <>
+      <ToastContainer />
       <StyledStickyBox sx={{ top: '63px' }}>
         <StyledTitle variant="h1">Thông tin sinh viên</StyledTitle>
         <Box
@@ -369,7 +371,7 @@ function StudentProfile() {
             <Grid item xs={5}>
               <ClassInfo
                 title="GPA"
-                description={String(learningInfo.gpa_10)}
+                description={learningInfo.gpa10?.toString() || 'Chưa có'}
               />
             </Grid>
             <Grid item xs={7}>

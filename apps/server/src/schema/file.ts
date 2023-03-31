@@ -63,6 +63,7 @@ const fileTypeDefs = gql`
     DIEM_THI_THEO_LOP_HOC_PHAN
     THOI_KHOA_BIEU
     HO_SO_SINH_VIEN
+    CHUNG_CHI_NGOAI_NGU
   }
 
   type ImportHistory {

@@ -82,7 +82,7 @@ export type AccountListItem = {
   gvu: Scalars['Boolean'];
   hoatDong: Scalars['Boolean'];
   maTK: Scalars['Int'];
-  tenGV: Scalars['String'];
+  tenGV?: Maybe<Scalars['String']>;
 };
 
 export type AllTeacherList = {
@@ -118,12 +118,12 @@ export type ClassroomScoreList = {
 
 export type ClassroomScoreListItem = {
   __typename?: 'ClassroomScoreListItem';
-  diemCK: Scalars['Float'];
-  diemCong: Scalars['Float'];
-  diemGK: Scalars['Float'];
-  diemKhac: Scalars['Float'];
-  diemTH: Scalars['Float'];
-  dtb: Scalars['Float'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -173,6 +173,7 @@ export type Document = {
 
 export const FileType = {
   BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
+  ChungChiNgoaiNgu: 'CHUNG_CHI_NGOAI_NGU',
   DanhSachChuyenNganh: 'DANH_SACH_CHUYEN_NGANH',
   DanhSachGvcn: 'DANH_SACH_GVCN',
   DanhSachMonHoc: 'DANH_SACH_MON_HOC',
@@ -460,8 +461,8 @@ export type MajorResultList = {
 
 export type MajorResultListItem = {
   __typename?: 'MajorResultListItem';
-  chuyenNganh?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
+  tenCN: Scalars['String'];
   tenSV: Scalars['String'];
 };
 
@@ -730,6 +731,7 @@ export type Query = {
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
+  studentStatistics: Array<StudentStatisticsItem>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   studentTrainingPointList: StudentTrainingPointList;
@@ -826,6 +828,7 @@ export type QueryHomeroomStudentListArgs = {
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -934,6 +937,10 @@ export type QueryStudentPostponeListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryStudentStatisticsArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentSubjectsByTermArgs = {
@@ -1052,8 +1059,8 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4?: Maybe<Scalars['Float']>;
-  gpa_10?: Maybe<Scalars['Float']>;
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
   lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
@@ -1189,6 +1196,15 @@ export type StudentPostponeListItem = {
   tenSV: Scalars['String'];
 };
 
+export type StudentStatisticsItem = {
+  __typename?: 'StudentStatisticsItem';
+  drl: Scalars['Int'];
+  dtb: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  namHoc: Scalars['Int'];
+  soTinChi: Scalars['Int'];
+};
+
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   diemCK?: Maybe<Scalars['Float']>;
@@ -1278,7 +1294,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSH: Array<Scalars['String']>;
+  lopSinhHoat: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1387,12 +1403,12 @@ export type ClassroomScoreListQuery = {
       __typename?: 'ClassroomScoreListItem';
       maSV: string;
       tenSV: string;
-      diemCK: number;
-      diemCong: number;
-      diemGK: number;
-      diemKhac: number;
-      diemTH: number;
-      dtb: number;
+      diemCK?: number | null | undefined;
+      diemCong?: number | null | undefined;
+      diemGK?: number | null | undefined;
+      diemKhac?: number | null | undefined;
+      diemTH?: number | null | undefined;
+      dtb?: number | null | undefined;
     }>;
   };
 };
@@ -1453,7 +1469,7 @@ export type MajorResultListQuery = {
       __typename?: 'MajorResultListItem';
       maSV: string;
       tenSV: string;
-      chuyenNganh?: string | null | undefined;
+      tenCN: string;
     }>;
   };
 };
@@ -1755,7 +1771,7 @@ export type AccountListQuery = {
       __typename?: 'AccountListItem';
       maTK: number;
       email: string;
-      tenGV: string;
+      tenGV?: string | null | undefined;
       hoatDong: boolean;
       gvcn: boolean;
       gvu: boolean;
@@ -2291,6 +2307,7 @@ export type HomeroomStudentListQueryVariables = Exact<{
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type HomeroomStudentListQuery = {
@@ -2581,8 +2598,8 @@ export type StudentDetailQuery = {
     emailCaNhan: string;
     sdt: string;
     tenCN?: string | null | undefined;
-    gpa_4?: number | null | undefined;
-    gpa_10?: number | null | undefined;
+    gpa4?: number | null | undefined;
+    gpa10?: number | null | undefined;
     ngoaiNgu: boolean;
     tinhTrang: string;
     maSH: string;
@@ -2676,6 +2693,22 @@ export type StudentParentInfoListQuery = {
       }>;
     }>;
   };
+};
+
+export type StudentStatisticsQueryVariables = Exact<{
+  studentId: Scalars['String'];
+}>;
+
+export type StudentStatisticsQuery = {
+  __typename?: 'Query';
+  studentStatistics: Array<{
+    __typename?: 'StudentStatisticsItem';
+    namHoc: number;
+    hocKy: number;
+    dtb: number;
+    drl: number;
+    soTinChi: number;
+  }>;
 };
 
 export type StudentSubjectsByTermQueryVariables = Exact<{
@@ -3060,7 +3093,7 @@ export const MajorResultListDocument = gql`
       data {
         maSV
         tenSV
-        chuyenNganh
+        tenCN
       }
     }
   }
@@ -5964,6 +5997,7 @@ export const HomeroomStudentListDocument = gql`
     $size: Int!
     $sortBy: String
     $sortOrder: String
+    $unruly: Boolean
   ) {
     homeroomStudentList(
       homeroomId: $homeroomId
@@ -5971,6 +6005,7 @@ export const HomeroomStudentListDocument = gql`
       size: $size
       sortBy: $sortBy
       sortOrder: $sortOrder
+      unruly: $unruly
     ) {
       total
       data {
@@ -6008,6 +6043,7 @@ export const HomeroomStudentListDocument = gql`
  *      size: // value for 'size'
  *      sortBy: // value for 'sortBy'
  *      sortOrder: // value for 'sortOrder'
+ *      unruly: // value for 'unruly'
  *   },
  * });
  */
@@ -6686,8 +6722,8 @@ export const StudentDetailDocument = gql`
       emailCaNhan
       sdt
       tenCN
-      gpa_4
-      gpa_10
+      gpa4
+      gpa10
       ngoaiNgu
       tinhTrang
       maSH
@@ -6979,6 +7015,68 @@ export type StudentParentInfoListLazyQueryHookResult = ReturnType<
 export type StudentParentInfoListQueryResult = Apollo.QueryResult<
   StudentParentInfoListQuery,
   StudentParentInfoListQueryVariables
+>;
+export const StudentStatisticsDocument = gql`
+  query StudentStatistics($studentId: String!) {
+    studentStatistics(studentId: $studentId) {
+      namHoc
+      hocKy
+      dtb
+      drl
+      soTinChi
+    }
+  }
+`;
+
+/**
+ * __useStudentStatisticsQuery__
+ *
+ * To run a query within a React component, call `useStudentStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentStatisticsQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *   },
+ * });
+ */
+export function useStudentStatisticsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >(StudentStatisticsDocument, options);
+}
+export function useStudentStatisticsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentStatisticsQuery,
+    StudentStatisticsQueryVariables
+  >(StudentStatisticsDocument, options);
+}
+export type StudentStatisticsQueryHookResult = ReturnType<
+  typeof useStudentStatisticsQuery
+>;
+export type StudentStatisticsLazyQueryHookResult = ReturnType<
+  typeof useStudentStatisticsLazyQuery
+>;
+export type StudentStatisticsQueryResult = Apollo.QueryResult<
+  StudentStatisticsQuery,
+  StudentStatisticsQueryVariables
 >;
 export const StudentSubjectsByTermDocument = gql`
   query StudentSubjectsByTerm($studentId: String!, $term: Int!) {

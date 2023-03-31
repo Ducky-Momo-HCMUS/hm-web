@@ -27,10 +27,8 @@ function AcademicResult({ studentOverviewResult }: AcademicResultProps) {
     },
   ] = useStudentDetailSubjectsResultLazyQuery();
 
-  const { tichLuy, data } = useMemo(() => {
+  const { data } = useMemo(() => {
     return {
-      tichLuy:
-        studentDetailSubjectsResultData?.studentDetailSubjectsResult.tichLuy,
       data:
         studentDetailSubjectsResultData?.studentDetailSubjectsResult.monHoc ||
         [],

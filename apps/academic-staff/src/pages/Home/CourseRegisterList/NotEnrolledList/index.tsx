@@ -53,6 +53,7 @@ function NotEnrolledList({ termId }: NotEnrolledListProps) {
         page: page + 1,
         size: NOT_ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getStudentNotEnrolledList, page, termId]);
 
@@ -64,7 +65,7 @@ function NotEnrolledList({ termId }: NotEnrolledListProps) {
           loading={studentNotEnrolledListLoading}
           data={notEnrolledList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
@@ -78,7 +79,7 @@ function NotEnrolledList({ termId }: NotEnrolledListProps) {
                 {notEnrolledList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>
-                      {page * NOT_ENROLLED_PAGE_SIZE * index + 1}
+                      {page * NOT_ENROLLED_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

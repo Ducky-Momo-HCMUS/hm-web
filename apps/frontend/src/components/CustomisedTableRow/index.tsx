@@ -3,6 +3,8 @@ import React from 'react';
 
 import { GenericObject } from '../../types';
 import { StyledTableRow } from '../../pages/ClassDetail/ClassTable/styles';
+import { StyledTableCell } from '../styles';
+import { renderGPA10WithProperColor } from '../../utils';
 
 interface CustomisedTableRowProps {
   data: GenericObject;
@@ -13,9 +15,15 @@ function CustomisedTableRow({ data, index }: CustomisedTableRowProps) {
   return (
     <StyledTableRow hover tabIndex={-1} key={index}>
       <TableCell>{index}</TableCell>
-      {Object.keys(data).map((k) => (
-        <TableCell>{data[k]}</TableCell>
-      ))}
+      {Object.keys(data).map((k) =>
+        typeof k === 'number' ? (
+          <StyledTableCell>
+            {renderGPA10WithProperColor(data[k] as number)}
+          </StyledTableCell>
+        ) : (
+          <TableCell>{data[k]}</TableCell>
+        )
+      )}
     </StyledTableRow>
   );
 }

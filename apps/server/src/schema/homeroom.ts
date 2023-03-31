@@ -10,6 +10,7 @@ const homeroomTypeDefs = gql`
       size: Int!
       sortBy: String
       sortOrder: String
+      unruly: Boolean
     ): HomeroomStudentList!
     homeroomWatchList(
       homeroomId: String!

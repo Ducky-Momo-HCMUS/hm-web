@@ -11,8 +11,8 @@ export const GET_STUDENT_DETAIL = gql`
       emailCaNhan
       sdt
       tenCN
-      gpa_4
-      gpa_10
+      gpa4
+      gpa10
       ngoaiNgu
       tinhTrang
       maSH

@@ -76,17 +76,17 @@ class FileAPI extends BaseDataSource {
     const formData = new FormData();
 
     Object.keys(input).forEach((key) => {
-      if (!input[key]) {
+      if (input[key] === undefined) {
         throw new UserInputError(`Missing ${key}`);
       }
       formData.append(key, input[key]);
     });
 
-    // Object.keys(config).forEach((key) => {
-    //   if (!config[key]) {
-    //     throw new UserInputError(`Missing ${key}`);
-    //   }
-    // });
+    Object.keys(config).forEach((key) => {
+      if (config[key] === undefined) {
+        throw new UserInputError(`Missing ${key}`);
+      }
+    });
 
     // const metadata = JSON.stringify({
     //   ...input,
