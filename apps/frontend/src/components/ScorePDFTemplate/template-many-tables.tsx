@@ -86,7 +86,6 @@ interface ScoreTemplateProps {
     dob: string;
     dtb: number | undefined;
     loaiMonHoc: any;
-    tongTCDaDat: number;
     tongTC: number;
   };
 }
@@ -189,10 +188,7 @@ function FullScorePDFTemplate({ data }: ScoreTemplateProps) {
           <View wrap={false}>
             <View style={styles.creditTotal}>
               <Text style={{ width: '40%' }}>
-                Tổng số tín chỉ: {data.tongTC}
-              </Text>
-              <Text style={{ width: '40%' }}>
-                Tổng số tín chỉ đạt: {data.tongTCDaDat}
+                Tổng số tín chỉ đạt: {data.tongTC}
               </Text>
               <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
             </View>

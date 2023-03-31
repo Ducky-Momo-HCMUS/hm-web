@@ -30,7 +30,6 @@ export const OVERVIEW_CONTENT = [
   { title: 'Kiến thức tự chọn tự do', goal: '' },
   { title: 'Kiến thức tốt nghiệp', goal: '10' },
   { title: 'Tổng tín chỉ tích luỹ', goal: '138' },
-  { title: 'Tổng tín chỉ đã học', goal: '' },
   { title: 'Điểm trung bình', goal: '' },
 ];
 
@@ -128,12 +127,9 @@ function AcademicOverview() {
                       : '',
                     dtb: studentOverviewResult.dtb,
                     loaiMonHoc: subjectList,
-                    tongTCDaDat:
-                      studentOverviewResultData?.studentOverviewResult
-                        ?.tongTC || 0,
                     tongTC:
                       studentOverviewResultData?.studentOverviewResult
-                        ?.tongTCDaHoc || 0,
+                        ?.tongTC || 0,
                   }}
                 />
               }
