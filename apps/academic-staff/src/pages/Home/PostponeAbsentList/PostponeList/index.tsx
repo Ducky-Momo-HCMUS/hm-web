@@ -48,6 +48,7 @@ function PostponeList({ termId }: PostponeListProps) {
         page: page + 1,
         size: ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getPostponeList, page, termId]);
 
@@ -59,7 +60,7 @@ function PostponeList({ termId }: PostponeListProps) {
           loading={postponeListLoading}
           data={postponeList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
@@ -74,7 +75,7 @@ function PostponeList({ termId }: PostponeListProps) {
                 {postponeList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>
-                      {page * ENROLLED_PAGE_SIZE * index + 1}
+                      {page * ENROLLED_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

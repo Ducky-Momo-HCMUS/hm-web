@@ -22,7 +22,7 @@ export type GeneralInfo = Pick<
 
 export type LearningInfo = Pick<
   StudentDetail,
-  'tenCN' | 'xepLoai' | 'gpa_10' | 'tinhTrang'
+  'tenCN' | 'xepLoai' | 'tinhTrang' | 'gpa10'
 > & { ngoaiNgu: string };
 
 export type ContactInfo = Pick<
@@ -178,7 +178,7 @@ class DocumentCreator {
         `Chuyên ngành: ${learningInfo.tenCN}`,
         1
       ),
-      this.createBullet('my-bullet-points-1', `GPA: ${learningInfo.gpa_10}`, 1),
+      this.createBullet('my-bullet-points-1', `GPA: ${learningInfo.gpa10}`, 1),
       this.createBullet(
         'my-bullet-points-1',
         `Xếp loại học lực: ${learningInfo.xepLoai}`,

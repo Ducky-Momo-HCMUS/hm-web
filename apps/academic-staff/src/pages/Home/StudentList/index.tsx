@@ -15,13 +15,18 @@ import {
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledStickyBox, StyledTitle } from '../../../components/styles';
+import {
+  StyledStickyBox,
+  StyledTableCell,
+  StyledTitle,
+} from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import {
   useHomeroomAllListQuery,
   useHomeroomStudentListLazyQuery,
 } from '../../../generated-types';
 import { MenuProps, STUDENT_LIST_PAGE_SIZE } from '../../../constants';
+import { renderStatusWithProperColor } from '../../../utils';
 
 import StudentTableHead from './StudentTableHead';
 
@@ -121,23 +126,25 @@ function StudentList() {
           loading={homeroomStudentListLoading}
           data={studentListData}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <StudentTableHead />
               <TableBody>
-                {studentListData
-                  // ?.sort(getComparator(order, orderBy))
-                  .map((row, index) => (
-                    <TableRow hover tabIndex={-1} key={row.maSV}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{row.maSV}</TableCell>
-                      <TableCell>{row.tenSV}</TableCell>
-                      <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
-                      <TableCell>{row.tinhTrang}</TableCell>
-                      <TableCell>{row.sdt}</TableCell>
-                      <TableCell>{row.emailSV}</TableCell>
-                    </TableRow>
-                  ))}
+                {studentListData.map((row, index) => (
+                  <TableRow hover tabIndex={-1} key={row.maSV}>
+                    <TableCell>
+                      {page * STUDENT_LIST_PAGE_SIZE + index + 1}
+                    </TableCell>
+                    <TableCell>{row.maSV}</TableCell>
+                    <TableCell>{row.tenSV}</TableCell>
+                    <TableCell>{row.tenCN || 'Chưa có'}</TableCell>
+                    <StyledTableCell>
+                      {renderStatusWithProperColor(row.tinhTrang)}
+                    </StyledTableCell>
+                    <TableCell>{row.sdt}</TableCell>
+                    <TableCell>{row.emailSV}</TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

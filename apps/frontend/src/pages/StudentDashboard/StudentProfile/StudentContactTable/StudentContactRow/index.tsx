@@ -1,10 +1,10 @@
 import React from 'react';
-import { IconButton, TableRow, TableCell, Tooltip } from '@mui/material';
+import { IconButton, TableRow, TableCell } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { StudentContact } from '../../../../../generated-types';
-import { StyledMuiLink } from '../../../../../components/styles';
+import { Contact, StudentContact } from '../../../../../generated-types';
+import { renderSocialContact } from '../../../../../utils/student';
 
 interface StudentContactRowProps {
   index: number;
@@ -19,22 +19,10 @@ function StudentContactRow({
   onClickDelete,
   onClickEdit,
 }: StudentContactRowProps) {
-  const { mxh, url } = data;
-
   return (
     <>
       <TableRow key={index}>
-        <TableCell>
-          {url.match('^https?://') ? (
-            <Tooltip title={url} placement="top">
-              <StyledMuiLink href={url} target="_blank">
-                {mxh}
-              </StyledMuiLink>
-            </Tooltip>
-          ) : (
-            `${mxh}: ${url}`
-          )}
-        </TableCell>
+        <TableCell>{renderSocialContact(data as Contact, false)}</TableCell>
         <TableCell align="right">
           <IconButton onClick={onClickEdit}>
             <EditIcon />

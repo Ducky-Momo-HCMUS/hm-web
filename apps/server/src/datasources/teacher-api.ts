@@ -3,6 +3,7 @@ import { ApolloError } from 'apollo-server-express';
 import {
   MutationTeacherDeleteArgs,
   MutationTeacherEditArgs,
+  QueryAllTeacherListArgs,
   QueryTeacherListArgs,
   QueryTeacherSearchStudentListArgs,
 } from '../generated-types';
@@ -37,9 +38,9 @@ class TeacherAPI extends BaseDataSource {
     }
   }
 
-  public async getAllTeacherList() {
+  public async getAllTeacherList({ page, size }: QueryAllTeacherListArgs) {
     try {
-      const res = await this.get('v1/teachers/all');
+      const res = await this.get(`v1/teachers/all?page=${page}&size=${size}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch all teacher list');

@@ -1,9 +1,18 @@
 import React, { useCallback } from 'react';
-import { Checkbox, TableCell, TableRow, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Button, Checkbox, TableCell, TableRow } from '@mui/material';
 
 import { HomeroomStudentListData } from '../../../../types';
-import { StyledMuiLink, StyledRouterLink } from '../../../../components/styles';
-import { theme } from '../../../../theme';
+import {
+  renderGPA10WithProperColor,
+  renderGPA4WithProperColor,
+  renderSocialContact,
+  renderStatusWithProperColor,
+} from '../../../../utils/student';
+import {
+  StyledRouterLink,
+  StyledTableCell,
+} from '../../../../components/styles';
 
 interface StudentTableRowProps {
   checked: boolean;
@@ -18,38 +27,6 @@ function StudentTableRow({
   handleCheck,
 }: StudentTableRowProps) {
   const { maSV, tenSV, tenCN, tinhTrang, gpa4, gpa10, contact } = data;
-
-  const renderStatusWithProperColor = useCallback(() => {
-    let color = '';
-
-    switch (tinhTrang) {
-      case 'Đang học': {
-        color = theme.palette.text.primary;
-        break;
-      }
-      case 'Bị buộc thôi học': {
-        color = theme.palette.error.main;
-        break;
-      }
-      case 'Đình chỉ học': {
-        color = theme.palette.warning.main;
-        break;
-      }
-      case 'Đã tốt nghiệp': {
-        color = theme.palette.success.main;
-        break;
-      }
-      default:
-        color = theme.palette.text.primary;
-        break;
-    }
-
-    return (
-      <Typography sx={{ color, fontSize: '0.875rem' }} component="span">
-        {tinhTrang}
-      </Typography>
-    );
-  }, [tinhTrang]);
 
   const handleChange = useCallback(() => {
     handleCheck(data.maSV);
@@ -72,19 +49,27 @@ function StudentTableRow({
         </StyledRouterLink>
       </TableCell>
       <TableCell>{tenCN || 'Chưa có'}</TableCell>
-      <TableCell>{renderStatusWithProperColor()}</TableCell>
-      <TableCell>{gpa4 || 'Chưa có'}</TableCell>
-      <TableCell>{gpa10 || 'Chưa có'}</TableCell>
+      <StyledTableCell>
+        {renderStatusWithProperColor(tinhTrang)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA4WithProperColor(gpa4 as number)}
+      </StyledTableCell>
+      <StyledTableCell>
+        {renderGPA10WithProperColor(gpa10 as number)}
+      </StyledTableCell>
       <TableCell>
         {contact.sdt}
-        {contact.lienHe?.map((social) => (
-          <>
-            ,{' '}
-            <StyledMuiLink key={social.url} target="_blank" href={social.url}>
-              {social.mxh}
-            </StyledMuiLink>
-          </>
-        ))}
+        {contact.lienHe?.map((social) => renderSocialContact(social, true))}
+      </TableCell>
+      <TableCell>
+        <Button
+          variant="outlined"
+          component={Link}
+          to={`/students/${maSV}/statistics`}
+        >
+          Thống kê
+        </Button>
       </TableCell>
     </TableRow>
   );

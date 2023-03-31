@@ -47,7 +47,9 @@ function HomeroomTeacherList() {
     []
   );
 
-  const { loading: yearListLoading, data: yearListData } = useYearListQuery({});
+  const { loading: yearListLoading, data: yearListData } = useYearListQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   const yearList = useMemo(
     () => yearListData?.yearList.map((item) => item.khoa.toString()) || [],
@@ -67,16 +69,17 @@ function HomeroomTeacherList() {
   }, [teacherListData?.teacherList.data, teacherListData?.teacherList.total]);
 
   useEffect(() => {
-    if (!yearListLoading) {
+    if (Number(values.year) || Number(yearList[0])) {
       getTeacherList({
         variables: {
           year: Number(values.year) || Number(yearList[0]),
           page: page + 1,
           size: TEACHER_LIST_PAGE_SIZE,
         },
+        fetchPolicy: 'no-cache',
       });
     }
-  }, [getTeacherList, page, values.year, yearList, yearListLoading]);
+  }, [getTeacherList, page, values.year, yearList]);
 
   return (
     <Box>
@@ -107,13 +110,15 @@ function HomeroomTeacherList() {
           loading={teacherListLoading}
           data={teacherList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <HomeroomTeacherTableHead />
               <TableBody>
                 {teacherList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={row.email}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {page * TEACHER_LIST_PAGE_SIZE + index + 1}
+                    </TableCell>
                     <TableCell>{row.tenGV}</TableCell>
                     <TableCell>{row.maSH}</TableCell>
                     <TableCell>{row.email}</TableCell>

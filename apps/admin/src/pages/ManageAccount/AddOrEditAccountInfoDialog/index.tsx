@@ -76,7 +76,7 @@ function AddOrEditAccountInfoDialog({
 
   const [values, setValues] = useState<State>({
     email: data ? data.email : '',
-    fullName: data ? data.tenGV : '',
+    fullName: data && data.tenGV ? data.tenGV : '',
     type: data ? type : '',
     status: data ? status : '',
   });
@@ -127,6 +127,9 @@ function AddOrEditAccountInfoDialog({
             InputLabelProps={{
               shrink: true,
             }}
+            InputProps={{
+              disabled: !!data,
+            }}
           />
           <StyledTextField
             label="Họ tên"
@@ -141,7 +144,7 @@ function AddOrEditAccountInfoDialog({
               shrink: true,
             }}
             InputProps={{
-              readOnly: !!data,
+              disabled: !!data,
             }}
           />
           <FormControl

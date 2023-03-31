@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  Autocomplete,
   Box,
   InputLabel,
   MenuItem,
@@ -13,11 +14,16 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
 } from '@mui/material';
 
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
-import { StyledTitle } from '../../../components/styles';
-import { StyledFormControl } from '../styles';
+import {
+  StyledStickyBox,
+  StyledTableCell,
+  StyledTitle,
+} from '../../../components/styles';
+import { StyledAutocompleteBox, StyledFormControl } from '../styles';
 import { MenuProps, STUDENT_SCORE_PAGE_SIZE } from '../../../constants';
 import {
   useClassroomListLazyQuery,
@@ -26,6 +32,7 @@ import {
   useTermListQuery,
 } from '../../../generated-types';
 import { groupTermsByYear } from '../ImportFile/utils';
+import { renderGPA10WithProperColor } from '../../../utils';
 
 interface State {
   year: string;
@@ -94,6 +101,7 @@ function CourseScoreList() {
         page: 1,
         size: 1000,
       },
+      fetchPolicy: 'no-cache',
     });
   const courseList = useMemo(
     () => courseListData?.courseList.data || [],
@@ -142,6 +150,7 @@ function CourseScoreList() {
           termId,
           subjectId,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [subjectId, getClassroomList, termId]);
@@ -161,93 +170,107 @@ function CourseScoreList() {
           page: page + 1,
           size: STUDENT_SCORE_PAGE_SIZE,
         },
+        fetchPolicy: 'no-cache',
       });
     }
   }, [classroomId, getClassroomScoreList, page, termId]);
 
   return (
     <Box>
-      <StyledTitle>Điểm học phần</StyledTitle>
-      <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
-        <StyledFormControl sx={{ marginRight: '1rem' }}>
-          <InputLabel id="year-select-label">Năm học</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={values.year || initialYear}
-            label="Năm học"
-            onChange={handleChange('year')}
-            MenuProps={MenuProps}
-          >
-            {years.map((item) => (
-              <MenuItem value={item}>
-                {item} - {Number(item) + 1}
-              </MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-        <StyledFormControl sx={{ marginRight: '1rem' }}>
-          <InputLabel id="semester-select-label">Học kỳ</InputLabel>
-          <Select
-            labelId="semester-select-label"
-            id="semester-select"
-            value={values.semester || initialTerm}
-            label="Học kỳ"
-            onChange={handleChange('semester')}
-            MenuProps={MenuProps}
-          >
-            {terms.map((item) => (
-              <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
-      <AsyncDataRenderer loading={courseListLoading} data={courseList}>
-        <StyledFormControl sx={{ marginRight: '1rem' }}>
-          <InputLabel id="course-select-label">Môn học</InputLabel>
-          <Select
-            labelId="course-select-label"
-            id="course-select"
-            value={values.courseId || courseList[0]?.maMH}
-            label="Môn học"
-            onChange={handleChange('courseId')}
-            MenuProps={MenuProps}
-          >
-            {courseList.map((item) => (
-              <MenuItem value={item.maMH}>{item.tenMH}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
-      <AsyncDataRenderer
-        loading={classroomListLoading}
-        data={classroomListData}
-      >
-        <StyledFormControl>
-          <InputLabel id="class-select-label">Lớp học phần</InputLabel>
-          <Select
-            labelId="class-select-label"
-            id="class-select"
-            value={values.classroomId || String(classroomList[0]?.maHP)}
-            label="Lớp học phần"
-            onChange={handleChange('classroomId')}
-            sx={{ minWidth: '150px' }}
-            MenuProps={MenuProps}
-          >
-            {classroomList.map((item) => (
-              <MenuItem value={item.maHP}>{item.tenLopHP}</MenuItem>
-            ))}
-          </Select>
-        </StyledFormControl>
-      </AsyncDataRenderer>
+      <StyledStickyBox>
+        <StyledTitle>Điểm học phần</StyledTitle>
+        <Box display="flex" alignItems="center">
+          <AsyncDataRenderer loading={allTermsLoading} data={allTermsData}>
+            <StyledFormControl sx={{ marginRight: '1rem' }}>
+              <InputLabel id="year-select-label">Năm học</InputLabel>
+              <Select
+                labelId="year-select-label"
+                id="year-select"
+                value={values.year || initialYear}
+                label="Năm học"
+                onChange={handleChange('year')}
+                MenuProps={MenuProps}
+              >
+                {years.map((item) => (
+                  <MenuItem value={item}>
+                    {item} - {Number(item) + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+            <StyledFormControl sx={{ marginRight: '1rem' }}>
+              <InputLabel id="semester-select-label">Học kỳ</InputLabel>
+              <Select
+                labelId="semester-select-label"
+                id="semester-select"
+                value={values.semester || initialTerm}
+                label="Học kỳ"
+                onChange={handleChange('semester')}
+                MenuProps={MenuProps}
+              >
+                {terms.map((item) => (
+                  <MenuItem value={item.maHK}>{item.hocKy}</MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
+          </AsyncDataRenderer>
 
+          <AsyncDataRenderer loading={courseListLoading} data={courseListData}>
+            <StyledAutocompleteBox>
+              <Autocomplete
+                sx={{ width: 300 }}
+                disablePortal
+                autoHighlight
+                options={courseList}
+                onChange={(event, newValue) => {
+                  setValues((v) => ({
+                    ...v,
+                    courseId: newValue?.maMH || '',
+                  }));
+                }}
+                value={courseList.find((course) => course.maMH === subjectId)}
+                getOptionLabel={(option) => option.tenMH}
+                renderInput={(params) => (
+                  <TextField {...params} label="Môn học" />
+                )}
+              />
+            </StyledAutocompleteBox>
+          </AsyncDataRenderer>
+          <AsyncDataRenderer
+            loading={classroomListLoading}
+            data={classroomListData}
+          >
+            <StyledAutocompleteBox>
+              <Autocomplete
+                sx={{ width: 200 }}
+                disablePortal
+                autoHighlight
+                options={classroomList}
+                onChange={(event, newValue) => {
+                  setValues((v) => ({
+                    ...v,
+                    classroomId: String(newValue?.maHP),
+                  }));
+                }}
+                value={classroomList.find(
+                  (classroom) => classroom.maHP === classroomId
+                )}
+                getOptionLabel={(option) => option.tenLopHP}
+                renderInput={(params) => (
+                  <TextField {...params} label="Lớp học phần" />
+                )}
+              />
+            </StyledAutocompleteBox>
+          </AsyncDataRenderer>
+        </Box>
+      </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
         <AsyncDataRenderer
           hasFullWidth
           loading={classroomScoreListLoading}
           data={classroomScoreListData}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
@@ -270,18 +293,31 @@ function CourseScoreList() {
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>
-                    <TableCell>{row.diemGK}</TableCell>
-                    <TableCell>{row.diemTH}</TableCell>
-                    <TableCell>{row.diemCong}</TableCell>
-                    <TableCell>{row.diemKhac}</TableCell>
-                    <TableCell>{row.diemCK}</TableCell>
-                    <TableCell>{row.dtb}</TableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemGK as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemTH as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemCong as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemKhac as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.diemCK as number)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {renderGPA10WithProperColor(row.dtb as number)}
+                    </StyledTableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
+            rowsPerPageOptions={[]}
             component="div"
             count={studentScoreListLength}
             rowsPerPage={STUDENT_SCORE_PAGE_SIZE}

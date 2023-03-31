@@ -2,7 +2,15 @@ import React from 'react';
 import { TableCell, TableHead, TableRow } from '@mui/material';
 
 interface Column {
-  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'contact';
+  id:
+    | 'maSV'
+    | 'tenSV'
+    | 'tenCN'
+    | 'tinhTrang'
+    | 'gpa4'
+    | 'gpa10'
+    | 'contact'
+    | 'actions';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -39,7 +47,12 @@ const columns: readonly Column[] = [
   {
     id: 'contact',
     label: 'Thông tin liên lạc',
-    minWidth: 380,
+    minWidth: 360,
+  },
+  {
+    id: 'actions',
+    label: 'Thao tác',
+    minWidth: 80,
   },
 ];
 

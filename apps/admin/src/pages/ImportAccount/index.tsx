@@ -255,7 +255,7 @@ function ImportAccount() {
       },
       onError: (error) => {
         // TODO: lấy error từ BE
-        toast.error('Đã có  lỗi xảy ra');
+        toast.error(error.message);
       },
     });
 
@@ -269,7 +269,7 @@ function ImportAccount() {
 
       const payloadHeaders = columnHeaders.map((item) => {
         const value =
-          mappedHeadersPayload.find((header) => header.index === item.index)
+          mappedHeadersPayload.find((header) => header?.index === item.index)
             ?.value || '';
 
         return {
@@ -278,24 +278,32 @@ function ImportAccount() {
         };
       });
 
-      // if (file) {
-      //   await uploadDocument({
-      //     variables: {
-      //       file,
-      //       input,
-      //       config: {
-      //         start,
-      //         sheet: {
-      //           value: current,
-      //           index: sheets.findIndex((sheetName) => sheetName === current),
-      //         },
-      //         headers: payloadHeaders,
-      //       },
-      //     },
-      //   });
-      // }
+      if (file) {
+        await uploadDocument({
+          variables: {
+            file,
+            input,
+            config: {
+              start: Number(start) - 1,
+              sheet: {
+                value: current,
+                index: sheets.findIndex((sheetName) => sheetName === current),
+              },
+              headers: payloadHeaders,
+            },
+          },
+        });
+      }
     },
-    [columnHeaders, current, file, mappedHeadersPayload, sheets, uploadDocument]
+    [
+      columnHeaders,
+      current,
+      file,
+      mappedHeadersPayload,
+      sheets,
+      start,
+      uploadDocument,
+    ]
   );
 
   return (

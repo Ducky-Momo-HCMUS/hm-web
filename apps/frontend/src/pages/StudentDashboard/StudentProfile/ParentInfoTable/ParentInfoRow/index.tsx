@@ -1,10 +1,10 @@
 import React from 'react';
-import { IconButton, TableCell, TableRow, Tooltip } from '@mui/material';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { StyledMuiLink } from '../../../../../components/styles';
-import { StudentParentInfo } from '../../../../../generated-types';
+import { Contact, StudentParentInfo } from '../../../../../generated-types';
+import { renderSocialContact } from '../../../../../utils/student';
 
 interface ParentInfoRowProps {
   index: number;
@@ -28,14 +28,9 @@ function ParentInfoRow({
         <TableCell>{quanHe}</TableCell>
         <TableCell>{sdt}</TableCell>
         <TableCell>
-          {lienHePH.map((social) => (
-            <>
-              <Tooltip title={social.url} placement="top">
-                <StyledMuiLink href={social.url}>{social.mxh}</StyledMuiLink>
-              </Tooltip>
-              {lienHePH.at(lienHePH.length - 1) === social ? '' : ', '}
-            </>
-          ))}
+          {lienHePH.map((social, parentIndex) =>
+            renderSocialContact(social as Contact, parentIndex > 0)
+          )}
         </TableCell>
         <TableCell align="center">
           {sua && (

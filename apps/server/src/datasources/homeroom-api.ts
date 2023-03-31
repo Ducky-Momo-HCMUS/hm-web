@@ -52,11 +52,14 @@ class HomeroomAPI extends BaseDataSource {
     size,
     sortOrder,
     sortBy,
+    unruly,
   }: QueryHomeroomStudentListArgs) {
     try {
-      const homeroomStudentList = await this.get(
-        `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}&sortOrder=${sortOrder}&sortBy=${sortBy}`
-      );
+      let queryString = `v1/homerooms/${homeroomId}/students?page=${page}&size=${size}&sortOrder=${sortOrder}&sortBy=${sortBy}`;
+      if (unruly) {
+        queryString += '&gpa10Max=5.0&riskyStatus&op=$or';
+      }
+      const homeroomStudentList = await this.get(queryString);
       return homeroomStudentList;
     } catch (error) {
       logger.error('Error: cannot fetch homeroom student list');

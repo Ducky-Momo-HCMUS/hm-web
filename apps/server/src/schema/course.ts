@@ -15,7 +15,7 @@ const courseTypeDefs = gql`
   type MajorResultListItem {
     maSV: String!
     tenSV: String!
-    chuyenNganh: String
+    tenCN: String!
   }
 
   type MajorList {

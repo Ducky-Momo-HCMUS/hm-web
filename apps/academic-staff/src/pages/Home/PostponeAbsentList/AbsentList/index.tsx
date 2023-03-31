@@ -46,6 +46,7 @@ function AbsentList({ termId }: AbsentListProps) {
         page: page + 1,
         size: NOT_ENROLLED_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getAbsentList, page, termId]);
 
@@ -57,7 +58,7 @@ function AbsentList({ termId }: AbsentListProps) {
           loading={absentListLoading}
           data={absentList}
         >
-          <TableContainer sx={{ maxHeight: 440 }}>
+          <TableContainer sx={{ maxHeight: '100vh' }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
@@ -72,7 +73,7 @@ function AbsentList({ termId }: AbsentListProps) {
                 {absentList.map((row, index) => (
                   <TableRow hover tabIndex={-1} key={index}>
                     <TableCell>
-                      {page * NOT_ENROLLED_PAGE_SIZE * index + 1}
+                      {page * NOT_ENROLLED_PAGE_SIZE + index + 1}
                     </TableCell>
                     <TableCell>{row.maSV}</TableCell>
                     <TableCell>{row.tenSV}</TableCell>

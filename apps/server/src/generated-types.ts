@@ -87,7 +87,7 @@ export type AccountListItem = {
   gvu: Scalars['Boolean'];
   hoatDong: Scalars['Boolean'];
   maTK: Scalars['Int'];
-  tenGV: Scalars['String'];
+  tenGV?: Maybe<Scalars['String']>;
 };
 
 export type AllTeacherList = {
@@ -123,12 +123,12 @@ export type ClassroomScoreList = {
 
 export type ClassroomScoreListItem = {
   __typename?: 'ClassroomScoreListItem';
-  diemCK: Scalars['Float'];
-  diemCong: Scalars['Float'];
-  diemGK: Scalars['Float'];
-  diemKhac: Scalars['Float'];
-  diemTH: Scalars['Float'];
-  dtb: Scalars['Float'];
+  diemCK?: Maybe<Scalars['Float']>;
+  diemCong?: Maybe<Scalars['Float']>;
+  diemGK?: Maybe<Scalars['Float']>;
+  diemKhac?: Maybe<Scalars['Float']>;
+  diemTH?: Maybe<Scalars['Float']>;
+  dtb?: Maybe<Scalars['Float']>;
   maSV: Scalars['String'];
   tenSV: Scalars['String'];
 };
@@ -178,6 +178,7 @@ export type Document = {
 
 export const FileType = {
   BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
+  ChungChiNgoaiNgu: 'CHUNG_CHI_NGOAI_NGU',
   DanhSachChuyenNganh: 'DANH_SACH_CHUYEN_NGANH',
   DanhSachGvcn: 'DANH_SACH_GVCN',
   DanhSachMonHoc: 'DANH_SACH_MON_HOC',
@@ -465,8 +466,8 @@ export type MajorResultList = {
 
 export type MajorResultListItem = {
   __typename?: 'MajorResultListItem';
-  chuyenNganh?: Maybe<Scalars['String']>;
   maSV: Scalars['String'];
+  tenCN: Scalars['String'];
   tenSV: Scalars['String'];
 };
 
@@ -735,6 +736,7 @@ export type Query = {
   studentOverviewResult?: Maybe<StudentOverviewResult>;
   studentParentInfoList: StudentParentInfoList;
   studentPostponeList: StudentPostponeList;
+  studentStatistics: Array<StudentStatisticsItem>;
   studentSubjectsByTerm: StudentSubjectsByTerm;
   studentTrainingPointByTerm: StudentTrainingPoint;
   studentTrainingPointList: StudentTrainingPointList;
@@ -831,6 +833,7 @@ export type QueryHomeroomStudentListArgs = {
   size: Scalars['Int'];
   sortBy?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<Scalars['String']>;
+  unruly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type QueryHomeroomTermListArgs = {
@@ -939,6 +942,10 @@ export type QueryStudentPostponeListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
   termId: Scalars['Int'];
+};
+
+export type QueryStudentStatisticsArgs = {
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentSubjectsByTermArgs = {
@@ -1057,8 +1064,8 @@ export type StudentDetail = {
   emailCaNhan: Scalars['String'];
   emailSV: Scalars['String'];
   gioiTinh: Scalars['Int'];
-  gpa_4?: Maybe<Scalars['Float']>;
-  gpa_10?: Maybe<Scalars['Float']>;
+  gpa4?: Maybe<Scalars['Float']>;
+  gpa10?: Maybe<Scalars['Float']>;
   lienHeSV?: Maybe<Array<StudentContact>>;
   maSH: Scalars['String'];
   maSV: Scalars['String'];
@@ -1194,6 +1201,15 @@ export type StudentPostponeListItem = {
   tenSV: Scalars['String'];
 };
 
+export type StudentStatisticsItem = {
+  __typename?: 'StudentStatisticsItem';
+  drl: Scalars['Int'];
+  dtb: Scalars['Float'];
+  hocKy: Scalars['Int'];
+  namHoc: Scalars['Int'];
+  soTinChi: Scalars['Int'];
+};
+
 export type StudentSubject = {
   __typename?: 'StudentSubject';
   diemCK?: Maybe<Scalars['Float']>;
@@ -1283,7 +1299,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSH: Array<Scalars['String']>;
+  lopSinhHoat: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1574,6 +1590,7 @@ export type ResolversTypes = {
   StudentParentInfoList: ResolverTypeWrapper<StudentParentInfoList>;
   StudentPostponeList: ResolverTypeWrapper<StudentPostponeList>;
   StudentPostponeListItem: ResolverTypeWrapper<StudentPostponeListItem>;
+  StudentStatisticsItem: ResolverTypeWrapper<StudentStatisticsItem>;
   StudentSubject: ResolverTypeWrapper<StudentSubject>;
   StudentSubjectsByTerm: ResolverTypeWrapper<StudentSubjectsByTerm>;
   StudentTag: ResolverTypeWrapper<StudentTag>;
@@ -1718,6 +1735,7 @@ export type ResolversParentTypes = {
   StudentParentInfoList: StudentParentInfoList;
   StudentPostponeList: StudentPostponeList;
   StudentPostponeListItem: StudentPostponeListItem;
+  StudentStatisticsItem: StudentStatisticsItem;
   StudentSubject: StudentSubject;
   StudentSubjectsByTerm: StudentSubjectsByTerm;
   StudentTag: StudentTag;
@@ -1803,7 +1821,7 @@ export type AccountListItemResolvers<
   gvu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   hoatDong?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  tenGV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenGV?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1869,12 +1887,12 @@ export type ClassroomScoreListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ClassroomScoreListItem'] = ResolversParentTypes['ClassroomScoreListItem']
 > = {
-  diemCK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemCong?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemGK?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemKhac?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  diemTH?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  diemCK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemCong?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemGK?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemKhac?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  diemTH?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2445,12 +2463,8 @@ export type MajorResultListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['MajorResultListItem'] = ResolversParentTypes['MajorResultListItem']
 > = {
-  chuyenNganh?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2977,6 +2991,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentPostponeListArgs, 'page' | 'size' | 'termId'>
   >;
+  studentStatistics?: Resolver<
+    Array<ResolversTypes['StudentStatisticsItem']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentStatisticsArgs, 'studentId'>
+  >;
   studentSubjectsByTerm?: Resolver<
     ResolversTypes['StudentSubjectsByTerm'],
     ParentType,
@@ -3153,8 +3173,8 @@ export type StudentDetailResolvers<
   emailCaNhan?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   gioiTinh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  gpa_4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  gpa_10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa4?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  gpa10?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   lienHeSV?: Resolver<
     Maybe<Array<ResolversTypes['StudentContact']>>,
     ParentType,
@@ -3348,6 +3368,18 @@ export type StudentPostponeListItemResolvers<
   maSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   tenSV?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentStatisticsItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentStatisticsItem'] = ResolversParentTypes['StudentStatisticsItem']
+> = {
+  drl?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3656,6 +3688,7 @@ export type Resolvers<ContextType = any> = {
   StudentParentInfoList?: StudentParentInfoListResolvers<ContextType>;
   StudentPostponeList?: StudentPostponeListResolvers<ContextType>;
   StudentPostponeListItem?: StudentPostponeListItemResolvers<ContextType>;
+  StudentStatisticsItem?: StudentStatisticsItemResolvers<ContextType>;
   StudentSubject?: StudentSubjectResolvers<ContextType>;
   StudentSubjectsByTerm?: StudentSubjectsByTermResolvers<ContextType>;
   StudentTag?: StudentTagResolvers<ContextType>;

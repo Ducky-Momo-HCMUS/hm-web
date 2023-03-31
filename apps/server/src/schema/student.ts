@@ -57,6 +57,7 @@ const studentTypeDefs = gql`
       size: Int!
     ): StudentPostponeList!
     studentAbsentList(termId: Int!, page: Int!, size: Int!): StudentAbsentList!
+    studentStatistics(studentId: String!): [StudentStatisticsItem!]!
   }
 
   extend type Mutation {
@@ -78,6 +79,14 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+  }
+
+  type StudentStatisticsItem {
+    namHoc: Int!
+    hocKy: Int!
+    dtb: Float!
+    drl: Int!
+    soTinChi: Int!
   }
 
   type StudentSubjectsByTerm {
@@ -204,8 +213,8 @@ const studentTypeDefs = gql`
     emailCaNhan: String!
     sdt: String!
     tenCN: String
-    gpa_4: Float
-    gpa_10: Float
+    gpa4: Float
+    gpa10: Float
     ngoaiNgu: Boolean!
     tinhTrang: String!
     maSH: String!

@@ -8,6 +8,7 @@ import {
   Paper,
   Divider,
   Breadcrumbs,
+  TableCell,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { blue, grey } from '@mui/material/colors';
@@ -127,4 +128,10 @@ export const StyledInfoBox = styled(Box)`
     font-weight: bold;
   }
   border-bottom: 1px solid #ccc;
+`;
+
+export const StyledTableCell = styled(TableCell)`
+  & > p {
+    font-size: 0.875rem;
+  }
 `;

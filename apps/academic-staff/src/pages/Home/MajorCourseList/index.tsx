@@ -7,7 +7,7 @@ import {
   StyledTab,
   TabPanel,
 } from '../../../components/TabsContainer';
-import { StyledTitle } from '../../../components/styles';
+import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 
 import CourseList from './CourseList';
 import MajorList from './MajorList';
@@ -23,8 +23,8 @@ function MajorCourseList() {
 
   return (
     <Box>
-      <StyledTitle>Môn học và chuyên ngành</StyledTitle>
-      <Paper>
+      <StyledStickyBox>
+        <StyledTitle>Môn học và chuyên ngành</StyledTitle>
         <AppBar position="static">
           <Tabs
             value={value}
@@ -38,6 +38,8 @@ function MajorCourseList() {
             <StyledTab label="Kết quả chuyên ngành" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
+      </StyledStickyBox>
+      <Paper>
         <TabPanel value={value} index={0} dir={theme.direction}>
           <CourseList />
         </TabPanel>

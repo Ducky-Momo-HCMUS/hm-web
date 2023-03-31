@@ -68,14 +68,14 @@ function ClassReport() {
 
   const handleChangeFinalResultPage = useCallback(
     (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, subjectStatus: newPage }));
+      setPage((p) => ({ ...p, finalResult: newPage }));
     },
     []
   );
 
   const handleChangeExamAbsentPage = useCallback(
     (event: unknown, newPage: number) => {
-      setPage((p) => ({ ...p, notRegistered: newPage }));
+      setPage((p) => ({ ...p, examAbsent: newPage }));
     },
     []
   );
@@ -180,10 +180,7 @@ function ClassReport() {
 
   const [
     getHomeroomExamAbsentListByTerm,
-    {
-      loading: homeroomExamAbsentListLoading,
-      data: homeroomExamAbsentListData,
-    },
+    { data: homeroomExamAbsentListData },
   ] = useHomeroomExamAbsentListByTermLazyQuery();
 
   const { homeroomExamAbsentList, homeroomExamAbsentListLength } =
@@ -204,10 +201,7 @@ function ClassReport() {
 
   const [
     getHomeroomPostponeExamListByTerm,
-    {
-      loading: homeroomPostponeExamListLoading,
-      data: homeroomPostponeExamListData,
-    },
+    { data: homeroomPostponeExamListData },
   ] = useHomeroomPostponeExamListByTermLazyQuery();
 
   const { homeroomPostponeExamList, homeroomPostponeExamListLength } =
@@ -547,10 +541,8 @@ function ClassReport() {
             <PostponeExam
               homeroomExamAbsentList={homeroomExamAbsentList}
               homeroomExamAbsentListLength={homeroomExamAbsentListLength}
-              homeroomExamAbsentListLoading={homeroomExamAbsentListLoading}
               homeroomExamPostponedList={homeroomPostponeExamList}
               homeroomExamPostponedListLength={homeroomPostponeExamListLength}
-              homeroomExamPostponedListLoading={homeroomPostponeExamListLoading}
               examAbsentPage={page.examAbsent}
               examPostponePage={page.postponeExam}
               handleChangeExamAbsentPage={handleChangeExamAbsentPage}

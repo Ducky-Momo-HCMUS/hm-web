@@ -8,8 +8,10 @@ import React, {
   useState,
 } from 'react';
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -17,8 +19,6 @@ import {
   Select,
   SelectChangeEvent,
   Typography,
-  Backdrop,
-  CircularProgress,
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -227,8 +227,8 @@ function NoteStore() {
     });
   }, [deleteNote, values.deleteIndex]);
 
-  const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
-  const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+  const [addNote] = useNoteAddMutation();
+  const [editNote] = useNoteEditMutation();
 
   const filePondRef = useRef<FilePond | null>(null);
 
@@ -706,12 +706,12 @@ function NoteStore() {
           onClickConfirm={handleDeleteNote}
         />
       )}
-      {/* <Backdrop
+      <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={deleteNoteLoading || addNoteLoading || editNoteLoading}
+        open={deleteNoteLoading}
       >
         <CircularProgress color="inherit" />
-      </Backdrop> */}
+      </Backdrop>
     </>
   );
 }

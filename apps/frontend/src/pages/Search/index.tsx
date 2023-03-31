@@ -1,4 +1,5 @@
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -20,13 +21,19 @@ import {
   StyledContentWrapper,
   StyledRouterLink,
   StyledStickyBox,
+  StyledTableCell,
   StyledTitle,
 } from '../../components/styles';
 import { STUDENT_LIST_PAGE_SIZE } from '../../constants';
 import { useTeacherSearchStudentListQuery } from '../../generated-types';
+import {
+  renderGPA10WithProperColor,
+  renderGPA4WithProperColor,
+  renderStatusWithProperColor,
+} from '../../utils';
 
 interface Column {
-  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10';
+  id: 'maSV' | 'tenSV' | 'tenCN' | 'tinhTrang' | 'gpa4' | 'gpa10' | 'actions';
   label: string;
   minWidth?: number;
   align?: 'left';
@@ -59,6 +66,11 @@ const columns: readonly Column[] = [
     id: 'gpa10',
     label: 'GPA hệ 10',
     minWidth: 60,
+  },
+  {
+    id: 'actions',
+    label: 'Thao tác',
+    minWidth: 80,
   },
 ];
 
@@ -111,7 +123,7 @@ function Search() {
         </StyledStickyBox>
         <AsyncDataRenderer loading={searchStudentsLoading} data={studentsList}>
           <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-            <TableContainer sx={{ maxHeight: 350 }}>
+            <TableContainer sx={{ maxHeight: '100vh' }}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
@@ -134,9 +146,24 @@ function Search() {
                         </StyledRouterLink>
                       </TableCell>
                       <TableCell>{item.tenCN || 'Chưa có'}</TableCell>
-                      <TableCell>{item.tinhTrang}</TableCell>
-                      <TableCell>{item.gpa4 || 'Chưa có'}</TableCell>
-                      <TableCell>{item.gpa10 || 'Chưa có'}</TableCell>
+                      <StyledTableCell>
+                        {renderStatusWithProperColor(item.tinhTrang)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {renderGPA4WithProperColor(item.gpa4 as number)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {renderGPA10WithProperColor(item.gpa10 as number)}
+                      </StyledTableCell>
+                      <TableCell>
+                        <Button
+                          variant="outlined"
+                          component={Link}
+                          to={`/students/${maSV}/statistics`}
+                        >
+                          Thống kê
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
