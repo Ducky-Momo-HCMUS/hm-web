@@ -314,7 +314,7 @@ const studentTypeDefs = gql`
     tuChonChuyenNganh: Int!
     totNghiep: Int!
     tongTC: Int!
-    tongTCDaHoc: Int!
+    ngoaiNgu: Boolean!
     dtb: Float!
   }
 

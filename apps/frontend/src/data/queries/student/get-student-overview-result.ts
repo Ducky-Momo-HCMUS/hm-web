@@ -11,7 +11,7 @@ export const GET_STUDENT_OVERVIEW_RESULT = gql`
       tuChonChuyenNganh
       totNghiep
       tongTC
-      tongTCDaHoc
+      ngoaiNgu
       dtb
     }
   }

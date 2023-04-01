@@ -1145,9 +1145,9 @@ export type StudentOverviewResult = {
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
+  ngoaiNgu: Scalars['Boolean'];
   tenCN: Scalars['String'];
   tongTC: Scalars['Int'];
-  tongTCDaHoc: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
   tuChonTuDo: Scalars['Int'];
@@ -2660,7 +2660,7 @@ export type StudentOverviewResultQuery = {
         tuChonChuyenNganh: number;
         totNghiep: number;
         tongTC: number;
-        tongTCDaHoc: number;
+        ngoaiNgu: boolean;
         dtb: number;
       }
     | null
@@ -6888,7 +6888,7 @@ export const StudentOverviewResultDocument = gql`
       tuChonChuyenNganh
       totNghiep
       tongTC
-      tongTCDaHoc
+      ngoaiNgu
       dtb
     }
   }
