@@ -1198,11 +1198,11 @@ export type StudentPostponeListItem = {
 
 export type StudentStatisticsItem = {
   __typename?: 'StudentStatisticsItem';
-  drl: Scalars['Int'];
-  dtb: Scalars['Float'];
-  hocKy: Scalars['Int'];
-  namHoc: Scalars['Int'];
-  soTinChi: Scalars['Int'];
+  drl?: Maybe<Scalars['Int']>;
+  dtb?: Maybe<Scalars['Float']>;
+  hocky: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+  soTC: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -2703,11 +2703,11 @@ export type StudentStatisticsQuery = {
   __typename?: 'Query';
   studentStatistics: Array<{
     __typename?: 'StudentStatisticsItem';
-    namHoc: number;
-    hocKy: number;
-    dtb: number;
-    drl: number;
-    soTinChi: number;
+    namHocBD: number;
+    hocky: number;
+    dtb?: number | null | undefined;
+    drl?: number | null | undefined;
+    soTC: number;
   }>;
 };
 
@@ -7019,11 +7019,11 @@ export type StudentParentInfoListQueryResult = Apollo.QueryResult<
 export const StudentStatisticsDocument = gql`
   query StudentStatistics($studentId: String!) {
     studentStatistics(studentId: $studentId) {
-      namHoc
-      hocKy
+      namHocBD
+      hocky
       dtb
       drl
-      soTinChi
+      soTC
     }
   }
 `;

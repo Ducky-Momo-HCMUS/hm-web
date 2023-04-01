@@ -1203,11 +1203,11 @@ export type StudentPostponeListItem = {
 
 export type StudentStatisticsItem = {
   __typename?: 'StudentStatisticsItem';
-  drl: Scalars['Int'];
-  dtb: Scalars['Float'];
-  hocKy: Scalars['Int'];
-  namHoc: Scalars['Int'];
-  soTinChi: Scalars['Int'];
+  drl?: Maybe<Scalars['Int']>;
+  dtb?: Maybe<Scalars['Float']>;
+  hocky: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+  soTC: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -3375,11 +3375,11 @@ export type StudentStatisticsItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['StudentStatisticsItem'] = ResolversParentTypes['StudentStatisticsItem']
 > = {
-  drl?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  hocKy?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  namHoc?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  soTinChi?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  drl?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  dtb?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  hocky?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  namHocBD?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  soTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

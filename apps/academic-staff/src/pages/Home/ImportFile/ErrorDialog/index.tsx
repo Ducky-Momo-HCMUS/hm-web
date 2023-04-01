@@ -60,7 +60,7 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
       <DialogContent sx={{ marginLeft: '1.5rem' }}>
         {headers.length > 0 && (
           <Box>
-            <Typography fontWeight="bold">Expected</Typography>
+            <Typography fontWeight="bold">Header</Typography>
             <Table sx={{ width: 'fit-content' }}>
               <TableHead>
                 <TableRow>
@@ -93,7 +93,7 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
         )}
         {row.length > 0 && (
           <Box mt={2}>
-            <Typography fontWeight="bold">Received</Typography>
+            <Typography fontWeight="bold">Row</Typography>
             <Table sx={{ width: 'fit-content' }}>
               <TableHead>
                 <TableRow>
@@ -106,7 +106,7 @@ function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
               <TableBody>
                 <TableRow>
                   <StyledTableCell>
-                    <b>{index}</b>
+                    <b>{index !== undefined ? index + 1 : ''}</b>
                   </StyledTableCell>
                   {row.map((receivedValue) => (
                     <StyledTableCell>{receivedValue}</StyledTableCell>

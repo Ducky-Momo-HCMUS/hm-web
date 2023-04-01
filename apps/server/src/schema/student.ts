@@ -82,11 +82,11 @@ const studentTypeDefs = gql`
   }
 
   type StudentStatisticsItem {
-    namHoc: Int!
-    hocKy: Int!
-    dtb: Float!
-    drl: Int!
-    soTinChi: Int!
+    namHocBD: Int!
+    hocky: Int!
+    dtb: Float
+    drl: Int
+    soTC: Int!
   }
 
   type StudentSubjectsByTerm {
