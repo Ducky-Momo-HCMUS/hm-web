@@ -61,17 +61,17 @@ function StudentStatistics() {
               <StudentStatisticsHeader />
               <TableBody>
                 {studentStatistics.map((item, index) => (
-                  <TableRow hover tabIndex={-1} key={item.namHoc}>
+                  <TableRow hover tabIndex={-1} key={item.namHocBD}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>
-                      {item.namHoc} - {item.namHoc + 1}
+                      {item.namHocBD} - {item.namHocBD + 1}
                     </TableCell>
-                    <TableCell>{item.hocKy}</TableCell>
+                    <TableCell>{item.hocky}</TableCell>
                     <StyledTableCell>
                       {renderGPA10WithProperColor(item.dtb as number)}
                     </StyledTableCell>
-                    <TableCell>{item.drl}</TableCell>
-                    <TableCell>{item.soTinChi}</TableCell>
+                    <TableCell>{item.drl || 'Chưa có'}</TableCell>
+                    <TableCell>{item.soTC}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

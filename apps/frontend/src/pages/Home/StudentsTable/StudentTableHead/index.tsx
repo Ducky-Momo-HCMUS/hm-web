@@ -7,7 +7,6 @@ interface Column {
     | 'tenSV'
     | 'tenCN'
     | 'tinhTrang'
-    | 'gpa4'
     | 'gpa10'
     | 'contact'
     | 'actions';
@@ -33,11 +32,6 @@ const columns: readonly Column[] = [
     id: 'tinhTrang',
     label: 'Tình trạng',
     minWidth: 120,
-  },
-  {
-    id: 'gpa4',
-    label: 'GPA hệ 4',
-    minWidth: 60,
   },
   {
     id: 'gpa10',

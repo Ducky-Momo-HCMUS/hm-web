@@ -5,6 +5,7 @@ import {
   MutationAccountAddArgs,
   MutationAccountDeleteArgs,
   MutationAccountEditArgs,
+  QueryAccountListArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -17,9 +18,9 @@ class AccountAPI extends BaseDataSource {
     this.baseURL = baseUrl;
   }
 
-  public async getAccountList() {
+  public async getAccountList({ page, size }: QueryAccountListArgs) {
     try {
-      const res = await this.get('v1/admin');
+      const res = await this.get(`v1/admin?page=${page}&size=${size}`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch account list');

@@ -1145,9 +1145,9 @@ export type StudentOverviewResult = {
   coSoNganh: Scalars['Int'];
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
-  tenCN: Scalars['String'];
+  ngoaiNgu: Scalars['Boolean'];
+  tenCN?: Maybe<Scalars['String']>;
   tongTC: Scalars['Int'];
-  tongTCDaHoc: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
   tuChonTuDo: Scalars['Int'];
@@ -1198,11 +1198,11 @@ export type StudentPostponeListItem = {
 
 export type StudentStatisticsItem = {
   __typename?: 'StudentStatisticsItem';
-  drl: Scalars['Int'];
-  dtb: Scalars['Float'];
-  hocKy: Scalars['Int'];
-  namHoc: Scalars['Int'];
-  soTinChi: Scalars['Int'];
+  drl?: Maybe<Scalars['Int']>;
+  dtb?: Maybe<Scalars['Float']>;
+  hocky: Scalars['Int'];
+  namHocBD: Scalars['Int'];
+  soTC: Scalars['Int'];
 };
 
 export type StudentSubject = {
@@ -2652,7 +2652,7 @@ export type StudentOverviewResultQuery = {
   studentOverviewResult?:
     | {
         __typename?: 'StudentOverviewResult';
-        tenCN: string;
+        tenCN?: string | null | undefined;
         daiCuong: number;
         coSoNganh: number;
         batBuocChuyenNganh: number;
@@ -2660,7 +2660,7 @@ export type StudentOverviewResultQuery = {
         tuChonChuyenNganh: number;
         totNghiep: number;
         tongTC: number;
-        tongTCDaHoc: number;
+        ngoaiNgu: boolean;
         dtb: number;
       }
     | null
@@ -2703,11 +2703,11 @@ export type StudentStatisticsQuery = {
   __typename?: 'Query';
   studentStatistics: Array<{
     __typename?: 'StudentStatisticsItem';
-    namHoc: number;
-    hocKy: number;
-    dtb: number;
-    drl: number;
-    soTinChi: number;
+    namHocBD: number;
+    hocky: number;
+    dtb?: number | null | undefined;
+    drl?: number | null | undefined;
+    soTC: number;
   }>;
 };
 
@@ -6888,7 +6888,7 @@ export const StudentOverviewResultDocument = gql`
       tuChonChuyenNganh
       totNghiep
       tongTC
-      tongTCDaHoc
+      ngoaiNgu
       dtb
     }
   }
@@ -7019,11 +7019,11 @@ export type StudentParentInfoListQueryResult = Apollo.QueryResult<
 export const StudentStatisticsDocument = gql`
   query StudentStatistics($studentId: String!) {
     studentStatistics(studentId: $studentId) {
-      namHoc
-      hocKy
+      namHocBD
+      hocky
       dtb
       drl
-      soTinChi
+      soTC
     }
   }
 `;
