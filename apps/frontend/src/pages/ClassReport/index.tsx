@@ -508,16 +508,13 @@ function ClassReport() {
             </AsyncDataRenderer>
           </Box>
           <Box sx={{ marginTop: '1rem' }}>
-            <AppBar position="static">
+            <AppBar position="static" color="transparent">
               <Tabs
                 value={selectedTab}
                 onChange={handleChangeTab}
                 textColor="inherit"
+                indicatorColor="primary"
                 variant="fullWidth"
-                aria-label="full width tabs example"
-                TabIndicatorProps={{
-                  style: { display: 'none' },
-                }}
               >
                 <Tab label="Tổng kết lớp" />
                 <Tab label="Hoãn/vắng thi" />

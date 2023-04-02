@@ -84,12 +84,13 @@ function AcademicResult({ studentOverviewResult }: AcademicResultProps) {
 
   return (
     <Box mt={3}>
-      <AppBar position="static">
+      <AppBar position="static" color="transparent">
         <Tabs
           value={selectedTab}
           onChange={handleChangeTab}
-          indicatorColor="secondary"
+          variant="scrollable"
           textColor="inherit"
+          indicatorColor="primary"
         >
           <Tab
             label={`Giáo dục đại cương (${studentOverviewResult.daiCuong}/56)`}

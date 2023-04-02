@@ -125,12 +125,12 @@ function CourseRegisterList() {
         </AsyncDataRenderer>
       </StyledStickyBox>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-        <AppBar position="static">
+        <AppBar position="static" color="transparent">
           <Tabs
             value={tabValue}
             onChange={handleTabChange}
-            indicatorColor="secondary"
-            variant="fullWidth"
+            textColor="inherit"
+            indicatorColor="primary"
           >
             <StyledTab label="Danh sách ĐKHP" {...a11yProps(0)} />
             <StyledTab label="Danh sách không ĐKHP" {...a11yProps(1)} />

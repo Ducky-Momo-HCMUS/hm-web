@@ -24,7 +24,6 @@ export async function startServer() {
     debug: true,
     formatError: (error: GraphQLError) => {
       const { extensions } = error;
-      console.log('extensions', extensions);
 
       const code = extensions?.code;
       const stacktrace = extensions?.exception;

@@ -134,9 +134,9 @@ function PostponeAbsentList() {
             <Tabs
               value={tabValue}
               onChange={handleTabChange}
-              indicatorColor="secondary"
+              textColor="inherit"
+              indicatorColor="primary"
               variant="fullWidth"
-              aria-label="full width tabs example"
             >
               <StyledTab label="Danh sách vắng thi" {...a11yProps(0)} />
               <StyledTab label="Danh sách hoãn thi" {...a11yProps(1)} />

@@ -25,13 +25,13 @@ function MajorCourseList() {
     <Box>
       <StyledStickyBox>
         <StyledTitle>Môn học và chuyên ngành</StyledTitle>
-        <AppBar position="static">
+        <AppBar position="static" color="transparent">
           <Tabs
             value={value}
             onChange={handleChange}
-            indicatorColor="secondary"
+            textColor="inherit"
+            indicatorColor="primary"
             variant="fullWidth"
-            aria-label="full width tabs example"
           >
             <StyledTab label="Danh sách Môn học" {...a11yProps(0)} />
             <StyledTab label="Danh sách Chuyên ngành" {...a11yProps(1)} />
