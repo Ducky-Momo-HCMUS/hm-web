@@ -30,6 +30,7 @@ export const OVERVIEW_CONTENT = [
   { title: 'Kiến thức tự chọn tự do', goal: '' },
   { title: 'Kiến thức tốt nghiệp', goal: '10' },
   { title: 'Tổng tín chỉ tích luỹ', goal: '138' },
+  { title: 'Chứng chỉ ngoại ngữ', goal: '' },
   { title: 'Điểm trung bình', goal: '' },
 ];
 
@@ -65,7 +66,7 @@ function AcademicOverview() {
       data?.tuChonTuDo || 0,
       data?.totNghiep || 0,
       data?.tongTC || 0,
-      data?.tongTCDaHoc || 0,
+      data?.ngoaiNgu ? 'Đã nộp' : 'Chưa nộp',
       data?.dtb || 'Chưa có',
     ];
 
@@ -127,9 +128,13 @@ function AcademicOverview() {
                       : '',
                     dtb: studentOverviewResult.dtb,
                     loaiMonHoc: subjectList,
-                    tongTC:
+                    tongTCDaDat:
                       studentOverviewResultData?.studentOverviewResult
                         ?.tongTC || 0,
+                    ngoaiNgu: studentOverviewResultData?.studentOverviewResult
+                      ?.ngoaiNgu
+                      ? 'Đã nộp'
+                      : 'Chưa nộp',
                   }}
                 />
               }

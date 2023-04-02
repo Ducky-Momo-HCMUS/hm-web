@@ -17,18 +17,18 @@ Font.register({
   family: 'Roboto',
   fonts: [
     {
-      src: 'http://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf',
+      src: 'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf',
     },
     {
-      src: 'http://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9vAx05IsDqlA.ttf',
+      src: 'https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9vAx05IsDqlA.ttf',
       fontWeight: 500,
     },
     {
-      src: 'http://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf',
+      src: 'https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlvAx05IsDqlA.ttf',
       fontWeight: 700,
     },
     {
-      src: 'http://fonts.gstatic.com/s/roboto/v30/KFOkCnqEu92Fr1Mu52xPKTM1K9nz.ttf',
+      src: 'https://fonts.gstatic.com/s/roboto/v30/KFOkCnqEu92Fr1Mu52xPKTM1K9nz.ttf',
       fontStyle: 'italic',
     },
   ],
@@ -86,7 +86,8 @@ interface ScoreTemplateProps {
     dob: string;
     dtb: number | undefined;
     loaiMonHoc: any;
-    tongTC: number;
+    tongTCDaDat: number;
+    ngoaiNgu: string;
   };
 }
 
@@ -188,7 +189,10 @@ function FullScorePDFTemplate({ data }: ScoreTemplateProps) {
           <View wrap={false}>
             <View style={styles.creditTotal}>
               <Text style={{ width: '40%' }}>
-                Tổng số tín chỉ đạt: {data.tongTC}
+                Tổng số tín chỉ đạt: {data.tongTCDaDat}
+              </Text>
+              <Text style={{ width: '40%' }}>
+                Chứng chỉ ngoại ngữ: {data.ngoaiNgu}
               </Text>
               <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
             </View>
