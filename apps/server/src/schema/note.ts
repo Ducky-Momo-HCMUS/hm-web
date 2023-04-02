@@ -7,6 +7,7 @@ const noteTypeDefs = gql`
     noteDetail(noteId: Int!): NoteDetail!
     noteList: [NoteListItem!]!
     noteSearch(
+      type: String!
       tieuDe: String
       maSV: String
       tenSV: String

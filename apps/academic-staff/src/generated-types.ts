@@ -871,6 +871,7 @@ export type QueryNoteSearchArgs = {
   start?: InputMaybe<Scalars['Date']>;
   tenSV?: InputMaybe<Scalars['String']>;
   tieuDe?: InputMaybe<Scalars['String']>;
+  type: Scalars['String'];
 };
 
 export type QueryStudentAbsentListArgs = {
@@ -2406,6 +2407,7 @@ export type NoteDetailQuery = {
 };
 
 export type NoteSearchQueryVariables = Exact<{
+  type: Scalars['String'];
   tieuDe?: InputMaybe<Scalars['String']>;
   maSV?: InputMaybe<Scalars['String']>;
   tenSV?: InputMaybe<Scalars['String']>;
@@ -6301,6 +6303,7 @@ export type NoteDetailQueryResult = Apollo.QueryResult<
 >;
 export const NoteSearchDocument = gql`
   query NoteSearch(
+    $type: String!
     $tieuDe: String
     $maSV: String
     $tenSV: String
@@ -6312,6 +6315,7 @@ export const NoteSearchDocument = gql`
     $size: Int!
   ) {
     noteSearch(
+      type: $type
       tieuDe: $tieuDe
       maSV: $maSV
       tenSV: $tenSV
@@ -6351,6 +6355,7 @@ export const NoteSearchDocument = gql`
  * @example
  * const { data, loading, error } = useNoteSearchQuery({
  *   variables: {
+ *      type: // value for 'type'
  *      tieuDe: // value for 'tieuDe'
  *      maSV: // value for 'maSV'
  *      tenSV: // value for 'tenSV'

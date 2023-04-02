@@ -2,6 +2,7 @@ import {
   Box,
   Card,
   Dialog,
+  FormControl,
   Grid,
   IconButton,
   styled,
@@ -40,4 +41,17 @@ export const StyledDialog = styled(Dialog)`
 export const StyledIconButton = styled(IconButton)`
   font-size: 2.25rem;
   padding: 6px;
+`;
+
+export const StyledFormControl = styled(FormControl)`
+  min-width: 10rem;
+  &:first-child {
+    margin-right: 1rem;
+  }
+  & > div {
+    background-color: white;
+  }
+  & > div > div {
+    padding: 0.5rem 1rem;
+  }
 `;

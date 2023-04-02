@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 export const SEARCH_NOTE = gql`
   query NoteSearch(
+    $type: String!
     $tieuDe: String
     $maSV: String
     $tenSV: String
@@ -13,6 +14,7 @@ export const SEARCH_NOTE = gql`
     $size: Int!
   ) {
     noteSearch(
+      type: $type
       tieuDe: $tieuDe
       maSV: $maSV
       tenSV: $tenSV
