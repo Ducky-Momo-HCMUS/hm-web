@@ -1151,7 +1151,7 @@ export type StudentOverviewResult = {
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
   ngoaiNgu: Scalars['Boolean'];
-  tenCN: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tongTC: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
@@ -3299,7 +3299,7 @@ export type StudentOverviewResultResolvers<
   daiCuong?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   dtb?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   ngoaiNgu?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  tenCN?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenCN?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tongTC?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totNghiep?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tuChonChuyenNganh?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

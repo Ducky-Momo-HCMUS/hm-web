@@ -306,7 +306,7 @@ const studentTypeDefs = gql`
   }
 
   type StudentOverviewResult {
-    tenCN: String!
+    tenCN: String
     daiCuong: Int!
     coSoNganh: Int!
     batBuocChuyenNganh: Int!

@@ -1146,7 +1146,7 @@ export type StudentOverviewResult = {
   daiCuong: Scalars['Int'];
   dtb: Scalars['Float'];
   ngoaiNgu: Scalars['Boolean'];
-  tenCN: Scalars['String'];
+  tenCN?: Maybe<Scalars['String']>;
   tongTC: Scalars['Int'];
   totNghiep: Scalars['Int'];
   tuChonChuyenNganh: Scalars['Int'];
@@ -2652,7 +2652,7 @@ export type StudentOverviewResultQuery = {
   studentOverviewResult?:
     | {
         __typename?: 'StudentOverviewResult';
-        tenCN: string;
+        tenCN?: string | null | undefined;
         daiCuong: number;
         coSoNganh: number;
         batBuocChuyenNganh: number;
