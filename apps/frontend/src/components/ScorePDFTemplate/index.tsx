@@ -104,7 +104,7 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
       tongTC += item.soTinChi;
     });
   }
-  console.log(data);
+
   return (
     <Document>
       <Page size="A4" style={styles.all}>
