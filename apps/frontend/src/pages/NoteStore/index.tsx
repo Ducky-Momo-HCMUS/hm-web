@@ -64,6 +64,7 @@ import {
   StyledGridContainer,
   StyledIconButton,
   StyledTextField,
+  StyledFormControl,
 } from './styles';
 
 interface State {
@@ -78,6 +79,7 @@ interface State {
 }
 
 interface FilterState {
+  type: string;
   title: string;
   student: string;
   tag: string;
@@ -96,6 +98,12 @@ const MenuProps = {
   },
 };
 
+const TYPES = [
+  { label: 'Tất cả', value: 'all' },
+  { label: 'Ghi chú chung', value: 'general' },
+  { label: 'Ghi chú sinh viên', value: 'student' },
+];
+
 function NoteStore() {
   const [values, setValues] = useState<State>({
     selected: -1,
@@ -109,6 +117,7 @@ function NoteStore() {
   });
 
   const [filterValues, setFilterValues] = useState<FilterState>({
+    type: TYPES[0].value,
     title: '',
     student: '',
     tag: '',
@@ -144,6 +153,16 @@ function NoteStore() {
     },
     []
   );
+
+  const handleSelectType = useCallback((event: SelectChangeEvent<string>) => {
+    const {
+      target: { value },
+    } = event;
+    setFilterValues((v) => ({
+      ...v,
+      type: value,
+    }));
+  }, []);
 
   const handleSelectTags = useCallback((event: SelectChangeEvent<string[]>) => {
     const {
@@ -220,7 +239,11 @@ function NoteStore() {
       refetchQueries: [
         {
           query: SEARCH_NOTE,
-          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+          variables: {
+            page: 1,
+            size: NOTE_STORE_LIST_PAGE_SIZE,
+            type: TYPES[0].value,
+          },
         },
         'NoteSearch',
       ],
@@ -270,7 +293,11 @@ function NoteStore() {
         refetchQueries: [
           {
             query: SEARCH_NOTE,
-            variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+            variables: {
+              page: 1,
+              size: NOTE_STORE_LIST_PAGE_SIZE,
+              type: TYPES[0].value,
+            },
           },
           'NoteSearch',
         ],
@@ -310,7 +337,11 @@ function NoteStore() {
       refetchQueries: [
         {
           query: SEARCH_NOTE,
-          variables: { page: 1, size: NOTE_STORE_LIST_PAGE_SIZE },
+          variables: {
+            page: 1,
+            size: NOTE_STORE_LIST_PAGE_SIZE,
+            type: TYPES[0].value,
+          },
         },
         'NoteSearch',
       ],
@@ -346,7 +377,8 @@ function NoteStore() {
       filterValues.start && { start: filterValues.start },
       filterValues.end && { end: filterValues.end },
       filterValues.tag && { maTag: filterValues.tag },
-      filterValues.class && { maSH: filterValues.class }
+      filterValues.class && { maSH: filterValues.class },
+      filterValues.type && { type: filterValues.type }
     );
 
     if (filterValues.student) {
@@ -371,6 +403,7 @@ function NoteStore() {
     filterValues.student,
     filterValues.tag,
     filterValues.title,
+    filterValues.type,
     page,
   ]);
 
@@ -400,6 +433,7 @@ function NoteStore() {
 
   const handleResetFilter = useCallback(() => {
     setFilterValues({
+      type: TYPES[0].value,
       title: '',
       student: '',
       tag: '',
@@ -411,6 +445,7 @@ function NoteStore() {
       variables: {
         page: 1,
         size: NOTE_STORE_LIST_PAGE_SIZE,
+        type: TYPES[0].value,
       },
     });
   }, [searchNote]);
@@ -486,6 +521,24 @@ function NoteStore() {
           </StyledStickyBox>
           {openFilterBox && (
             <StyledCard>
+              <Box mb={2}>
+                <StyledFormControl>
+                  <InputLabel id="type-select-label">Loại</InputLabel>
+                  <Select
+                    labelId="type-select-label"
+                    id="type-select"
+                    value={filterValues.type}
+                    label="Loại"
+                    onChange={handleSelectType}
+                  >
+                    {TYPES.map((item) => (
+                      <MenuItem key={item.value} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </StyledFormControl>
+              </Box>
               <StyledFilterBox>
                 <StyledTextField
                   sx={{ width: '20%' }}

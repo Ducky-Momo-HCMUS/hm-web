@@ -33,6 +33,7 @@ class NoteAPI extends BaseDataSource {
   }
 
   public async searchNote({
+    type,
     tieuDe,
     maSV,
     tenSV,
@@ -46,6 +47,7 @@ class NoteAPI extends BaseDataSource {
     try {
       const args = Object.assign(
         {},
+        type && { type },
         tieuDe && { tieuDe },
         maSV && { maSV },
         tenSV && { tenSV },

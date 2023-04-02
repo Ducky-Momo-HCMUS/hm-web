@@ -876,6 +876,7 @@ export type QueryNoteSearchArgs = {
   start?: InputMaybe<Scalars['Date']>;
   tenSV?: InputMaybe<Scalars['String']>;
   tieuDe?: InputMaybe<Scalars['String']>;
+  type: Scalars['String'];
 };
 
 export type QueryStudentAbsentListArgs = {
@@ -2917,7 +2918,7 @@ export type QueryResolvers<
     ResolversTypes['NoteSearch'],
     ParentType,
     ContextType,
-    RequireFields<QueryNoteSearchArgs, 'page' | 'size'>
+    RequireFields<QueryNoteSearchArgs, 'page' | 'size' | 'type'>
   >;
   studentAbsentList?: Resolver<
     ResolversTypes['StudentAbsentList'],
