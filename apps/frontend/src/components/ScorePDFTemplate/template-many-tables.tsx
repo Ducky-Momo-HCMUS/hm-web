@@ -194,7 +194,7 @@ function FullScorePDFTemplate({ data }: ScoreTemplateProps) {
               <Text style={{ width: '40%' }}>
                 Chứng chỉ ngoại ngữ: {data.ngoaiNgu}
               </Text>
-              <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
+              <Text style={{ width: '20%' }}>ĐTB: {data.dtb || 'Chưa có'}</Text>
             </View>
             <View
               style={{
