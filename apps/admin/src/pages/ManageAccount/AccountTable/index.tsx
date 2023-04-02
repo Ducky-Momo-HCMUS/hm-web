@@ -46,6 +46,7 @@ function AccountTable() {
         page: page + 1,
         size: ACCOUNT_LIST_PAGE_SIZE,
       },
+      fetchPolicy: 'no-cache',
     });
   }, [getAccountList, page]);
 

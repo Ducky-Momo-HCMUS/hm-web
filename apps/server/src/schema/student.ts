@@ -82,11 +82,11 @@ const studentTypeDefs = gql`
   }
 
   type StudentStatisticsItem {
-    namHoc: Int!
-    hocKy: Int!
-    dtb: Float!
-    drl: Int!
-    soTinChi: Int!
+    namHocBD: Int!
+    hocky: Int!
+    dtb: Float
+    drl: Int
+    soTC: Int!
   }
 
   type StudentSubjectsByTerm {
@@ -306,7 +306,7 @@ const studentTypeDefs = gql`
   }
 
   type StudentOverviewResult {
-    tenCN: String!
+    tenCN: String
     daiCuong: Int!
     coSoNganh: Int!
     batBuocChuyenNganh: Int!
@@ -314,7 +314,7 @@ const studentTypeDefs = gql`
     tuChonChuyenNganh: Int!
     totNghiep: Int!
     tongTC: Int!
-    tongTCDaHoc: Int!
+    ngoaiNgu: Boolean!
     dtb: Float!
   }
 

@@ -48,14 +48,13 @@ const TYPES = ['Tất cả', 'Cần chú ý', 'Cá biệt'];
 const SORT_BY_OPTIONS = [
   { label: 'MSSV', value: 'maSV' },
   { label: 'Họ tên', value: 'tenSV' },
-  { label: 'GPA hệ 4', value: 'gpa4' },
   { label: 'GPA hệ 10', value: 'gpa10' },
 ];
 interface State {
   year: string;
   class: string;
   type: string;
-  sortBy: 'maSV' | 'tenSV' | 'gpa4' | 'gpa10';
+  sortBy: 'maSV' | 'tenSV' | 'gpa10';
   sortOrder: Order;
   selected: string[];
 }

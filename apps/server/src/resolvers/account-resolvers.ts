@@ -4,8 +4,8 @@ import { ResolverContext } from './types';
 
 export const accountResolver: Resolvers<ResolverContext> = {
   Query: {
-    accountList: async (_, __, { dataSources }) => {
-      const res = await dataSources.accountAPI.getAccountList();
+    accountList: async (_, args, { dataSources }) => {
+      const res = await dataSources.accountAPI.getAccountList(args);
       return res.data;
     },
   },

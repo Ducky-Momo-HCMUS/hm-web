@@ -5,7 +5,6 @@ import { Button, Checkbox, TableCell, TableRow } from '@mui/material';
 import { HomeroomStudentListData } from '../../../../types';
 import {
   renderGPA10WithProperColor,
-  renderGPA4WithProperColor,
   renderSocialContact,
   renderStatusWithProperColor,
 } from '../../../../utils/student';
@@ -26,7 +25,7 @@ function StudentTableRow({
   index,
   handleCheck,
 }: StudentTableRowProps) {
-  const { maSV, tenSV, tenCN, tinhTrang, gpa4, gpa10, contact } = data;
+  const { maSV, tenSV, tenCN, tinhTrang, gpa10, contact } = data;
 
   const handleChange = useCallback(() => {
     handleCheck(data.maSV);
@@ -51,9 +50,6 @@ function StudentTableRow({
       <TableCell>{tenCN || 'Chưa có'}</TableCell>
       <StyledTableCell>
         {renderStatusWithProperColor(tinhTrang)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA4WithProperColor(gpa4 as number)}
       </StyledTableCell>
       <StyledTableCell>
         {renderGPA10WithProperColor(gpa10 as number)}
