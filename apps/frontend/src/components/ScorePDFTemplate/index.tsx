@@ -101,7 +101,6 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
   if (data.monHoc) {
     data.monHoc.forEach((item) => {
       if (item.dtb >= 5) tongTC += item.soTinChi;
-      tongTC += item.soTinChi;
     });
   }
 
