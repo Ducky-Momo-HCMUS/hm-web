@@ -1,20 +1,14 @@
 import React, { SyntheticEvent, useState } from 'react';
-import { Box, Tabs, AppBar, Paper } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Tabs, AppBar, Paper, Tab } from '@mui/material';
 
-import {
-  a11yProps,
-  StyledTab,
-  TabPanel,
-} from '../../../components/TabsContainer';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
+import TabPanel from '../../../components/TabPanel';
 
 import CourseList from './CourseList';
 import MajorList from './MajorList';
 import MajorResultList from './MajorResult';
 
 function MajorCourseList() {
-  const theme = useTheme();
   const [value, setValue] = useState(0);
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -33,20 +27,20 @@ function MajorCourseList() {
             indicatorColor="primary"
             variant="fullWidth"
           >
-            <StyledTab label="Danh sách Môn học" {...a11yProps(0)} />
-            <StyledTab label="Danh sách Chuyên ngành" {...a11yProps(1)} />
-            <StyledTab label="Kết quả chuyên ngành" {...a11yProps(2)} />
+            <Tab label="Danh sách Môn học" />
+            <Tab label="Danh sách Chuyên ngành" />
+            <Tab label="Kết quả chuyên ngành" />
           </Tabs>
         </AppBar>
       </StyledStickyBox>
       <Paper>
-        <TabPanel value={value} index={0} dir={theme.direction}>
+        <TabPanel value={value} index={0}>
           <CourseList />
         </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
+        <TabPanel value={value} index={1}>
           <MajorList />
         </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
+        <TabPanel value={value} index={2}>
           <MajorResultList />
         </TabPanel>
       </Paper>

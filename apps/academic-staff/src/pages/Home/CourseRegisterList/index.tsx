@@ -7,21 +7,17 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
+  Tab,
   Tabs,
-  useTheme,
 } from '@mui/material';
 
-import {
-  a11yProps,
-  StyledTab,
-  TabPanel,
-} from '../../../components/TabsContainer';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { groupTermsByYear } from '../ImportFile/utils';
 import { useTermListQuery } from '../../../generated-types';
 import { MenuProps } from '../../../constants';
+import TabPanel from '../../../components/TabPanel';
 
 import EnrolledList from './EnrolledList';
 import NotEnrolledList from './NotEnrolledList';
@@ -32,7 +28,6 @@ interface State {
 }
 
 function CourseRegisterList() {
-  const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event: SyntheticEvent, newValue: number) => {
@@ -132,18 +127,18 @@ function CourseRegisterList() {
             textColor="inherit"
             indicatorColor="primary"
           >
-            <StyledTab label="Danh sách ĐKHP" {...a11yProps(0)} />
-            <StyledTab label="Danh sách không ĐKHP" {...a11yProps(1)} />
+            <Tab label="Danh sách ĐKHP" />
+            <Tab label="Danh sách không ĐKHP" />
           </Tabs>
         </AppBar>
-        <TabPanel value={tabValue} index={0} dir={theme.direction}>
+        <TabPanel value={tabValue} index={0}>
           <EnrolledList
             termId={
               values.semester ? Number(values.semester) : Number(initialTerm)
             }
           />
         </TabPanel>
-        <TabPanel value={tabValue} index={1} dir={theme.direction}>
+        <TabPanel value={tabValue} index={1}>
           <NotEnrolledList
             termId={
               values.semester ? Number(values.semester) : Number(initialTerm)
