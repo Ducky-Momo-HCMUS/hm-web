@@ -7,21 +7,17 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
+  Tab,
   Tabs,
-  useTheme,
 } from '@mui/material';
 
-import {
-  a11yProps,
-  StyledTab,
-  TabPanel,
-} from '../../../components/TabsContainer';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import { StyledStickyBox, StyledTitle } from '../../../components/styles';
 import { StyledFormControl } from '../styles';
 import { groupTermsByYear } from '../ImportFile/utils';
 import { useTermListQuery } from '../../../generated-types';
 import { MenuProps } from '../../../constants';
+import TabPanel from '../../../components/TabPanel';
 
 import AbsentList from './AbsentList';
 import PostponeList from './PostponeList';
@@ -32,7 +28,6 @@ interface State {
 }
 
 function PostponeAbsentList() {
-  const theme = useTheme();
   const [tabValue, setTabValue] = React.useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -134,18 +129,18 @@ function PostponeAbsentList() {
             <Tabs
               value={tabValue}
               onChange={handleTabChange}
-              indicatorColor="secondary"
+              textColor="inherit"
+              indicatorColor="primary"
               variant="fullWidth"
-              aria-label="full width tabs example"
             >
-              <StyledTab label="Danh sách vắng thi" {...a11yProps(0)} />
-              <StyledTab label="Danh sách hoãn thi" {...a11yProps(1)} />
+              <Tab label="Danh sách vắng thi" />
+              <Tab label="Danh sách hoãn thi" />
             </Tabs>
           </AppBar>
-          <TabPanel value={tabValue} index={0} dir={theme.direction}>
+          <TabPanel value={tabValue} index={0}>
             <AbsentList termId={termId} />
           </TabPanel>
-          <TabPanel value={tabValue} index={1} dir={theme.direction}>
+          <TabPanel value={tabValue} index={1}>
             <PostponeList termId={termId} />
           </TabPanel>
         </Paper>

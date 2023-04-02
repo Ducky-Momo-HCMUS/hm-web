@@ -97,12 +97,10 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
   const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
   const yyyy = today.getFullYear();
   let tongTC = 0;
-  let tongTCDaDat = 0;
 
   if (data.monHoc) {
     data.monHoc.forEach((item) => {
-      if (item.dtb >= 5) tongTCDaDat += item.soTinChi;
-      tongTC += item.soTinChi;
+      if (item.dtb >= 5) tongTC += item.soTinChi;
     });
   }
 
@@ -153,10 +151,9 @@ function ScorePDFTemplate({ data }: ScoreTemplateProps) {
         />
         <View style={styles.creditTotal}>
           <Text style={{ width: '40%' }}>Tổng số tín chỉ: {tongTC}</Text>
-          <Text style={{ width: '40%' }}>
-            Tổng số tín chỉ đạt: {tongTCDaDat}
+          <Text style={{ width: '20%' }}>
+            ĐTB: {data.dtb ? data.dtb : 'Chưa có'}
           </Text>
-          <Text style={{ width: '20%' }}>ĐTB: {data.dtb}</Text>
         </View>
         <View
           style={{
