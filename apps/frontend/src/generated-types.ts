@@ -753,6 +753,7 @@ export type Query = {
   studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentContactList: StudentContactList;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
@@ -923,6 +924,12 @@ export type QueryStudentAveragePointByTermArgs = {
   term: Scalars['Int'];
 };
 
+export type QueryStudentContactListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentDetailArgs = {
   studentId: Scalars['String'];
 };
@@ -1064,6 +1071,12 @@ export type StudentContact = {
   maLHSV: Scalars['Int'];
   mxh: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type StudentContactList = {
+  __typename?: 'StudentContactList';
+  data: Array<StudentContact>;
+  total: Scalars['Int'];
 };
 
 export type StudentContactResponse = {
@@ -2612,6 +2625,26 @@ export type StudentAveragePointByTermQuery = {
     __typename?: 'StudentAveragePoint';
     dtb: number;
     xepLoai?: string | null | undefined;
+  };
+};
+
+export type StudentContactListQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentContactListQuery = {
+  __typename?: 'Query';
+  studentContactList: {
+    __typename?: 'StudentContactList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentContact';
+      maLHSV: number;
+      mxh: string;
+      url: string;
+    }>;
   };
 };
 
@@ -6804,6 +6837,71 @@ export type StudentAveragePointByTermLazyQueryHookResult = ReturnType<
 export type StudentAveragePointByTermQueryResult = Apollo.QueryResult<
   StudentAveragePointByTermQuery,
   StudentAveragePointByTermQueryVariables
+>;
+export const StudentContactListDocument = gql`
+  query StudentContactList($studentId: String!, $page: Int!, $size: Int!) {
+    studentContactList(studentId: $studentId, page: $page, size: $size) {
+      total
+      data {
+        maLHSV
+        mxh
+        url
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentContactListQuery__
+ *
+ * To run a query within a React component, call `useStudentContactListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentContactListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentContactListQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentContactListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >(StudentContactListDocument, options);
+}
+export function useStudentContactListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >(StudentContactListDocument, options);
+}
+export type StudentContactListQueryHookResult = ReturnType<
+  typeof useStudentContactListQuery
+>;
+export type StudentContactListLazyQueryHookResult = ReturnType<
+  typeof useStudentContactListLazyQuery
+>;
+export type StudentContactListQueryResult = Apollo.QueryResult<
+  StudentContactListQuery,
+  StudentContactListQueryVariables
 >;
 export const StudentDetailSubjectsResultDocument = gql`
   query StudentDetailSubjectsResult($studentId: String!, $subject: String!) {

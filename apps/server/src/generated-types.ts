@@ -758,6 +758,7 @@ export type Query = {
   studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentContactList: StudentContactList;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
@@ -928,6 +929,12 @@ export type QueryStudentAveragePointByTermArgs = {
   term: Scalars['Int'];
 };
 
+export type QueryStudentContactListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  studentId: Scalars['String'];
+};
+
 export type QueryStudentDetailArgs = {
   studentId: Scalars['String'];
 };
@@ -1069,6 +1076,12 @@ export type StudentContact = {
   maLHSV: Scalars['Int'];
   mxh: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type StudentContactList = {
+  __typename?: 'StudentContactList';
+  data: Array<StudentContact>;
+  total: Scalars['Int'];
 };
 
 export type StudentContactResponse = {
@@ -1604,6 +1617,7 @@ export type ResolversTypes = {
   StudentAllSubjectsResultDetail: ResolverTypeWrapper<StudentAllSubjectsResultDetail>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
+  StudentContactList: ResolverTypeWrapper<StudentContactList>;
   StudentContactResponse: ResolverTypeWrapper<StudentContactResponse>;
   StudentDeleteContactResponse: ResolverTypeWrapper<StudentDeleteContactResponse>;
   StudentDeleteParentInfoResponse: ResolverTypeWrapper<StudentDeleteParentInfoResponse>;
@@ -1753,6 +1767,7 @@ export type ResolversParentTypes = {
   StudentAllSubjectsResultDetail: StudentAllSubjectsResultDetail;
   StudentAveragePoint: StudentAveragePoint;
   StudentContact: StudentContact;
+  StudentContactList: StudentContactList;
   StudentContactResponse: StudentContactResponse;
   StudentDeleteContactResponse: StudentDeleteContactResponse;
   StudentDeleteParentInfoResponse: StudentDeleteParentInfoResponse;
@@ -3010,6 +3025,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryStudentAveragePointByTermArgs, 'studentId' | 'term'>
   >;
+  studentContactList?: Resolver<
+    ResolversTypes['StudentContactList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentContactListArgs, 'page' | 'size' | 'studentId'>
+  >;
   studentDetail?: Resolver<
     ResolversTypes['StudentDetail'],
     ParentType,
@@ -3202,6 +3223,19 @@ export type StudentContactResolvers<
   maLHSV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentContactListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentContactList'] = ResolversParentTypes['StudentContactList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentContact']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3739,6 +3773,7 @@ export type Resolvers<ContextType = any> = {
   StudentAllSubjectsResultDetail?: StudentAllSubjectsResultDetailResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;
+  StudentContactList?: StudentContactListResolvers<ContextType>;
   StudentContactResponse?: StudentContactResponseResolvers<ContextType>;
   StudentDeleteContactResponse?: StudentDeleteContactResponseResolvers<ContextType>;
   StudentDeleteParentInfoResponse?: StudentDeleteParentInfoResponseResolvers<ContextType>;

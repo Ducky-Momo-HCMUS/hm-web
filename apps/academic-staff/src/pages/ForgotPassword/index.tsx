@@ -71,8 +71,7 @@ function ResetPassword() {
             <Typography component="span" sx={{ fontWeight: 'bold' }}>
               email
             </Typography>{' '}
-            vào ô bên dưới để nhận email thay đổi mật khẩu. Nếu gặp vấn đề liên
-            quan đến đăng nhập vào hệ thống vui lòng liên hệ{' '}
+            vào ô bên dưới để nhận email thay đổi mật khẩu.
             <Typography component="span" sx={{ fontWeight: 'bold' }}>
               admin@fit.hcmus.edu.vn
             </Typography>
