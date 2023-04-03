@@ -300,7 +300,6 @@ function ImportFile() {
           .graphQLErrors[0] as unknown as FileHandlingError;
         toast.error(fileError.message);
         setFileError(fileError);
-        console.log('error', fileError);
         setOpenErrorDialog(true);
       },
     });

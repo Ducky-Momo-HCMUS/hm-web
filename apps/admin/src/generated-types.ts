@@ -1295,7 +1295,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSinhHoat: Array<Scalars['String']>;
+  lopSH: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1755,7 +1755,10 @@ export type TeacherEditMutationVariables = Exact<{
 
 export type TeacherEditMutation = {
   __typename?: 'Mutation';
-  teacherEdit: { __typename?: 'AllTeacherListItem'; maGV: number };
+  teacherEdit: {
+    __typename?: 'AllTeacherListItem';
+    lopSinhHoat: Array<{ __typename?: 'HomeroomInfo'; maSH: string }>;
+  };
 };
 
 export type AccountListQueryVariables = Exact<{
@@ -4234,7 +4237,9 @@ export type TeacherDeleteMutationOptions = Apollo.BaseMutationOptions<
 export const TeacherEditDocument = gql`
   mutation TeacherEdit($teacherId: Int!, $payload: TeacherEditInput!) {
     teacherEdit(teacherId: $teacherId, payload: $payload) {
-      maGV
+      lopSinhHoat {
+        maSH
+      }
     }
   }
 `;

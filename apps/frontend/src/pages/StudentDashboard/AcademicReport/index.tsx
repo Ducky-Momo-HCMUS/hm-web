@@ -159,7 +159,7 @@ function AcademicReport() {
       return 'Yếu';
     }
 
-    if (averagePoint.dtb >= 3 && averagePoint.dtb < 4) {
+    if (averagePoint.dtb < 4) {
       return 'Kém';
     }
 

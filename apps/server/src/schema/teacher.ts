@@ -31,7 +31,7 @@ const teacherTypeDefs = gql`
   }
 
   input TeacherEditInput {
-    lopSinhHoat: [String!]!
+    lopSH: [String!]!
   }
 
   type AllTeacherList {

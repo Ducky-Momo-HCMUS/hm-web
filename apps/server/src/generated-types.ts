@@ -1300,7 +1300,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSinhHoat: Array<Scalars['String']>;
+  lopSH: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {

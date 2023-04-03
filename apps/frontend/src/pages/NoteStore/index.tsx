@@ -552,18 +552,20 @@ function NoteStore() {
                   onChange={handleChangeFilterValue('title')}
                   value={filterValues.title}
                 />
-                <StyledTextField
-                  sx={{ width: '15%' }}
-                  id="student-keyword"
-                  variant="standard"
-                  label="Sinh viên"
-                  placeholder="Nhập họ tên/MSSV..."
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={handleChangeFilterValue('student')}
-                  value={filterValues.student}
-                />
+                {filterValues.type === TYPES[2].value && (
+                  <StyledTextField
+                    sx={{ width: '15%' }}
+                    id="student-keyword"
+                    variant="standard"
+                    label="Sinh viên"
+                    placeholder="Nhập họ tên/MSSV..."
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={handleChangeFilterValue('student')}
+                    value={filterValues.student}
+                  />
+                )}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Ngày bắt đầu"
