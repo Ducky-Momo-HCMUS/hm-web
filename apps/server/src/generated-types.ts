@@ -454,6 +454,15 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorEditInput = {
+  name: Scalars['String'];
+};
+
+export type MajorEditResponse = {
+  __typename?: 'MajorEditResponse';
+  maCN: Scalars['Int'];
+};
+
 export type MajorList = {
   __typename?: 'MajorList';
   data: Array<MajorListItem>;
@@ -492,6 +501,7 @@ export type Mutation = {
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
   homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
+  majorEdit: MajorEditResponse;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
   noteEdit: NoteEditResponse;
@@ -553,6 +563,11 @@ export type MutationHomeroomDeleteWatchlistArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationMajorEditArgs = {
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
 };
 
 export type MutationNoteAddArgs = {
@@ -1560,6 +1575,8 @@ export type ResolversTypes = {
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
+  MajorEditInput: MajorEditInput;
+  MajorEditResponse: ResolverTypeWrapper<MajorEditResponse>;
   MajorList: ResolverTypeWrapper<MajorList>;
   MajorListItem: ResolverTypeWrapper<MajorListItem>;
   MajorResultList: ResolverTypeWrapper<MajorResultList>;
@@ -1707,6 +1724,8 @@ export type ResolversParentTypes = {
   ImportHistory: ImportHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
+  MajorEditInput: MajorEditInput;
+  MajorEditResponse: MajorEditResponse;
   MajorList: MajorList;
   MajorListItem: MajorListItem;
   MajorResultList: MajorResultList;
@@ -2451,6 +2470,14 @@ export type LoginResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MajorEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorEditResponse'] = ResolversParentTypes['MajorEditResponse']
+> = {
+  maCN?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MajorListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['MajorList'] = ResolversParentTypes['MajorList']
@@ -2563,6 +2590,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationLoginArgs, 'email' | 'password'>
+  >;
+  majorEdit?: Resolver<
+    ResolversTypes['MajorEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationMajorEditArgs, 'majorId' | 'payload'>
   >;
   noteAdd?: Resolver<
     ResolversTypes['NoteAddResponse'],
@@ -3684,6 +3717,7 @@ export type Resolvers<ContextType = any> = {
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
+  MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;
   MajorListItem?: MajorListItemResolvers<ContextType>;
   MajorResultList?: MajorResultListResolvers<ContextType>;

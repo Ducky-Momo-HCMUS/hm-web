@@ -12,6 +12,15 @@ const courseTypeDefs = gql`
       courseId: String!
       payload: CourseEditInput!
     ): CourseEditResponse!
+    majorEdit(majorId: Int!, payload: MajorEditInput!): MajorEditResponse!
+  }
+
+  input MajorEditInput {
+    name: String!
+  }
+
+  type MajorEditResponse {
+    maCN: Int!
   }
 
   input CourseEditInput {

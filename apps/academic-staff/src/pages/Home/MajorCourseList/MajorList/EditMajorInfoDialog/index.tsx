@@ -9,34 +9,31 @@ import {
 import React, { useCallback, useState } from 'react';
 
 import { StyledTextField } from '../../../../../components/styles';
-import {
-  CourseEditInput,
-  CourseListItem,
-} from '../../../../../generated-types';
+import { CourseEditInput, MajorListItem } from '../../../../../generated-types';
 
 interface State {
-  id: String;
+  nickname: String;
   name: string;
 }
 
-interface EditCourseInfoProps {
+interface EditMajorInfoProps {
   open: boolean;
   onClose: any;
   onClickCancel: any;
   onClickConfirm: (payload: CourseEditInput) => void;
-  data: CourseListItem;
+  data: MajorListItem;
 }
 
-function EditCourseInfoDialog({
+function EditMajorInfoDialog({
   open,
   onClose,
   onClickCancel,
   onClickConfirm,
   data,
-}: EditCourseInfoProps) {
+}: EditMajorInfoProps) {
   const [values, setValues] = useState<State>({
-    id: data.maMH,
-    name: data.tenMH,
+    nickname: data.tenVietTat,
+    name: data.tenCN,
   });
 
   const handleChange = useCallback(
@@ -48,24 +45,24 @@ function EditCourseInfoDialog({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Chỉnh sửa môn học</DialogTitle>
+      <DialogTitle>Chỉnh sửa chuyên ngành</DialogTitle>
       <DialogContent>
         <Box component="form">
           <StyledTextField
-            label="Mã môn học"
-            value={values.id}
+            label="Tên viết tắt"
+            value={values.nickname}
             sx={{ margin: '0.5rem 0', width: '100%', minWidth: '20rem' }}
             variant="filled"
             required
             InputProps={{ disabled: true }}
           />
           <StyledTextField
-            label="Tên môn học"
+            label="Tên chuyên ngành"
             value={values.name}
             sx={{ margin: '0.5rem 0', width: '100%', minWidth: '20rem' }}
             variant="filled"
             onChange={handleChange('name')}
-            placeholder="Nhập tên môn học..."
+            placeholder="Nhập tên chuyên ngành..."
             required
             InputLabelProps={{
               shrink: true,
@@ -89,4 +86,4 @@ function EditCourseInfoDialog({
   );
 }
 
-export default EditCourseInfoDialog;
+export default EditMajorInfoDialog;

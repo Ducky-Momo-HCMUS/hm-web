@@ -449,6 +449,15 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorEditInput = {
+  name: Scalars['String'];
+};
+
+export type MajorEditResponse = {
+  __typename?: 'MajorEditResponse';
+  maCN: Scalars['Int'];
+};
+
 export type MajorList = {
   __typename?: 'MajorList';
   data: Array<MajorListItem>;
@@ -487,6 +496,7 @@ export type Mutation = {
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
   homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
+  majorEdit: MajorEditResponse;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
   noteEdit: NoteEditResponse;
@@ -548,6 +558,11 @@ export type MutationHomeroomDeleteWatchlistArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationMajorEditArgs = {
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
 };
 
 export type MutationNoteAddArgs = {
@@ -1386,6 +1401,16 @@ export type CourseEditMutationVariables = Exact<{
 export type CourseEditMutation = {
   __typename?: 'Mutation';
   courseEdit: { __typename?: 'CourseEditResponse'; maMH: string };
+};
+
+export type MajorEditMutationVariables = Exact<{
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
+}>;
+
+export type MajorEditMutation = {
+  __typename?: 'Mutation';
+  majorEdit: { __typename?: 'MajorEditResponse'; maCN: number };
 };
 
 export type UploadDocumentMutationVariables = Exact<{
@@ -2854,6 +2879,56 @@ export type CourseEditMutationResult =
 export type CourseEditMutationOptions = Apollo.BaseMutationOptions<
   CourseEditMutation,
   CourseEditMutationVariables
+>;
+export const MajorEditDocument = gql`
+  mutation MajorEdit($majorId: Int!, $payload: MajorEditInput!) {
+    majorEdit(majorId: $majorId, payload: $payload) {
+      maCN
+    }
+  }
+`;
+export type MajorEditMutationFn = Apollo.MutationFunction<
+  MajorEditMutation,
+  MajorEditMutationVariables
+>;
+
+/**
+ * __useMajorEditMutation__
+ *
+ * To run a mutation, you first call `useMajorEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMajorEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [majorEditMutation, { data, loading, error }] = useMajorEditMutation({
+ *   variables: {
+ *      majorId: // value for 'majorId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useMajorEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MajorEditMutation,
+    MajorEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<MajorEditMutation, MajorEditMutationVariables>(
+    MajorEditDocument,
+    options
+  );
+}
+export type MajorEditMutationHookResult = ReturnType<
+  typeof useMajorEditMutation
+>;
+export type MajorEditMutationResult = Apollo.MutationResult<MajorEditMutation>;
+export type MajorEditMutationOptions = Apollo.BaseMutationOptions<
+  MajorEditMutation,
+  MajorEditMutationVariables
 >;
 export const UploadDocumentDocument = gql`
   mutation UploadDocument(

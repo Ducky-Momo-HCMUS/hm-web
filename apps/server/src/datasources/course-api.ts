@@ -4,6 +4,7 @@ import { ApolloError } from 'apollo-server-express';
 import {
   MutationCourseEditArgs,
   QueryCourseListArgs,
+  MutationMajorEditArgs,
 } from '../generated-types';
 import { SERVICES_BASE_URL } from '../utils/config';
 import { logger } from '../utils/logger';
@@ -22,6 +23,16 @@ class CourseAPI extends BaseDataSource {
       return res;
     } catch (error) {
       logger.error('Error: cannot edit course');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
+  public async editMajor({ majorId, payload }: MutationMajorEditArgs) {
+    try {
+      const res = await this.patch(`v1/majors/${majorId}`, payload);
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot edit major');
       throw this.handleError(error as ApolloError);
     }
   }
