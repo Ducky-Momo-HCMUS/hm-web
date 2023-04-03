@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import React, { useCallback, useState } from 'react';
 import {
   Backdrop,
@@ -6,6 +7,8 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ErrorMessage from '../../components/ErrorMessage';
 import Header from '../../components/Header';
@@ -35,7 +38,16 @@ function ResetPassword() {
   );
 
   const [forgotPassword, { loading: forgotPasswordLoading }] =
-    useForgotPasswordMutation();
+    useForgotPasswordMutation({
+      onCompleted: () => {
+        toast.success(
+          'Gửi thông tin lấy lại mật khẩu thành công! Vui lòng kiểm tra email của bạn!'
+        );
+      },
+      onError: (error) => {
+        toast.error(error.graphQLErrors[0].message);
+      },
+    });
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,6 +70,7 @@ function ResetPassword() {
 
   return (
     <>
+      <ToastContainer />
       <StyledContainer>
         <Header />
         <StyledCard>
