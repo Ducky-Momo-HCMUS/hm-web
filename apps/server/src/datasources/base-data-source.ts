@@ -76,7 +76,7 @@ export class BaseDataSource extends RESTDataSource<RequestContext> {
   protected handleError(error: unknown) {
     // ApolloError has been replaced with GraphQLError in v4
     if (!(error instanceof ApolloError)) {
-      logger.error('Stacktrace', error);
+      logger.error(JSON.stringify(error));
       return new ApolloError('Internal Server Error');
     }
     // Possible exeptions from RESTDataSource:
