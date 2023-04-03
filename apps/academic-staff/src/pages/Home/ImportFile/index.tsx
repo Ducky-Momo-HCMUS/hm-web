@@ -278,8 +278,8 @@ function ImportFile() {
     useUploadDocumentMutation({
       onCompleted: () => {
         toast.success('File đang được xử lý. Thông báo sẽ được hiển thị sau!');
-        setValues({
-          type: TYPES[0].label,
+        setValues((v) => ({
+          ...v,
           year: '',
           term: '',
           class: '',
@@ -295,6 +295,7 @@ function ImportFile() {
           fetchPolicy: 'no-cache',
         });
       },
+
       onError: (error) => {
         const fileError = error
           .graphQLErrors[0] as unknown as FileHandlingError;
