@@ -49,6 +49,7 @@ export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
   email: Scalars['String'];
   maTK: Scalars['Int'];
+  matKhau?: Maybe<Scalars['String']>;
 };
 
 export type AccountDeleteInput = {
@@ -1853,6 +1854,7 @@ export type AccountAddResponseResolvers<
 > = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  matKhau?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

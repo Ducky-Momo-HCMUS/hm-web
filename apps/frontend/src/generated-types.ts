@@ -44,6 +44,7 @@ export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
   email: Scalars['String'];
   maTK: Scalars['Int'];
+  matKhau?: Maybe<Scalars['String']>;
 };
 
 export type AccountDeleteInput = {
@@ -1779,6 +1780,7 @@ export type AccountAddMutation = {
     __typename?: 'AccountAddResponse';
     maTK: number;
     email: string;
+    matKhau?: string | null | undefined;
   };
 };
 
@@ -4170,6 +4172,7 @@ export const AccountAddDocument = gql`
     accountAdd(payload: $payload) {
       maTK
       email
+      matKhau
     }
   }
 `;
