@@ -180,6 +180,11 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type ErrorMessage = {
+  __typename?: 'ErrorMessage';
+  message?: Maybe<Scalars['String']>;
+};
+
 export const FileType = {
   BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
   ChungChiNgoaiNgu: 'CHUNG_CHI_NGOAI_NGU',
@@ -442,6 +447,13 @@ export type ImportHistory = {
   __typename?: 'ImportHistory';
   taiKhoan?: Maybe<ImportAuthor>;
   thoiGian?: Maybe<Scalars['String']>;
+};
+
+export type ImportStatusHistory = {
+  __typename?: 'ImportStatusHistory';
+  error?: Maybe<ErrorMessage>;
+  thoiGian: Scalars['String'];
+  trangThai: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -744,6 +756,7 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
   noteDetail: NoteDetail;
@@ -875,6 +888,10 @@ export type QueryHomeroomWatchListArgs = {
 };
 
 export type QueryImportHistoryArgs = {
+  fileType: FileType;
+};
+
+export type QueryImportStatusHistoryArgs = {
   fileType: FileType;
 };
 
@@ -1569,6 +1586,23 @@ export type ImportHistoryQuery = {
       | null
       | undefined;
   };
+};
+
+export type ImportStatusHistoryQueryVariables = Exact<{
+  fileType: FileType;
+}>;
+
+export type ImportStatusHistoryQuery = {
+  __typename?: 'Query';
+  importStatusHistory: Array<{
+    __typename?: 'ImportStatusHistory';
+    thoiGian: string;
+    trangThai: string;
+    error?:
+      | { __typename?: 'ErrorMessage'; message?: string | null | undefined }
+      | null
+      | undefined;
+  }>;
 };
 
 export type TermListQueryVariables = Exact<{ [key: string]: never }>;
@@ -3461,6 +3495,68 @@ export type ImportHistoryLazyQueryHookResult = ReturnType<
 export type ImportHistoryQueryResult = Apollo.QueryResult<
   ImportHistoryQuery,
   ImportHistoryQueryVariables
+>;
+export const ImportStatusHistoryDocument = gql`
+  query ImportStatusHistory($fileType: FileType!) {
+    importStatusHistory(fileType: $fileType) {
+      thoiGian
+      trangThai
+      error {
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * __useImportStatusHistoryQuery__
+ *
+ * To run a query within a React component, call `useImportStatusHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImportStatusHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImportStatusHistoryQuery({
+ *   variables: {
+ *      fileType: // value for 'fileType'
+ *   },
+ * });
+ */
+export function useImportStatusHistoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >(ImportStatusHistoryDocument, options);
+}
+export function useImportStatusHistoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >(ImportStatusHistoryDocument, options);
+}
+export type ImportStatusHistoryQueryHookResult = ReturnType<
+  typeof useImportStatusHistoryQuery
+>;
+export type ImportStatusHistoryLazyQueryHookResult = ReturnType<
+  typeof useImportStatusHistoryLazyQuery
+>;
+export type ImportStatusHistoryQueryResult = Apollo.QueryResult<
+  ImportStatusHistoryQuery,
+  ImportStatusHistoryQueryVariables
 >;
 export const TermListDocument = gql`
   query TermList {

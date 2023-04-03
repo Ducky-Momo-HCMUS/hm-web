@@ -15,6 +15,10 @@ export const fileResolver: Resolvers<ResolverContext> = {
       const res = await dataSources.fileAPI.getImportHistory(args);
       return res.data;
     },
+    importStatusHistory: async (_, args, { dataSources }) => {
+      const res = await dataSources.fileAPI.getImportStatusHistory(args);
+      return res.data;
+    },
     columnHeaderList: async (_, args, { dataSources }) => {
       const res = await dataSources.fileAPI.getColumnHeaderList(args);
       return res.data.headers;

@@ -185,6 +185,11 @@ export type Document = {
   url: Scalars['String'];
 };
 
+export type ErrorMessage = {
+  __typename?: 'ErrorMessage';
+  message?: Maybe<Scalars['String']>;
+};
+
 export const FileType = {
   BangDiemToanBoSinhVien: 'BANG_DIEM_TOAN_BO_SINH_VIEN',
   ChungChiNgoaiNgu: 'CHUNG_CHI_NGOAI_NGU',
@@ -447,6 +452,13 @@ export type ImportHistory = {
   __typename?: 'ImportHistory';
   taiKhoan?: Maybe<ImportAuthor>;
   thoiGian?: Maybe<Scalars['String']>;
+};
+
+export type ImportStatusHistory = {
+  __typename?: 'ImportStatusHistory';
+  error?: Maybe<ErrorMessage>;
+  thoiGian: Scalars['String'];
+  trangThai: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -749,6 +761,7 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
   noteDetail: NoteDetail;
@@ -880,6 +893,10 @@ export type QueryHomeroomWatchListArgs = {
 };
 
 export type QueryImportHistoryArgs = {
+  fileType: FileType;
+};
+
+export type QueryImportStatusHistoryArgs = {
   fileType: FileType;
 };
 
@@ -1544,6 +1561,7 @@ export type ResolversTypes = {
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
+  ErrorMessage: ResolverTypeWrapper<ErrorMessage>;
   FileType: FileType;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1586,6 +1604,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   ImportAuthor: ResolverTypeWrapper<ImportAuthor>;
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
+  ImportStatusHistory: ResolverTypeWrapper<ImportStatusHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   MajorEditInput: MajorEditInput;
@@ -1695,6 +1714,7 @@ export type ResolversParentTypes = {
   CourseListItem: CourseListItem;
   Date: Scalars['Date'];
   Document: Document;
+  ErrorMessage: ErrorMessage;
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
@@ -1736,6 +1756,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   ImportAuthor: ImportAuthor;
   ImportHistory: ImportHistory;
+  ImportStatusHistory: ImportStatusHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
   MajorEditInput: MajorEditInput;
@@ -2022,6 +2043,14 @@ export type DocumentResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ErrorMessageResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ErrorMessage'] = ResolversParentTypes['ErrorMessage']
+> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2474,6 +2503,20 @@ export type ImportHistoryResolvers<
     ContextType
   >;
   thoiGian?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImportStatusHistoryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ImportStatusHistory'] = ResolversParentTypes['ImportStatusHistory']
+> = {
+  error?: Resolver<
+    Maybe<ResolversTypes['ErrorMessage']>,
+    ParentType,
+    ContextType
+  >;
+  thoiGian?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  trangThai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2971,6 +3014,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryImportHistoryArgs, 'fileType'>
+  >;
+  importStatusHistory?: Resolver<
+    Array<ResolversTypes['ImportStatusHistory']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryImportStatusHistoryArgs, 'fileType'>
   >;
   majorList?: Resolver<
     ResolversTypes['MajorList'],
@@ -3713,6 +3762,7 @@ export type Resolvers<ContextType = any> = {
   CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
+  ErrorMessage?: ErrorMessageResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllListItem?: HomeroomAllListItemResolvers<ContextType>;
   HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;
@@ -3750,6 +3800,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomWatchListItem?: HomeroomWatchListItemResolvers<ContextType>;
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
+  ImportStatusHistory?: ImportStatusHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;

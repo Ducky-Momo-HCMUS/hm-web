@@ -28,6 +28,16 @@ class FileAPI extends BaseDataSource {
     }
   }
 
+  public async getImportStatusHistory({ fileType }: QueryImportHistoryArgs) {
+    try {
+      const res = await this.get(`v1/files/history?loaiFile=${fileType}`);
+      return res;
+    } catch (error) {
+      logger.error('Error: cannot fetch import status history');
+      throw this.handleError(error as ApolloError);
+    }
+  }
+
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
       const res = await this.get(`v1/files/history/${fileType}/latest`);

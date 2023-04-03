@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HistoryIcon from '@mui/icons-material/History';
 import React, {
   useState,
   useCallback,
@@ -40,6 +41,7 @@ import {
   useColumnHeaderListLazyQuery,
   useCourseListQuery,
   useImportHistoryLazyQuery,
+  useImportStatusHistoryLazyQuery,
   useTermListQuery,
   useUploadDocumentMutation,
 } from '../../../generated-types';
@@ -57,6 +59,7 @@ import {
 } from './utils';
 import HelpDialog from './HelpDialog';
 import ErrorDialog from './ErrorDialog';
+import HistoryDialog from './HistoryDialog';
 
 interface State {
   year: string;
@@ -491,6 +494,22 @@ function ImportFile() {
     ]
   );
 
+  const [
+    getImportStatusHistory,
+    { loading: importStatusHistoryLoading, data: importStatusHistoryData },
+  ] = useImportStatusHistoryLazyQuery();
+
+  const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
+
+  useEffect(() => {
+    getImportStatusHistory({
+      variables: {
+        fileType,
+      },
+      fetchPolicy: 'no-cache',
+    });
+  }, [fileType, getImportStatusHistory]);
+
   return (
     <>
       <ToastContainer />
@@ -629,12 +648,22 @@ function ImportFile() {
                 </Typography>
               </AsyncDataRenderer>
             )}
-            <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
-              Cập nhật{' '}
-              {TYPES.find(
-                (item) => item.label === values.type
-              )?.label.toLowerCase()}
-            </Typography>
+            <Box
+              sx={{ marginTop: '0.5rem' }}
+              display="flex"
+              alignItems="center"
+            >
+              <Typography variant="h6" component="span">
+                Cập nhật{' '}
+                {TYPES.find(
+                  (item) => item.label === values.type
+                )?.label.toLowerCase()}
+              </Typography>
+              <IconButton onClick={() => setOpenHistoryDialog(true)}>
+                <HistoryIcon />
+              </IconButton>
+            </Box>
+
             <Box mt={3}>
               <FilePond
                 ref={filePondRef}
@@ -742,6 +771,19 @@ function ImportFile() {
           openErrorDialog={openErrorDialog}
           onClose={() => setOpenErrorDialog(false)}
           error={fileError as FileHandlingError}
+        />
+      )}
+      {openHistoryDialog && (
+        <HistoryDialog
+          loading={importStatusHistoryLoading}
+          title={
+            TYPES.find(
+              (type) => type.value === values.type
+            )?.label.toLowerCase() || ''
+          }
+          openHistoryDialog={openHistoryDialog}
+          onClose={() => setOpenHistoryDialog(false)}
+          historyList={importStatusHistoryData?.importStatusHistory || []}
         />
       )}
       <Backdrop
