@@ -51,6 +51,7 @@ const accountTypeDefs = gql`
   type AccountAddResponse {
     maTK: Int!
     email: String!
+    matKhau: String
   }
 
   type AccountEditResponse {

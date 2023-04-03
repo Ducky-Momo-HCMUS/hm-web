@@ -5,6 +5,7 @@ export const ADD_ACCOUNT = gql`
     accountAdd(payload: $payload) {
       maTK
       email
+      matKhau
     }
   }
 `;
