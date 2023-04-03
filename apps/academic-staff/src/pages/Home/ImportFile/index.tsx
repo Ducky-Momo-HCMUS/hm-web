@@ -277,7 +277,7 @@ function ImportFile() {
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
-        toast.success('Cập nhật thông tin thành công');
+        toast.success('File đang được xử lý. Thông báo sẽ được hiển thị sau!');
         setValues((v) => ({
           ...v,
           year: '',
@@ -295,6 +295,7 @@ function ImportFile() {
           fetchPolicy: 'no-cache',
         });
       },
+
       onError: (error) => {
         const fileError = error
           .graphQLErrors[0] as unknown as FileHandlingError;

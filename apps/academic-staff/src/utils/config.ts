@@ -6,3 +6,6 @@ function getOrThrow(key: string) {
 }
 
 export const REACT_APP_GRAPHQL_URL = getOrThrow('REACT_APP_GRAPHQL_URL');
+export const REACT_APP_NOTIFICATION_APP_ID = getOrThrow(
+  'REACT_APP_NOTIFICATION_APP_ID'
+);
