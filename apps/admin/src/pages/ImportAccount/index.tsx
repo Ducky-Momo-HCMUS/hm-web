@@ -374,6 +374,11 @@ function ImportAccount() {
                 onChange={(event) => {
                   setStart(event.target.value);
                 }}
+                InputProps={{
+                  inputProps: {
+                    min: 1,
+                  },
+                }}
               />
             </Box>
             <Box>

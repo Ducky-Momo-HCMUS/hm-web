@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import { utils } from 'xlsx';
+import _sortBy from 'lodash/sortBy';
 
 import { FileHandlingError } from '../../../../types';
 
@@ -31,14 +32,14 @@ interface ErrorDialogProps {
 function ErrorDialog({ openErrorDialog, onClose, error }: ErrorDialogProps) {
   const { details: { headers = [], row = [], fieldErrors = {}, index } = {} } =
     error;
-  const { columnNames, headerKeys, headerValues } = useMemo(
-    () => ({
-      columnNames: headers.map((item) => utils.encode_col(item.index)),
-      headerKeys: headers.map((item) => item.key),
-      headerValues: headers.map((item) => item.value),
-    }),
-    [headers]
-  );
+  const { columnNames, headerKeys, headerValues } = useMemo(() => {
+    const sortedHeaders = _sortBy(headers, 'index');
+    return {
+      columnNames: sortedHeaders.map((item) => utils.encode_col(item.index)),
+      headerKeys: sortedHeaders.map((item) => item.key),
+      headerValues: sortedHeaders.map((item) => item.value),
+    };
+  }, [headers]);
 
   const { receivedColumnNames } = useMemo(
     () => ({

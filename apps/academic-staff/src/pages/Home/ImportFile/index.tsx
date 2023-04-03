@@ -84,16 +84,6 @@ function ImportFile() {
   const filePondRef = useRef<FilePond | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  const handleChange = useCallback(
-    (prop: keyof State) => (event: SelectChangeEvent) => {
-      if (prop === 'type' && filePondRef.current) {
-        filePondRef.current.removeFile();
-      }
-      setValues((v) => ({ ...v, [prop]: event.target.value }));
-    },
-    []
-  );
-
   const fileType = useMemo(
     () =>
       TYPES.find((item) => item.label === values.type)?.value ||
@@ -280,9 +270,6 @@ function ImportFile() {
         toast.success('File đang được xử lý. Thông báo sẽ được hiển thị sau!');
         setValues((v) => ({
           ...v,
-          year: '',
-          term: '',
-          class: '',
           start: '1',
         }));
         if (filePondRef.current) {
@@ -332,6 +319,25 @@ function ImportFile() {
   );
 
   const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const handleChange = useCallback(
+    (prop: keyof State) => (event: SelectChangeEvent) => {
+      if (prop === 'type' && filePondRef.current) {
+        filePondRef.current.removeFile();
+      }
+
+      if (prop === 'year') {
+        setValues((v) => ({
+          ...v,
+          [prop]: event.target.value,
+          term: mappedData[event.target.value][0].hocKy.toString(),
+        }));
+      } else {
+        setValues((v) => ({ ...v, [prop]: event.target.value }));
+      }
+    },
+    [mappedData]
+  );
 
   const years = useMemo(() => Object.keys(mappedData), [mappedData]);
 
@@ -680,6 +686,11 @@ function ImportFile() {
                     ...v,
                     start: event.target.value,
                   }));
+                }}
+                InputProps={{
+                  inputProps: {
+                    min: 1,
+                  },
                 }}
               />
             </Box>
