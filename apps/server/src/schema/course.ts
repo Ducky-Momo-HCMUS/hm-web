@@ -3,8 +3,23 @@ import { gql } from 'apollo-server-express';
 const courseTypeDefs = gql`
   extend type Query {
     courseList(page: Int, size: Int): CourseList!
-    majorList(page: Int!, size: Int!): MajorList!
     majorResultList(page: Int!, size: Int!): MajorResultList!
+    majorList(page: Int!, size: Int!): MajorList!
+  }
+
+  extend type Mutation {
+    courseEdit(
+      courseId: String!
+      payload: CourseEditInput!
+    ): CourseEditResponse!
+  }
+
+  input CourseEditInput {
+    name: String!
+  }
+
+  type CourseEditResponse {
+    maMH: String!
   }
 
   type MajorResultList {

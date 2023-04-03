@@ -147,6 +147,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseEditInput = {
+  name: Scalars['String'];
+};
+
+export type CourseEditResponse = {
+  __typename?: 'CourseEditResponse';
+  maMH: Scalars['String'];
+};
+
 export type CourseList = {
   __typename?: 'CourseList';
   data: Array<CourseListItem>;
@@ -472,6 +481,7 @@ export type Mutation = {
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
+  courseEdit: CourseEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
@@ -509,6 +519,11 @@ export type MutationAccountDeleteArgs = {
 
 export type MutationAccountEditArgs = {
   payload: AccountEditInput;
+};
+
+export type MutationCourseEditArgs = {
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
 };
 
 export type MutationEditPasswordArgs = {
@@ -1361,6 +1376,16 @@ export type UploadFileConfig = {
 export type YearListItem = {
   __typename?: 'YearListItem';
   khoa: Scalars['Int'];
+};
+
+export type CourseEditMutationVariables = Exact<{
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
+}>;
+
+export type CourseEditMutation = {
+  __typename?: 'Mutation';
+  courseEdit: { __typename?: 'CourseEditResponse'; maMH: string };
 };
 
 export type UploadDocumentMutationVariables = Exact<{
@@ -2779,6 +2804,57 @@ export type TeacherSearchStudentListQuery = {
   };
 };
 
+export const CourseEditDocument = gql`
+  mutation CourseEdit($courseId: String!, $payload: CourseEditInput!) {
+    courseEdit(courseId: $courseId, payload: $payload) {
+      maMH
+    }
+  }
+`;
+export type CourseEditMutationFn = Apollo.MutationFunction<
+  CourseEditMutation,
+  CourseEditMutationVariables
+>;
+
+/**
+ * __useCourseEditMutation__
+ *
+ * To run a mutation, you first call `useCourseEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCourseEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [courseEditMutation, { data, loading, error }] = useCourseEditMutation({
+ *   variables: {
+ *      courseId: // value for 'courseId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useCourseEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CourseEditMutation,
+    CourseEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CourseEditMutation, CourseEditMutationVariables>(
+    CourseEditDocument,
+    options
+  );
+}
+export type CourseEditMutationHookResult = ReturnType<
+  typeof useCourseEditMutation
+>;
+export type CourseEditMutationResult =
+  Apollo.MutationResult<CourseEditMutation>;
+export type CourseEditMutationOptions = Apollo.BaseMutationOptions<
+  CourseEditMutation,
+  CourseEditMutationVariables
+>;
 export const UploadDocumentDocument = gql`
   mutation UploadDocument(
     $file: UploadFile!

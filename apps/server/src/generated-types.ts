@@ -152,6 +152,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseEditInput = {
+  name: Scalars['String'];
+};
+
+export type CourseEditResponse = {
+  __typename?: 'CourseEditResponse';
+  maMH: Scalars['String'];
+};
+
 export type CourseList = {
   __typename?: 'CourseList';
   data: Array<CourseListItem>;
@@ -477,6 +486,7 @@ export type Mutation = {
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
+  courseEdit: CourseEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
@@ -514,6 +524,11 @@ export type MutationAccountDeleteArgs = {
 
 export type MutationAccountEditArgs = {
   payload: AccountEditInput;
+};
+
+export type MutationCourseEditArgs = {
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
 };
 
 export type MutationEditPasswordArgs = {
@@ -1495,6 +1510,8 @@ export type ResolversTypes = {
   ColumnHeader: ResolverTypeWrapper<ColumnHeader>;
   ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: ResolverTypeWrapper<Contact>;
+  CourseEditInput: CourseEditInput;
+  CourseEditResponse: ResolverTypeWrapper<CourseEditResponse>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
@@ -1641,6 +1658,8 @@ export type ResolversParentTypes = {
   ColumnHeader: ColumnHeader;
   ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: Contact;
+  CourseEditInput: CourseEditInput;
+  CourseEditResponse: CourseEditResponse;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
   Date: Scalars['Date'];
@@ -1915,6 +1934,14 @@ export type ContactResolvers<
 > = {
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CourseEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CourseEditResponse'] = ResolversParentTypes['CourseEditResponse']
+> = {
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2497,6 +2524,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationAccountEditArgs, 'payload'>
+  >;
+  courseEdit?: Resolver<
+    ResolversTypes['CourseEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCourseEditArgs, 'courseId' | 'payload'>
   >;
   editPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
@@ -3608,6 +3641,7 @@ export type Resolvers<ContextType = any> = {
   ClassroomScoreListItem?: ClassroomScoreListItemResolvers<ContextType>;
   ColumnHeader?: ColumnHeaderResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
+  CourseEditResponse?: CourseEditResponseResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;

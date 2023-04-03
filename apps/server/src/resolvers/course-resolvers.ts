@@ -17,6 +17,12 @@ export const courseResolver: Resolvers<ResolverContext> = {
       return res;
     },
   },
+  Mutation: {
+    courseEdit: async (_, args, { dataSources }) => {
+      const res = await dataSources.courseAPI.editCourse(args);
+      return res.data;
+    },
+  },
 };
 
 export default courseResolver;
