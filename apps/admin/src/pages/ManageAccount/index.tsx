@@ -36,8 +36,8 @@ function ManageAccount() {
 
   const [addAccount, { loading: addAccountLoading }] = useAccountAddMutation({
     onCompleted: (account) => {
-      setOpenAccountSuccessDialog(true);
       setNewAccount(account);
+      setOpenAccountSuccessDialog(true);
     },
   });
 

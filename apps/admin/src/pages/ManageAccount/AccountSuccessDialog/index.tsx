@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -13,7 +12,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 
 import { AccountAddMutation } from '../../../generated-types';
 
@@ -24,15 +22,15 @@ interface AccountSuccessDialogProps {
 }
 
 interface KeyValueRowProps {
-  key: string;
+  id: string;
   value: string;
 }
 
-function KeyValueRow({ key, value }: KeyValueRowProps) {
+function KeyValueRow({ id, value }: KeyValueRowProps) {
   return (
-    <TableRow key={key}>
+    <TableRow key={id}>
       <TableCell component="th" scope="row">
-        {key}
+        {id}
       </TableCell>
       <TableCell align="left">{value}</TableCell>
     </TableRow>
@@ -46,19 +44,18 @@ function AccountSuccessDialog({
 }: AccountSuccessDialogProps) {
   const account = data.accountAdd;
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle display="flex" alignItems="center">
-        <ErrorOutlinedIcon sx={{ color: 'red' }} fontSize="medium" />{' '}
         <Typography sx={{ marginLeft: '1rem' }} variant="h6" component="span">
           Tài khoản
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ marginLeft: '1.5rem' }}>
-        <Table sx={{ width: 'fit-content' }}>
+        <Table>
           <TableBody>
-            <KeyValueRow key="Email" value={account.email} />
+            <KeyValueRow id="Email" value={account.email} />
             {account.matKhau && (
-              <KeyValueRow key="Mật khẩu" value={account.matKhau} />
+              <KeyValueRow id="Mật khẩu" value={account.matKhau} />
             )}
           </TableBody>
         </Table>
