@@ -152,6 +152,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseEditInput = {
+  name: Scalars['String'];
+};
+
+export type CourseEditResponse = {
+  __typename?: 'CourseEditResponse';
+  maMH: Scalars['String'];
+};
+
 export type CourseList = {
   __typename?: 'CourseList';
   data: Array<CourseListItem>;
@@ -445,6 +454,15 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorEditInput = {
+  name: Scalars['String'];
+};
+
+export type MajorEditResponse = {
+  __typename?: 'MajorEditResponse';
+  maCN: Scalars['Int'];
+};
+
 export type MajorList = {
   __typename?: 'MajorList';
   data: Array<MajorListItem>;
@@ -477,11 +495,13 @@ export type Mutation = {
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
+  courseEdit: CourseEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
   homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
+  majorEdit: MajorEditResponse;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
   noteEdit: NoteEditResponse;
@@ -516,6 +536,11 @@ export type MutationAccountEditArgs = {
   payload: AccountEditInput;
 };
 
+export type MutationCourseEditArgs = {
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
+};
+
 export type MutationEditPasswordArgs = {
   email: Scalars['String'];
   newPassword: Scalars['String'];
@@ -538,6 +563,11 @@ export type MutationHomeroomDeleteWatchlistArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationMajorEditArgs = {
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
 };
 
 export type MutationNoteAddArgs = {
@@ -1300,7 +1330,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSinhHoat: Array<Scalars['String']>;
+  lopSH: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1495,6 +1525,8 @@ export type ResolversTypes = {
   ColumnHeader: ResolverTypeWrapper<ColumnHeader>;
   ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: ResolverTypeWrapper<Contact>;
+  CourseEditInput: CourseEditInput;
+  CourseEditResponse: ResolverTypeWrapper<CourseEditResponse>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
@@ -1543,6 +1575,8 @@ export type ResolversTypes = {
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
+  MajorEditInput: MajorEditInput;
+  MajorEditResponse: ResolverTypeWrapper<MajorEditResponse>;
   MajorList: ResolverTypeWrapper<MajorList>;
   MajorListItem: ResolverTypeWrapper<MajorListItem>;
   MajorResultList: ResolverTypeWrapper<MajorResultList>;
@@ -1641,6 +1675,8 @@ export type ResolversParentTypes = {
   ColumnHeader: ColumnHeader;
   ColumnHeaderConfig: ColumnHeaderConfig;
   Contact: Contact;
+  CourseEditInput: CourseEditInput;
+  CourseEditResponse: CourseEditResponse;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
   Date: Scalars['Date'];
@@ -1688,6 +1724,8 @@ export type ResolversParentTypes = {
   ImportHistory: ImportHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
+  MajorEditInput: MajorEditInput;
+  MajorEditResponse: MajorEditResponse;
   MajorList: MajorList;
   MajorListItem: MajorListItem;
   MajorResultList: MajorResultList;
@@ -1915,6 +1953,14 @@ export type ContactResolvers<
 > = {
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CourseEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CourseEditResponse'] = ResolversParentTypes['CourseEditResponse']
+> = {
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2424,6 +2470,14 @@ export type LoginResponseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MajorEditResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MajorEditResponse'] = ResolversParentTypes['MajorEditResponse']
+> = {
+  maCN?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MajorListResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['MajorList'] = ResolversParentTypes['MajorList']
@@ -2498,6 +2552,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAccountEditArgs, 'payload'>
   >;
+  courseEdit?: Resolver<
+    ResolversTypes['CourseEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCourseEditArgs, 'courseId' | 'payload'>
+  >;
   editPassword?: Resolver<
     Maybe<ResolversTypes['MutationStatusReponse']>,
     ParentType,
@@ -2530,6 +2590,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationLoginArgs, 'email' | 'password'>
+  >;
+  majorEdit?: Resolver<
+    ResolversTypes['MajorEditResponse'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationMajorEditArgs, 'majorId' | 'payload'>
   >;
   noteAdd?: Resolver<
     ResolversTypes['NoteAddResponse'],
@@ -3608,6 +3674,7 @@ export type Resolvers<ContextType = any> = {
   ClassroomScoreListItem?: ClassroomScoreListItemResolvers<ContextType>;
   ColumnHeader?: ColumnHeaderResolvers<ContextType>;
   Contact?: ContactResolvers<ContextType>;
+  CourseEditResponse?: CourseEditResponseResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
@@ -3650,6 +3717,7 @@ export type Resolvers<ContextType = any> = {
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
+  MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;
   MajorListItem?: MajorListItemResolvers<ContextType>;
   MajorResultList?: MajorResultListResolvers<ContextType>;

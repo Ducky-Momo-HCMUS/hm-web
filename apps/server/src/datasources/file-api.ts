@@ -30,7 +30,7 @@ class FileAPI extends BaseDataSource {
 
   public async getImportHistory({ fileType }: QueryImportHistoryArgs) {
     try {
-      const res = await this.get(`v1/files/history/${fileType}`);
+      const res = await this.get(`v1/files/history/${fileType}/latest`);
       return res;
     } catch (error) {
       logger.error('Error: cannot fetch import history');

@@ -152,7 +152,7 @@ function AddOrEditHomeroomTeacherInfoDialog({
           <Button
             color="primary"
             variant="contained"
-            onClick={() => onClickConfirm({ lopSinhHoat: values.className })}
+            onClick={() => onClickConfirm({ lopSH: values.className })}
           >
             {data ? 'Lưu' : 'Thêm'}
           </Button>

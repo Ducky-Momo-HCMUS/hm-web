@@ -126,6 +126,7 @@ function CourseRegisterList() {
             onChange={handleTabChange}
             textColor="inherit"
             indicatorColor="primary"
+            variant="fullWidth"
           >
             <Tab label="Danh sách ĐKHP" />
             <Tab label="Danh sách không ĐKHP" />

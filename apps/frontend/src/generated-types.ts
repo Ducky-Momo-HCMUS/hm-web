@@ -147,6 +147,15 @@ export type Contact = {
   url: Scalars['String'];
 };
 
+export type CourseEditInput = {
+  name: Scalars['String'];
+};
+
+export type CourseEditResponse = {
+  __typename?: 'CourseEditResponse';
+  maMH: Scalars['String'];
+};
+
 export type CourseList = {
   __typename?: 'CourseList';
   data: Array<CourseListItem>;
@@ -440,6 +449,15 @@ export type LoginResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type MajorEditInput = {
+  name: Scalars['String'];
+};
+
+export type MajorEditResponse = {
+  __typename?: 'MajorEditResponse';
+  maCN: Scalars['Int'];
+};
+
 export type MajorList = {
   __typename?: 'MajorList';
   data: Array<MajorListItem>;
@@ -472,11 +490,13 @@ export type Mutation = {
   accountAdd: AccountAddResponse;
   accountDelete: AccountDeleteResponse;
   accountEdit: AccountEditResponse;
+  courseEdit: CourseEditResponse;
   editPassword?: Maybe<MutationStatusReponse>;
   forgotPassword?: Maybe<MutationStatusReponse>;
   homeroomAddWatchlist: HomeroomAddWatchlistResponse;
   homeroomDeleteWatchlist: HomeroomDeleteWatchlistResponse;
   login?: Maybe<LoginResponse>;
+  majorEdit: MajorEditResponse;
   noteAdd: NoteAddResponse;
   noteDelete: NoteDeleteResponse;
   noteEdit: NoteEditResponse;
@@ -511,6 +531,11 @@ export type MutationAccountEditArgs = {
   payload: AccountEditInput;
 };
 
+export type MutationCourseEditArgs = {
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
+};
+
 export type MutationEditPasswordArgs = {
   email: Scalars['String'];
   newPassword: Scalars['String'];
@@ -533,6 +558,11 @@ export type MutationHomeroomDeleteWatchlistArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MutationMajorEditArgs = {
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
 };
 
 export type MutationNoteAddArgs = {
@@ -1295,7 +1325,7 @@ export type TagList = {
 };
 
 export type TeacherEditInput = {
-  lopSinhHoat: Array<Scalars['String']>;
+  lopSH: Array<Scalars['String']>;
 };
 
 export type TeacherInfo = {
@@ -1361,6 +1391,26 @@ export type UploadFileConfig = {
 export type YearListItem = {
   __typename?: 'YearListItem';
   khoa: Scalars['Int'];
+};
+
+export type CourseEditMutationVariables = Exact<{
+  courseId: Scalars['String'];
+  payload: CourseEditInput;
+}>;
+
+export type CourseEditMutation = {
+  __typename?: 'Mutation';
+  courseEdit: { __typename?: 'CourseEditResponse'; maMH: string };
+};
+
+export type MajorEditMutationVariables = Exact<{
+  majorId: Scalars['Int'];
+  payload: MajorEditInput;
+}>;
+
+export type MajorEditMutation = {
+  __typename?: 'Mutation';
+  majorEdit: { __typename?: 'MajorEditResponse'; maCN: number };
 };
 
 export type UploadDocumentMutationVariables = Exact<{
@@ -1755,7 +1805,10 @@ export type TeacherEditMutationVariables = Exact<{
 
 export type TeacherEditMutation = {
   __typename?: 'Mutation';
-  teacherEdit: { __typename?: 'AllTeacherListItem'; maGV: number };
+  teacherEdit: {
+    __typename?: 'AllTeacherListItem';
+    lopSinhHoat: Array<{ __typename?: 'HomeroomInfo'; maSH: string }>;
+  };
 };
 
 export type AccountListQueryVariables = Exact<{
@@ -2776,6 +2829,107 @@ export type TeacherSearchStudentListQuery = {
   };
 };
 
+export const CourseEditDocument = gql`
+  mutation CourseEdit($courseId: String!, $payload: CourseEditInput!) {
+    courseEdit(courseId: $courseId, payload: $payload) {
+      maMH
+    }
+  }
+`;
+export type CourseEditMutationFn = Apollo.MutationFunction<
+  CourseEditMutation,
+  CourseEditMutationVariables
+>;
+
+/**
+ * __useCourseEditMutation__
+ *
+ * To run a mutation, you first call `useCourseEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCourseEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [courseEditMutation, { data, loading, error }] = useCourseEditMutation({
+ *   variables: {
+ *      courseId: // value for 'courseId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useCourseEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CourseEditMutation,
+    CourseEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CourseEditMutation, CourseEditMutationVariables>(
+    CourseEditDocument,
+    options
+  );
+}
+export type CourseEditMutationHookResult = ReturnType<
+  typeof useCourseEditMutation
+>;
+export type CourseEditMutationResult =
+  Apollo.MutationResult<CourseEditMutation>;
+export type CourseEditMutationOptions = Apollo.BaseMutationOptions<
+  CourseEditMutation,
+  CourseEditMutationVariables
+>;
+export const MajorEditDocument = gql`
+  mutation MajorEdit($majorId: Int!, $payload: MajorEditInput!) {
+    majorEdit(majorId: $majorId, payload: $payload) {
+      maCN
+    }
+  }
+`;
+export type MajorEditMutationFn = Apollo.MutationFunction<
+  MajorEditMutation,
+  MajorEditMutationVariables
+>;
+
+/**
+ * __useMajorEditMutation__
+ *
+ * To run a mutation, you first call `useMajorEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMajorEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [majorEditMutation, { data, loading, error }] = useMajorEditMutation({
+ *   variables: {
+ *      majorId: // value for 'majorId'
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+export function useMajorEditMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MajorEditMutation,
+    MajorEditMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<MajorEditMutation, MajorEditMutationVariables>(
+    MajorEditDocument,
+    options
+  );
+}
+export type MajorEditMutationHookResult = ReturnType<
+  typeof useMajorEditMutation
+>;
+export type MajorEditMutationResult = Apollo.MutationResult<MajorEditMutation>;
+export type MajorEditMutationOptions = Apollo.BaseMutationOptions<
+  MajorEditMutation,
+  MajorEditMutationVariables
+>;
 export const UploadDocumentDocument = gql`
   mutation UploadDocument(
     $file: UploadFile!
@@ -4234,7 +4388,9 @@ export type TeacherDeleteMutationOptions = Apollo.BaseMutationOptions<
 export const TeacherEditDocument = gql`
   mutation TeacherEdit($teacherId: Int!, $payload: TeacherEditInput!) {
     teacherEdit(teacherId: $teacherId, payload: $payload) {
-      maGV
+      lopSinhHoat {
+        maSH
+      }
     }
   }
 `;

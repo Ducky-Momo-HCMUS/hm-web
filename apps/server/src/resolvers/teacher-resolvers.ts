@@ -24,7 +24,7 @@ export const teacherResolver: Resolvers<ResolverContext> = {
   Mutation: {
     teacherEdit: async (_, args, { dataSources }) => {
       const res = await dataSources.teacherAPI.updateTeacher(args);
-      return res;
+      return res.data;
     },
     teacherDelete: async (_, args, { dataSources }) => {
       const res = await dataSources.teacherAPI.deleteTeacher(args);
