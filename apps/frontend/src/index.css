@@ -51,3 +51,8 @@ code {
 a {
   text-decoration: none!important;
 }
+
+.Toastify__toast-container--top-right {
+  top: 5em;
+  right: 1em
+}

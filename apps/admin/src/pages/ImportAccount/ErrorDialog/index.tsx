@@ -19,7 +19,7 @@ import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import { utils } from 'xlsx';
 import _sortBy from 'lodash/sortBy';
 
-import { FileHandlingError } from '../../../../types';
+import { FileHandlingError } from '../../../types';
 
 import { StyledDialog, StyledTableCell } from './styles';
 
