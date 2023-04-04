@@ -5,7 +5,7 @@ const fileTypeDefs = gql`
 
   extend type Query {
     documents: [Document!]!
-    importHistory(fileType: FileType!): ImportHistory!
+    importHistory(fileType: FileType!): ImportHistory
     # Danh sách năm học
     termList: [TermListItem!]!
     columnHeaderList(fileType: FileType!): [ColumnHeader!]!

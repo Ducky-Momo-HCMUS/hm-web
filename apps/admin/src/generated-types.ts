@@ -756,7 +756,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
-  importHistory: ImportHistory;
+  importHistory?: Maybe<ImportHistory>;
   importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
@@ -1576,17 +1576,20 @@ export type ImportHistoryQueryVariables = Exact<{
 
 export type ImportHistoryQuery = {
   __typename?: 'Query';
-  importHistory: {
-    __typename?: 'ImportHistory';
-    thoiGian?: string | null | undefined;
-    taiKhoan?:
-      | {
-          __typename?: 'ImportAuthor';
-          giaoVien: { __typename?: 'AuthorInfo'; tenGV: string };
-        }
-      | null
-      | undefined;
-  };
+  importHistory?:
+    | {
+        __typename?: 'ImportHistory';
+        thoiGian?: string | null | undefined;
+        taiKhoan?:
+          | {
+              __typename?: 'ImportAuthor';
+              giaoVien: { __typename?: 'AuthorInfo'; tenGV: string };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
 };
 
 export type ImportStatusHistoryQueryVariables = Exact<{
