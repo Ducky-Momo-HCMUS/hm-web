@@ -761,7 +761,7 @@ export type Query = {
   homeroomStudentList: HomeroomStudentList;
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
-  importHistory: ImportHistory;
+  importHistory?: Maybe<ImportHistory>;
   importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
@@ -3012,7 +3012,7 @@ export type QueryResolvers<
     RequireFields<QueryHomeroomWatchListArgs, 'homeroomId' | 'page' | 'size'>
   >;
   importHistory?: Resolver<
-    ResolversTypes['ImportHistory'],
+    Maybe<ResolversTypes['ImportHistory']>,
     ParentType,
     ContextType,
     RequireFields<QueryImportHistoryArgs, 'fileType'>
