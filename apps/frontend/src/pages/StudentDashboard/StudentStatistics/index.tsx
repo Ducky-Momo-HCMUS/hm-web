@@ -17,7 +17,10 @@ import {
   StyledTableCell,
   StyledTitle,
 } from '../../../components/styles';
-import { renderGPA10WithProperColor } from '../../../utils';
+import {
+  renderGPA10WithProperColor,
+  renderTrainingPointWithProperColor,
+} from '../../../utils';
 import { useStudentStatisticsQuery } from '../../../generated-types';
 import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 
@@ -70,7 +73,9 @@ function StudentStatistics() {
                     <StyledTableCell>
                       {renderGPA10WithProperColor(item.dtb as number)}
                     </StyledTableCell>
-                    <TableCell>{item.drl || 'Chưa có'}</TableCell>
+                    <TableCell>
+                      {renderTrainingPointWithProperColor(item.drl as number)}
+                    </TableCell>
                     <TableCell>{item.soTC}</TableCell>
                   </TableRow>
                 ))}
