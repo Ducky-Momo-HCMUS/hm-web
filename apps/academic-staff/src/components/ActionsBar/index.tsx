@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Box,
   IconButton,
   ListItemButton,
   ListItemIcon,
@@ -11,6 +10,16 @@ import {
 import { Logout } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
+import {
+  NovuProvider,
+  PopoverNotificationCenter,
+  NotificationBell,
+} from '@novu/notification-center';
+import { decodeJwt } from 'jose';
+
+import { REACT_APP_NOTIFICATION_APP_ID } from '../../utils/config';
+
+import { StyledBox } from './styles';
 
 function ActionsBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -31,11 +40,23 @@ function ActionsBar() {
     navigate('/login');
   }, [navigate]);
 
+  const jwtPayload = decodeJwt(localStorage.getItem('ACCESS_TOKEN') as string);
+
   return (
     <>
-      <Box>
+      <StyledBox>
+        <NovuProvider
+          subscriberId={String(jwtPayload.sub)}
+          applicationIdentifier={REACT_APP_NOTIFICATION_APP_ID}
+        >
+          <PopoverNotificationCenter colorScheme="light">
+            {({ unseenCount }) => (
+              <NotificationBell unseenCount={unseenCount} />
+            )}
+          </PopoverNotificationCenter>
+        </NovuProvider>
         <IconButton
-          sx={{ paddingRight: 0 }}
+          sx={{ paddingRight: 0, marginLeft: '0.25rem' }}
           size="large"
           color="inherit"
           aria-label="personal"
@@ -44,7 +65,7 @@ function ActionsBar() {
         >
           <AccountCircleIcon fontSize="inherit" />
         </IconButton>
-      </Box>
+      </StyledBox>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"

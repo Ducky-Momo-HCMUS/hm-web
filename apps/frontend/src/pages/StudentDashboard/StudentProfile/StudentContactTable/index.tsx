@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Backdrop,
   CircularProgress,
@@ -8,15 +8,16 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-import { GET_STUDENT_DETAIL } from '../../../../data/queries/student/get-student-detail';
 import {
-  StudentContact,
   StudentEditContactInput,
+  useStudentContactListLazyQuery,
   useStudentDeleteContactMutation,
   useStudentEditContactMutation,
 } from '../../../../generated-types';
 import DeleteDialog from '../../../../components/DeleteDialog';
 import EditStudentContactDialog from '../AddOrEditStudentContactDialog';
+import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
+import { GET_STUDENT_CONTACT_LIST } from '../../../../data/queries/student/get-student-contacts';
 
 import StudentContactRow from './StudentContactRow';
 
@@ -25,14 +26,9 @@ interface State {
   editIndex: number;
 }
 
-interface StudentContactTableProps {
-  data: StudentContact[];
-}
-
-function StudentContactTable({ data }: StudentContactTableProps) {
+function StudentContactTable() {
   const { id = '' } = useParams();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
 
   const [values, setValues] = useState<State>({
     deleteIndex: -1,
@@ -51,14 +47,6 @@ function StudentContactTable({ data }: StudentContactTableProps) {
     setPage(newPage);
   }, []);
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    },
-    []
-  );
-
   const [editStudentContact, { loading: editStudentContactLoading }] =
     useStudentEditContactMutation();
 
@@ -71,8 +59,11 @@ function StudentContactTable({ data }: StudentContactTableProps) {
           payload,
         },
         refetchQueries: [
-          { query: GET_STUDENT_DETAIL, variables: { studentId: id } },
-          'StudentDetail',
+          {
+            query: GET_STUDENT_CONTACT_LIST,
+            variables: { studentId: id, page: 1, size: 2 },
+          },
+          'StudentContactList',
         ],
       });
     },
@@ -89,19 +80,51 @@ function StudentContactTable({ data }: StudentContactTableProps) {
         contactId: values.deleteIndex,
       },
       refetchQueries: [
-        { query: GET_STUDENT_DETAIL, variables: { studentId: id } },
-        'StudentDetail',
+        {
+          query: GET_STUDENT_CONTACT_LIST,
+          variables: { studentId: id, page: 1, size: 2 },
+        },
+        'StudentContactList',
       ],
     });
   }, [deleteStudentContact, id, values.deleteIndex]);
 
+  const [
+    getStudentContactList,
+    { loading: studentContactListLoading, data: studentContactListData },
+  ] = useStudentContactListLazyQuery();
+
+  const { studentContactList, studentContactListLength } = useMemo(
+    () => ({
+      studentContactList: studentContactListData?.studentContactList.data || [],
+      studentContactListLength:
+        studentContactListData?.studentContactList.total || 0,
+    }),
+    [
+      studentContactListData?.studentContactList.data,
+      studentContactListData?.studentContactList.total,
+    ]
+  );
+
+  useEffect(() => {
+    getStudentContactList({
+      variables: {
+        studentId: id,
+        page: page + 1,
+        size: 2,
+      },
+    });
+  }, [getStudentContactList, id, page]);
+
   return (
     <>
-      <Table>
-        <TableBody>
-          {data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((row, index) => (
+      <AsyncDataRenderer
+        loading={studentContactListLoading}
+        data={studentContactListData}
+      >
+        <Table>
+          <TableBody>
+            {studentContactList.map((row, index) => (
               <StudentContactRow
                 key={row.maLHSV}
                 index={index}
@@ -110,25 +133,26 @@ function StudentContactTable({ data }: StudentContactTableProps) {
                 onClickDelete={() => handleClickDelete(row.maLHSV)}
               />
             ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        rowsPerPageOptions={[]}
-        component="div"
-        count={data.length || 0}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        labelRowsPerPage="Số dòng trên trang"
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          count={studentContactListLength}
+          page={page}
+          rowsPerPage={2}
+          onPageChange={handleChangePage}
+        />
+      </AsyncDataRenderer>
       {values.deleteIndex >= 0 && (
         <DeleteDialog
           open={values.deleteIndex >= 0}
           onClose={() => setValues({ ...values, deleteIndex: -1 })}
           description="Bạn có đồng ý xoá liên lạc"
           boldText={
-            data.find((item) => item.maLHSV === values.deleteIndex)?.mxh || ''
+            studentContactList.find(
+              (item) => item.maLHSV === values.deleteIndex
+            )?.mxh || ''
           }
           onClickCancel={() => setValues({ ...values, deleteIndex: -1 })}
           onClickConfirm={handleDeleteStudentContact}
@@ -141,7 +165,9 @@ function StudentContactTable({ data }: StudentContactTableProps) {
           onClose={() => setValues({ ...values, editIndex: -1 })}
           onClickCancel={() => setValues({ ...values, editIndex: -1 })}
           onClickConfirm={handleEditStudentContact}
-          data={data.find((item) => item.maLHSV === values.editIndex)}
+          data={studentContactList.find(
+            (item) => item.maLHSV === values.editIndex
+          )}
         />
       )}
 

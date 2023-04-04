@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HistoryIcon from '@mui/icons-material/History';
 import React, {
   useState,
   useCallback,
@@ -40,6 +41,7 @@ import {
   useColumnHeaderListLazyQuery,
   useCourseListQuery,
   useImportHistoryLazyQuery,
+  useImportStatusHistoryLazyQuery,
   useTermListQuery,
   useUploadDocumentMutation,
 } from '../../../generated-types';
@@ -57,6 +59,7 @@ import {
 } from './utils';
 import HelpDialog from './HelpDialog';
 import ErrorDialog from './ErrorDialog';
+import HistoryDialog from './HistoryDialog';
 
 interface State {
   year: string;
@@ -83,16 +86,6 @@ function ImportFile() {
 
   const filePondRef = useRef<FilePond | null>(null);
   const [file, setFile] = useState<File | null>(null);
-
-  const handleChange = useCallback(
-    (prop: keyof State) => (event: SelectChangeEvent) => {
-      if (prop === 'type' && filePondRef.current) {
-        filePondRef.current.removeFile();
-      }
-      setValues((v) => ({ ...v, [prop]: event.target.value }));
-    },
-    []
-  );
 
   const fileType = useMemo(
     () =>
@@ -277,12 +270,9 @@ function ImportFile() {
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
-        toast.success('Cập nhật thông tin thành công');
+        toast.success('File đang được xử lý. Thông báo sẽ được hiển thị sau!');
         setValues((v) => ({
           ...v,
-          year: '',
-          term: '',
-          class: '',
           start: '1',
         }));
         if (filePondRef.current) {
@@ -295,6 +285,7 @@ function ImportFile() {
           fetchPolicy: 'no-cache',
         });
       },
+
       onError: (error) => {
         const fileError = error
           .graphQLErrors[0] as unknown as FileHandlingError;
@@ -331,6 +322,25 @@ function ImportFile() {
   );
 
   const mappedData = useMemo(() => groupTermsByYear(termsData), [termsData]);
+
+  const handleChange = useCallback(
+    (prop: keyof State) => (event: SelectChangeEvent) => {
+      if (prop === 'type' && filePondRef.current) {
+        filePondRef.current.removeFile();
+      }
+
+      if (prop === 'year') {
+        setValues((v) => ({
+          ...v,
+          [prop]: event.target.value,
+          term: mappedData[event.target.value][0].hocKy.toString(),
+        }));
+      } else {
+        setValues((v) => ({ ...v, [prop]: event.target.value }));
+      }
+    },
+    [mappedData]
+  );
 
   const years = useMemo(() => Object.keys(mappedData), [mappedData]);
 
@@ -484,6 +494,22 @@ function ImportFile() {
     ]
   );
 
+  const [
+    getImportStatusHistory,
+    { loading: importStatusHistoryLoading, data: importStatusHistoryData },
+  ] = useImportStatusHistoryLazyQuery();
+
+  const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
+
+  useEffect(() => {
+    getImportStatusHistory({
+      variables: {
+        fileType,
+      },
+      fetchPolicy: 'no-cache',
+    });
+  }, [fileType, getImportStatusHistory]);
+
   return (
     <>
       <ToastContainer />
@@ -622,12 +648,22 @@ function ImportFile() {
                 </Typography>
               </AsyncDataRenderer>
             )}
-            <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
-              Cập nhật{' '}
-              {TYPES.find(
-                (item) => item.label === values.type
-              )?.label.toLowerCase()}
-            </Typography>
+            <Box
+              sx={{ marginTop: '0.5rem' }}
+              display="flex"
+              alignItems="center"
+            >
+              <Typography variant="h6" component="span">
+                Cập nhật{' '}
+                {TYPES.find(
+                  (item) => item.label === values.type
+                )?.label.toLowerCase()}
+              </Typography>
+              <IconButton onClick={() => setOpenHistoryDialog(true)}>
+                <HistoryIcon />
+              </IconButton>
+            </Box>
+
             <Box mt={3}>
               <FilePond
                 ref={filePondRef}
@@ -680,6 +716,11 @@ function ImportFile() {
                     start: event.target.value,
                   }));
                 }}
+                InputProps={{
+                  inputProps: {
+                    min: 1,
+                  },
+                }}
               />
             </Box>
             <Box>
@@ -730,6 +771,19 @@ function ImportFile() {
           openErrorDialog={openErrorDialog}
           onClose={() => setOpenErrorDialog(false)}
           error={fileError as FileHandlingError}
+        />
+      )}
+      {openHistoryDialog && (
+        <HistoryDialog
+          loading={importStatusHistoryLoading}
+          title={
+            TYPES.find(
+              (type) => type.value === values.type
+            )?.label.toLowerCase() || ''
+          }
+          openHistoryDialog={openHistoryDialog}
+          onClose={() => setOpenHistoryDialog(false)}
+          historyList={importStatusHistoryData?.importStatusHistory || []}
         />
       )}
       <Backdrop

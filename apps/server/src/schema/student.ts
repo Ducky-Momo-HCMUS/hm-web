@@ -16,6 +16,11 @@ const studentTypeDefs = gql`
     ): StudentAveragePoint!
     studentAllTerms(studentId: String!): [StudentTerm!]!
     studentDetail(studentId: String!): StudentDetail!
+    studentContactList(
+      studentId: String!
+      page: Int!
+      size: Int!
+    ): StudentContactList!
     studentParentInfoList(
       studentId: String!
       page: Int!
@@ -79,6 +84,11 @@ const studentTypeDefs = gql`
       payload: StudentEditParentInfoInput!
     ): StudentParentInfo!
     studentDeleteParentInfo(parentId: Int!): StudentDeleteParentInfoResponse!
+  }
+
+  type StudentContactList {
+    total: Int!
+    data: [StudentContact!]!
   }
 
   type StudentStatisticsItem {

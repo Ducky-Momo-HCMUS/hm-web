@@ -44,9 +44,11 @@ import {
   useImportHistoryLazyQuery,
   useUploadDocumentMutation,
 } from '../../generated-types';
+import { FileHandlingError } from '../../types';
 
 import { arrayify, DataSet, Row } from './utils';
 import { StyledFormControl, StyledTextField } from './styles';
+import ErrorDialog from './ErrorDialog';
 
 function ImportAccount() {
   const [
@@ -243,6 +245,8 @@ function ImportAccount() {
   }
 
   const [openHelpDialog, setOpenHelpDialog] = useState(false);
+  const [openErrorDialog, setOpenErrorDialog] = useState(false);
+  const [fileError, setFileError] = useState<FileHandlingError>();
 
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
@@ -252,10 +256,19 @@ function ImportAccount() {
         if (filePondRef.current) {
           filePondRef.current.removeFile();
         }
+        getImportHistory({
+          variables: {
+            fileType: FileType.TaiKhoan,
+          },
+          fetchPolicy: 'no-cache',
+        });
       },
       onError: (error) => {
-        // TODO: lấy error từ BE
-        toast.error(error.message);
+        const fileError = error
+          .graphQLErrors[0] as unknown as FileHandlingError;
+        toast.error(fileError.message);
+        setFileError(fileError);
+        setOpenErrorDialog(true);
       },
     });
 
@@ -374,6 +387,11 @@ function ImportAccount() {
                 onChange={(event) => {
                   setStart(event.target.value);
                 }}
+                InputProps={{
+                  inputProps: {
+                    min: 1,
+                  },
+                }}
               />
             </Box>
             <Box>
@@ -463,6 +481,13 @@ function ImportAccount() {
           <Button onClick={() => setOpenHelpDialog(false)}>Đóng</Button>
         </DialogActions>
       </Dialog>
+      {openErrorDialog && (
+        <ErrorDialog
+          openErrorDialog={openErrorDialog}
+          onClose={() => setOpenErrorDialog(false)}
+          error={fileError as FileHandlingError}
+        />
+      )}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={uploadDocumentLoading}

@@ -44,6 +44,7 @@ export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
   email: Scalars['String'];
   maTK: Scalars['Int'];
+  matKhau?: Maybe<Scalars['String']>;
 };
 
 export type AccountDeleteInput = {
@@ -178,6 +179,11 @@ export type Document = {
   id: Scalars['ID'];
   name: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type ErrorMessage = {
+  __typename?: 'ErrorMessage';
+  message?: Maybe<Scalars['String']>;
 };
 
 export const FileType = {
@@ -442,6 +448,13 @@ export type ImportHistory = {
   __typename?: 'ImportHistory';
   taiKhoan?: Maybe<ImportAuthor>;
   thoiGian?: Maybe<Scalars['String']>;
+};
+
+export type ImportStatusHistory = {
+  __typename?: 'ImportStatusHistory';
+  error?: Maybe<ErrorMessage>;
+  thoiGian: Scalars['String'];
+  trangThai: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -744,6 +757,7 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
   noteDetail: NoteDetail;
@@ -753,6 +767,7 @@ export type Query = {
   studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentContactList: StudentContactList;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
@@ -877,6 +892,10 @@ export type QueryImportHistoryArgs = {
   fileType: FileType;
 };
 
+export type QueryImportStatusHistoryArgs = {
+  fileType: FileType;
+};
+
 export type QueryMajorListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
@@ -921,6 +940,12 @@ export type QueryStudentAllTermsArgs = {
 export type QueryStudentAveragePointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryStudentContactListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentDetailArgs = {
@@ -1064,6 +1089,12 @@ export type StudentContact = {
   maLHSV: Scalars['Int'];
   mxh: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type StudentContactList = {
+  __typename?: 'StudentContactList';
+  data: Array<StudentContact>;
+  total: Scalars['Int'];
 };
 
 export type StudentContactResponse = {
@@ -1558,6 +1589,23 @@ export type ImportHistoryQuery = {
   };
 };
 
+export type ImportStatusHistoryQueryVariables = Exact<{
+  fileType: FileType;
+}>;
+
+export type ImportStatusHistoryQuery = {
+  __typename?: 'Query';
+  importStatusHistory: Array<{
+    __typename?: 'ImportStatusHistory';
+    thoiGian: string;
+    trangThai: string;
+    error?:
+      | { __typename?: 'ErrorMessage'; message?: string | null | undefined }
+      | null
+      | undefined;
+  }>;
+};
+
 export type TermListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type TermListQuery = {
@@ -1732,6 +1780,7 @@ export type AccountAddMutation = {
     __typename?: 'AccountAddResponse';
     maTK: number;
     email: string;
+    matKhau?: string | null | undefined;
   };
 };
 
@@ -2615,6 +2664,26 @@ export type StudentAveragePointByTermQuery = {
   };
 };
 
+export type StudentContactListQueryVariables = Exact<{
+  studentId: Scalars['String'];
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+}>;
+
+export type StudentContactListQuery = {
+  __typename?: 'Query';
+  studentContactList: {
+    __typename?: 'StudentContactList';
+    total: number;
+    data: Array<{
+      __typename?: 'StudentContact';
+      maLHSV: number;
+      mxh: string;
+      url: string;
+    }>;
+  };
+};
+
 export type StudentDetailSubjectsResultQueryVariables = Exact<{
   studentId: Scalars['String'];
   subject: Scalars['String'];
@@ -3429,6 +3498,68 @@ export type ImportHistoryQueryResult = Apollo.QueryResult<
   ImportHistoryQuery,
   ImportHistoryQueryVariables
 >;
+export const ImportStatusHistoryDocument = gql`
+  query ImportStatusHistory($fileType: FileType!) {
+    importStatusHistory(fileType: $fileType) {
+      thoiGian
+      trangThai
+      error {
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * __useImportStatusHistoryQuery__
+ *
+ * To run a query within a React component, call `useImportStatusHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImportStatusHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImportStatusHistoryQuery({
+ *   variables: {
+ *      fileType: // value for 'fileType'
+ *   },
+ * });
+ */
+export function useImportStatusHistoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >(ImportStatusHistoryDocument, options);
+}
+export function useImportStatusHistoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ImportStatusHistoryQuery,
+    ImportStatusHistoryQueryVariables
+  >(ImportStatusHistoryDocument, options);
+}
+export type ImportStatusHistoryQueryHookResult = ReturnType<
+  typeof useImportStatusHistoryQuery
+>;
+export type ImportStatusHistoryLazyQueryHookResult = ReturnType<
+  typeof useImportStatusHistoryLazyQuery
+>;
+export type ImportStatusHistoryQueryResult = Apollo.QueryResult<
+  ImportStatusHistoryQuery,
+  ImportStatusHistoryQueryVariables
+>;
 export const TermListDocument = gql`
   query TermList {
     termList {
@@ -4041,6 +4172,7 @@ export const AccountAddDocument = gql`
     accountAdd(payload: $payload) {
       maTK
       email
+      matKhau
     }
   }
 `;
@@ -6804,6 +6936,71 @@ export type StudentAveragePointByTermLazyQueryHookResult = ReturnType<
 export type StudentAveragePointByTermQueryResult = Apollo.QueryResult<
   StudentAveragePointByTermQuery,
   StudentAveragePointByTermQueryVariables
+>;
+export const StudentContactListDocument = gql`
+  query StudentContactList($studentId: String!, $page: Int!, $size: Int!) {
+    studentContactList(studentId: $studentId, page: $page, size: $size) {
+      total
+      data {
+        maLHSV
+        mxh
+        url
+      }
+    }
+  }
+`;
+
+/**
+ * __useStudentContactListQuery__
+ *
+ * To run a query within a React component, call `useStudentContactListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentContactListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentContactListQuery({
+ *   variables: {
+ *      studentId: // value for 'studentId'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *   },
+ * });
+ */
+export function useStudentContactListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >(StudentContactListDocument, options);
+}
+export function useStudentContactListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    StudentContactListQuery,
+    StudentContactListQueryVariables
+  >(StudentContactListDocument, options);
+}
+export type StudentContactListQueryHookResult = ReturnType<
+  typeof useStudentContactListQuery
+>;
+export type StudentContactListLazyQueryHookResult = ReturnType<
+  typeof useStudentContactListLazyQuery
+>;
+export type StudentContactListQueryResult = Apollo.QueryResult<
+  StudentContactListQuery,
+  StudentContactListQueryVariables
 >;
 export const StudentDetailSubjectsResultDocument = gql`
   query StudentDetailSubjectsResult($studentId: String!, $subject: String!) {

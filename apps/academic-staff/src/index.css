@@ -21,3 +21,8 @@ code {
 .filepond--panel-root {
   background-color: white!important;
 }
+
+.Toastify__toast-container--top-right {
+  top: 5em;
+  right: 1em
+}

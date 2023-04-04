@@ -25,16 +25,15 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   StudentAddContactInput,
   StudentAddParentInfoInput,
-  StudentContact,
   useStudentAddContactMutation,
   useStudentAddParentInfoMutation,
   useStudentDetailQuery,
   useStudentParentInfoListLazyQuery,
 } from '../../../generated-types';
-import { GET_STUDENT_DETAIL } from '../../../data/queries/student/get-student-detail';
 import { GET_STUDENT_PARENT_INFO_LIST } from '../../../data/queries/student/get-student-parent-info';
 import { PARENT_PAGE_SIZE } from '../../../constants';
 import { saveDocumentToFile } from '../../../utils';
+import { GET_STUDENT_CONTACT_LIST } from '../../../data/queries/student/get-student-contacts';
 
 import { StyledGridContainer } from './styles';
 import ParentInfoTable from './ParentInfoTable';
@@ -73,8 +72,11 @@ function StudentProfile() {
           payload,
         },
         refetchQueries: [
-          { query: GET_STUDENT_DETAIL, variables: { studentId: id } },
-          'StudentDetail',
+          {
+            query: GET_STUDENT_CONTACT_LIST,
+            variables: { studentId: id, page: 1, size: 2 },
+          },
+          'StudentContactList',
         ],
       });
     },
@@ -318,14 +320,7 @@ function StudentProfile() {
                   Thêm
                 </Button>
               </Box>
-              <AsyncDataRenderer
-                loading={studentDetailsLoading}
-                data={contactInfo.lienHeSV}
-              >
-                <StudentContactTable
-                  data={contactInfo.lienHeSV as StudentContact[]}
-                />
-              </AsyncDataRenderer>
+              <StudentContactTable />
             </Grid>
           </StyledGridContainer>
         </AsyncDataRenderer>

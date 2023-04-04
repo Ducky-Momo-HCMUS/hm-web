@@ -49,6 +49,7 @@ export type AccountAddResponse = {
   __typename?: 'AccountAddResponse';
   email: Scalars['String'];
   maTK: Scalars['Int'];
+  matKhau?: Maybe<Scalars['String']>;
 };
 
 export type AccountDeleteInput = {
@@ -183,6 +184,11 @@ export type Document = {
   id: Scalars['ID'];
   name: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type ErrorMessage = {
+  __typename?: 'ErrorMessage';
+  message?: Maybe<Scalars['String']>;
 };
 
 export const FileType = {
@@ -447,6 +453,13 @@ export type ImportHistory = {
   __typename?: 'ImportHistory';
   taiKhoan?: Maybe<ImportAuthor>;
   thoiGian?: Maybe<Scalars['String']>;
+};
+
+export type ImportStatusHistory = {
+  __typename?: 'ImportStatusHistory';
+  error?: Maybe<ErrorMessage>;
+  thoiGian: Scalars['String'];
+  trangThai: Scalars['String'];
 };
 
 export type LoginResponse = {
@@ -749,6 +762,7 @@ export type Query = {
   homeroomTermList: Array<HomeroomTermListItem>;
   homeroomWatchList: HomeroomWatchList;
   importHistory: ImportHistory;
+  importStatusHistory: Array<ImportStatusHistory>;
   majorList: MajorList;
   majorResultList: MajorResultList;
   noteDetail: NoteDetail;
@@ -758,6 +772,7 @@ export type Query = {
   studentAllSubjectsResult: StudentAllSubjectsResult;
   studentAllTerms: Array<StudentTerm>;
   studentAveragePointByTerm: StudentAveragePoint;
+  studentContactList: StudentContactList;
   studentDetail: StudentDetail;
   studentDetailSubjectsResult: StudentDetailSubjectsResult;
   studentEnrolledList: StudentEnrolledList;
@@ -882,6 +897,10 @@ export type QueryImportHistoryArgs = {
   fileType: FileType;
 };
 
+export type QueryImportStatusHistoryArgs = {
+  fileType: FileType;
+};
+
 export type QueryMajorListArgs = {
   page: Scalars['Int'];
   size: Scalars['Int'];
@@ -926,6 +945,12 @@ export type QueryStudentAllTermsArgs = {
 export type QueryStudentAveragePointByTermArgs = {
   studentId: Scalars['String'];
   term: Scalars['Int'];
+};
+
+export type QueryStudentContactListArgs = {
+  page: Scalars['Int'];
+  size: Scalars['Int'];
+  studentId: Scalars['String'];
 };
 
 export type QueryStudentDetailArgs = {
@@ -1069,6 +1094,12 @@ export type StudentContact = {
   maLHSV: Scalars['Int'];
   mxh: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type StudentContactList = {
+  __typename?: 'StudentContactList';
+  data: Array<StudentContact>;
+  total: Scalars['Int'];
 };
 
 export type StudentContactResponse = {
@@ -1531,6 +1562,7 @@ export type ResolversTypes = {
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
+  ErrorMessage: ResolverTypeWrapper<ErrorMessage>;
   FileType: FileType;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1573,6 +1605,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   ImportAuthor: ResolverTypeWrapper<ImportAuthor>;
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
+  ImportStatusHistory: ResolverTypeWrapper<ImportStatusHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   MajorEditInput: MajorEditInput;
@@ -1604,6 +1637,7 @@ export type ResolversTypes = {
   StudentAllSubjectsResultDetail: ResolverTypeWrapper<StudentAllSubjectsResultDetail>;
   StudentAveragePoint: ResolverTypeWrapper<StudentAveragePoint>;
   StudentContact: ResolverTypeWrapper<StudentContact>;
+  StudentContactList: ResolverTypeWrapper<StudentContactList>;
   StudentContactResponse: ResolverTypeWrapper<StudentContactResponse>;
   StudentDeleteContactResponse: ResolverTypeWrapper<StudentDeleteContactResponse>;
   StudentDeleteParentInfoResponse: ResolverTypeWrapper<StudentDeleteParentInfoResponse>;
@@ -1681,6 +1715,7 @@ export type ResolversParentTypes = {
   CourseListItem: CourseListItem;
   Date: Scalars['Date'];
   Document: Document;
+  ErrorMessage: ErrorMessage;
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
@@ -1722,6 +1757,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   ImportAuthor: ImportAuthor;
   ImportHistory: ImportHistory;
+  ImportStatusHistory: ImportStatusHistory;
   Int: Scalars['Int'];
   LoginResponse: LoginResponse;
   MajorEditInput: MajorEditInput;
@@ -1753,6 +1789,7 @@ export type ResolversParentTypes = {
   StudentAllSubjectsResultDetail: StudentAllSubjectsResultDetail;
   StudentAveragePoint: StudentAveragePoint;
   StudentContact: StudentContact;
+  StudentContactList: StudentContactList;
   StudentContactResponse: StudentContactResponse;
   StudentDeleteContactResponse: StudentDeleteContactResponse;
   StudentDeleteParentInfoResponse: StudentDeleteParentInfoResponse;
@@ -1817,6 +1854,7 @@ export type AccountAddResponseResolvers<
 > = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   maTK?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  matKhau?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2007,6 +2045,14 @@ export type DocumentResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ErrorMessageResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ErrorMessage'] = ResolversParentTypes['ErrorMessage']
+> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2459,6 +2505,20 @@ export type ImportHistoryResolvers<
     ContextType
   >;
   thoiGian?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImportStatusHistoryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ImportStatusHistory'] = ResolversParentTypes['ImportStatusHistory']
+> = {
+  error?: Resolver<
+    Maybe<ResolversTypes['ErrorMessage']>,
+    ParentType,
+    ContextType
+  >;
+  thoiGian?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  trangThai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2957,6 +3017,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryImportHistoryArgs, 'fileType'>
   >;
+  importStatusHistory?: Resolver<
+    Array<ResolversTypes['ImportStatusHistory']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryImportStatusHistoryArgs, 'fileType'>
+  >;
   majorList?: Resolver<
     ResolversTypes['MajorList'],
     ParentType,
@@ -3009,6 +3075,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryStudentAveragePointByTermArgs, 'studentId' | 'term'>
+  >;
+  studentContactList?: Resolver<
+    ResolversTypes['StudentContactList'],
+    ParentType,
+    ContextType,
+    RequireFields<QueryStudentContactListArgs, 'page' | 'size' | 'studentId'>
   >;
   studentDetail?: Resolver<
     ResolversTypes['StudentDetail'],
@@ -3202,6 +3274,19 @@ export type StudentContactResolvers<
   maLHSV?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   mxh?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StudentContactListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['StudentContactList'] = ResolversParentTypes['StudentContactList']
+> = {
+  data?: Resolver<
+    Array<ResolversTypes['StudentContact']>,
+    ParentType,
+    ContextType
+  >;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3679,6 +3764,7 @@ export type Resolvers<ContextType = any> = {
   CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
+  ErrorMessage?: ErrorMessageResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllListItem?: HomeroomAllListItemResolvers<ContextType>;
   HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;
@@ -3716,6 +3802,7 @@ export type Resolvers<ContextType = any> = {
   HomeroomWatchListItem?: HomeroomWatchListItemResolvers<ContextType>;
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
+  ImportStatusHistory?: ImportStatusHistoryResolvers<ContextType>;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;
@@ -3739,6 +3826,7 @@ export type Resolvers<ContextType = any> = {
   StudentAllSubjectsResultDetail?: StudentAllSubjectsResultDetailResolvers<ContextType>;
   StudentAveragePoint?: StudentAveragePointResolvers<ContextType>;
   StudentContact?: StudentContactResolvers<ContextType>;
+  StudentContactList?: StudentContactListResolvers<ContextType>;
   StudentContactResponse?: StudentContactResponseResolvers<ContextType>;
   StudentDeleteContactResponse?: StudentDeleteContactResponseResolvers<ContextType>;
   StudentDeleteParentInfoResponse?: StudentDeleteParentInfoResponseResolvers<ContextType>;

@@ -3,16 +3,24 @@ import React, { useCallback, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 
 import { StyledStickyBox, StyledTitle } from '../../components/styles';
-import { AccountAddInput, useAccountAddMutation } from '../../generated-types';
+import {
+  AccountAddInput,
+  AccountAddMutation,
+  useAccountAddMutation,
+} from '../../generated-types';
 import { GET_ACCOUNT_LIST } from '../../data/queries/account/get-account-list';
 import { ACCOUNT_LIST_PAGE_SIZE } from '../../constants';
 
 import AccountTable from './AccountTable';
 import AddOrEditAccountInfoDialog from './AddOrEditAccountInfoDialog';
+import AccountSuccessDialog from './AccountSuccessDialog';
 
 function ManageAccount() {
   const [openAddAccountInfoDialog, setOpenAddAccountInfoDialog] =
     useState(false);
+  const [openAccountSuccessDialog, setOpenAccountSuccessDialog] =
+    useState(false);
+  const [newAccount, setNewAccount] = useState<AccountAddMutation>();
 
   const handleOpenAddAccountInfoDialog = () => {
     setOpenAddAccountInfoDialog(true);
@@ -22,7 +30,16 @@ function ManageAccount() {
     setOpenAddAccountInfoDialog(false);
   };
 
-  const [addAccount, { loading: addAccountLoading }] = useAccountAddMutation();
+  const handleCloseAccountSuccessDialog = () => {
+    setOpenAccountSuccessDialog(false);
+  };
+
+  const [addAccount, { loading: addAccountLoading }] = useAccountAddMutation({
+    onCompleted: (account) => {
+      setNewAccount(account);
+      setOpenAccountSuccessDialog(true);
+    },
+  });
 
   const handleAddAccount = useCallback(
     async (payload: AccountAddInput) => {
@@ -72,6 +89,13 @@ function ManageAccount() {
             onClose={handleCloseAddAccountInfoDialog}
             onClickCancel={handleCloseAddAccountInfoDialog}
             onClickConfirm={handleAddAccount}
+          />
+        )}
+        {openAccountSuccessDialog && (
+          <AccountSuccessDialog
+            open={openAccountSuccessDialog}
+            onClose={handleCloseAccountSuccessDialog}
+            data={newAccount as AccountAddMutation}
           />
         )}
       </Box>
