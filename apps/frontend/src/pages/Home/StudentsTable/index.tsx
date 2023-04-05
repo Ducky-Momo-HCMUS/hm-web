@@ -48,7 +48,7 @@ const TYPES = ['Tất cả', 'Cần chú ý', 'Cá biệt'];
 const SORT_BY_OPTIONS = [
   { label: 'MSSV', value: 'maSV' },
   { label: 'Họ tên', value: 'tenSV' },
-  { label: 'GPA hệ 10', value: 'gpa10' },
+  { label: 'GPA', value: 'gpa10' },
 ];
 interface State {
   year: string;
@@ -424,13 +424,25 @@ function StudentsTable() {
                   </Select>
                 </StyledFormControl>
               </Box>
-              <Button
-                component={Link}
-                to={`/classes/${selectedClass}`}
-                variant="contained"
-              >
-                Tổng quan lớp học
-              </Button>
+              <Box>
+                {!_isEqual(values.selected, initialSelected) && (
+                  <Button
+                    sx={{ marginTop: '1rem' }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleUpdateWatchlist}
+                  >
+                    Lưu thay đổi
+                  </Button>
+                )}
+                <Button
+                  component={Link}
+                  to={`/classes/${selectedClass}`}
+                  variant="contained"
+                >
+                  Tổng quan lớp học
+                </Button>
+              </Box>
             </StyledActionsBar>
           </AsyncDataRenderer>
         </StyledStickyBox>
@@ -464,16 +476,6 @@ function StudentsTable() {
             </Paper>
           )}
         </AsyncDataRenderer>
-        {!_isEqual(values.selected, initialSelected) && (
-          <Button
-            sx={{ marginTop: '1rem' }}
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateWatchlist}
-          >
-            Lưu thay đổi
-          </Button>
-        )}
       </StyledContentWrapper>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
