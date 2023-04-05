@@ -17,6 +17,7 @@ export const StyledTextField = styled(TextField)`
 
 export const StyledCard = styled(Card)`
   padding: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const StyledFilterBox = styled(Box)`

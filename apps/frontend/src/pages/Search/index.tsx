@@ -114,7 +114,7 @@ function Search() {
     <StyledContainer>
       <Header isAuthenticated />
       <StyledContentWrapper>
-        <StyledStickyBox>
+        <StyledStickyBox sx={{ paddingBottom: 0 }}>
           <StyledTitle>Kết quả tìm kiếm</StyledTitle>
           <StyledBreadCrumbs aria-label="breadcrumb">
             <Link to="/">Trang chủ</Link>
@@ -122,7 +122,7 @@ function Search() {
           </StyledBreadCrumbs>
         </StyledStickyBox>
         <AsyncDataRenderer loading={searchStudentsLoading} data={studentsList}>
-          <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
+          <Paper sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: '100vh' }}>
               <Table stickyHeader>
                 <TableHead>

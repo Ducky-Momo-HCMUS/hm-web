@@ -16,9 +16,11 @@ import { Link } from 'react-router-dom';
 
 export const StyledStickyBox = styled(Box)`
   position: sticky;
-  top: 66px;
+  top: 60px;
   background-color: #f5f5f5;
   z-index: 10;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 `;
 
 export const StyledContainer = styled(Box)`

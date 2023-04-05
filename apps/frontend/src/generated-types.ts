@@ -19,6 +19,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  CustomObject: any;
   Date: any;
   UploadFile: any;
 };
@@ -181,9 +182,19 @@ export type Document = {
   url: Scalars['String'];
 };
 
-export type ErrorMessage = {
-  __typename?: 'ErrorMessage';
-  message?: Maybe<Scalars['String']>;
+export type FileErrorDetails = {
+  __typename?: 'FileErrorDetails';
+  fieldErrors?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
+  headers: Array<ColumnHeader>;
+  index?: Maybe<Scalars['Int']>;
+  row?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+};
+
+export type FileHandlingError = {
+  __typename?: 'FileHandlingError';
+  details?: Maybe<FileErrorDetails>;
+  message: Scalars['String'];
 };
 
 export const FileType = {
@@ -452,7 +463,7 @@ export type ImportHistory = {
 
 export type ImportStatusHistory = {
   __typename?: 'ImportStatusHistory';
-  error?: Maybe<ErrorMessage>;
+  error?: Maybe<FileHandlingError>;
   thoiGian: Scalars['String'];
   trangThai: Scalars['String'];
 };
@@ -1608,7 +1619,29 @@ export type ImportStatusHistoryQuery = {
     thoiGian: string;
     trangThai: string;
     error?:
-      | { __typename?: 'ErrorMessage'; message?: string | null | undefined }
+      | {
+          __typename?: 'FileHandlingError';
+          message: string;
+          details?:
+            | {
+                __typename?: 'FileErrorDetails';
+                index?: number | null | undefined;
+                row?: Array<any | null | undefined> | null | undefined;
+                fieldErrors?: Array<any | null | undefined> | null | undefined;
+                formErrors?:
+                  | Array<string | null | undefined>
+                  | null
+                  | undefined;
+                headers: Array<{
+                  __typename?: 'ColumnHeader';
+                  key: string;
+                  value: string;
+                  index: number;
+                }>;
+              }
+            | null
+            | undefined;
+        }
       | null
       | undefined;
   }>;
@@ -3513,6 +3546,17 @@ export const ImportStatusHistoryDocument = gql`
       trangThai
       error {
         message
+        details {
+          index
+          headers {
+            key
+            value
+            index
+          }
+          row
+          fieldErrors
+          formErrors
+        }
       }
     }
   }

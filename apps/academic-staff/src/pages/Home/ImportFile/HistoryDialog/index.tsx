@@ -11,12 +11,12 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material';
-import { format } from 'date-fns';
 
 import { ImportStatusHistory } from '../../../../generated-types';
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 
 import { StyledDialog } from './styles';
+import ExpandableRow from './ExpandableRow';
 
 interface HistoryDialogProps {
   title: string;
@@ -46,19 +46,11 @@ function HistoryDialog({
                 <TableCell>STT</TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Trạng thái</TableCell>
-                <TableCell>Thông báo</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {historyList.map((history, index) => (
-                <TableRow>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    {format(new Date(history.thoiGian), 'dd/MM/yyyy HH:mm:ss')}
-                  </TableCell>
-                  <TableCell>{history.trangThai}</TableCell>
-                  <TableCell>{history.error?.message || ''}</TableCell>
-                </TableRow>
+                <ExpandableRow rowIndex={index} history={history} />
               ))}
             </TableBody>
           </Table>

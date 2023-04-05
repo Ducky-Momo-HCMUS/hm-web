@@ -345,7 +345,6 @@ function ClassDetail() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '2rem',
               marginTop: '1rem',
             }}
           >

@@ -40,7 +40,7 @@ function StudentStatistics() {
 
   return (
     <>
-      <StyledStickyBox sx={{ top: '63px' }}>
+      <StyledStickyBox sx={{ top: '63px', paddingBottom: 0 }}>
         <StyledTitle variant="h1">Thống kê tình hình</StyledTitle>
         <Box
           display="flex"

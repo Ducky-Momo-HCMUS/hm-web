@@ -24,6 +24,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  CustomObject: any;
   Date: any;
   UploadFile: any;
 };
@@ -186,9 +187,19 @@ export type Document = {
   url: Scalars['String'];
 };
 
-export type ErrorMessage = {
-  __typename?: 'ErrorMessage';
-  message?: Maybe<Scalars['String']>;
+export type FileErrorDetails = {
+  __typename?: 'FileErrorDetails';
+  fieldErrors?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
+  headers: Array<ColumnHeader>;
+  index?: Maybe<Scalars['Int']>;
+  row?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+};
+
+export type FileHandlingError = {
+  __typename?: 'FileHandlingError';
+  details?: Maybe<FileErrorDetails>;
+  message: Scalars['String'];
 };
 
 export const FileType = {
@@ -457,7 +468,7 @@ export type ImportHistory = {
 
 export type ImportStatusHistory = {
   __typename?: 'ImportStatusHistory';
-  error?: Maybe<ErrorMessage>;
+  error?: Maybe<FileHandlingError>;
   thoiGian: Scalars['String'];
   trangThai: Scalars['String'];
 };
@@ -1565,9 +1576,11 @@ export type ResolversTypes = {
   CourseEditResponse: ResolverTypeWrapper<CourseEditResponse>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
+  CustomObject: ResolverTypeWrapper<Scalars['CustomObject']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
-  ErrorMessage: ResolverTypeWrapper<ErrorMessage>;
+  FileErrorDetails: ResolverTypeWrapper<FileErrorDetails>;
+  FileHandlingError: ResolverTypeWrapper<FileHandlingError>;
   FileType: FileType;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1719,9 +1732,11 @@ export type ResolversParentTypes = {
   CourseEditResponse: CourseEditResponse;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
+  CustomObject: Scalars['CustomObject'];
   Date: Scalars['Date'];
   Document: Document;
-  ErrorMessage: ErrorMessage;
+  FileErrorDetails: FileErrorDetails;
+  FileHandlingError: FileHandlingError;
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
@@ -2040,6 +2055,11 @@ export type CourseListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface CustomObjectScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['CustomObject'], any> {
+  name: 'CustomObject';
+}
+
 export interface DateScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -2055,11 +2075,44 @@ export type DocumentResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ErrorMessageResolvers<
+export type FileErrorDetailsResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['ErrorMessage'] = ResolversParentTypes['ErrorMessage']
+  ParentType extends ResolversParentTypes['FileErrorDetails'] = ResolversParentTypes['FileErrorDetails']
 > = {
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fieldErrors?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['CustomObject']>>>,
+    ParentType,
+    ContextType
+  >;
+  formErrors?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
+  headers?: Resolver<
+    Array<ResolversTypes['ColumnHeader']>,
+    ParentType,
+    ContextType
+  >;
+  index?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  row?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['CustomObject']>>>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FileHandlingErrorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FileHandlingError'] = ResolversParentTypes['FileHandlingError']
+> = {
+  details?: Resolver<
+    Maybe<ResolversTypes['FileErrorDetails']>,
+    ParentType,
+    ContextType
+  >;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2520,7 +2573,7 @@ export type ImportStatusHistoryResolvers<
   ParentType extends ResolversParentTypes['ImportStatusHistory'] = ResolversParentTypes['ImportStatusHistory']
 > = {
   error?: Resolver<
-    Maybe<ResolversTypes['ErrorMessage']>,
+    Maybe<ResolversTypes['FileHandlingError']>,
     ParentType,
     ContextType
   >;
@@ -3777,9 +3830,11 @@ export type Resolvers<ContextType = any> = {
   CourseEditResponse?: CourseEditResponseResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;
+  CustomObject?: GraphQLScalarType;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
-  ErrorMessage?: ErrorMessageResolvers<ContextType>;
+  FileErrorDetails?: FileErrorDetailsResolvers<ContextType>;
+  FileHandlingError?: FileHandlingErrorResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllListItem?: HomeroomAllListItemResolvers<ContextType>;
   HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;

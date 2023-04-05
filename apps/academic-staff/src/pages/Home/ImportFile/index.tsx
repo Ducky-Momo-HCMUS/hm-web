@@ -37,6 +37,7 @@ import AsyncDataRenderer from '../../../components/AsyncDataRenderer';
 import {
   ColumnHeader,
   FileType,
+  ImportStatusHistory,
   useClassroomListLazyQuery,
   useColumnHeaderListLazyQuery,
   useCourseListQuery,
@@ -374,6 +375,7 @@ function ImportFile() {
         page: 1,
         size: 1000,
       },
+      fetchPolicy: 'no-cache',
     });
   const courseList = useMemo(
     () => courseListData?.courseList.data || [],
@@ -421,6 +423,7 @@ function ImportFile() {
             termId,
             subjectId: selectedSubject,
           },
+          fetchPolicy: 'no-cache',
         });
       }
     }
@@ -500,15 +503,6 @@ function ImportFile() {
   ] = useImportStatusHistoryLazyQuery();
 
   const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
-
-  useEffect(() => {
-    getImportStatusHistory({
-      variables: {
-        fileType,
-      },
-      fetchPolicy: 'no-cache',
-    });
-  }, [fileType, getImportStatusHistory]);
 
   return (
     <>
@@ -659,7 +653,23 @@ function ImportFile() {
                   (item) => item.label === values.type
                 )?.label.toLowerCase()}
               </Typography>
-              <IconButton onClick={() => setOpenHistoryDialog(true)}>
+              <IconButton
+                onClick={() => {
+                  getImportHistory({
+                    variables: {
+                      fileType,
+                    },
+                    fetchPolicy: 'no-cache',
+                  });
+                  getImportStatusHistory({
+                    variables: {
+                      fileType,
+                    },
+                    fetchPolicy: 'no-cache',
+                  });
+                  setOpenHistoryDialog(true);
+                }}
+              >
                 <HistoryIcon />
               </IconButton>
             </Box>
@@ -783,7 +793,10 @@ function ImportFile() {
           }
           openHistoryDialog={openHistoryDialog}
           onClose={() => setOpenHistoryDialog(false)}
-          historyList={importStatusHistoryData?.importStatusHistory || []}
+          historyList={
+            (importStatusHistoryData?.importStatusHistory as ImportStatusHistory[]) ||
+            []
+          }
         />
       )}
       <Backdrop

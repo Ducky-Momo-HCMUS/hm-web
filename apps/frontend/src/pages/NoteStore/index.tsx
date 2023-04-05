@@ -471,7 +471,7 @@ function NoteStore() {
       <StyledContainer>
         <Header isAuthenticated />
         <StyledContentWrapper>
-          <StyledStickyBox>
+          <StyledStickyBox sx={{ paddingBottom: 0 }}>
             <Box
               sx={{
                 display: 'flex',

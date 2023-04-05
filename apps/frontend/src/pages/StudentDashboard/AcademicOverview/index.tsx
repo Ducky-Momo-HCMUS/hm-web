@@ -99,7 +99,7 @@ function AcademicOverview() {
 
   return (
     <>
-      <StyledStickyBox>
+      <StyledStickyBox sx={{ paddingBottom: 0 }}>
         <StyledTitle variant="h1">Kết quả học tập</StyledTitle>
         <Box
           sx={{

@@ -34,7 +34,7 @@ function NoteCardItem({
   const tenSV = sinhVien?.tenSV;
 
   return (
-    <Grid item xs={3}>
+    <Grid item xs={3} sx={{ paddingTop: '0!important' }}>
       <StyledCard onClick={onClick}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography color="text.secondary" variant="body2">

@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 
 const fileTypeDefs = gql`
+  scalar CustomObject
   scalar UploadFile
 
   extend type Query {
@@ -23,11 +24,20 @@ const fileTypeDefs = gql`
   type ImportStatusHistory {
     thoiGian: String!
     trangThai: String!
-    error: ErrorMessage
+    error: FileHandlingError
   }
 
-  type ErrorMessage {
-    message: String
+  type FileHandlingError {
+    message: String!
+    details: FileErrorDetails
+  }
+
+  type FileErrorDetails {
+    index: Int
+    headers: [ColumnHeader!]!
+    row: [CustomObject]
+    fieldErrors: [CustomObject]
+    formErrors: [String]
   }
 
   input UploadFileConfig {
