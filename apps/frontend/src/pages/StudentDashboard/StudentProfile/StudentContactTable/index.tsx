@@ -120,7 +120,7 @@ function StudentContactTable() {
     <>
       <AsyncDataRenderer
         loading={studentContactListLoading}
-        data={studentContactListData}
+        data={studentContactList}
       >
         <Table>
           <TableBody>

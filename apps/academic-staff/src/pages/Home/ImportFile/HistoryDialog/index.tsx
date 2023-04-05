@@ -45,10 +45,10 @@ function HistoryDialog({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell> </TableCell>
                 <TableCell>STT</TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Trạng thái</TableCell>
+                <TableCell> </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

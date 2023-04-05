@@ -176,10 +176,12 @@ class HomeroomAPI extends BaseDataSource {
   public async getHomeroomFinalResultListByTerm({
     homeroomId,
     term,
+    page,
+    size,
   }: QueryHomeroomFinalResultListByTermArgs) {
     try {
       const homeroomFinalResultList = await this.get(
-        `v1/homerooms/${homeroomId}/score?term=${term}`
+        `v1/homerooms/${homeroomId}/score?term=${term}&page=${page}&size=${size}`
       );
       return homeroomFinalResultList;
     } catch (error) {
