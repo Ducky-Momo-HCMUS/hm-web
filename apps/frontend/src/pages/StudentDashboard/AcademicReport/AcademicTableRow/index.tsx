@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
+import _isNumber from 'lodash/isNumber';
 
 import { theme } from '../../../../theme';
 import { StudentSubject } from '../../../../generated-types';
@@ -39,6 +40,14 @@ function AcademicTableRow({ data }: AcademicTableRowProps) {
         color = theme.palette.success.main;
         break;
       }
+      case 'Vắng thi': {
+        color = theme.palette.warning.main;
+        break;
+      }
+      case 'Hoãn thi': {
+        color = theme.palette.warning.main;
+        break;
+      }
       default:
         break;
     }
@@ -57,24 +66,16 @@ function AcademicTableRow({ data }: AcademicTableRowProps) {
       <TableCell>{tenLopHP}</TableCell>
       <TableCell>{renderStatusWithProperColor()}</TableCell>
       <TableCell>{soTinChi}</TableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(diemGK as number)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(diemTH as number)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(diemCong as number)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(diemKhac as number)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(diemCK as number)}
-      </StyledTableCell>
-      <StyledTableCell>
-        {renderGPA10WithProperColor(dtb as number)}
-      </StyledTableCell>
+      <StyledTableCell>{_isNumber(diemGK) ? diemGK : ''}</StyledTableCell>
+      <StyledTableCell>{_isNumber(diemTH) ? diemTH : ''}</StyledTableCell>
+      <StyledTableCell>{_isNumber(diemCong) ? diemCong : ''}</StyledTableCell>
+      <StyledTableCell>{_isNumber(diemKhac) ? diemKhac : ''}</StyledTableCell>
+      <StyledTableCell>{_isNumber(diemCK) ? diemCK : ''}</StyledTableCell>
+      {!['Vắng thi', 'Hoãn thi'].includes(tinhTrang) && (
+        <StyledTableCell>
+          {renderGPA10WithProperColor(dtb as number)}
+        </StyledTableCell>
+      )}
     </TableRow>
   );
 }
