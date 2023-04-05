@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   IconButton,
@@ -42,11 +42,13 @@ function ActionsBar() {
     navigate('/login');
   }, [navigate]);
 
-  const jwt = localStorage.getItem('ACCESS_TOKEN');
-  if (jwt) {
-    const jwtPayload = decodeJwt(jwt);
-    setNotificationSubscriberId(String(jwtPayload.sub));
-  }
+  useEffect(() => {
+    const jwt = localStorage.getItem('ACCESS_TOKEN');
+    if (jwt) {
+      const jwtPayload = decodeJwt(jwt);
+      setNotificationSubscriberId(String(jwtPayload.sub));
+    }
+  }, []);
 
   return (
     <>
