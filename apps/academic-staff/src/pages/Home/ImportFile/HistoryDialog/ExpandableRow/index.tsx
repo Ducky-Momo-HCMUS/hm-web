@@ -22,13 +22,15 @@ import _sortBy from 'lodash/sortBy';
 
 import { ImportStatusHistory } from '../../../../../generated-types';
 
-import { StyledTableCell } from './styles';
+import { StyledTableCell, StyledTableRow } from './styles';
 
 function ExpandableRow(props: {
+  selected: boolean;
+  setSelected: any;
   rowIndex: number;
   history: ImportStatusHistory;
 }) {
-  const { rowIndex, history } = props;
+  const { selected, setSelected, rowIndex, history } = props;
   const [open, setOpen] = React.useState(false);
 
   const { headers, row, fieldErrors, index, message } = useMemo(() => {
@@ -76,7 +78,11 @@ function ExpandableRow(props: {
 
   return (
     <>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <StyledTableRow
+        sx={{ '& > *': { borderBottom: 'unset' } }}
+        selected={selected}
+        onClick={() => setSelected(rowIndex)}
+      >
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -93,7 +99,7 @@ function ExpandableRow(props: {
           {format(new Date(history.thoiGian), 'dd/MM/yyyy HH:mm:ss')}
         </TableCell>
         <TableCell>{history.trangThai}</TableCell>
-      </TableRow>
+      </StyledTableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>

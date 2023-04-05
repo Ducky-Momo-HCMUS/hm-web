@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   DialogActions,
@@ -33,6 +33,8 @@ function HistoryDialog({
   loading,
   historyList,
 }: HistoryDialogProps) {
+  const [selected, setSelected] = useState(-1);
+
   return (
     <StyledDialog open={openHistoryDialog} onClose={onClose}>
       <DialogTitle display="flex" alignItems="center">
@@ -51,7 +53,12 @@ function HistoryDialog({
             </TableHead>
             <TableBody>
               {historyList.map((history, index) => (
-                <ExpandableRow rowIndex={index} history={history} />
+                <ExpandableRow
+                  rowIndex={index}
+                  history={history}
+                  selected={selected === index}
+                  setSelected={setSelected}
+                />
               ))}
             </TableBody>
           </Table>
