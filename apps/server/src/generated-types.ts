@@ -528,7 +528,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
-  teacherDelete: AllTeacherListItem;
+  teacherDelete: TeacherDeleteResponse;
   teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
@@ -1360,6 +1360,11 @@ export type TagList = {
   total: Scalars['Int'];
 };
 
+export type TeacherDeleteResponse = {
+  __typename?: 'TeacherDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type TeacherEditInput = {
   lopSH: Array<Scalars['String']>;
 };
@@ -1673,6 +1678,7 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  TeacherDeleteResponse: ResolverTypeWrapper<TeacherDeleteResponse>;
   TeacherEditInput: TeacherEditInput;
   TeacherInfo: ResolverTypeWrapper<TeacherInfo>;
   TeacherList: ResolverTypeWrapper<TeacherList>;
@@ -1825,6 +1831,7 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  TeacherDeleteResponse: TeacherDeleteResponse;
   TeacherEditInput: TeacherEditInput;
   TeacherInfo: TeacherInfo;
   TeacherList: TeacherList;
@@ -2739,7 +2746,7 @@ export type MutationResolvers<
     RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
   >;
   teacherDelete?: Resolver<
-    ResolversTypes['AllTeacherListItem'],
+    ResolversTypes['TeacherDeleteResponse'],
     ParentType,
     ContextType,
     RequireFields<MutationTeacherDeleteArgs, 'teacherId'>
@@ -3656,6 +3663,14 @@ export type TagListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TeacherDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherDeleteResponse'] = ResolversParentTypes['TeacherDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TeacherInfoResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TeacherInfo'] = ResolversParentTypes['TeacherInfo']
@@ -3857,6 +3872,7 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
+  TeacherDeleteResponse?: TeacherDeleteResponseResolvers<ContextType>;
   TeacherInfo?: TeacherInfoResolvers<ContextType>;
   TeacherList?: TeacherListResolvers<ContextType>;
   TeacherListItem?: TeacherListItemResolvers<ContextType>;

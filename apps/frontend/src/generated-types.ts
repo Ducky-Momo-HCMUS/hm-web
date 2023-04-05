@@ -523,7 +523,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
-  teacherDelete: AllTeacherListItem;
+  teacherDelete: TeacherDeleteResponse;
   teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
@@ -1355,6 +1355,11 @@ export type TagList = {
   total: Scalars['Int'];
 };
 
+export type TeacherDeleteResponse = {
+  __typename?: 'TeacherDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type TeacherEditInput = {
   lopSH: Array<Scalars['String']>;
 };
@@ -1847,7 +1852,7 @@ export type TeacherDeleteMutationVariables = Exact<{
 
 export type TeacherDeleteMutation = {
   __typename?: 'Mutation';
-  teacherDelete: { __typename?: 'AllTeacherListItem'; maGV: number };
+  teacherDelete: { __typename?: 'TeacherDeleteResponse'; status: number };
 };
 
 export type TeacherEditMutationVariables = Exact<{
@@ -4473,7 +4478,7 @@ export type TagEditMutationOptions = Apollo.BaseMutationOptions<
 export const TeacherDeleteDocument = gql`
   mutation TeacherDelete($teacherId: Int!) {
     teacherDelete(teacherId: $teacherId) {
-      maGV
+      status
     }
   }
 `;
