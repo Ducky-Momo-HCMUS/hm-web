@@ -55,7 +55,7 @@ function ExpandableRow(props: {
       row: [],
       fieldErrors: {},
       index: 0,
-      message: '',
+      message: error?.message || '',
     };
   }, [history]);
 
@@ -81,17 +81,7 @@ function ExpandableRow(props: {
       <StyledTableRow
         sx={{ '& > *': { borderBottom: 'unset' } }}
         selected={selected}
-        onClick={() => setSelected(rowIndex)}
       >
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
         <TableCell component="th" scope="row">
           {rowIndex + 1}
         </TableCell>
@@ -99,14 +89,30 @@ function ExpandableRow(props: {
           {format(new Date(history.thoiGian), 'dd/MM/yyyy HH:mm:ss')}
         </TableCell>
         <TableCell>{history.trangThai}</TableCell>
+        {history.trangThai === 'FAILED' && (
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => {
+                setSelected(rowIndex);
+                setOpen(!open);
+              }}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+        )}
       </StyledTableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
+              <Typography>
+                <b>Message</b>: {message}
+              </Typography>
               {headers && headers.length > 0 && (
                 <Box>
-                  <Typography>{message}</Typography>
                   <Typography fontWeight="bold">Header</Typography>
                   <Table sx={{ width: 'fit-content' }}>
                     <TableHead>

@@ -33,9 +33,12 @@ import {
   StudentTerm,
   useHomeroomDetailQuery,
   useHomeroomExamAbsentListByTermLazyQuery,
+  useHomeroomExamAbsentListByTermQuery,
   useHomeroomFinalResultListByTermLazyQuery,
+  useHomeroomFinalResultListByTermQuery,
   useHomeroomOverviewReportByTermLazyQuery,
   useHomeroomPostponeExamListByTermLazyQuery,
+  useHomeroomPostponeExamListByTermQuery,
   useHomeroomReportDetailByTermQuery,
   useHomeroomTermListQuery,
 } from '../../generated-types';
@@ -361,6 +364,42 @@ function ClassReport() {
     skip: homeroomTermListLoading,
   });
 
+  const {
+    loading: homeroomAllFinalResultLoading,
+    data: homeroomAllFinalResultData,
+  } = useHomeroomFinalResultListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: selectedTerm,
+      page: 1,
+      size: 1000,
+    },
+  });
+
+  const {
+    loading: homeroomAllExamAbsentLoading,
+    data: homeroomAllExamAbsentData,
+  } = useHomeroomExamAbsentListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: selectedTerm,
+      page: 1,
+      size: 1000,
+    },
+  });
+
+  const {
+    loading: homeroomAllPostponeExamLoading,
+    data: homeroomAllPostponeExamData,
+  } = useHomeroomPostponeExamListByTermQuery({
+    variables: {
+      homeroomId: id,
+      term: selectedTerm,
+      page: 1,
+      size: 1000,
+    },
+  });
+
   function convertName(tenGVCN: string) {
     const words = tenGVCN.split(' ');
     let name = '';
@@ -393,7 +432,7 @@ function ClassReport() {
         homeroomOverviewReport: homeroomReportDetailData
           ?.homeroomReportDetailByTerm.overviewReport as HomeroomOverviewReport,
         homeroomExamAbsentList:
-          homeroomReportDetailData?.homeroomReportDetailByTerm.examAbsent.data.map(
+          homeroomAllExamAbsentData?.homeroomExamAbsentListByTerm.data.map(
             (item) => ({
               maSV: item.sinhVien.maSV,
               tenSV: item.sinhVien.tenSV,
@@ -401,15 +440,15 @@ function ClassReport() {
             })
           ) as ExamAbsentListItem[],
         homeroomPostponeExamList:
-          homeroomReportDetailData?.homeroomReportDetailByTerm.examPostpone.data.map(
+          homeroomAllPostponeExamData?.homeroomPostponeExamListByTerm.data.map(
             (item) => ({
               maSV: item.sinhVien.maSV,
               tenSV: item.sinhVien.tenSV,
               tenMH: item.monHoc.tenMH,
             })
           ) as ExamAbsentListItem[],
-        homeroomFinalResultList: homeroomReportDetailData
-          ?.homeroomReportDetailByTerm.finalResult
+        homeroomFinalResultList: homeroomAllFinalResultData
+          ?.homeroomFinalResultListByTerm
           .formatted as HomeroomFinalResultListItem[],
       });
       saveDocumentToFile(
@@ -422,11 +461,10 @@ function ClassReport() {
       );
     },
     [
+      homeroomAllExamAbsentData?.homeroomExamAbsentListByTerm.data,
+      homeroomAllFinalResultData?.homeroomFinalResultListByTerm.formatted,
+      homeroomAllPostponeExamData?.homeroomPostponeExamListByTerm.data,
       homeroomDetail?.giaoVien.tenGV,
-      homeroomReportDetailData?.homeroomReportDetailByTerm.examAbsent.data,
-      homeroomReportDetailData?.homeroomReportDetailByTerm.examPostpone.data,
-      homeroomReportDetailData?.homeroomReportDetailByTerm.finalResult
-        .formatted,
       homeroomReportDetailData?.homeroomReportDetailByTerm.overviewReport,
       id,
       initialYear,
@@ -495,7 +533,12 @@ function ClassReport() {
               </Box>
             </AsyncDataRenderer>
             <AsyncDataRenderer
-              loading={homeroomReportDetailLoading}
+              loading={
+                homeroomReportDetailLoading ||
+                homeroomAllFinalResultLoading ||
+                homeroomAllExamAbsentLoading ||
+                homeroomAllPostponeExamLoading
+              }
               data={homeroomReportDetailData}
             >
               <Button
