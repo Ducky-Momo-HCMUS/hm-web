@@ -39,6 +39,18 @@ export const saveDocumentToFile = (doc, fileName) => {
   });
 };
 
+export const renderTrainingPointWithProperColor = (drl: number) => {
+  let color = '';
+
+  if (drl <= 50) {
+    color = theme.palette.error.main;
+  } else {
+    color = theme.palette.text.primary;
+  }
+
+  return <Typography sx={{ color }}>{drl || 'Chưa có'}</Typography>;
+};
+
 export const renderStatusWithProperColor = (tinhTrang: string) => {
   let color = '';
 

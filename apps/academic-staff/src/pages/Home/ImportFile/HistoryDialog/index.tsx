@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   DialogActions,
@@ -11,12 +11,12 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material';
-import { format } from 'date-fns';
 
 import { ImportStatusHistory } from '../../../../generated-types';
 import AsyncDataRenderer from '../../../../components/AsyncDataRenderer';
 
 import { StyledDialog } from './styles';
+import ExpandableRow from './ExpandableRow';
 
 interface HistoryDialogProps {
   title: string;
@@ -33,6 +33,8 @@ function HistoryDialog({
   loading,
   historyList,
 }: HistoryDialogProps) {
+  const [selected, setSelected] = useState(-1);
+
   return (
     <StyledDialog open={openHistoryDialog} onClose={onClose}>
       <DialogTitle display="flex" alignItems="center">
@@ -40,25 +42,23 @@ function HistoryDialog({
       </DialogTitle>
       <DialogContent>
         <AsyncDataRenderer loading={loading} data={historyList}>
-          <Table sx={{ width: 'fit-content' }}>
+          <Table>
             <TableHead>
               <TableRow>
+                <TableCell> </TableCell>
                 <TableCell>STT</TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Trạng thái</TableCell>
-                <TableCell>Thông báo</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {historyList.map((history, index) => (
-                <TableRow>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    {format(new Date(history.thoiGian), 'dd/MM/yyyy HH:mm:ss')}
-                  </TableCell>
-                  <TableCell>{history.trangThai}</TableCell>
-                  <TableCell>{history.error?.message || ''}</TableCell>
-                </TableRow>
+                <ExpandableRow
+                  rowIndex={index}
+                  history={history}
+                  selected={selected === index}
+                  setSelected={setSelected}
+                />
               ))}
             </TableBody>
           </Table>

@@ -13,7 +13,11 @@ const teacherTypeDefs = gql`
       teacherId: Int!
       payload: TeacherEditInput!
     ): AllTeacherListItem!
-    teacherDelete(teacherId: Int!): AllTeacherListItem!
+    teacherDelete(teacherId: Int!): TeacherDeleteResponse!
+  }
+
+  type TeacherDeleteResponse {
+    status: Int!
   }
 
   type TeacherStudentList {

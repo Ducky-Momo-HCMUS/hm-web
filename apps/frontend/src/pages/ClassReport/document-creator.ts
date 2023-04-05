@@ -212,13 +212,6 @@ class DocumentCreator {
             ),
             this.createBullet(
               'my-bullet-points-1',
-              `Tình hình thi hết học phần HK${hocKy}/${namHocBD}-${
-                Number(namHocBD) + 1
-              }:`,
-              1
-            ),
-            this.createBullet(
-              'my-bullet-points-1',
               `CÔNG TÁC CỦA GVCN TRONG HỌC KỲ ${hocKy} / NĂM HỌC ${namHocBD}-${
                 Number(namHocBD) + 1
               }`,

@@ -168,7 +168,7 @@ function AcademicReport() {
 
   return (
     <>
-      <StyledStickyBox>
+      <StyledStickyBox sx={{ paddingBottom: 0 }}>
         <StyledTitle variant="h1">Tình hình học tập</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
           <Link to="/">Trang chủ</Link>

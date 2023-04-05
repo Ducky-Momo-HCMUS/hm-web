@@ -214,7 +214,7 @@ function StudentProfile() {
   return (
     <>
       <ToastContainer />
-      <StyledStickyBox sx={{ top: '63px' }}>
+      <StyledStickyBox sx={{ top: '63px', paddingBottom: 0 }}>
         <StyledTitle variant="h1">Thông tin sinh viên</StyledTitle>
         <Box
           display="flex"

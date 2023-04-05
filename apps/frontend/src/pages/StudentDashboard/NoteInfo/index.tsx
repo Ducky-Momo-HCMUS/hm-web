@@ -408,7 +408,7 @@ function NoteInfo() {
 
   return (
     <>
-      <StyledStickyBox>
+      <StyledStickyBox sx={{ paddingBottom: 0 }}>
         <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
           <Link to="/">Trang chủ</Link>
@@ -417,7 +417,7 @@ function NoteInfo() {
         </StyledBreadCrumbs>
       </StyledStickyBox>
       <StyledGridContainer
-        sx={{ marginTop: '1.5rem' }}
+        sx={{ marginTop: '0.5rem' }}
         container
         spacing={3}
         columns={20}
