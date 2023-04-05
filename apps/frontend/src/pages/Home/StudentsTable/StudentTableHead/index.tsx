@@ -35,7 +35,7 @@ const columns: readonly Column[] = [
   },
   {
     id: 'gpa10',
-    label: 'GPA hệ 10',
+    label: 'GPA',
     minWidth: 60,
   },
   {
