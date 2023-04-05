@@ -125,7 +125,7 @@ function PostponeAbsentList() {
       </StyledStickyBox>
       <AsyncDataRenderer loading={false} data={[{}]}>
         <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}>
-          <AppBar position="static">
+          <AppBar position="static" color="transparent">
             <Tabs
               value={tabValue}
               onChange={handleTabChange}
