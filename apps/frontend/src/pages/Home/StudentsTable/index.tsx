@@ -424,11 +424,11 @@ function StudentsTable() {
                   </Select>
                 </StyledFormControl>
               </Box>
-              <Box>
+              <Box display="flex" alignItems="center">
                 {!_isEqual(values.selected, initialSelected) && (
                   <Button
-                    sx={{ marginTop: '1rem' }}
-                    variant="contained"
+                    sx={{ marginRight: '1rem' }}
+                    variant="outlined"
                     color="primary"
                     onClick={handleUpdateWatchlist}
                   >
