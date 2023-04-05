@@ -19,8 +19,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  CustomObject: any;
   Date: any;
+  JSONObject: any;
   UploadFile: any;
 };
 
@@ -184,16 +184,16 @@ export type Document = {
 
 export type FileErrorDetails = {
   __typename?: 'FileErrorDetails';
-  fieldErrors?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  fieldErrors?: Maybe<Scalars['JSONObject']>;
   formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
   headers: Array<ColumnHeader>;
   index?: Maybe<Scalars['Int']>;
-  row?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  row?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type FileHandlingError = {
   __typename?: 'FileHandlingError';
-  details?: Maybe<FileErrorDetails>;
+  detail?: Maybe<FileErrorDetails>;
   message: Scalars['String'];
 };
 
@@ -1622,12 +1622,12 @@ export type ImportStatusHistoryQuery = {
       | {
           __typename?: 'FileHandlingError';
           message: string;
-          details?:
+          detail?:
             | {
                 __typename?: 'FileErrorDetails';
                 index?: number | null | undefined;
-                row?: Array<any | null | undefined> | null | undefined;
-                fieldErrors?: Array<any | null | undefined> | null | undefined;
+                row?: Array<string | null | undefined> | null | undefined;
+                fieldErrors?: any | null | undefined;
                 formErrors?:
                   | Array<string | null | undefined>
                   | null
@@ -3546,7 +3546,7 @@ export const ImportStatusHistoryDocument = gql`
       trangThai
       error {
         message
-        details {
+        detail {
           index
           headers {
             key

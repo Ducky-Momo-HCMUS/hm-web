@@ -24,8 +24,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  CustomObject: any;
   Date: any;
+  JSONObject: any;
   UploadFile: any;
 };
 
@@ -189,16 +189,16 @@ export type Document = {
 
 export type FileErrorDetails = {
   __typename?: 'FileErrorDetails';
-  fieldErrors?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  fieldErrors?: Maybe<Scalars['JSONObject']>;
   formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
   headers: Array<ColumnHeader>;
   index?: Maybe<Scalars['Int']>;
-  row?: Maybe<Array<Maybe<Scalars['CustomObject']>>>;
+  row?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type FileHandlingError = {
   __typename?: 'FileHandlingError';
-  details?: Maybe<FileErrorDetails>;
+  detail?: Maybe<FileErrorDetails>;
   message: Scalars['String'];
 };
 
@@ -1576,7 +1576,6 @@ export type ResolversTypes = {
   CourseEditResponse: ResolverTypeWrapper<CourseEditResponse>;
   CourseList: ResolverTypeWrapper<CourseList>;
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
-  CustomObject: ResolverTypeWrapper<Scalars['CustomObject']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
   FileErrorDetails: ResolverTypeWrapper<FileErrorDetails>;
@@ -1625,6 +1624,7 @@ export type ResolversTypes = {
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
   ImportStatusHistory: ResolverTypeWrapper<ImportStatusHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   MajorEditInput: MajorEditInput;
   MajorEditResponse: ResolverTypeWrapper<MajorEditResponse>;
@@ -1732,7 +1732,6 @@ export type ResolversParentTypes = {
   CourseEditResponse: CourseEditResponse;
   CourseList: CourseList;
   CourseListItem: CourseListItem;
-  CustomObject: Scalars['CustomObject'];
   Date: Scalars['Date'];
   Document: Document;
   FileErrorDetails: FileErrorDetails;
@@ -1780,6 +1779,7 @@ export type ResolversParentTypes = {
   ImportHistory: ImportHistory;
   ImportStatusHistory: ImportStatusHistory;
   Int: Scalars['Int'];
+  JSONObject: Scalars['JSONObject'];
   LoginResponse: LoginResponse;
   MajorEditInput: MajorEditInput;
   MajorEditResponse: MajorEditResponse;
@@ -2055,11 +2055,6 @@ export type CourseListItemResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface CustomObjectScalarConfig
-  extends GraphQLScalarTypeConfig<ResolversTypes['CustomObject'], any> {
-  name: 'CustomObject';
-}
-
 export interface DateScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
@@ -2080,7 +2075,7 @@ export type FileErrorDetailsResolvers<
   ParentType extends ResolversParentTypes['FileErrorDetails'] = ResolversParentTypes['FileErrorDetails']
 > = {
   fieldErrors?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['CustomObject']>>>,
+    Maybe<ResolversTypes['JSONObject']>,
     ParentType,
     ContextType
   >;
@@ -2096,7 +2091,7 @@ export type FileErrorDetailsResolvers<
   >;
   index?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   row?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes['CustomObject']>>>,
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
     ParentType,
     ContextType
   >;
@@ -2107,7 +2102,7 @@ export type FileHandlingErrorResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['FileHandlingError'] = ResolversParentTypes['FileHandlingError']
 > = {
-  details?: Resolver<
+  detail?: Resolver<
     Maybe<ResolversTypes['FileErrorDetails']>,
     ParentType,
     ContextType
@@ -2581,6 +2576,11 @@ export type ImportStatusHistoryResolvers<
   trangThai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface JsonObjectScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['JSONObject'], any> {
+  name: 'JSONObject';
+}
 
 export type LoginResponseResolvers<
   ContextType = any,
@@ -3830,7 +3830,6 @@ export type Resolvers<ContextType = any> = {
   CourseEditResponse?: CourseEditResponseResolvers<ContextType>;
   CourseList?: CourseListResolvers<ContextType>;
   CourseListItem?: CourseListItemResolvers<ContextType>;
-  CustomObject?: GraphQLScalarType;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
   FileErrorDetails?: FileErrorDetailsResolvers<ContextType>;
@@ -3873,6 +3872,7 @@ export type Resolvers<ContextType = any> = {
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
   ImportStatusHistory?: ImportStatusHistoryResolvers<ContextType>;
+  JSONObject?: GraphQLScalarType;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;

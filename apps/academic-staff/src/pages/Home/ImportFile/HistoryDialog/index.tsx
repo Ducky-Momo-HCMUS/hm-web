@@ -40,9 +40,10 @@ function HistoryDialog({
       </DialogTitle>
       <DialogContent>
         <AsyncDataRenderer loading={loading} data={historyList}>
-          <Table sx={{ width: 'fit-content' }}>
+          <Table>
             <TableHead>
               <TableRow>
+                <TableCell> </TableCell>
                 <TableCell>STT</TableCell>
                 <TableCell>Thời gian</TableCell>
                 <TableCell>Trạng thái</TableCell>

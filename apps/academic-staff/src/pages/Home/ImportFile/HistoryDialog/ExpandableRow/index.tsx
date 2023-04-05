@@ -31,11 +31,12 @@ function ExpandableRow(props: {
   const { rowIndex, history } = props;
   const [open, setOpen] = React.useState(false);
 
-  const { headers, row, fieldErrors, index } = useMemo(() => {
+  const { headers, row, fieldErrors, index, message } = useMemo(() => {
     const { error } = history;
-    if (error && error.details) {
+    if (error && error.detail) {
       const {
-        details: { headers = [], row = [], fieldErrors = {}, index } = {},
+        detail: { headers = [], row = [], fieldErrors = {}, index } = {},
+        message,
       } = error;
 
       return {
@@ -43,6 +44,7 @@ function ExpandableRow(props: {
         row,
         fieldErrors,
         index,
+        message,
       };
     }
 
@@ -51,6 +53,7 @@ function ExpandableRow(props: {
       row: [],
       fieldErrors: {},
       index: 0,
+      message: '',
     };
   }, [history]);
 
@@ -95,11 +98,9 @@ function ExpandableRow(props: {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Thông báo
-              </Typography>
               {headers && headers.length > 0 && (
                 <Box>
+                  <Typography>{message}</Typography>
                   <Typography fontWeight="bold">Header</Typography>
                   <Table sx={{ width: 'fit-content' }}>
                     <TableHead>
