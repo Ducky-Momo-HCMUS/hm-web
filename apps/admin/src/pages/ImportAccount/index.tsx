@@ -58,12 +58,12 @@ function ImportAccount() {
 
   const { thoiGian, tenGV } = useMemo(() => {
     return {
-      thoiGian: importHistoryData?.importHistory.thoiGian,
-      tenGV: importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
+      thoiGian: importHistoryData?.importHistory?.thoiGian,
+      tenGV: importHistoryData?.importHistory?.taiKhoan?.giaoVien.tenGV,
     };
   }, [
-    importHistoryData?.importHistory.taiKhoan?.giaoVien.tenGV,
-    importHistoryData?.importHistory.thoiGian,
+    importHistoryData?.importHistory?.taiKhoan?.giaoVien.tenGV,
+    importHistoryData?.importHistory?.thoiGian,
   ]);
 
   useEffect(() => {

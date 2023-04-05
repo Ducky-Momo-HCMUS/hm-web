@@ -7,6 +7,17 @@ export const GET_IMPORT_STATUS_HISTORY = gql`
       trangThai
       error {
         message
+        detail {
+          index
+          headers {
+            key
+            value
+            index
+          }
+          row
+          fieldErrors
+          formErrors
+        }
       }
     }
   }

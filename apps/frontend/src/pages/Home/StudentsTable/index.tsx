@@ -436,9 +436,7 @@ function StudentsTable() {
         </StyledStickyBox>
         <AsyncDataRenderer loading={homeroomLoading} data={homeroomData}>
           {(values.class || initialClass) && (
-            <Paper
-              sx={{ width: '100%', overflow: 'hidden', marginTop: '2rem' }}
-            >
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
               <TableContainer sx={{ maxHeight: '100vh' }}>
                 <Table stickyHeader>
                   <StudentTableHead />

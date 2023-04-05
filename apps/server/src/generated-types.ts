@@ -25,6 +25,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  JSONObject: any;
   UploadFile: any;
 };
 
@@ -186,9 +187,19 @@ export type Document = {
   url: Scalars['String'];
 };
 
-export type ErrorMessage = {
-  __typename?: 'ErrorMessage';
-  message?: Maybe<Scalars['String']>;
+export type FileErrorDetails = {
+  __typename?: 'FileErrorDetails';
+  fieldErrors?: Maybe<Scalars['JSONObject']>;
+  formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
+  headers: Array<ColumnHeader>;
+  index?: Maybe<Scalars['Int']>;
+  row?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type FileHandlingError = {
+  __typename?: 'FileHandlingError';
+  detail?: Maybe<FileErrorDetails>;
+  message: Scalars['String'];
 };
 
 export const FileType = {
@@ -457,7 +468,7 @@ export type ImportHistory = {
 
 export type ImportStatusHistory = {
   __typename?: 'ImportStatusHistory';
-  error?: Maybe<ErrorMessage>;
+  error?: Maybe<FileHandlingError>;
   thoiGian: Scalars['String'];
   trangThai: Scalars['String'];
 };
@@ -528,7 +539,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
-  teacherDelete: AllTeacherListItem;
+  teacherDelete: TeacherDeleteResponse;
   teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
@@ -1360,6 +1371,11 @@ export type TagList = {
   total: Scalars['Int'];
 };
 
+export type TeacherDeleteResponse = {
+  __typename?: 'TeacherDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type TeacherEditInput = {
   lopSH: Array<Scalars['String']>;
 };
@@ -1562,7 +1578,8 @@ export type ResolversTypes = {
   CourseListItem: ResolverTypeWrapper<CourseListItem>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Document: ResolverTypeWrapper<Document>;
-  ErrorMessage: ResolverTypeWrapper<ErrorMessage>;
+  FileErrorDetails: ResolverTypeWrapper<FileErrorDetails>;
+  FileHandlingError: ResolverTypeWrapper<FileHandlingError>;
   FileType: FileType;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
@@ -1607,6 +1624,7 @@ export type ResolversTypes = {
   ImportHistory: ResolverTypeWrapper<ImportHistory>;
   ImportStatusHistory: ResolverTypeWrapper<ImportStatusHistory>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
   MajorEditInput: MajorEditInput;
   MajorEditResponse: ResolverTypeWrapper<MajorEditResponse>;
@@ -1673,6 +1691,7 @@ export type ResolversTypes = {
   TagDeleteResponse: ResolverTypeWrapper<TagDeleteResponse>;
   TagEditInput: TagEditInput;
   TagList: ResolverTypeWrapper<TagList>;
+  TeacherDeleteResponse: ResolverTypeWrapper<TeacherDeleteResponse>;
   TeacherEditInput: TeacherEditInput;
   TeacherInfo: ResolverTypeWrapper<TeacherInfo>;
   TeacherList: ResolverTypeWrapper<TeacherList>;
@@ -1715,7 +1734,8 @@ export type ResolversParentTypes = {
   CourseListItem: CourseListItem;
   Date: Scalars['Date'];
   Document: Document;
-  ErrorMessage: ErrorMessage;
+  FileErrorDetails: FileErrorDetails;
+  FileHandlingError: FileHandlingError;
   Float: Scalars['Float'];
   HomeroomAddWatchlistInput: HomeroomAddWatchlistInput;
   HomeroomAddWatchlistResponse: HomeroomAddWatchlistResponse;
@@ -1759,6 +1779,7 @@ export type ResolversParentTypes = {
   ImportHistory: ImportHistory;
   ImportStatusHistory: ImportStatusHistory;
   Int: Scalars['Int'];
+  JSONObject: Scalars['JSONObject'];
   LoginResponse: LoginResponse;
   MajorEditInput: MajorEditInput;
   MajorEditResponse: MajorEditResponse;
@@ -1825,6 +1846,7 @@ export type ResolversParentTypes = {
   TagDeleteResponse: TagDeleteResponse;
   TagEditInput: TagEditInput;
   TagList: TagList;
+  TeacherDeleteResponse: TeacherDeleteResponse;
   TeacherEditInput: TeacherEditInput;
   TeacherInfo: TeacherInfo;
   TeacherList: TeacherList;
@@ -2048,11 +2070,44 @@ export type DocumentResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ErrorMessageResolvers<
+export type FileErrorDetailsResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['ErrorMessage'] = ResolversParentTypes['ErrorMessage']
+  ParentType extends ResolversParentTypes['FileErrorDetails'] = ResolversParentTypes['FileErrorDetails']
 > = {
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fieldErrors?: Resolver<
+    Maybe<ResolversTypes['JSONObject']>,
+    ParentType,
+    ContextType
+  >;
+  formErrors?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
+  headers?: Resolver<
+    Array<ResolversTypes['ColumnHeader']>,
+    ParentType,
+    ContextType
+  >;
+  index?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  row?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['String']>>>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FileHandlingErrorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['FileHandlingError'] = ResolversParentTypes['FileHandlingError']
+> = {
+  detail?: Resolver<
+    Maybe<ResolversTypes['FileErrorDetails']>,
+    ParentType,
+    ContextType
+  >;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2513,7 +2568,7 @@ export type ImportStatusHistoryResolvers<
   ParentType extends ResolversParentTypes['ImportStatusHistory'] = ResolversParentTypes['ImportStatusHistory']
 > = {
   error?: Resolver<
-    Maybe<ResolversTypes['ErrorMessage']>,
+    Maybe<ResolversTypes['FileHandlingError']>,
     ParentType,
     ContextType
   >;
@@ -2521,6 +2576,11 @@ export type ImportStatusHistoryResolvers<
   trangThai?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface JsonObjectScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['JSONObject'], any> {
+  name: 'JSONObject';
+}
 
 export type LoginResponseResolvers<
   ContextType = any,
@@ -2739,7 +2799,7 @@ export type MutationResolvers<
     RequireFields<MutationTagEditArgs, 'payload' | 'tagId'>
   >;
   teacherDelete?: Resolver<
-    ResolversTypes['AllTeacherListItem'],
+    ResolversTypes['TeacherDeleteResponse'],
     ParentType,
     ContextType,
     RequireFields<MutationTeacherDeleteArgs, 'teacherId'>
@@ -3656,6 +3716,14 @@ export type TagListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TeacherDeleteResponseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TeacherDeleteResponse'] = ResolversParentTypes['TeacherDeleteResponse']
+> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TeacherInfoResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TeacherInfo'] = ResolversParentTypes['TeacherInfo']
@@ -3764,7 +3832,8 @@ export type Resolvers<ContextType = any> = {
   CourseListItem?: CourseListItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Document?: DocumentResolvers<ContextType>;
-  ErrorMessage?: ErrorMessageResolvers<ContextType>;
+  FileErrorDetails?: FileErrorDetailsResolvers<ContextType>;
+  FileHandlingError?: FileHandlingErrorResolvers<ContextType>;
   HomeroomAddWatchlistResponse?: HomeroomAddWatchlistResponseResolvers<ContextType>;
   HomeroomAllListItem?: HomeroomAllListItemResolvers<ContextType>;
   HomeroomDeleteWatchlistResponse?: HomeroomDeleteWatchlistResponseResolvers<ContextType>;
@@ -3803,6 +3872,7 @@ export type Resolvers<ContextType = any> = {
   ImportAuthor?: ImportAuthorResolvers<ContextType>;
   ImportHistory?: ImportHistoryResolvers<ContextType>;
   ImportStatusHistory?: ImportStatusHistoryResolvers<ContextType>;
+  JSONObject?: GraphQLScalarType;
   LoginResponse?: LoginResponseResolvers<ContextType>;
   MajorEditResponse?: MajorEditResponseResolvers<ContextType>;
   MajorList?: MajorListResolvers<ContextType>;
@@ -3857,6 +3927,7 @@ export type Resolvers<ContextType = any> = {
   Tag?: TagResolvers<ContextType>;
   TagDeleteResponse?: TagDeleteResponseResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
+  TeacherDeleteResponse?: TeacherDeleteResponseResolvers<ContextType>;
   TeacherInfo?: TeacherInfoResolvers<ContextType>;
   TeacherList?: TeacherListResolvers<ContextType>;
   TeacherListItem?: TeacherListItemResolvers<ContextType>;

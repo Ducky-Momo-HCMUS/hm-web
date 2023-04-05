@@ -20,6 +20,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  JSONObject: any;
   UploadFile: any;
 };
 
@@ -181,9 +182,19 @@ export type Document = {
   url: Scalars['String'];
 };
 
-export type ErrorMessage = {
-  __typename?: 'ErrorMessage';
-  message?: Maybe<Scalars['String']>;
+export type FileErrorDetails = {
+  __typename?: 'FileErrorDetails';
+  fieldErrors?: Maybe<Scalars['JSONObject']>;
+  formErrors?: Maybe<Array<Maybe<Scalars['String']>>>;
+  headers: Array<ColumnHeader>;
+  index?: Maybe<Scalars['Int']>;
+  row?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type FileHandlingError = {
+  __typename?: 'FileHandlingError';
+  detail?: Maybe<FileErrorDetails>;
+  message: Scalars['String'];
 };
 
 export const FileType = {
@@ -452,7 +463,7 @@ export type ImportHistory = {
 
 export type ImportStatusHistory = {
   __typename?: 'ImportStatusHistory';
-  error?: Maybe<ErrorMessage>;
+  error?: Maybe<FileHandlingError>;
   thoiGian: Scalars['String'];
   trangThai: Scalars['String'];
 };
@@ -523,7 +534,7 @@ export type Mutation = {
   tagAdd: Tag;
   tagDelete: TagDeleteResponse;
   tagEdit: Tag;
-  teacherDelete: AllTeacherListItem;
+  teacherDelete: TeacherDeleteResponse;
   teacherEdit: AllTeacherListItem;
   uploadDocument: UploadDocumentResponse;
 };
@@ -1355,6 +1366,11 @@ export type TagList = {
   total: Scalars['Int'];
 };
 
+export type TeacherDeleteResponse = {
+  __typename?: 'TeacherDeleteResponse';
+  status: Scalars['Int'];
+};
+
 export type TeacherEditInput = {
   lopSH: Array<Scalars['String']>;
 };
@@ -1603,7 +1619,29 @@ export type ImportStatusHistoryQuery = {
     thoiGian: string;
     trangThai: string;
     error?:
-      | { __typename?: 'ErrorMessage'; message?: string | null | undefined }
+      | {
+          __typename?: 'FileHandlingError';
+          message: string;
+          detail?:
+            | {
+                __typename?: 'FileErrorDetails';
+                index?: number | null | undefined;
+                row?: Array<string | null | undefined> | null | undefined;
+                fieldErrors?: any | null | undefined;
+                formErrors?:
+                  | Array<string | null | undefined>
+                  | null
+                  | undefined;
+                headers: Array<{
+                  __typename?: 'ColumnHeader';
+                  key: string;
+                  value: string;
+                  index: number;
+                }>;
+              }
+            | null
+            | undefined;
+        }
       | null
       | undefined;
   }>;
@@ -1847,7 +1885,7 @@ export type TeacherDeleteMutationVariables = Exact<{
 
 export type TeacherDeleteMutation = {
   __typename?: 'Mutation';
-  teacherDelete: { __typename?: 'AllTeacherListItem'; maGV: number };
+  teacherDelete: { __typename?: 'TeacherDeleteResponse'; status: number };
 };
 
 export type TeacherEditMutationVariables = Exact<{
@@ -3508,6 +3546,17 @@ export const ImportStatusHistoryDocument = gql`
       trangThai
       error {
         message
+        detail {
+          index
+          headers {
+            key
+            value
+            index
+          }
+          row
+          fieldErrors
+          formErrors
+        }
       }
     }
   }
@@ -4473,7 +4522,7 @@ export type TagEditMutationOptions = Apollo.BaseMutationOptions<
 export const TeacherDeleteDocument = gql`
   mutation TeacherDelete($teacherId: Int!) {
     teacherDelete(teacherId: $teacherId) {
-      maGV
+      status
     }
   }
 `;

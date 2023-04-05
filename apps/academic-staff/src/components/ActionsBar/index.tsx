@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   IconButton,
@@ -23,6 +23,8 @@ import { StyledBox } from './styles';
 
 function ActionsBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [notificationSubscriberId, setNotificationSubscriberId] =
+    React.useState<string | null>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -40,21 +42,30 @@ function ActionsBar() {
     navigate('/login');
   }, [navigate]);
 
-  const jwtPayload = decodeJwt(localStorage.getItem('ACCESS_TOKEN') as string);
+  useEffect(() => {
+    const jwt = localStorage.getItem('ACCESS_TOKEN');
+    if (jwt) {
+      const jwtPayload = decodeJwt(jwt);
+      setNotificationSubscriberId(String(jwtPayload.sub));
+    }
+  }, []);
 
   return (
     <>
       <StyledBox>
-        <NovuProvider
-          subscriberId={String(jwtPayload.sub)}
-          applicationIdentifier={REACT_APP_NOTIFICATION_APP_ID}
-        >
-          <PopoverNotificationCenter colorScheme="light">
-            {({ unseenCount }) => (
-              <NotificationBell unseenCount={unseenCount} />
-            )}
-          </PopoverNotificationCenter>
-        </NovuProvider>
+        {notificationSubscriberId && (
+          <NovuProvider
+            subscriberId={String(notificationSubscriberId)}
+            applicationIdentifier={REACT_APP_NOTIFICATION_APP_ID}
+            i18n="vi"
+          >
+            <PopoverNotificationCenter colorScheme="light">
+              {({ unseenCount }) => (
+                <NotificationBell unseenCount={unseenCount} />
+              )}
+            </PopoverNotificationCenter>
+          </NovuProvider>
+        )}
         <IconButton
           sx={{ paddingRight: 0, marginLeft: '0.25rem' }}
           size="large"

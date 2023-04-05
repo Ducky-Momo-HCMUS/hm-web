@@ -440,7 +440,7 @@ function ClassReport() {
     <>
       <AppHeader isAuthenticated />
       <StyledContentWrapper>
-        <StyledStickyBox>
+        <StyledStickyBox sx={{ paddingBottom: 0 }}>
           <StyledTitle variant="h1">Báo cáo lớp học</StyledTitle>
           <StyledBreadCrumbs aria-label="breadcrumb">
             <Link to="/">Trang chủ</Link>

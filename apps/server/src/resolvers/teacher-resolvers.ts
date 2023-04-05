@@ -28,7 +28,7 @@ export const teacherResolver: Resolvers<ResolverContext> = {
     },
     teacherDelete: async (_, args, { dataSources }) => {
       const res = await dataSources.teacherAPI.deleteTeacher(args);
-      return res;
+      return res.data;
     },
   },
 };
