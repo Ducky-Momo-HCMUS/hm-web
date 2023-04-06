@@ -42,7 +42,7 @@ function AccountTableRow({
   return (
     <>
       <TableRow key={index}>
-        <TableCell>{index + 1}</TableCell>
+        <TableCell>{index}</TableCell>
         <TableCell>{email}</TableCell>
         <TableCell>{tenGV}</TableCell>
         <TableCell>{loaiTK}</TableCell>
