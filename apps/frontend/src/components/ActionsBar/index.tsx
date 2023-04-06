@@ -24,6 +24,8 @@ function ActionsBar() {
     setAnchorEl(null);
   };
 
+  const email = localStorage.getItem('EMAIL')?.toString();
+
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
@@ -91,6 +93,12 @@ function ActionsBar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        <MenuItem>
+          <ListItemIcon>
+            <AccountCircleIcon fontSize="small" />
+          </ListItemIcon>
+          {email}
+        </MenuItem>
         <MenuItem>
           <ListItemButton
             sx={{ padding: 0 }}

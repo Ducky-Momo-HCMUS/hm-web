@@ -190,7 +190,7 @@ function StudentsTable() {
         getHomeroomWatchList({
           variables: {
             homeroomId: values.class.length > 0 ? values.class : initialClass,
-            page: page + 1,
+            page: 1,
             size: STUDENT_LIST_PAGE_SIZE,
             sortOrder: values.sortOrder,
             sortBy: values.sortBy,
