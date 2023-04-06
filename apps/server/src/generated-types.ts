@@ -111,9 +111,16 @@ export type AuthorInfo = {
   tenGV: Scalars['String'];
 };
 
+export type ClassroomCourseItem = {
+  __typename?: 'ClassroomCourseItem';
+  maMH: Scalars['String'];
+  tenMH: Scalars['String'];
+};
+
 export type ClassroomListItem = {
   __typename?: 'ClassroomListItem';
   maHP: Scalars['Int'];
+  monHoc?: Maybe<ClassroomCourseItem>;
   tenLopHP: Scalars['String'];
 };
 
@@ -1566,6 +1573,7 @@ export type ResolversTypes = {
   AllTeacherListItem: ResolverTypeWrapper<AllTeacherListItem>;
   AuthorInfo: ResolverTypeWrapper<AuthorInfo>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ClassroomCourseItem: ResolverTypeWrapper<ClassroomCourseItem>;
   ClassroomListItem: ResolverTypeWrapper<ClassroomListItem>;
   ClassroomScoreList: ResolverTypeWrapper<ClassroomScoreList>;
   ClassroomScoreListItem: ResolverTypeWrapper<ClassroomScoreListItem>;
@@ -1722,6 +1730,7 @@ export type ResolversParentTypes = {
   AllTeacherListItem: AllTeacherListItem;
   AuthorInfo: AuthorInfo;
   Boolean: Scalars['Boolean'];
+  ClassroomCourseItem: ClassroomCourseItem;
   ClassroomListItem: ClassroomListItem;
   ClassroomScoreList: ClassroomScoreList;
   ClassroomScoreListItem: ClassroomScoreListItem;
@@ -1960,11 +1969,25 @@ export type AuthorInfoResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ClassroomCourseItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ClassroomCourseItem'] = ResolversParentTypes['ClassroomCourseItem']
+> = {
+  maMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tenMH?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ClassroomListItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ClassroomListItem'] = ResolversParentTypes['ClassroomListItem']
 > = {
   maHP?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  monHoc?: Resolver<
+    Maybe<ResolversTypes['ClassroomCourseItem']>,
+    ParentType,
+    ContextType
+  >;
   tenLopHP?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3822,6 +3845,7 @@ export type Resolvers<ContextType = any> = {
   AllTeacherList?: AllTeacherListResolvers<ContextType>;
   AllTeacherListItem?: AllTeacherListItemResolvers<ContextType>;
   AuthorInfo?: AuthorInfoResolvers<ContextType>;
+  ClassroomCourseItem?: ClassroomCourseItemResolvers<ContextType>;
   ClassroomListItem?: ClassroomListItemResolvers<ContextType>;
   ClassroomScoreList?: ClassroomScoreListResolvers<ContextType>;
   ClassroomScoreListItem?: ClassroomScoreListItemResolvers<ContextType>;

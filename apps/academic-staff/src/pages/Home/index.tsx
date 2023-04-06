@@ -28,6 +28,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Backpack } from '@mui/icons-material';
 
 import Header from '../../components/Header';
 
@@ -108,6 +109,7 @@ function Home() {
               { page: 'Danh sách GVCN', url: '/homeroom-teachers' },
               { page: 'Danh sách sinh viên', url: '/students' },
               { page: 'Môn học và chuyên ngành', url: '/major-courses' },
+              { page: 'Lớp học phần', url: '/classroom' },
               { page: 'Đăng ký học phần', url: '/course-registration' },
               { page: 'Điểm học phần', url: '/course-result' },
               { page: 'Điểm rèn luyện', url: '/training-result' },
@@ -141,11 +143,12 @@ function Home() {
                     {index === 0 && <CoPresentIcon />}
                     {index === 1 && <GroupsIcon />}
                     {index === 2 && <ListAltIcon />}
-                    {index === 3 && <CheckBoxIcon />}
-                    {index === 4 && <TextIncreaseIcon />}
-                    {index === 5 && <EventAvailableIcon />}
-                    {index === 6 && <PersonOffIcon />}
-                    {index === 7 && <PublishIcon />}
+                    {index === 3 && <Backpack />}
+                    {index === 4 && <CheckBoxIcon />}
+                    {index === 5 && <TextIncreaseIcon />}
+                    {index === 6 && <EventAvailableIcon />}
+                    {index === 7 && <PersonOffIcon />}
+                    {index === 8 && <PublishIcon />}
                   </ListItemIcon>
                   <ListItemText
                     primary={page}
