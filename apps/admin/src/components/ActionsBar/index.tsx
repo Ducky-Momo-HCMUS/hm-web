@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Box,
   IconButton,
   ListItemButton,
   ListItemIcon,
@@ -11,9 +10,21 @@ import {
 import { Logout } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
+import {
+  NovuProvider,
+  PopoverNotificationCenter,
+  NotificationBell,
+} from '@novu/notification-center';
+import { decodeJwt } from 'jose';
+
+import { REACT_APP_NOTIFICATION_APP_ID } from '../../utils/config';
+
+import { StyledBox } from './styles';
 
 function ActionsBar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [notificationSubscriberId, setNotificationSubscriberId] =
+    React.useState<string | null>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,9 +44,30 @@ function ActionsBar() {
     navigate('/login');
   }, [navigate]);
 
+  useEffect(() => {
+    const jwt = localStorage.getItem('ACCESS_TOKEN');
+    if (jwt) {
+      const jwtPayload = decodeJwt(jwt);
+      setNotificationSubscriberId(String(jwtPayload.sub));
+    }
+  }, []);
+
   return (
     <>
-      <Box>
+      <StyledBox>
+        {notificationSubscriberId && (
+          <NovuProvider
+            subscriberId={String(notificationSubscriberId)}
+            applicationIdentifier={REACT_APP_NOTIFICATION_APP_ID}
+            i18n="vi"
+          >
+            <PopoverNotificationCenter colorScheme="light">
+              {({ unseenCount }) => (
+                <NotificationBell unseenCount={unseenCount} />
+              )}
+            </PopoverNotificationCenter>
+          </NovuProvider>
+        )}
         <IconButton
           sx={{ paddingRight: 0 }}
           size="large"
@@ -46,7 +78,7 @@ function ActionsBar() {
         >
           <AccountCircleIcon fontSize="inherit" />
         </IconButton>
-      </Box>
+      </StyledBox>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"

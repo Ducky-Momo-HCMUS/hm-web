@@ -163,6 +163,7 @@ importers:
       '@mui/system': ^5.10.16
       '@mui/utils': ^5.10.9
       '@mui/x-data-grid': ^5.17.21
+      '@novu/notification-center': ^0.12.0
       '@reduxjs/toolkit': ^1.9.1
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
@@ -180,6 +181,7 @@ importers:
       filepond-plugin-file-validate-type: ^1.2.8
       graphql: ^15.3.0
       jest: ^29.2.0
+      jose: ^4.13.1
       lodash: ^4.17.21
       postcss: ^8.1.0
       react: ^17.0.2
@@ -202,6 +204,7 @@ importers:
       '@mui/material': 5.10.10_qh4q22gogckwevp57qqkv5tsle
       '@mui/utils': 5.10.16_react@17.0.2
       '@mui/x-data-grid': 5.17.21_ka5ewhjdtr54zpqsubcgbbcuc4
+      '@novu/notification-center': 0.12.0_5vlckyktntgwvvslyodwngbpz4
       '@reduxjs/toolkit': 1.9.1_3m5k4ry2nwm36zz5ojtujpfkvq
       '@testing-library/dom': 8.19.0
       '@testing-library/jest-dom': 5.16.5
@@ -212,6 +215,7 @@ importers:
       filepond: 4.30.4
       filepond-plugin-file-validate-type: 1.2.8_filepond@4.30.4
       graphql: 15.8.0
+      jose: 4.13.1
       lodash: 4.17.21
       react: 17.0.2
       react-admin: 4.6.2_5vlckyktntgwvvslyodwngbpz4

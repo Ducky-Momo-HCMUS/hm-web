@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HistoryIcon from '@mui/icons-material/History';
 import React, {
   useState,
   useCallback,
@@ -40,8 +41,10 @@ import AsyncDataRenderer from '../../components/AsyncDataRenderer';
 import {
   ColumnHeader,
   FileType,
+  ImportStatusHistory,
   useColumnHeaderListLazyQuery,
   useImportHistoryLazyQuery,
+  useImportStatusHistoryLazyQuery,
   useUploadDocumentMutation,
 } from '../../generated-types';
 import { FileHandlingError } from '../../types';
@@ -49,6 +52,7 @@ import { FileHandlingError } from '../../types';
 import { arrayify, DataSet, Row } from './utils';
 import { StyledFormControl, StyledTextField } from './styles';
 import ErrorDialog from './ErrorDialog';
+import HistoryDialog from './HistoryDialog';
 
 function ImportAccount() {
   const [
@@ -251,7 +255,7 @@ function ImportAccount() {
   const [uploadDocument, { loading: uploadDocumentLoading }] =
     useUploadDocumentMutation({
       onCompleted: () => {
-        toast.success('Cập nhật thông tin thành công');
+        toast.info('File đang được xử lý.');
         setStart('1');
         if (filePondRef.current) {
           filePondRef.current.removeFile();
@@ -319,6 +323,13 @@ function ImportAccount() {
     ]
   );
 
+  const [
+    getImportStatusHistory,
+    { loading: importStatusHistoryLoading, data: importStatusHistoryData },
+  ] = useImportStatusHistoryLazyQuery();
+
+  const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
+
   return (
     <>
       <ToastContainer />
@@ -337,9 +348,30 @@ function ImportAccount() {
             </Typography>
           </AsyncDataRenderer>
         )}
-        <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
-          Cập nhật danh sách tài khoản
-        </Typography>
+        <Box sx={{ marginTop: '0.5rem' }} display="flex" alignItems="center">
+          <Typography sx={{ marginTop: '0.5rem' }} variant="h6">
+            Cập nhật danh sách tài khoản
+          </Typography>
+          <IconButton
+            onClick={() => {
+              getImportHistory({
+                variables: {
+                  fileType: FileType.TaiKhoan,
+                },
+                fetchPolicy: 'no-cache',
+              });
+              getImportStatusHistory({
+                variables: {
+                  fileType: FileType.TaiKhoan,
+                },
+                fetchPolicy: 'no-cache',
+              });
+              setOpenHistoryDialog(true);
+            }}
+          >
+            <HistoryIcon />
+          </IconButton>
+        </Box>
         <Box mt={3}>
           <FilePond
             ref={filePondRef}
@@ -486,6 +518,18 @@ function ImportAccount() {
           openErrorDialog={openErrorDialog}
           onClose={() => setOpenErrorDialog(false)}
           error={fileError as FileHandlingError}
+        />
+      )}
+      {openHistoryDialog && (
+        <HistoryDialog
+          loading={importStatusHistoryLoading}
+          title="danh sách tài khoản"
+          openHistoryDialog={openHistoryDialog}
+          onClose={() => setOpenHistoryDialog(false)}
+          historyList={
+            (importStatusHistoryData?.importStatusHistory as ImportStatusHistory[]) ||
+            []
+          }
         />
       )}
       <Backdrop
