@@ -27,7 +27,8 @@ const errorLink = onError(({ graphQLErrors }) => {
     graphQLErrors.forEach(({ message }) => {
       if (
         message === 'Invalid authorization token' ||
-        message === 'Forbidden resource'
+        message === 'Forbidden resource' ||
+        message === 'Session expired'
       ) {
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('EMAIL');
