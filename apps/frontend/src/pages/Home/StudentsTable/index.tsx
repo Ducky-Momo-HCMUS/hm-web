@@ -279,7 +279,7 @@ function StudentsTable() {
             query: GET_HOMEROOM_WATCH_LIST,
             variables: {
               homeroomId: selectedClass,
-              page: page + 1,
+              page: 1,
               size: STUDENT_LIST_PAGE_SIZE,
             },
           },
@@ -300,7 +300,7 @@ function StudentsTable() {
             query: GET_HOMEROOM_WATCH_LIST,
             variables: {
               homeroomId: selectedClass,
-              page: page + 1,
+              page: 1,
               size: STUDENT_LIST_PAGE_SIZE,
             },
           },
@@ -311,7 +311,6 @@ function StudentsTable() {
   }, [
     addStudentToWatchlist,
     initialSelected,
-    page,
     removeStudentFromWatchlist,
     selectedClass,
     values.selected,
