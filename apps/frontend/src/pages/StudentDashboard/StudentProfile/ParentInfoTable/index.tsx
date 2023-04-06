@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import {
   StudentEditParentInfoInput,
@@ -60,7 +61,11 @@ function ParentInfoTable({
   }, []);
 
   const [editStudentParentInfo, { loading: editStudentParentInfoLoading }] =
-    useStudentEditParentInfoMutation();
+    useStudentEditParentInfoMutation({
+      onError: (error) => {
+        toast.error(error.graphQLErrors[0].message);
+      },
+    });
 
   const handleEditStudentParentInfo = useCallback(
     async (payload: StudentEditParentInfoInput) => {
@@ -83,7 +88,11 @@ function ParentInfoTable({
   );
 
   const [deleteStudentParentInfo, { loading: deleteStudentParentInfoLoading }] =
-    useStudentDeleteParentInfoMutation();
+    useStudentDeleteParentInfoMutation({
+      onError: (error) => {
+        toast.error(error.graphQLErrors[0].message);
+      },
+    });
 
   const handleDeleteStudentParentInfo = useCallback(async () => {
     setValues((v) => ({ ...v, deleteIndex: -1 }));

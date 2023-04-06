@@ -29,6 +29,8 @@ import { FilePond } from 'react-filepond';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header';
 import {
@@ -229,7 +231,11 @@ function NoteStore() {
     }
   }, [noteDetail, values.isAdding]);
 
-  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
+  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
   const handleDeleteNote = useCallback(async () => {
     setValues((v) => ({ ...v, deleteIndex: -1 }));
     await deleteNote({
@@ -250,8 +256,16 @@ function NoteStore() {
     });
   }, [deleteNote, values.deleteIndex]);
 
-  const [addNote] = useNoteAddMutation();
-  const [editNote] = useNoteEditMutation();
+  const [addNote] = useNoteAddMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
+  const [editNote] = useNoteEditMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
 
   const filePondRef = useRef<FilePond | null>(null);
 
@@ -470,6 +484,7 @@ function NoteStore() {
     <>
       <StyledContainer>
         <Header isAuthenticated />
+        <ToastContainer />
         <StyledContentWrapper>
           <StyledStickyBox sx={{ paddingBottom: 0 }}>
             <Box

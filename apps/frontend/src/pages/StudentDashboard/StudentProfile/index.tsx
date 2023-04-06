@@ -11,7 +11,8 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { format } from 'date-fns';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { StyledHeader } from '../NoteInfo/styles';
 import ClassInfo from '../../ClassDetail/ClassInfo';
@@ -61,7 +62,11 @@ function StudentProfile() {
   };
 
   const [addStudentContact, { loading: addStudentContactLoading }] =
-    useStudentAddContactMutation();
+    useStudentAddContactMutation({
+      onError: (error) => {
+        toast.error(error.graphQLErrors[0].message);
+      },
+    });
 
   const handleAddStudentContact = useCallback(
     (payload: StudentAddContactInput) => {
@@ -146,7 +151,11 @@ function StudentProfile() {
   }, [studentParentInfoListData?.studentParentInfoList]);
 
   const [addStudentParentInfo, { loading: addStudentParentInfoLoading }] =
-    useStudentAddParentInfoMutation();
+    useStudentAddParentInfoMutation({
+      onError: (error) => {
+        toast.error(error.graphQLErrors[0].message);
+      },
+    });
 
   const handleAddParentInfo = useCallback(
     (studentInfo: StudentAddParentInfoInput) => {

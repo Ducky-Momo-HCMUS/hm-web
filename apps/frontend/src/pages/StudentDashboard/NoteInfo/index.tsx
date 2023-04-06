@@ -32,6 +32,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import FilterAltOffOutlinedIcon from '@mui/icons-material/FilterAltOffOutlined';
 import { FilePond } from 'react-filepond';
+import { toast, ToastContainer } from 'react-toastify';
 
 import NoteEditor from '../../../components/Note/NoteEditor';
 import {
@@ -158,8 +159,16 @@ function NoteInfo() {
     }
   }, [noteDetail]);
 
-  const [addNote, { loading: addNoteLoading }] = useNoteAddMutation();
-  const [editNote, { loading: editNoteLoading }] = useNoteEditMutation();
+  const [addNote, { loading: addNoteLoading }] = useNoteAddMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
+  const [editNote, { loading: editNoteLoading }] = useNoteEditMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
 
   const { data: tagListData, loading: tagListLoading } = useTagListQuery({
     variables: {
@@ -321,7 +330,11 @@ function NoteInfo() {
     setValues((v) => ({ ...v, deleteIndex: index }));
   }, []);
 
-  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation();
+  const [deleteNote, { loading: deleteNoteLoading }] = useNoteDeleteMutation({
+    onError: (error) => {
+      toast.error(error.graphQLErrors[0].message);
+    },
+  });
 
   const handleDeleteNote = useCallback(async () => {
     setValues({ ...values, deleteIndex: -1 });
@@ -408,6 +421,7 @@ function NoteInfo() {
 
   return (
     <>
+      <ToastContainer />
       <StyledStickyBox sx={{ paddingBottom: 0 }}>
         <StyledTitle variant="h1">Ghi chú sinh viên</StyledTitle>
         <StyledBreadCrumbs aria-label="breadcrumb">
