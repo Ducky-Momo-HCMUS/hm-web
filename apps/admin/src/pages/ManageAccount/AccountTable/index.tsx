@@ -175,7 +175,7 @@ function AccountTable() {
             <TableBody>
               {accountList.map((row, index) => (
                 <AccountTableRow
-                  index={index}
+                  index={ACCOUNT_LIST_PAGE_SIZE * page + index + 1}
                   key={row.email}
                   data={row}
                   onClickDelete={() => handleClickDelete(row.maTK)}
