@@ -17,6 +17,7 @@ import CourseScoreList from './pages/Home/CourseScoreList';
 import TrainingPointList from './pages/Home/TrainingPointList';
 import PostponeAbsentList from './pages/Home/PostponeAbsentList';
 import ImportFile from './pages/Home/ImportFile';
+import ClassroomList from './pages/Home/ClassroomList';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/homeroom-teachers" element={<HomeroomTeacherList />} />
           <Route path="/students" element={<StudentList />} />
           <Route path="/major-courses" element={<MajorCourseList />} />
+          <Route path="/classroom" element={<ClassroomList />} />
           <Route path="/course-registration" element={<CourseRegisterList />} />
           <Route path="/course-result" element={<CourseScoreList />} />
           <Route path="/training-result" element={<TrainingPointList />} />

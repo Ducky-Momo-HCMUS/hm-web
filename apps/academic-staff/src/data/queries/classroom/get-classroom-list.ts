@@ -5,6 +5,10 @@ export const GET_CLASSROOM_LIST = gql`
     classroomList(termId: $termId, subjectId: $subjectId) {
       maHP
       tenLopHP
+      monHoc {
+        maMH
+        tenMH
+      }
     }
   }
 `;
