@@ -14,6 +14,12 @@ const classroomTypeDefs = gql`
   type ClassroomListItem {
     maHP: Int!
     tenLopHP: String!
+    monHoc: ClassroomCourseItem
+  }
+
+  type ClassroomCourseItem {
+    maMH: String!
+    tenMH: String!
   }
 
   type ClassroomScoreList {

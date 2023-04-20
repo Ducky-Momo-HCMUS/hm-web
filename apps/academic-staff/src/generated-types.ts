@@ -106,9 +106,16 @@ export type AuthorInfo = {
   tenGV: Scalars['String'];
 };
 
+export type ClassroomCourseItem = {
+  __typename?: 'ClassroomCourseItem';
+  maMH: Scalars['String'];
+  tenMH: Scalars['String'];
+};
+
 export type ClassroomListItem = {
   __typename?: 'ClassroomListItem';
   maHP: Scalars['Int'];
+  monHoc?: Maybe<ClassroomCourseItem>;
   tenLopHP: Scalars['String'];
 };
 
@@ -1482,6 +1489,10 @@ export type ClassroomListQuery = {
     __typename?: 'ClassroomListItem';
     maHP: number;
     tenLopHP: string;
+    monHoc?:
+      | { __typename?: 'ClassroomCourseItem'; maMH: string; tenMH: string }
+      | null
+      | undefined;
   }>;
 };
 
@@ -3101,6 +3112,10 @@ export const ClassroomListDocument = gql`
     classroomList(termId: $termId, subjectId: $subjectId) {
       maHP
       tenLopHP
+      monHoc {
+        maMH
+        tenMH
+      }
     }
   }
 `;
